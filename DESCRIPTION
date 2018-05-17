@@ -1,0 +1,33 @@
+Package: embed
+Version: 0.0.0.9000
+Title: Extra recipes for categorical predictor embeddings
+Description: Factor predictors can be converted to one or more numeric representations using simple generalized linear models or nonlinear models. All embeddings are supervised.
+Authors@R: c(
+    person("Max", "Kuhn", , "max@rstudio.com", c("aut", "cre")),
+    person("RStudio", role = "cph"))
+Depends: 
+    R (>= 3.1),
+    recipes (>= 0.1.2.9001)
+Imports: 
+    rstanarm,
+    keras,
+    stats,
+    dplyr,
+    purrr,
+    rlang,
+    utils,
+    broom,
+    tidyr
+Suggests: 
+    testthat,
+    knitr,
+    rmarkdown,
+    covr
+License: GPL-2
+VignetteBuilder: knitr
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 6.0.1
+Roxygen: list(markdown = TRUE)
+ByteCompile: true
+Remotes: topepo/recipes
