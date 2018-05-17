@@ -58,7 +58,9 @@ scores derived from a generalized linear models.
 For each factor predictor, a generlaized linear model is fit to the
 outcome and the coefficients are returned as the encoding. These coefficients
 are on the linear predictor scale so, for factor outcomes, they are in
-log-odds units. The coefficients are created using a no intercept model.
+log-odds units. The coefficients are created using a no intercept model and,
+when two factor outcomes are used, the log-odds reflect the event of interest
+being the \emph{first} level of the factor.
 
 For novel levels, the average of the coeffcients is returned.
 }
@@ -71,15 +73,7 @@ data(okc)
 not_pooled <- recipe(Class ~ age + location, data = okc) \%>\%
   step_embed(location, outcome = vars(Class))
 
-not_pooled <- prep(not_pooled, training = okc)
-
-# Get predictions when a value is missing or a new location
-newer <- okc \%>\% head()
-newer$location <- as.character(newer$location)
-newer$location[1] <- NA
-newer$location[2] <- "Baltimore"
-
-encoded <- bake(not_pooled, newdata = newer)
+# see pkgdown url for more examples
 }
 \references{
 Zumel N and Mount J (2017) "vtreat: a data.frame Processor for

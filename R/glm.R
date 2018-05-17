@@ -56,16 +56,7 @@
 #' not_pooled <- recipe(Class ~ age + location, data = okc) %>%
 #'   step_embed(location, outcome = vars(Class))
 #' 
-#' not_pooled <- prep(not_pooled, training = okc)
-#' 
-#' # Get predictions when a value is missing or a new location
-#' newer <- okc %>% head()
-#' newer$location <- as.character(newer$location)
-#' newer$location[1] <- NA
-#' newer$location[2] <- "Baltimore"
-#' 
-#' encoded <- bake(not_pooled, newdata = newer)
-
+#' # see pkgdown url for more examples
 
 #' @importFrom recipes add_step step terms_select sel2char ellipse_check
 step_embed <-
