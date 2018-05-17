@@ -70,6 +70,7 @@ variables for encoding), \code{level} (the factor levels), and
 \code{step_tfembed} creates a \emph{specification} of a recipe step that
 will convert a nominal (i.e. factor) predictor into a set of
 scores derived from a tensorflow model via a word-embedding model.
+\code{tfembed_control} is a simple wrapper for setting default options.
 }
 \details{
 Factor levels are initially assigned at random to the

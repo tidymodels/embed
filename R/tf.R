@@ -3,6 +3,7 @@
 #' `step_tfembed` creates a *specification* of a recipe step that
 #'  will convert a nominal (i.e. factor) predictor into a set of
 #'  scores derived from a tensorflow model via a word-embedding model.
+#'  `tfembed_control` is a simple wrapper for setting default options. 
 #'
 #' @param recipe A recipe object. The step will be added to the
 #'  sequence of operations for this recipe.
