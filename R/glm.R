@@ -37,9 +37,12 @@
 #' @details For each factor predictor, a generlaized linear model is fit to the
 #' outcome and the coefficients are returned as the encoding. These coefficients
 #' are on the linear predictor scale so, for factor outcomes, they are in
-#' log-odds units. The coefficients are created using a no intercept model.
+#' log-odds units. The coefficients are created using a no intercept model and,
+#' when two factor outcomes are used, the log-odds reflect the event of interest
+#' being the _first_ level of the factor. 
 #'
 #' For novel levels, the average of the coeffcients is returned.
+#' 
 #'
 #' @references Zumel N and Mount J (2017) "vtreat: a data.frame Processor for 
 #'  Predictive Modeling," arXiv:1611.09477
@@ -137,9 +140,11 @@ glm_coefs <- function(x, y, ...) {
   mean_coef <- mean(coefs, na.rm = TRUE)
   coefs[is.na(coefs)] <- mean_coef
   coefs <- c(coefs, ..new = mean_coef)
+  if(is.factor(y[[1]]))
+    coefs <- -coefs
   tibble(
     ..level = names(coefs),
-    ..value = -unname(coefs)
+    ..value = unname(coefs)
   )
 }
 
