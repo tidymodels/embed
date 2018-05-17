@@ -60,13 +60,13 @@
 #' here would be
 #' 
 #' ```
-#'  keras_model_sequential() %>% 
+#'  keras_model_sequential() \\%>\\% 
 #'  layer_embedding(
 #'    input_dim = num_factor_levels_x + 1,
 #'    output_dim = number,
 #'    input_length = 1
-#'  ) %>%
-#'    layer_flatten() %>%
+#'  ) \\%>\\%
+#'    layer_flatten() \\%>\\%
 #'    layer_dense(units = 1, activation = 'linear')
 #' ```
 #'
@@ -74,14 +74,14 @@
 #' would be
 #'
 #' ```
-#'  keras_model_sequential() %>% 
+#'  keras_model_sequential() \\%>\\% 
 #'  layer_embedding(
 #'    input_dim = num_factor_levels_x + 1,
 #'    output_dim = number,
 #'    input_length = 1
-#'  ) %>%
-#'    layer_flatten() %>%
-#'    layer_dense(units = hidden, activation = "relu") %>%
+#'  ) \\%>\\%
+#'    layer_flatten() \\%>\\%
+#'    layer_dense(units = hidden, activation = "relu") \\%>\\%
 #'    layer_dense(units = num_factor_levels_y, activation = 'softmax')
 #' ```
 #' 
@@ -94,17 +94,8 @@
 #'   step_tfembed(location, outcome = vars(Class),
 #'                options = tfembed_control(epochs = 10))
 #' 
-#' trained <- prep(rec, training = okc)
-#' 
-#' # Get predictions when a value is missing or a new location
-#' newer <- okc %>% head()
-#' newer$location <- as.character(newer$location)
-#' newer$location[1] <- NA
-#' newer$location[2] <- "Baltimore"
-#' 
-#' encoded <- bake(trained, newdata = newer)
+#' # see pkgdown url for more examples
 
-# add prefix
 
 #' @importFrom recipes add_step step terms_select sel2char ellipse_check
 step_tfembed <-
