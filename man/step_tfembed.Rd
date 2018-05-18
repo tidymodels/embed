@@ -64,7 +64,8 @@ An updated version of \code{recipe} with the new step added
 to the sequence of existing steps (if any). For the \code{tidy}
 method, a tibble with columns \code{terms} (the selectors or
 variables for encoding), \code{level} (the factor levels), and
-\code{value} (the encodings).
+several columns beginning with the prefix \code{emb} (the
+encodings).
 }
 \description{
 \code{step_tfembed} creates a \emph{specification} of a recipe step that
@@ -91,27 +92,29 @@ used in the last layer while softmax is used for factor outcomes
 (with any number of levels).
 
 For example, the \code{keras} code for a numeric outcome and no hidden units used
-here would be\preformatted{ keras_model_sequential() \\\%>\\\% 
- layer_embedding(
-   input_dim = num_factor_levels_x + 1,
-   output_dim = number,
-   input_length = 1
- ) \\\%>\\\%
-   layer_flatten() \\\%>\\\%
-   layer_dense(units = 1, activation = 'linear')
+here would be\preformatted{  keras_model_sequential() \%>\% 
+  layer_embedding(
+    input_dim = num_factor_levels_x + 1,
+    output_dim = number,
+    input_length = 1
+  ) \%>\%
+  layer_flatten() \%>\%
+  layer_dense(units = 1, activation = 'linear')
 }
 
 If a factor outcome is used and 10 hidden units were requested, the code
-would be\preformatted{ keras_model_sequential() \\\%>\\\% 
- layer_embedding(
-   input_dim = num_factor_levels_x + 1,
-   output_dim = number,
-   input_length = 1
- ) \\\%>\\\%
-   layer_flatten() \\\%>\\\%
-   layer_dense(units = hidden, activation = "relu") \\\%>\\\%
-   layer_dense(units = num_factor_levels_y, activation = 'softmax')
+would be\preformatted{  keras_model_sequential() \%>\% 
+  layer_embedding(
+    input_dim = num_factor_levels_x + 1,
+    output_dim = number,
+    input_length = 1
+   ) \%>\%
+  layer_flatten() \%>\%
+  layer_dense(units = 10, activation = "relu") \%>\%
+  layer_dense(units = num_factor_levels_y, activation = 'softmax')
 }
+
+Also note that it may be difficult to obtain reproducible results using this step due to the nature of Tensorflow (see link in References).
 }
 \examples{
 data(okc)
@@ -124,6 +127,8 @@ rec <- recipe(Class ~ age + location, data = okc) \%>\%
 }
 \references{
 Francois C and Allaire JJ (2018) \emph{Deep Learning with R}, Manning
+
+"How can I obtain reproducible results using Keras during development?" \url{https://tinyurl.com/keras-repro}
 }
 \concept{
 preprocessing encoding

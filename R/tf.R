@@ -36,7 +36,8 @@
 #'  to the sequence of existing steps (if any). For the `tidy`
 #'  method, a tibble with columns `terms` (the selectors or
 #'  variables for encoding), `level` (the factor levels), and
-#'  `value` (the encodings).
+#'  several columns beginning with the prefix `emb` (the 
+#'  encodings).
 #' @keywords datagen
 #' @concept preprocessing encoding
 #' @export
@@ -61,32 +62,36 @@
 #' here would be
 #' 
 #' ```
-#'  keras_model_sequential() \\%>\\% 
-#'  layer_embedding(
-#'    input_dim = num_factor_levels_x + 1,
-#'    output_dim = number,
-#'    input_length = 1
-#'  ) \\%>\\%
-#'    layer_flatten() \\%>\\%
-#'    layer_dense(units = 1, activation = 'linear')
+#'   keras_model_sequential() \\%>\\% 
+#'   layer_embedding(
+#'     input_dim = num_factor_levels_x + 1,
+#'     output_dim = number,
+#'     input_length = 1
+#'   ) \\%>\\%
+#'   layer_flatten() \\%>\\%
+#'   layer_dense(units = 1, activation = 'linear')
 #' ```
 #'
 #' If a factor outcome is used and 10 hidden units were requested, the code 
 #' would be
 #'
 #' ```
-#'  keras_model_sequential() \\%>\\% 
-#'  layer_embedding(
-#'    input_dim = num_factor_levels_x + 1,
-#'    output_dim = number,
-#'    input_length = 1
-#'  ) \\%>\\%
-#'    layer_flatten() \\%>\\%
-#'    layer_dense(units = hidden, activation = "relu") \\%>\\%
-#'    layer_dense(units = num_factor_levels_y, activation = 'softmax')
+#'   keras_model_sequential() \\%>\\% 
+#'   layer_embedding(
+#'     input_dim = num_factor_levels_x + 1,
+#'     output_dim = number,
+#'     input_length = 1
+#'    ) \\%>\\%
+#'   layer_flatten() \\%>\\%
+#'   layer_dense(units = 10, activation = "relu") \\%>\\%
+#'   layer_dense(units = num_factor_levels_y, activation = 'softmax')
 #' ```
 #' 
+#' Also note that it may be difficult to obtain reproducible results using this step due to the nature of Tensorflow (see link in References).
+#' 
 #' @references Francois C and Allaire JJ (2018) _Deep Learning with R_, Manning
+#' 
+#' "How can I obtain reproducible results using Keras during development?" \url{https://tinyurl.com/keras-repro}
 #' 
 #' @examples
 #' data(okc)
@@ -226,9 +231,7 @@ tf_coefs <- function(x, y, opt, num, lab, h, ...) {
   else
     model <- model %>%
     layer_dense(units = 1, activation = 'linear')
-  
-  print(model)
-  
+
   model <- model %>%
     compile(
       loss = opt$loss,
