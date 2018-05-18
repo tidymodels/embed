@@ -184,7 +184,7 @@ stan_coefs <- function(x, y, options, verbose, ...) {
   if (length(options) > 0)
     args <- c(args, options)
   if (!verbose) {
-    mod <- do.call("stan_glmer", args)
+    junk <- capture.output(mod <- do.call("stan_glmer", args))
   } else {
     mod <- do.call("stan_glmer", args)
   }
