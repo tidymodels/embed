@@ -17,7 +17,8 @@ Imports:
     rlang,
     utils,
     broom,
-    tidyr
+    tidyr,
+    tibble
 Suggests: 
     testthat,
     knitr,

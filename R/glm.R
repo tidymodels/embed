@@ -2,7 +2,7 @@
 #'
 #' `step_embed` creates a *specification* of a recipe step that
 #'  will convert a nominal (i.e. factor) predictor into a single set of
-#'  scores derived from a generalized linear models.
+#'  scores derived from a generalized linear model.
 #'
 #' @param recipe A recipe object. The step will be added to the
 #'  sequence of operations for this recipe.
@@ -15,6 +15,11 @@
 #' @param outcome A call to `vars` to specify which variable is
 #'  used as the outcome in the generalized linear model. Only
 #'  numeric and two-level factors are currently supported.
+#' @param pooling A logical; should partial pooling be used via a hierarchical 
+#'  generalized linear model?
+#' @param options A list of options to pass to [rstanarm::stan_glmer()].
+#' @param verbose A logical to control the default printing by 
+#'  [rstanarm::stan_glmer()].
 #' @param mapping A list of tibble results that define the
 #'  encoding. This is `NULL` until the step is trained by
 #'  [recipes::prep.recipe()].
@@ -31,19 +36,21 @@
 #'  method, a tibble with columns `terms` (the selectors or
 #'  variables for encoding), `level` (the factor levels), and
 #'  `value` (the encodings).
-#' @keywords datagen
+#' @keywords datagen 
 #' @concept preprocessing encoding
 #' @export
-#' @details For each factor predictor, a generlaized linear model is fit to the
+#' @details For each factor predictor, a generalized linear model is fit to the
 #' outcome and the coefficients are returned as the encoding. These coefficients
 #' are on the linear predictor scale so, for factor outcomes, they are in
 #' log-odds units. The coefficients are created using a no intercept model and,
 #' when two factor outcomes are used, the log-odds reflect the event of interest
 #' being the _first_ level of the factor. 
 #'
-#' For novel levels, the average of the coeffcients is returned.
+#' For novel levels, the average of the coefficients is returned.
 #' 
-#'
+#' With partial pooling, a hierarchical generalized linear model is fit using 
+#'  [rstanarm::stan_glmer()] and no intercept.  
+#' 
 #' @references Zumel N and Mount J (2017) "vtreat: a data.frame Processor for 
 #'  Predictive Modeling," arXiv:1611.09477
 #' 
@@ -65,6 +72,9 @@ step_embed <-
            role = NA,
            trained = FALSE,
            outcome = NULL,
+           pooling = FALSE,
+           options = list(seed = sample.int(10^5, 1)),
+           verbose = FALSE,
            mapping = NULL,
            skip = FALSE) {
     if (is.null(outcome))
@@ -76,6 +86,9 @@ step_embed <-
         role = role,
         trained = trained,
         outcome = outcome,
+        pooling = pooling,
+        options = options,
+        verbose = verbose,
         mapping = mapping,
         skip = skip
       )
@@ -87,6 +100,9 @@ step_embed_new <-
            role = NA,
            trained = FALSE,
            outcome = NULL,
+           pooling = NULL,
+           options = NULL,
+           verbose = FALSE,
            mapping = NULL,
            skip = FALSE) {
     step(
@@ -95,6 +111,9 @@ step_embed_new <-
       role = role,
       trained = trained,
       outcome = outcome,
+      pooling = pooling,
+      options = options,
+      verbose = verbose,
       mapping = mapping,
       skip = skip
     )
@@ -106,7 +125,13 @@ prep.step_embed <- function(x, training, info = NULL, ...) {
   col_names <- terms_select(x$terms, info = info)
   check_type(training[, col_names], quant = FALSE)
   y_name <- terms_select(x$outcome, info = info)
-  res <- map(training[, col_names], glm_coefs, y = training[, y_name])
+  if (x$pooling) {
+    res <-
+      map(training[, col_names], stan_coefs, y = training[, y_name],
+          x$options, x$verbose)
+  } else {
+    res <- map(training[, col_names], glm_coefs, y = training[, y_name])
+  }
   x$mapping <- res
   x$trained <- TRUE
   x
@@ -139,7 +164,46 @@ glm_coefs <- function(x, y, ...) {
   )
 }
 
-#' @importFrom dplyr tibble mutate filter left_join %>% arrange
+#' @importFrom rstanarm stan_glmer
+#' @importFrom tibble rownames_to_column 
+#' @importFrom rlang set_names
+#' @importFrom dplyr bind_rows
+stan_coefs <- function(x, y, options, verbose, ...) {
+  fam <- if (is.factor(y[[1]]))
+    binomial()
+  else
+    gaussian()
+  form <- as.formula(paste0(names(y), "~ (1|value)"))
+  args <-
+    list(
+      form,
+      data = bind_cols(as_tibble(x), y),
+      family = fam,
+      na.action = na.omit
+    )
+  if (length(options) > 0)
+    args <- c(args, options)
+  if (!verbose) {
+    mod <- do.call("stan_glmer", args)
+  } else {
+    mod <- do.call("stan_glmer", args)
+  }
+  
+  coefs <- coef(mod)$value
+  coefs <- as.data.frame(coefs)
+  coefs <- set_names(coefs, "..value")
+  coefs <- rownames_to_column(coefs, "..level")
+  coefs <- as_tibble(coefs)
+  mean_coef <- mean(coefs$..value, na.rm = TRUE)
+  coefs$..value[is.na(coefs$..value)] <- mean_coef
+  new_row <- tibble(..level = "..new", ..value = mean_coef)
+  coefs <- bind_rows(coefs, new_row)
+  if (is.factor(y[[1]]))
+    coefs$..value <- -coefs$..value
+  coefs
+}
+
+#' @importFrom dplyr tibble mutate filter left_join %>% arrange 
 map_glm_coef <- function(dat, mapping) {
   new_val <- mapping$..value[mapping$..level == "..new"]
   dat <- dat %>% 

@@ -6,7 +6,8 @@
 \title{Encoding Factors into Linear Functions}
 \usage{
 step_embed(recipe, ..., role = NA, trained = FALSE, outcome = NULL,
-  mapping = NULL, skip = FALSE)
+  pooling = FALSE, options = list(seed = sample.int(10^5, 1)),
+  verbose = FALSE, mapping = NULL, skip = FALSE)
 
 \method{tidy}{step_embed}(x, ...)
 }
@@ -28,6 +29,14 @@ preprocessing have been estimated.}
 \item{outcome}{A call to \code{vars} to specify which variable is
 used as the outcome in the generalized linear model. Only
 numeric and two-level factors are currently supported.}
+
+\item{pooling}{A logical; should partial pooling be used via a hierarchical
+generalized linear model?}
+
+\item{options}{A list of options to pass to \code{\link[rstanarm:stan_glmer]{rstanarm::stan_glmer()}}.}
+
+\item{verbose}{A logical to control the default printing by
+\code{\link[rstanarm:stan_glmer]{rstanarm::stan_glmer()}}.}
 
 \item{mapping}{A list of tibble results that define the
 encoding. This is \code{NULL} until the step is trained by
@@ -52,17 +61,20 @@ variables for encoding), \code{level} (the factor levels), and
 \description{
 \code{step_embed} creates a \emph{specification} of a recipe step that
 will convert a nominal (i.e. factor) predictor into a single set of
-scores derived from a generalized linear models.
+scores derived from a generalized linear model.
 }
 \details{
-For each factor predictor, a generlaized linear model is fit to the
+For each factor predictor, a generalized linear model is fit to the
 outcome and the coefficients are returned as the encoding. These coefficients
 are on the linear predictor scale so, for factor outcomes, they are in
 log-odds units. The coefficients are created using a no intercept model and,
 when two factor outcomes are used, the log-odds reflect the event of interest
 being the \emph{first} level of the factor.
 
-For novel levels, the average of the coeffcients is returned.
+For novel levels, the average of the coefficients is returned.
+
+With partial pooling, a hierarchical generalized linear model is fit using
+\code{\link[rstanarm:stan_glmer]{rstanarm::stan_glmer()}} and no intercept.
 }
 \examples{
 library(recipes)
