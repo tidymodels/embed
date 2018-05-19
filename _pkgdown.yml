@@ -1,0 +1,11 @@
+template:
+  params:
+    bootswatch: united
+
+navbar:
+  left:
+  - text: Generalized Linear Models
+    href: articles/Applications/GLM.html  
+  - text: Tensorflow
+    href: articles/Applications/Tensorflow.html  
+

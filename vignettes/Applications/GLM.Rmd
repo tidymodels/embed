@@ -1,0 +1,152 @@
+---
+title: "Using Generalized Linear Models"
+vignette: >
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteIndexEntry{Using Generalized Linear Models}
+output:
+  knitr:::html_vignette:
+    toc: yes
+---
+
+
+```{r setup, include = FALSE}
+library(tidyverse)
+library(embed)
+data(okc)
+```
+
+This method uses a generalized linear model to estimate the effect of each level of a factor predictor on the outcome. These values are retained to serve as the new encodings for the factor levels. `embed` has two estimation methods for accomplishing this: with and without pooling. 
+
+The example used here is the OkCupid data from [Kim and Escobedo-Land (2015)(pdf)](http://www.amstat.org/publications/jse/v23n2/kim.pdf). In [Kuhn and Johnson (2018)](http://feat.engineering), these data are used to predict whether a person is in the STEM fields (science, technology, engineering, and mathematics). One predictor, geographic location, is a factor variable. The frequencies of location in the data set used here vary between `r min(table(okc$location))` person and `r max(table(okc$location))` per location. There are `r length(table(okc$location))` locations in the data. Rather than producing `r length(table(okc$location)) - 1` indicator variables for a model, a single numeric variable can be used to represent the _effect_ or _impact_ of the factor level on the outcome. In this case, where a factor outcome is being predicted (STEM or not), the effects are quantified by the log-odds of the location for being STEM.  
+
+We first calculate the raw log-odds for the data (independent of any model):
+
+```{r raw-data}
+library(tidyverse)
+library(embed)
+data(okc)
+
+props <- okc %>%
+  group_by(location) %>%
+  summarise(
+    prop = mean(Class == "stem"),
+    log_odds  = log(prop/(1-prop)),
+    n = length(Class)
+  ) %>% 
+  arrange(n)
+props
+
+# later, for plotting
+rng <- extendrange(props$log_odds[is.finite(props$log_odds)], f = 0.1)
+```
+
+In subsequent sections, a logistic regression model is used. When the outcome variable is numeric, the steps automatically use linear regression models to estimate effects. 
+
+## No Pooling
+
+In this case, the effect of each location can be estimated separately for each factor level. One method for conducting this estimation step is to fit a logistic regression with the STEM classification as the outcome and the location as the predictor. From this, the log-odds are naturally estimated by logistic regression. 
+
+For these data, a recipe is created and `step_embed` is used:
+
+```{r simple-glm}
+okc_glm <- recipe(Class ~ ., data = okc) %>%
+  # specify the variable being encoded and the outcome
+  step_embed(location, outcome = vars(Class)) %>%
+  # estimate the effects
+  prep(training = okc)
+```
+
+The `tidy` method can be used to extract the encodings and are merged with the raw estimates:
+
+```{r simple-glm-extract}
+estimates <- tidy(okc_glm, number = 1)
+estimates
+
+estimates <- estimates %>% 
+  dplyr::select(-terms) %>%
+  set_names(c("location", "glm")) %>%
+    inner_join(props, by = "location")
+```
+
+For the locations with `n > 1`, the estimates are effectively the same:
+
+```{r simple-glm-check}
+estimates %>%
+  dplyr::filter(is.finite(log_odds)) %>%
+  mutate(difference = log_odds-glm) %>%
+  dplyr::select(difference) %>%
+  summary()
+```
+
+Note that there is also a effect that is used for a novel location for future data sets that is the average effect:
+
+```{r simple-glm-new}
+tidy(okc_glm, number = 1) %>%
+  dplyr::filter(level == "..new") 
+```
+
+## Partial Pooling
+
+This method estimates the effects by using all of the locations at once using a hierarchical Bayesian generalized linear model. The locations are treated as a random set that contributes a random intercept to the previously used logistic regression. 
+
+Partial pooling estimates each effect as a combination of the separate empirical estimates of the log-odds and the prior distribution. For locations with small sample sizes, the final estimate is _shrunken_ towards the overall mean of the log-odds. This makes sense since we have poor information for estimating these locations. For locations with many data points, the estimates reply more on the empirical estimates. [This page](https://cran.r-project.org/web/packages/rstanarm/vignettes/glmer.html) has a good discussion of pooling in Bayesian models. 
+ 
+The step uses the `stan_glmer` function in the `rstanarm` package. There are a number of options that can be used to control the model estimation routine, including:
+
+```{r stan-options}
+opts <- 
+  list(
+    ## the number of chains
+    chains = 4,
+    ## how many cores to use 
+    cores = 4,
+    ## the total number of iterations per chain (low here for time)
+    iter = 500,
+    ## set the random number seed
+    seed = 8779
+  )
+```
+
+Using the default priors, the model is estimated via:
+
+```{r stan-fit-defaults}
+okc_glmer <- recipe(Class ~ ., data = okc) %>%
+  step_embed(
+    location,
+    outcome = vars(Class),
+    pooling = TRUE,
+    options = opts
+  ) %>% 
+  prep(training = okc)
+```
+
+This took more time than the simple non-pooled model. The embeddings are extracted in the same way:
+
+```{r stan-extract}
+estimates <- tidy(okc_glmer, number = 1) %>% 
+  dplyr::select(-terms) %>%
+  set_names(c("location", "glmer")) %>%
+    inner_join(estimates, by = "location")
+estimates %>% dplyr::select(location, log_odds, glm, glmer)
+```
+
+Note that the `n = 1` locations have estimates that are less extreme that the naive estimates. Also, 
+
+Let's see the effect of the shrinkage indued by partial pooling by plotting the naive results versus the new results (finite data only):
+
+```{r stan-compare}
+estimates %>%
+  dplyr::filter(is.finite(log_odds)) %>%
+  ggplot(aes(x = log_odds, y = glmer)) + 
+  geom_abline(col = "red", alpha = .5) + 
+  geom_point(aes(size = sqrt(n)), alpha = .5) + 
+  xlim(rng) + ylim(rng) +
+  theme_bw()
+```
+
+New levels are encoded as:
+
+```{r glmer-new}
+tidy(okc_glmer, number = 1) %>%
+  dplyr::filter(level == "..new") 
+```

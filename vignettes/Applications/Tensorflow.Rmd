@@ -1,0 +1,160 @@
+---
+title: "Entity Embeddings of Categorical Variables using Tensorflow"
+vignette: >
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteIndexEntry{Entity Embeddings of Categorical Variables using Tensorflow}
+output:
+  knitr:::html_vignette:
+    toc: yes
+---
+
+```{r setup, include = FALSE}
+library(tidyverse)
+library(keras)
+library(AmesHousing)
+library(embed)
+library(MASS)
+options(digits = 2)
+set.seed(24566)
+```
+
+The approach encodes categorical data as multiple numeric variables using a _word embedding_ approach. Originally intended as a way to take a large number of word identifiers and represent them in a smaller dimension. Good references on this are [Guo and Berkhahn (2016)](https://arxiv.org/abs/1604.06737) and Chapter 6 of [Francois and Allaire (2018)](https://www.manning.com/books/deep-learning-with-r). 
+
+The methodology first translates the _C_ factor levels as a set of integer values then randomly allocates them to the new _D_ numeric columns. These columns are optionally connected in a neural network to an intermediate layer of hidden units. This implementation uses a single layer with ReLu activations. Finally, an output layer is used with either linear activation (for numeric outcomes) or softmax (for classification).  
+
+To translate this model to a set of embeddings, the coefficients of the original embedding layer are used to represent the original factor levels. 
+
+As an example, we use the Ames housing data where the sale price of houses are being predicted. One predictor, neighborhood, has the most factor levels of the predictors. 
+
+```{r ames}
+library(tidyverse)
+library(AmesHousing)
+ames <- make_ames()
+length(levels(ames$Neighborhood))
+```
+
+The distribution of data in the neighborhood is not uniform:
+
+```{r ames-xtab}
+ggplot(ames, aes(x = Neighborhood)) + 
+  geom_bar() + 
+  coord_flip() + 
+  xlab("") + 
+  theme_bw()
+```
+
+Fo plotting later, we calculate the simple means per neighborhood:
+
+```{r ames-means}
+means <- ames %>%
+  group_by(Neighborhood) %>%
+  summarise(
+    mean = mean(log10(Sale_Price)),
+    n = length(Sale_Price),
+    lon = median(Longitude),
+    lat = median(Latitude)
+  )
+```
+
+First, we'll fit a model with no hidden units and 10 encoding columns:
+
+```{r ames-linear}
+library(embed)
+tf_linear <- recipe(Sale_Price ~ Neighborhood + MS_SubClass, data = ames) %>%
+  step_log(Sale_Price, base = 10) %>%
+  step_tfembed(
+    Neighborhood, outcome = vars(Sale_Price),
+    number = 10, 
+    options = tfembed_control(epochs = 50)
+  ) %>% 
+  prep(training = ames)
+```
+
+The embeddings are obtained using the `tidy` method:
+
+```{r linear-coefs, warning = FALSE}
+linear_coef <- tidy(tf_linear, number = 2)
+linear_coef
+
+linear_coef <- linear_coef %>%
+  dplyr::rename(Neighborhood = level) %>% 
+  inner_join(means, by = "Neighborhood")
+```
+
+There is some columns that are correlated with the outcome:
+
+```{r linear-cor}
+linear_cor <- linear_coef %>% 
+  dplyr::select(starts_with("emb"), mean) %>% 
+  cor()
+linear_cor[-11,11]
+```
+
+However, this has induced some between-predictor correlations. 
+
+[Multidimensional scaling](https://en.wikipedia.org/wiki/Multidimensional_scaling) is used to see if there is any information in the data that is associated with the outcome:
+
+```{r linear-mds}
+lin_mds <- linear_coef %>% 
+  dplyr::select(starts_with("emb")) %>%
+  dist() %>%
+  sammon(trace = FALSE)
+lin_mds$points %>%
+  as.data.frame() %>%
+  bind_cols(linear_coef %>% dplyr::select(Neighborhood, mean)) %>%
+  gather(comp, mds_value, -Neighborhood, -mean) %>%
+  ggplot(aes(x = mds_value, y = mean)) + 
+  geom_point(alpha = 0.5) + 
+  facet_wrap(~comp) + 
+  theme_bw()
+```
+
+Note that, since these methods are **supervised**, using the new encodings in a model where _the same data are being used_, the estimate of model performance may yield overly optimistic results. 
+
+Now let's fit a more complex model with a layer of hidden units. 
+
+```{r ames-nonlinear}
+tf_nlin <- recipe(Sale_Price ~ Neighborhood + MS_SubClass, data = ames) %>%
+  step_log(Sale_Price, base = 10) %>%
+  step_tfembed(
+    Neighborhood, outcome = vars(Sale_Price),
+    number = 10, 
+    hidden = 50,
+    options = tfembed_control(epochs = 50)
+  ) %>% 
+  prep(training = ames)
+
+nlin_coef <- tidy(tf_nlin, number = 2) %>%
+  dplyr::rename(Neighborhood = level) %>%
+  inner_join(means, by = "Neighborhood")
+
+nlin_cor <- nlin_coef %>% 
+  dplyr::select(starts_with("emb"), mean) %>% 
+  cor()
+nlin_cor[-11,11]
+
+nlin_mds <- nlin_coef %>%
+  # dplyr::filter(Neighborhood != "..new") %>% 
+  dplyr::select(starts_with("emb")) %>%
+  dist() %>%
+  sammon(trace = FALSE)
+nlin_mds$points %>%
+  as.data.frame() %>%
+  bind_cols(nlin_coef %>% dplyr::select(Neighborhood, mean)) %>%
+  gather(comp, mds_value, -Neighborhood, -mean) %>%
+  ggplot(aes(x = mds_value, y = mean)) + 
+  geom_point(alpha = 0.5) + 
+  facet_wrap(~comp) + 
+  theme_bw()
+```
+
+Arguably, there appears to be a slightly better association with the sample means using the extra layer. 
+
+The new levels are encoded as:
+
+```{r nlin-new}
+tidy(tf_nlin, number = 2) %>% 
+  dplyr::filter(level == "..new") %>%
+  dplyr::select(starts_with("emb"))
+```
+
