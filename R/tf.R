@@ -89,6 +89,10 @@
 #' 
 #' Also note that it may be difficult to obtain reproducible results using this step due to the nature of Tensorflow (see link in References).
 #' 
+#' tensorflow models cannot be run in parallel within the same 
+#'  session (via `foreach`) or the `parallel` package. If using a
+#'  recipes with this step with `caret`, avoid parallel processing. 
+#' 
 #' @references Francois C and Allaire JJ (2018) _Deep Learning with R_, Manning
 #' 
 #' "How can I obtain reproducible results using Keras during development?" \url{https://tinyurl.com/keras-repro}
@@ -163,7 +167,7 @@ prep.step_tfembed <- function(x, training, info = NULL, ...) {
   col_names <- terms_select(x$terms, info = info)
   check_type(training[, col_names], quant = FALSE)
   y_name <- terms_select(x$outcome, info = info)
-  # check options
+  x$options <- tf_options_check(x$options)
   res <-
     map(
       training[, col_names], 
@@ -349,6 +353,20 @@ tfembed_control <- function(
     loss = loss, optimizer = optimizer, epochs = epochs, 
     validation_split = validation_split, batch_size = batch_size,
     verbose = verbose)
+}
+
+tf_options_check <- function(opt) {
+  exp_names <- c('loss',
+                 'optimizer',
+                 'epochs',
+                 'validation_split',
+                 'batch_size',
+                 'verbose')
+
+  if (length(setdiff(exp_names, names(opt))) > 0)
+    stop("The following options are missing from the `options`: ",
+         paste0(setdiff(exp_names, names(opt)), collapse = ",")) 
+  opt
 }
 
 #' @importFrom utils globalVariables
