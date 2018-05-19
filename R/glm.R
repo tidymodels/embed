@@ -39,20 +39,40 @@
 #' @keywords datagen 
 #' @concept preprocessing encoding
 #' @export
-#' @details For each factor predictor, a generalized linear model is fit to the
-#' outcome and the coefficients are returned as the encoding. These coefficients
-#' are on the linear predictor scale so, for factor outcomes, they are in
-#' log-odds units. The coefficients are created using a no intercept model and,
-#' when two factor outcomes are used, the log-odds reflect the event of interest
-#' being the _first_ level of the factor. 
+#' @details For each factor predictor, a generalized linear model
+#'  is fit to the outcome and the coefficients are returned as the
+#'  encoding. These coefficients are on the linear predictor scale
+#'  so, for factor outcomes, they are in log-odds units. The
+#'  coefficients are created using a no intercept model and, when
+#'  two factor outcomes are used, the log-odds reflect the event of
+#'  interest being the _first_ level of the factor.
+
 #'
-#' For novel levels, the average of the coefficients is returned.
+#' For novel levels, a slightly timmed average of the coefficients 
+#'  is returned.
 #' 
-#' With partial pooling, a hierarchical generalized linear model is fit using 
-#'  [rstanarm::stan_glmer()] and no intercept.  
+#' With partial pooling, a hierarchical generalized linear model
+#'  is fit using [rstanarm::stan_glmer()] and no intercept via
+#'  
+#' ```
+#'   stan_glmer(outcome ~ (1 | predictor), data = data, ...)
+#' ```
+#' 
+#' where the `...` include the `family` argument (automatically
+#'  set by the step) as well as any arguments given to the `options`
+#'  argument to the step. Relevant options include `chains`, `iter`,
+#'  `cores`, and arguments for the priors (see the links in the 
+#'  References below). 
+#' 
 #' 
 #' @references Zumel N and Mount J (2017) "vtreat: a data.frame Processor for 
 #'  Predictive Modeling," arXiv:1611.09477
+#'  
+#' "Prior Distributions for `rstanarm`` Models"  
+#' \url{https://tinyurl.com/stan-priors}
+#'  
+#' "Estimating Generalized (Non-)Linear Models with Group-Specific 
+#' Terms with `rstanarm`" \url{https://tinyurl.com/stan-glm-grouped}
 #' 
 #' @examples
 #' library(recipes)
@@ -153,7 +173,7 @@ glm_coefs <- function(x, y, ...) {
   
   coefs <- coef(mod)
   names(coefs) <- gsub("^value", "", names(coefs))
-  mean_coef <- mean(coefs, na.rm = TRUE)
+  mean_coef <- mean(coefs, na.rm = TRUE, trim = .1)
   coefs[is.na(coefs)] <- mean_coef
   coefs <- c(coefs, ..new = mean_coef)
   if(is.factor(y[[1]]))
@@ -194,7 +214,7 @@ stan_coefs <- function(x, y, options, verbose, ...) {
   coefs <- set_names(coefs, "..value")
   coefs <- rownames_to_column(coefs, "..level")
   coefs <- as_tibble(coefs)
-  mean_coef <- mean(coefs$..value, na.rm = TRUE)
+  mean_coef <- mean(coefs$..value, na.rm = TRUE, trim = .1)
   coefs$..value[is.na(coefs$..value)] <- mean_coef
   new_row <- tibble(..level = "..new", ..value = mean_coef)
   coefs <- bind_rows(coefs, new_row)

@@ -115,6 +115,10 @@ would be\preformatted{  keras_model_sequential() \%>\%
 }
 
 Also note that it may be difficult to obtain reproducible results using this step due to the nature of Tensorflow (see link in References).
+
+tensorflow models cannot be run in parallel within the same
+session (via \code{foreach}) or the \code{parallel} package. If using a
+recipes with this step with \code{caret}, avoid parallel processing.
 }
 \examples{
 data(okc)

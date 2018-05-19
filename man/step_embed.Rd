@@ -64,17 +64,26 @@ will convert a nominal (i.e. factor) predictor into a single set of
 scores derived from a generalized linear model.
 }
 \details{
-For each factor predictor, a generalized linear model is fit to the
-outcome and the coefficients are returned as the encoding. These coefficients
-are on the linear predictor scale so, for factor outcomes, they are in
-log-odds units. The coefficients are created using a no intercept model and,
-when two factor outcomes are used, the log-odds reflect the event of interest
-being the \emph{first} level of the factor.
+For each factor predictor, a generalized linear model
+is fit to the outcome and the coefficients are returned as the
+encoding. These coefficients are on the linear predictor scale
+so, for factor outcomes, they are in log-odds units. The
+coefficients are created using a no intercept model and, when
+two factor outcomes are used, the log-odds reflect the event of
+interest being the \emph{first} level of the factor.
 
-For novel levels, the average of the coefficients is returned.
+For novel levels, a slightly timmed average of the coefficients
+is returned.
 
-With partial pooling, a hierarchical generalized linear model is fit using
-\code{\link[rstanarm:stan_glmer]{rstanarm::stan_glmer()}} and no intercept.
+With partial pooling, a hierarchical generalized linear model
+is fit using \code{\link[rstanarm:stan_glmer]{rstanarm::stan_glmer()}} and no intercept via\preformatted{  stan_glmer(outcome ~ (1 | predictor), data = data, ...)
+}
+
+where the \code{...} include the \code{family} argument (automatically
+set by the step) as well as any arguments given to the \code{options}
+argument to the step. Relevant options include \code{chains}, \code{iter},
+\code{cores}, and arguments for the priors (see the links in the
+References below).
 }
 \examples{
 library(recipes)
@@ -90,6 +99,12 @@ not_pooled <- recipe(Class ~ age + location, data = okc) \%>\%
 \references{
 Zumel N and Mount J (2017) "vtreat: a data.frame Processor for
 Predictive Modeling," arXiv:1611.09477
+
+"Prior Distributions for `rstanarm`` Models"
+\url{https://tinyurl.com/stan-priors}
+
+"Estimating Generalized (Non-)Linear Models with Group-Specific
+Terms with \code{rstanarm}" \url{https://tinyurl.com/stan-glm-grouped}
 }
 \concept{
 preprocessing encoding
