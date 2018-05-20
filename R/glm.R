@@ -68,6 +68,9 @@
 #' @references Zumel N and Mount J (2017) "vtreat: a data.frame Processor for 
 #'  Predictive Modeling," arXiv:1611.09477
 #'  
+#'  "Hierarchical Partial Pooling for Repeated Binary Trials" 
+#'  \url{https://tinyurl.com/stan-pooling}
+#'  
 #' "Prior Distributions for `rstanarm`` Models"  
 #' \url{https://tinyurl.com/stan-priors}
 #'  
