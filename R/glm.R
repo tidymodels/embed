@@ -62,7 +62,8 @@
 #'  set by the step) as well as any arguments given to the `options`
 #'  argument to the step. Relevant options include `chains`, `iter`,
 #'  `cores`, and arguments for the priors (see the links in the 
-#'  References below). 
+#'  References below). `prior_intercept` is the argument that has the 
+#'  most effect on the amount of shrinkage. 
 #' 
 #' 
 #' @references Zumel N and Mount J (2017) "vtreat: a data.frame Processor for 

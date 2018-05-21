@@ -83,7 +83,8 @@ where the \code{...} include the \code{family} argument (automatically
 set by the step) as well as any arguments given to the \code{options}
 argument to the step. Relevant options include \code{chains}, \code{iter},
 \code{cores}, and arguments for the priors (see the links in the
-References below).
+References below). \code{prior_intercept} is the argument that has the
+most effect on the amount of shrinkage.
 }
 \examples{
 library(recipes)
