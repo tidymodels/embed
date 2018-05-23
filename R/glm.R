@@ -187,7 +187,7 @@ glm_coefs <- function(x, y, ...) {
     ..value = unname(coefs)
   )
 }
-
+#' @importFrom utils capture.output
 #' @importFrom rstanarm stan_glmer
 #' @importFrom tibble rownames_to_column 
 #' @importFrom rlang set_names
