@@ -3,3 +3,4 @@
 ^pkgdown$
 Applications/GLM.Rmd
 Applications/Tensorflow.Rmd
+^\.travis\.yml$

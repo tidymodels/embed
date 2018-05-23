@@ -1,0 +1,30 @@
+# R for travis: see documentation at https://docs.travis-ci.com/user/languages/r
+language: r
+
+dist: trusty
+sudo: false
+cache: packages
+
+r:
+- oldrel
+- release
+- devel
+
+env:
+  - KERAS_BACKEND="tensorflow"
+  - KERAS_BACKEND="theano" THEANO_FLAGS=optimizer=fast_compile
+  - KERAS_IMPLEMENTATION="tensorflow"
+
+cache:
+  packages: true
+  directories:
+    - $HOME/.keras
+    - $HOME/.cache/pip
+
+before_script:
+  - pip2.7 install --upgrade --ignore-installed --user travis pip setuptools wheel virtualenv
+  - pip2.7 install --upgrade --ignore-installed --user travis keras h5py pyyaml requests Pillow scipy theano
+  - R -e 'tensorflow::install_tensorflow()'
+
+after_success:
+  - Rscript -e 'covr::codecov()'
