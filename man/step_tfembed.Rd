@@ -127,7 +127,7 @@ rec <- recipe(Class ~ age + location, data = okc) \%>\%
   step_tfembed(location, outcome = vars(Class),
                options = tfembed_control(epochs = 10))
 
-# see pkgdown url for more examples
+# See https://topepo.github.io/embed/ for examples
 }
 \references{
 Francois C and Allaire JJ (2018) \emph{Deep Learning with R}, Manning

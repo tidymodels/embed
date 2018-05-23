@@ -87,7 +87,7 @@
 #' not_pooled <- recipe(Class ~ age + location, data = okc) %>%
 #'   step_embed(location, outcome = vars(Class))
 #' 
-#' # see pkgdown url for more examples
+#' # See https://topepo.github.io/embed/ for examples
 
 #' @importFrom recipes add_step step terms_select sel2char ellipse_check
 step_embed <-

@@ -95,7 +95,7 @@ data(okc)
 not_pooled <- recipe(Class ~ age + location, data = okc) \%>\%
   step_embed(location, outcome = vars(Class))
 
-# see pkgdown url for more examples
+# See https://topepo.github.io/embed/ for examples
 }
 \references{
 Zumel N and Mount J (2017) "vtreat: a data.frame Processor for

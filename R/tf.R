@@ -104,7 +104,7 @@
 #'   step_tfembed(location, outcome = vars(Class),
 #'                options = tfembed_control(epochs = 10))
 #' 
-#' # see pkgdown url for more examples
+#' # See https://topepo.github.io/embed/ for examples
 
 
 #' @importFrom recipes add_step step terms_select sel2char ellipse_check
