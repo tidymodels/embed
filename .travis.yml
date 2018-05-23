@@ -14,8 +14,39 @@ env:
   - KERAS_BACKEND="tensorflow"
 
 r_binary_packages: 
-  - rstan
-
+ - rstan
+ - glue
+ - magrittr
+ - stringi
+ - colorspace
+ - assertthat
+ - utf8
+ - stringr
+ - RColorBrewer
+ - dichromat
+ - munsell
+ - labeling
+ - R6
+ - viridisLite
+ - cli
+ - crayon
+ - pillar
+ - rlang
+ - digest
+ - gtable
+ - plyr
+ - reshape2
+ - scales
+ - tibble
+ - lazyeval
+ - ggplot2
+ - StanHeaders
+ - inline
+ - gridExtra
+ - Rcpp
+ - RcppEigen
+ - BH
+ 
 cache:
   packages: true
   directories:
