@@ -2,7 +2,7 @@
 language: r
 
 dist: trusty
-sudo: false
+sudo: true
 cache: packages
 
 r:
@@ -46,7 +46,7 @@ r_binary_packages:
  - Rcpp
  - RcppEigen
  - BH
- 
+
 cache:
   packages: true
   directories:
