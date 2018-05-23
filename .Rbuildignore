@@ -4,3 +4,7 @@
 Applications/GLM.Rmd
 Applications/Tensorflow.Rmd
 ^\.travis\.yml$
+^README.*
+^.*\.Rproj$
+^\.Rproj\.user$
+.github
