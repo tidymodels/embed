@@ -15,6 +15,13 @@ env:
 
 r_binary_packages: 
  - rstan
+ - rstanarm
+ - igraph
+ - RCurl
+ - dplyr
+ - ddalpha
+ - git2r
+ - shiny
  - glue
  - magrittr
  - stringi
