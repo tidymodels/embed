@@ -22,6 +22,7 @@ r_binary_packages:
  - ddalpha
  - git2r
  - shiny
+ - class
  - glue
  - magrittr
  - stringi
