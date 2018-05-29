@@ -19,7 +19,6 @@ r_binary_packages:
  - igraph
  - RCurl
  - dplyr
- - ddalpha
  - git2r
  - shiny
  - glue
