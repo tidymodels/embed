@@ -23,6 +23,7 @@ r_binary_packages:
  - git2r
  - shiny
  - class
+ - r-api-3
  - glue
  - magrittr
  - stringi
