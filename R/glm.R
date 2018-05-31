@@ -62,11 +62,15 @@
 #'  set by the step) as well as any arguments given to the `options`
 #'  argument to the step. Relevant options include `chains`, `iter`,
 #'  `cores`, and arguments for the priors (see the links in the 
-#'  References below). 
+#'  References below). `prior_intercept` is the argument that has the 
+#'  most effect on the amount of shrinkage. 
 #' 
 #' 
 #' @references Zumel N and Mount J (2017) "vtreat: a data.frame Processor for 
 #'  Predictive Modeling," arXiv:1611.09477
+#'  
+#'  "Hierarchical Partial Pooling for Repeated Binary Trials" 
+#'  \url{https://tinyurl.com/stan-pooling}
 #'  
 #' "Prior Distributions for `rstanarm`` Models"  
 #' \url{https://tinyurl.com/stan-priors}
@@ -83,7 +87,7 @@
 #' not_pooled <- recipe(Class ~ age + location, data = okc) %>%
 #'   step_embed(location, outcome = vars(Class))
 #' 
-#' # see pkgdown url for more examples
+#' # See https://topepo.github.io/embed/ for examples
 
 #' @importFrom recipes add_step step terms_select sel2char ellipse_check
 step_embed <-
@@ -183,7 +187,7 @@ glm_coefs <- function(x, y, ...) {
     ..value = unname(coefs)
   )
 }
-
+#' @importFrom utils capture.output
 #' @importFrom rstanarm stan_glmer
 #' @importFrom tibble rownames_to_column 
 #' @importFrom rlang set_names

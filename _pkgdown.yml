@@ -8,4 +8,6 @@ navbar:
     href: articles/Applications/GLM.html  
   - text: Tensorflow
     href: articles/Applications/Tensorflow.html  
+  - text: Reference
+    href: reference/index.html 
 
