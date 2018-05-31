@@ -23,7 +23,8 @@ Suggests:
     testthat,
     knitr,
     rmarkdown,
-    covr
+    covr,
+    AmesHousing
 License: GPL-2
 VignetteBuilder: knitr
 Encoding: UTF-8
