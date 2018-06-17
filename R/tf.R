@@ -239,10 +239,11 @@ tf_coefs <- function(x, y, opt, num, lab, h, ...) {
   model <- model %>%
     compile(
       loss = opt$loss,
+      metrics = opt$metrics,
       optimizer = opt$optimizer
       )
   
-  model %>% fit(
+  history <- model %>% fit(
     x = x,
     y = y,
     epochs = opt$epochs,
@@ -250,6 +251,8 @@ tf_coefs <- function(x, y, opt, num, lab, h, ...) {
     batch_size = opt$batch_size,
     verbose = opt$verbose
   )
+  
+  plot(history)
   
   layer_values <- get_layer(model, "embedding")$get_weights()[[1]]
   layer_values <- as_tibble(layer_values) %>% 
@@ -333,10 +336,11 @@ tidy.step_tfembed <- function(x, ...) {
 
 #' @export
 #' @rdname step_tfembed
-#' @param optimizer,loss Arguments to pass to [keras::compile()]
+#' @param optimizer,loss,metrics Arguments to pass to [keras::compile()]
 #' @param epochs,validation_split,batch_size,verbose Arguments to pass to [keras::fit()]
 tfembed_control <- function(
   loss = "mse",
+  metrics = NULL,
   optimizer = "sgd",
   epochs = 20,
   validation_split = 0,
@@ -350,13 +354,14 @@ tfembed_control <- function(
   if(validation_split < 0 | validation_split > 1)
     stop("`validation_split` should be on [0, 1)", call. = FALSE)
   list(
-    loss = loss, optimizer = optimizer, epochs = epochs, 
+    loss = loss, metrics = metrics, optimizer = optimizer, epochs = epochs, 
     validation_split = validation_split, batch_size = batch_size,
     verbose = verbose)
 }
 
 tf_options_check <- function(opt) {
   exp_names <- c('loss',
+                 'metrics',
                  'optimizer',
                  'epochs',
                  'validation_split',

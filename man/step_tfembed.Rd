@@ -12,8 +12,8 @@ step_tfembed(recipe, ..., role = NA, trained = FALSE, outcome = NULL,
 
 \method{tidy}{step_tfembed}(x, ...)
 
-tfembed_control(loss = "mse", optimizer = "sgd", epochs = 20,
-  validation_split = 0, batch_size = 32, verbose = 0)
+tfembed_control(loss = "mse", metrics = NULL, optimizer = "sgd",
+  epochs = 20, validation_split = 0, batch_size = 32, verbose = 0)
 }
 \arguments{
 \item{recipe}{A recipe object. The step will be added to the
@@ -55,7 +55,7 @@ the computations for subsequent operations}
 
 \item{x}{A \code{step_tfembed} object.}
 
-\item{optimizer, loss}{Arguments to pass to \code{\link[keras:compile]{keras::compile()}}}
+\item{optimizer, loss, metrics}{Arguments to pass to \code{\link[keras:compile]{keras::compile()}}}
 
 \item{epochs, validation_split, batch_size, verbose}{Arguments to pass to \code{\link[keras:fit]{keras::fit()}}}
 }
