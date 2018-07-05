@@ -5,7 +5,6 @@ dist: trusty
 sudo: true
 
 r:
-- oldrel
 - release
 - devel
 
