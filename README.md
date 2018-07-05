@@ -1,3 +1,10 @@
+[![Travis build status](https://travis-ci.org/topepo/embed.svg?branch=master)](https://travis-ci.org/topepo/embed)
+[![Coverage status](https://codecov.io/gh/topepo/embed/branch/master/graph/badge.svg)](https://codecov.io/github/tidymodels/embed?branch=master)
+[![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/embed)](http://cran.r-project.org/web/packages/embed)
+[![Downloads](http://cranlogs.r-pkg.org/badges/embed)](http://cran.rstudio.com/package=embed)
+![](https://img.shields.io/badge/lifecycle-experimental-orange.svg)
+
+
 `embed` is a package that contains extra steps for the [`recipes`](http://cran.rstudio.com/package=recipes) package for embedding categorical predictors into one or more numeric columns. All of the preprocessing methods are _supervised_. 
 
 These steps are contained in a separate package because the package dependencies, [`rstanarm`](http://cran.rstudio.com/package=rstanarm) and [`keras`](http://cran.rstudio.com/package=keras),  are fairly heavy. 
