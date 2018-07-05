@@ -60,8 +60,8 @@ cache:
 
 
 before_script:
-  - python3 -m pip install --upgrade --ignore-installed --user travis pip setuptools wheel virtualenv
-  - python3 -m pip install --upgrade --ignore-installed --user travis keras h5py pyyaml requests Pillow scipy theano
+  - python -m pip install --upgrade --ignore-installed --user travis pip setuptools wheel virtualenv
+  - python -m pip install --upgrade --ignore-installed --user travis keras h5py pyyaml requests Pillow scipy theano
   - R -e 'tensorflow::install_tensorflow()'
 
 before_install:
