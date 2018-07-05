@@ -67,7 +67,7 @@ before_script:
 before_install:
   - sudo apt-get -y install libnlopt-dev 
   - sudo apt-get update
-  - sudo apt-get -y install python3.6
+  - sudo apt-get -y install python3
 
 after_success:
   - Rscript -e 'covr::codecov()'
