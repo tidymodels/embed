@@ -65,7 +65,8 @@ before_script:
   - R -e 'tensorflow::install_tensorflow()'
 
 before_install:
-  - sudo apt-get -y install libnlopt-dev
-
+  - sudo apt-get -y install libnlopt-dev 
+  - sudo apt-get -y install python3.6
+   
 after_success:
   - Rscript -e 'covr::codecov()'
