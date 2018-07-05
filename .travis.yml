@@ -3,7 +3,6 @@ language: r
 
 dist: trusty
 sudo: true
-cache: packages
 
 r:
 - oldrel
@@ -60,8 +59,8 @@ cache:
     - $HOME/.cache/pip
 
 before_script:
-  - pip2.7 install --upgrade --ignore-installed --user travis pip setuptools wheel virtualenv
-  - pip2.7 install --upgrade --ignore-installed --user travis keras h5py pyyaml requests Pillow scipy theano
+  - pip install --upgrade --ignore-installed --user travis pip setuptools wheel virtualenv
+  - pip install --upgrade --ignore-installed --user travis keras h5py pyyaml requests Pillow scipy theano
   - R -e 'tensorflow::install_tensorflow()'
 
 before_install:
