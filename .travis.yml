@@ -61,7 +61,7 @@ cache:
 
 before_script:
   - pip install --upgrade --ignore-installed --user travis pip
-  - pip install           --ignore-installed --user travis 'requests[security]'
+  - pip install --upgrade --ignore-installed --user travis 'requests[security]'
   - pip install --upgrade --ignore-installed --user travis pip setuptools wheel virtualenv
   - pip install --upgrade --ignore-installed --user travis keras h5py pyyaml requests Pillow scipy theano
   - R -e 'tensorflow::install_tensorflow()'
