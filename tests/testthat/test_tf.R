@@ -260,6 +260,7 @@ test_that("character encoded predictor", {
 context("tensorflow model, arguments")
 
 test_that("bad args", {
+  skip_on_cran()
   three_class <- iris
   three_class$fac <- rep(letters[1:3], 50)
   three_class$logical <- rep(c(TRUE, FALSE), 75)
@@ -273,6 +274,7 @@ test_that("bad args", {
 
 
 test_that('printing', {
+  skip_on_cran()
   print_test <- recipe(x2 ~ ., data = ex_dat_ch) %>%
     step_tfembed(x3, outcome = vars(x2)) 
   expect_output(print(print_test))
