@@ -58,10 +58,9 @@ cache:
     - $HOME/.keras
     - $HOME/.cache/pip
 
-python
-  - "3.5"
 
 before_script:
+  - pip install --upgrade --ignore-installed --user travis pip
   - pip install --upgrade --ignore-installed --user travis pip setuptools wheel virtualenv
   - pip install --upgrade --ignore-installed --user travis keras h5py pyyaml requests Pillow scipy theano
   - R -e 'tensorflow::install_tensorflow()'
