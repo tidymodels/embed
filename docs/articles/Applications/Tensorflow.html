@@ -107,20 +107,20 @@
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1">linear_coef &lt;-<span class="st"> </span><span class="kw">tidy</span>(tf_linear, <span class="dt">number =</span> <span class="dv">2</span>)</a>
 <a class="sourceLine" id="cb6-2" data-line-number="2">linear_coef</a></code></pre></div>
 <pre><code>## # A tibble: 29 x 12
-##       emb01   emb02    emb03    emb04  emb05    emb06   emb07  emb08
-##       &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;  &lt;dbl&gt;    &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;
-##  1  0.0231  -0.0120 -0.00825 -0.0268  0.0260  0.0256  -0.0141 0.0357
-##  2 -0.0517  -0.110   0.0632  -0.0375  0.0555  0.0436  -0.0823 0.115 
-##  3 -0.0799  -0.159   0.0180  -0.0190  0.0828  0.0644  -0.0657 0.110 
-##  4 -0.0224  -0.0620  0.0235   0.0269  0.0672 -0.00305 -0.0200 0.0714
-##  5 -0.0527  -0.0876  0.0158  -0.00549 0.0213  0.0347  -0.0193 0.0936
-##  6 -0.0462  -0.183   0.0889  -0.0267  0.0713 -0.0124  -0.0588 0.147 
-##  7 -0.0348  -0.270   0.112   -0.0372  0.0828  0.0349  -0.0558 0.156 
-##  8 -0.0394  -0.168   0.0815   0.0265  0.0571  0.0461  -0.0239 0.136 
-##  9  0.00481 -0.126   0.0797   0.0229  0.0178 -0.0168  -0.0506 0.0523
-## 10 -0.0637  -0.154   0.0447  -0.0384  0.125   0.0611  -0.0867 0.0692
-## # ... with 19 more rows, and 4 more variables: emb09 &lt;dbl&gt;, emb10 &lt;dbl&gt;,
-## #   level &lt;chr&gt;, terms &lt;chr&gt;</code></pre>
+##     emb01  emb02    emb03  emb04    emb05   emb06   emb07   emb08    emb09
+##     &lt;dbl&gt;  &lt;dbl&gt;    &lt;dbl&gt;  &lt;dbl&gt;    &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;
+##  1 0.0182 0.0491 -0.0475  0.0270 -0.00214 -0.0463  0.0205  0.0183 -2.84e-2
+##  2 0.137  0.102  -0.0805  0.0980  0.00958 -0.0988 -0.0527  0.0714 -6.53e-2
+##  3 0.170  0.122  -0.0857  0.132  -0.0300  -0.176  -0.0286 -0.0209 -8.69e-2
+##  4 0.0806 0.0774 -0.00667 0.153  -0.0454  -0.0424 -0.0796  0.0495 -4.56e-2
+##  5 0.114  0.0879 -0.0123  0.113  -0.0188  -0.104  -0.0392  0.0177 -1.82e-2
+##  6 0.210  0.0993 -0.0899  0.158  -0.0406  -0.160  -0.0581 -0.0118 -8.55e-2
+##  7 0.206  0.106  -0.103   0.206   0.0177  -0.222  -0.134   0.0385 -5.01e-2
+##  8 0.154  0.105  -0.117   0.176   0.0214  -0.133  -0.0457  0.0428 -3.42e-4
+##  9 0.136  0.125  -0.00981 0.124  -0.00811 -0.0983 -0.0124 -0.0267 -5.17e-2
+## 10 0.104  0.115  -0.0991  0.183   0.00121 -0.152  -0.0698 -0.0284 -7.78e-2
+## # ... with 19 more rows, and 3 more variables: emb10 &lt;dbl&gt;, level &lt;chr&gt;,
+## #   terms &lt;chr&gt;</code></pre>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1">linear_coef &lt;-<span class="st"> </span>linear_coef <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb8-2" data-line-number="2"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/select.html">rename</a></span>(<span class="dt">Neighborhood =</span> level) <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb8-3" data-line-number="3"><span class="st">  </span><span class="kw">inner_join</span>(means, <span class="dt">by =</span> <span class="st">"Neighborhood"</span>)</a></code></pre></div>
@@ -130,7 +130,7 @@
 <a class="sourceLine" id="cb9-3" data-line-number="3"><span class="st">  </span><span class="kw">cor</span>()</a>
 <a class="sourceLine" id="cb9-4" data-line-number="4">linear_cor[<span class="op">-</span><span class="dv">11</span>,<span class="dv">11</span>]</a></code></pre></div>
 <pre><code>## emb01 emb02 emb03 emb04 emb05 emb06 emb07 emb08 emb09 emb10 
-## -0.54 -0.72  0.49 -0.36  0.52  0.29 -0.43  0.61  0.58  0.40</code></pre>
+##  0.63  0.40 -0.62  0.53  0.33 -0.69 -0.70 -0.20 -0.25 -0.41</code></pre>
 <p>However, this has induced some between-predictor correlations.</p>
 <p><a href="https://en.wikipedia.org/wiki/Multidimensional_scaling">Multidimensional scaling</a> is used to see if there is any information in the data that is associated with the outcome:</p>
 <div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1">lin_mds &lt;-<span class="st"> </span>linear_coef <span class="op">%&gt;%</span><span class="st"> </span></a>
@@ -168,7 +168,7 @@
 <a class="sourceLine" id="cb14-3" data-line-number="3"><span class="st">  </span><span class="kw">cor</span>()</a>
 <a class="sourceLine" id="cb14-4" data-line-number="4">nlin_cor[<span class="op">-</span><span class="dv">11</span>,<span class="dv">11</span>]</a></code></pre></div>
 <pre><code>## emb01 emb02 emb03 emb04 emb05 emb06 emb07 emb08 emb09 emb10 
-##  0.64 -0.28 -0.52 -0.56  0.31 -0.32  0.75  0.21 -0.61  0.91</code></pre>
+## -0.77 -0.63  0.62 -0.71 -0.65 -0.86 -0.33 -0.32 -0.49 -0.75</code></pre>
 <div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1">nlin_mds &lt;-<span class="st"> </span>nlin_coef <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb16-2" data-line-number="2"><span class="st">  </span><span class="co"># dplyr::filter(Neighborhood != "..new") %&gt;% </span></a>
 <a class="sourceLine" id="cb16-3" data-line-number="3"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/select.html">select</a></span>(<span class="kw">starts_with</span>(<span class="st">"emb"</span>)) <span class="op">%&gt;%</span></a>
@@ -189,9 +189,9 @@
 <a class="sourceLine" id="cb17-2" data-line-number="2"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(level <span class="op">==</span><span class="st"> "..new"</span>) <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb17-3" data-line-number="3"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/select.html">select</a></span>(<span class="kw">starts_with</span>(<span class="st">"emb"</span>))</a></code></pre></div>
 <pre><code>## # A tibble: 1 x 10
-##     emb01   emb02   emb03  emb04  emb05   emb06   emb07   emb08   emb09
-##     &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;
-## 1 -0.0302 0.00798 -0.0333 0.0378 0.0338 -0.0482 0.00135 -0.0236 -0.0370
+##      emb01   emb02  emb03   emb04   emb05   emb06  emb07   emb08  emb09
+##      &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;
+## 1 -0.00877 -0.0351 0.0478 -0.0119 -0.0209 -0.0376 0.0181 -0.0451 0.0381
 ## # ... with 1 more variable: emb10 &lt;dbl&gt;</code></pre>
   </div>
 

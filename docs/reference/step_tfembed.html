@@ -110,13 +110,13 @@ scores derived from a tensorflow model via a word-embedding model.
 
     <pre class="usage"><span class='fu'>step_tfembed</span>(<span class='no'>recipe</span>, <span class='no'>...</span>, <span class='kw'>role</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>trained</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>outcome</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>number</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>hidden</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>options</span> <span class='kw'>=</span> <span class='fu'>tfembed_control</span>(), <span class='kw'>mapping</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>skip</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+  <span class='kw'>history</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>skip</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
 
 <span class='co'># S3 method for step_tfembed</span>
 <span class='fu'>tidy</span>(<span class='no'>x</span>, <span class='no'>...</span>)
 
-<span class='fu'>tfembed_control</span>(<span class='kw'>loss</span> <span class='kw'>=</span> <span class='st'>"mse"</span>, <span class='kw'>optimizer</span> <span class='kw'>=</span> <span class='st'>"sgd"</span>, <span class='kw'>epochs</span> <span class='kw'>=</span> <span class='fl'>20</span>,
-  <span class='kw'>validation_split</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>batch_size</span> <span class='kw'>=</span> <span class='fl'>32</span>, <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>0</span>)</pre>
+<span class='fu'>tfembed_control</span>(<span class='kw'>loss</span> <span class='kw'>=</span> <span class='st'>"mse"</span>, <span class='kw'>metrics</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>optimizer</span> <span class='kw'>=</span> <span class='st'>"sgd"</span>,
+  <span class='kw'>epochs</span> <span class='kw'>=</span> <span class='fl'>20</span>, <span class='kw'>validation_split</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>batch_size</span> <span class='kw'>=</span> <span class='fl'>32</span>, <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>0</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -170,6 +170,11 @@ encoding. This is <code>NULL</code> until the step is trained by
 <code><a href='http://www.rdocumentation.org/packages/recipes/topics/prep'>recipes::prep.recipe()</a></code>.</p></td>
     </tr>
     <tr>
+      <th>history</th>
+      <td><p>A tibble with the convergence statistics for each term. This
+is <code>NULL</code> until the step is trained by <code><a href='http://www.rdocumentation.org/packages/recipes/topics/prep'>recipes::prep.recipe()</a></code>.</p></td>
+    </tr>
+    <tr>
       <th>skip</th>
       <td><p>A logical. Should the step be skipped when the
 recipe is baked by <code><a href='http://www.rdocumentation.org/packages/recipes/topics/bake'>recipes::bake.recipe()</a></code>? While all operations are baked
@@ -183,7 +188,7 @@ the computations for subsequent operations</p></td>
       <td><p>A <code>step_tfembed</code> object.</p></td>
     </tr>
     <tr>
-      <th>optimizer, loss</th>
+      <th>optimizer, loss, metrics</th>
       <td><p>Arguments to pass to <code><a href='http://www.rdocumentation.org/packages/keras/topics/compile'>keras::compile()</a></code></p></td>
     </tr>
     <tr>
@@ -217,27 +222,29 @@ given in the recipe step.</p>
 used in the last layer while softmax is used for factor outcomes
 (with any number of levels).</p>
 <p>For example, the <code>keras</code> code for a numeric outcome and no hidden units used
-here would be</p><pre>  keras_model_sequential() %&gt;% 
+here would be</p><pre>  keras_model_sequential() \%&gt;\% 
   layer_embedding(
     input_dim = num_factor_levels_x + 1,
     output_dim = number,
     input_length = 1
-  ) %&gt;%
-  layer_flatten() %&gt;%
+  ) \%&gt;\%
+  layer_flatten() \%&gt;\%
   layer_dense(units = 1, activation = 'linear')
 </pre>
     <p>If a factor outcome is used and 10 hidden units were requested, the code
-would be</p><pre>  keras_model_sequential() %&gt;% 
+would be</p><pre>  keras_model_sequential() \%&gt;\% 
   layer_embedding(
     input_dim = num_factor_levels_x + 1,
     output_dim = number,
     input_length = 1
-   ) %&gt;%
-  layer_flatten() %&gt;%
-  layer_dense(units = 10, activation = "relu") %&gt;%
+   ) \%&gt;\%
+  layer_flatten() \%&gt;\%
+  layer_dense(units = 10, activation = "relu") \%&gt;\%
   layer_dense(units = num_factor_levels_y, activation = 'softmax')
 </pre>
-    <p>Also note that it may be difficult to obtain reproducible results using this step due to the nature of Tensorflow (see link in References).</p>
+    <p>Also note that it may be difficult to obtain reproducible
+results using this step due to the nature of Tensorflow (see
+link in References).</p>
 <p>tensorflow models cannot be run in parallel within the same
 session (via <code>foreach</code>) or the <code>parallel</code> package. If using a
 recipes with this step with <code>caret</code>, avoid parallel processing.</p>
@@ -245,7 +252,8 @@ recipes with this step with <code>caret</code>, avoid parallel processing.</p>
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
     <p>Francois C and Allaire JJ (2018) <em>Deep Learning with R</em>, Manning</p>
-<p>"How can I obtain reproducible results using Keras during development?" <a href='https://tinyurl.com/keras-repro'>https://tinyurl.com/keras-repro</a></p>
+<p>"How can I obtain reproducible results using Keras during development?"
+<a href='https://tinyurl.com/keras-repro'>https://tinyurl.com/keras-repro</a></p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
