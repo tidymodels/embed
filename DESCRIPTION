@@ -24,7 +24,8 @@ Suggests:
     knitr,
     rmarkdown,
     covr,
-    AmesHousing
+    AmesHousing,
+    lme4
 License: GPL-2
 VignetteBuilder: knitr
 Encoding: UTF-8

@@ -15,11 +15,19 @@
 #' @param outcome A call to `vars` to specify which variable is
 #'  used as the outcome in the generalized linear model. Only
 #'  numeric and two-level factors are currently supported.
-#' @param pooling A logical; should partial pooling be used via a hierarchical 
+#' @param pooling A logical; should partial pooling be used via a hierarchical
 #'  generalized linear model?
-#' @param options A list of options to pass to [rstanarm::stan_glmer()].
-#' @param verbose A logical to control the default printing by 
-#'  [rstanarm::stan_glmer()].
+#' @param stan A logical indicating if Stan should be used to estimate the
+#'  embedding. Defaults to `TRUE`. When `FALSE`, the embedding is estimated
+#'  with `lme4` instead. In general, `lme4` should be much faster, but does
+#'  allow for as much control over the amount of partial pooling. Ignored when
+#'  `pooling = FALSE`.
+#' @param options A list of options to pass to functions that estimate
+#'  partially pooled embeddings. When `stan = TRUE` (the default), passed to
+#'  [rstanarm::stan_glmer()]. When `stan = FALSE`, passed to [lme4::lmer()]
+#'  for regression problems and [lme4::glmer()] for classification problems.
+#' @param verbose A logical to control the default printing by
+#'  [rstanarm::stan_glmer()]. Ignored when `stan = FALSE`.
 #' @param mapping A list of tibble results that define the
 #'  encoding. This is `NULL` until the step is trained by
 #'  [recipes::prep.recipe()].
@@ -36,7 +44,7 @@
 #'  method, a tibble with columns `terms` (the selectors or
 #'  variables for encoding), `level` (the factor levels), and
 #'  `value` (the encodings).
-#' @keywords datagen 
+#' @keywords datagen
 #' @concept preprocessing encoding
 #' @export
 #' @details For each factor predictor, a generalized linear model
@@ -46,47 +54,51 @@
 #'  coefficients are created using a no intercept model and, when
 #'  two factor outcomes are used, the log-odds reflect the event of
 #'  interest being the _first_ level of the factor.
-
 #'
-#' For novel levels, a slightly timmed average of the coefficients 
+#' For novel levels, a slightly timmed average of the coefficients
 #'  is returned.
-#' 
+#'
 #' With partial pooling, a hierarchical generalized linear model
 #'  is fit using [rstanarm::stan_glmer()] and no intercept via
-#'  
+#'
 #' ```
 #'   stan_glmer(outcome ~ (1 | predictor), data = data, ...)
 #' ```
-#' 
+#'
 #' where the `...` include the `family` argument (automatically
 #'  set by the step) as well as any arguments given to the `options`
 #'  argument to the step. Relevant options include `chains`, `iter`,
-#'  `cores`, and arguments for the priors (see the links in the 
-#'  References below). `prior_intercept` is the argument that has the 
-#'  most effect on the amount of shrinkage. 
-#' 
-#' 
-#' @references Zumel N and Mount J (2017) "vtreat: a data.frame Processor for 
+#'  `cores`, and arguments for the priors (see the links in the
+#'  References below). `prior_intercept` is the argument that has the
+#'  most effect on the amount of shrinkage.
+#'
+#' For partial pooling when `stan = FALSE`, the embedding is estimated with
+#'
+#' ```
+#'   glmer(outcome ~ (1 | predictor), data = data, ...)
+#' ```
+#'
+#' @references Zumel N and Mount J (2017) "vtreat: a data.frame Processor for
 #'  Predictive Modeling," arXiv:1611.09477
-#'  
-#'  "Hierarchical Partial Pooling for Repeated Binary Trials" 
+#'
+#'  "Hierarchical Partial Pooling for Repeated Binary Trials"
 #'  \url{https://tinyurl.com/stan-pooling}
-#'  
-#' "Prior Distributions for `rstanarm`` Models"  
+#'
+#' "Prior Distributions for `rstanarm`` Models"
 #' \url{https://tinyurl.com/stan-priors}
-#'  
-#' "Estimating Generalized (Non-)Linear Models with Group-Specific 
+#'
+#' "Estimating Generalized (Non-)Linear Models with Group-Specific
 #' Terms with `rstanarm`" \url{https://tinyurl.com/stan-glm-grouped}
-#' 
+#'
 #' @examples
 #' library(recipes)
 #' library(dplyr)
-#' 
+#'
 #' data(okc)
-#' 
+#'
 #' not_pooled <- recipe(Class ~ age + location, data = okc) %>%
 #'   step_embed(location, outcome = vars(Class))
-#' 
+#'
 #' # See https://topepo.github.io/embed/ for examples
 
 #' @importFrom recipes add_step step terms_select sel2char ellipse_check
@@ -97,6 +109,7 @@ step_embed <-
            trained = FALSE,
            outcome = NULL,
            pooling = FALSE,
+           stan = TRUE,
            options = list(seed = sample.int(10^5, 1)),
            verbose = FALSE,
            mapping = NULL,
@@ -111,6 +124,7 @@ step_embed <-
         trained = trained,
         outcome = outcome,
         pooling = pooling,
+        stan = stan,
         options = options,
         verbose = verbose,
         mapping = mapping,
@@ -125,6 +139,7 @@ step_embed_new <-
            trained = FALSE,
            outcome = NULL,
            pooling = NULL,
+           stan = TRUE,
            options = NULL,
            verbose = FALSE,
            mapping = NULL,
@@ -136,6 +151,7 @@ step_embed_new <-
       trained = trained,
       outcome = outcome,
       pooling = pooling,
+      stan = stan,
       options = options,
       verbose = verbose,
       mapping = mapping,
@@ -149,10 +165,14 @@ prep.step_embed <- function(x, training, info = NULL, ...) {
   col_names <- terms_select(x$terms, info = info)
   check_type(training[, col_names], quant = FALSE)
   y_name <- terms_select(x$outcome, info = info)
-  if (x$pooling) {
+  if (x$pooling && x$stan) {
     res <-
       map(training[, col_names], stan_coefs, y = training[, y_name],
           x$options, x$verbose)
+  } else if (x$pooling && !x$stan) {
+    res <-
+      map(training[, col_names], lmer_coefs, y = training[, y_name],
+          x$options)
   } else {
     res <- map(training[, col_names], glm_coefs, y = training[, y_name])
   }
@@ -174,7 +194,7 @@ glm_coefs <- function(x, y, ...) {
       na.action = na.omit,
       ...
     )
-  
+
   coefs <- coef(mod)
   names(coefs) <- gsub("^value", "", names(coefs))
   mean_coef <- mean(coefs, na.rm = TRUE, trim = .1)
@@ -187,9 +207,50 @@ glm_coefs <- function(x, y, ...) {
     ..value = unname(coefs)
   )
 }
+
+#' @importFrom lme4 glmer lmer
+#' @importFrom tibble rownames_to_column
+#' @importFrom rlang set_names
+#' @importFrom dplyr bind_rows
+lmer_coefs <- function(x, y, options, ...) {
+  is_classification_task <- is.factor(y[[1]])
+  form <- as.formula(paste0(names(y), "~ 0 + (1|value)"))
+
+  args <-
+    list(
+      formula = form,
+      data = bind_cols(as_tibble(x), y),
+      na.action = na.omit
+    )
+
+  options$seed <- NULL
+  if (length(options) > 0)
+    args <- c(args, options)
+
+  if (is_classification_task) {
+    args <- c(args, family = binomial)
+    mod <- do.call("glmer", args)
+  } else {
+    mod <- do.call("lmer", args)
+  }
+
+  coefs <- coef(mod)$value
+  coefs <- as.data.frame(coefs)
+  coefs <- set_names(coefs, "..value")
+  coefs <- rownames_to_column(coefs, "..level")
+  coefs <- as_tibble(coefs)
+  mean_coef <- mean(coefs$..value, na.rm = TRUE, trim = .1)
+  coefs$..value[is.na(coefs$..value)] <- mean_coef
+  new_row <- tibble(..level = "..new", ..value = mean_coef)
+  coefs <- bind_rows(coefs, new_row)
+  if (is_classification_task)
+    coefs$..value <- -coefs$..value
+  coefs
+}
+
 #' @importFrom utils capture.output
 #' @importFrom rstanarm stan_glmer
-#' @importFrom tibble rownames_to_column 
+#' @importFrom tibble rownames_to_column
 #' @importFrom rlang set_names
 #' @importFrom dplyr bind_rows
 stan_coefs <- function(x, y, options, verbose, ...) {
@@ -212,7 +273,7 @@ stan_coefs <- function(x, y, options, verbose, ...) {
   } else {
     mod <- do.call("stan_glmer", args)
   }
-  
+
   coefs <- coef(mod)$value
   coefs <- as.data.frame(coefs)
   coefs <- set_names(coefs, "..value")
@@ -227,10 +288,10 @@ stan_coefs <- function(x, y, options, verbose, ...) {
   coefs
 }
 
-#' @importFrom dplyr tibble mutate filter left_join %>% arrange 
+#' @importFrom dplyr tibble mutate filter left_join %>% arrange
 map_glm_coef <- function(dat, mapping) {
   new_val <- mapping$..value[mapping$..level == "..new"]
-  dat <- dat %>% 
+  dat <- dat %>%
     mutate(..order = 1:nrow(dat)) %>%
     set_names(c("..level", "..order")) %>%
     mutate(..level = as.character(..level))
