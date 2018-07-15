@@ -208,11 +208,17 @@ glm_coefs <- function(x, y, ...) {
   )
 }
 
-#' @importFrom lme4 glmer lmer
 #' @importFrom tibble rownames_to_column
 #' @importFrom rlang set_names
 #' @importFrom dplyr bind_rows
 lmer_coefs <- function(x, y, options, ...) {
+
+  if (!requireNamespace("lme4", quietly = TRUE))
+    stop(
+      "Must install `lme4` to enable `stan = FALSE` behavior.",
+      call. = FALSE
+    )
+
   is_classification_task <- is.factor(y[[1]])
   form <- as.formula(paste0(names(y), "~ 0 + (1|value)"))
 
@@ -229,9 +235,11 @@ lmer_coefs <- function(x, y, options, ...) {
 
   if (is_classification_task) {
     args <- c(args, family = binomial)
-    mod <- do.call("glmer", args)
+    glmer <- get("glmer", asNamespace("lme4"))
+    mod <- do.call(glmer, args)
   } else {
-    mod <- do.call("lmer", args)
+    lmer <- get("lmer", asNamespace("lme4"))
+    mod <- do.call(lmer, args)
   }
 
   coefs <- coef(mod)$value

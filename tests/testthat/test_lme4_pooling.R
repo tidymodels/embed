@@ -4,11 +4,14 @@ library(testthat)
 
 source("make_example_data.R")
 
-glmer_opts <- list(control = glmerControl(boundary.tol = 1e-4))
-
 ###################################################################
 
 context("lme4::glmer model, classification")
+
+skip_if_not_installed("lme4")
+library(lme4)
+
+glmer_opts <- list(control = glmerControl(boundary.tol = 1e-4))
 
 test_that("factor encoded predictor", {
 
