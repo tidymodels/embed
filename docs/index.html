@@ -58,8 +58,9 @@
       </header><div class="row">
   <div class="contents col-md-9">
     
+<p><a href="https://travis-ci.org/topepo/embed"><img src="https://travis-ci.org/topepo/embed.svg?branch=master" alt="Travis build status"></a> <a href="https://codecov.io/github/tidymodels/embed?branch=master"><img src="https://codecov.io/gh/topepo/embed/branch/master/graph/badge.svg" alt="Coverage status"></a> <a href="http://cran.r-project.org/web/packages/embed"><img src="http://www.r-pkg.org/badges/version/embed" alt="CRAN_Status_Badge"></a> <a href="http://cran.rstudio.com/package=embed"><img src="http://cranlogs.r-pkg.org/badges/embed" alt="Downloads"></a> <img src="https://img.shields.io/badge/lifecycle-experimental-orange.svg"></p>
 <p><code>embed</code> is a package that contains extra steps for the <a href="http://cran.rstudio.com/package=recipes"><code>recipes</code></a> package for embedding categorical predictors into one or more numeric columns. All of the preprocessing methods are <em>supervised</em>.</p>
-<p>These steps are contained in a separate package because the package dependencies, <a href="http://cran.rstudio.com/package=%20rstanarm"><code>rstanarm</code></a> and <a href="http://cran.rstudio.com/package=%20keras"><code>keras</code></a>, are fairly heavy.</p>
+<p>These steps are contained in a separate package because the package dependencies, <a href="http://cran.rstudio.com/package=rstanarm"><code>rstanarm</code></a> and <a href="http://cran.rstudio.com/package=keras"><code>keras</code></a>, are fairly heavy.</p>
 <p>The steps included are:</p>
 <ul>
 <li><p><code>step_embed</code> estimates the effect of each of the factor levels on the outcome and these estimates are used as the new encoding. The estimates are estimated by a generalized linear model. This step can be executed without pooling (via <code>glm</code>) or with partial pooling (<code>stan_glm</code>). Currently implemented for numeric and two-class outcomes.</p></li>
@@ -68,7 +69,7 @@
 <p>Some references for these methods are:</p>
 <ul>
 <li>Francois C and Allaire JJ (2018) <a href="https://www.manning.com/books/deep-learning-with-r"><em>Deep Learning with R</em></a>, Manning</li>
-<li>Guo, C and Berkhahn F (2106) “<a href="https://arxiv.org/abs/1604.06737">Entity Embeddings of Categorical Variables</a>”</li>
+<li>Guo, C and Berkhahn F (2016) “<a href="https://arxiv.org/abs/1604.06737">Entity Embeddings of Categorical Variables</a>”</li>
 <li>Zumel N and Mount J (2017) “<a href="https://arxiv.org/abs/1611.09477"><code>vtreat</code>: a <code>data.frame</code> Processor for Predictive Modeling</a>”</li>
 </ul>
 <p>To install it, use:</p>
@@ -81,7 +82,7 @@
     <div class="links">
 <h2>Links</h2>
 <ul class="list-unstyled">
-<li>Report a bug at <br><a href="NA">NA</a>
+<li>Report a bug at <br><a href="https://github.com/topepo/embed/issues">https://​github.com/​topepo/​embed/​issues</a>
 </li>
 </ul>
 </div>

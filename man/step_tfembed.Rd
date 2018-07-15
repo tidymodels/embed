@@ -8,12 +8,12 @@
 \usage{
 step_tfembed(recipe, ..., role = NA, trained = FALSE, outcome = NULL,
   number = 2, hidden = 0, options = tfembed_control(), mapping = NULL,
-  skip = FALSE)
+  history = NULL, skip = FALSE)
 
 \method{tidy}{step_tfembed}(x, ...)
 
-tfembed_control(loss = "mse", optimizer = "sgd", epochs = 20,
-  validation_split = 0, batch_size = 32, verbose = 0)
+tfembed_control(loss = "mse", metrics = NULL, optimizer = "sgd",
+  epochs = 20, validation_split = 0, batch_size = 32, verbose = 0)
 }
 \arguments{
 \item{recipe}{A recipe object. The step will be added to the
@@ -46,6 +46,9 @@ value of zero for no intermediate layer (see Details below).}
 encoding. This is \code{NULL} until the step is trained by
 \code{\link[recipes:prep.recipe]{recipes::prep.recipe()}}.}
 
+\item{history}{A tibble with the convergence statistics for each term. This
+is \code{NULL} until the step is trained by \code{\link[recipes:prep.recipe]{recipes::prep.recipe()}}.}
+
 \item{skip}{A logical. Should the step be skipped when the
 recipe is baked by \code{\link[recipes:bake.recipe]{recipes::bake.recipe()}}? While all operations are baked
 when \code{\link[recipes:prep.recipe]{recipes::prep.recipe()}} is run, some operations may not be able to be
@@ -55,7 +58,7 @@ the computations for subsequent operations}
 
 \item{x}{A \code{step_tfembed} object.}
 
-\item{optimizer, loss}{Arguments to pass to \code{\link[keras:compile]{keras::compile()}}}
+\item{optimizer, loss, metrics}{Arguments to pass to \code{\link[keras:compile]{keras::compile()}}}
 
 \item{epochs, validation_split, batch_size, verbose}{Arguments to pass to \code{\link[keras:fit]{keras::fit()}}}
 }
@@ -92,29 +95,31 @@ used in the last layer while softmax is used for factor outcomes
 (with any number of levels).
 
 For example, the \code{keras} code for a numeric outcome and no hidden units used
-here would be\preformatted{  keras_model_sequential() \%>\% 
+here would be\preformatted{  keras_model_sequential() \\\%>\\\% 
   layer_embedding(
     input_dim = num_factor_levels_x + 1,
     output_dim = number,
     input_length = 1
-  ) \%>\%
-  layer_flatten() \%>\%
+  ) \\\%>\\\%
+  layer_flatten() \\\%>\\\%
   layer_dense(units = 1, activation = 'linear')
 }
 
 If a factor outcome is used and 10 hidden units were requested, the code
-would be\preformatted{  keras_model_sequential() \%>\% 
+would be\preformatted{  keras_model_sequential() \\\%>\\\% 
   layer_embedding(
     input_dim = num_factor_levels_x + 1,
     output_dim = number,
     input_length = 1
-   ) \%>\%
-  layer_flatten() \%>\%
-  layer_dense(units = 10, activation = "relu") \%>\%
+   ) \\\%>\\\%
+  layer_flatten() \\\%>\\\%
+  layer_dense(units = 10, activation = "relu") \\\%>\\\%
   layer_dense(units = num_factor_levels_y, activation = 'softmax')
 }
 
-Also note that it may be difficult to obtain reproducible results using this step due to the nature of Tensorflow (see link in References).
+Also note that it may be difficult to obtain reproducible
+results using this step due to the nature of Tensorflow (see
+link in References).
 
 tensorflow models cannot be run in parallel within the same
 session (via \code{foreach}) or the \code{parallel} package. If using a
@@ -132,7 +137,8 @@ rec <- recipe(Class ~ age + location, data = okc) \%>\%
 \references{
 Francois C and Allaire JJ (2018) \emph{Deep Learning with R}, Manning
 
-"How can I obtain reproducible results using Keras during development?" \url{https://tinyurl.com/keras-repro}
+"How can I obtain reproducible results using Keras during development?"
+\url{https://tinyurl.com/keras-repro}
 }
 \concept{
 preprocessing encoding

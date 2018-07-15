@@ -24,6 +24,8 @@
 #' @param mapping A list of tibble results that define the
 #'  encoding. This is `NULL` until the step is trained by
 #'  [recipes::prep.recipe()].
+#' @param history A tibble with the convergence statistics for each term. This 
+#'  is `NULL` until the step is trained by [recipes::prep.recipe()]. 
 #' @param skip A logical. Should the step be skipped when the
 #'  recipe is baked by [recipes::bake.recipe()]? While all operations are baked
 #'  when [recipes::prep.recipe()] is run, some operations may not be able to be
@@ -87,7 +89,9 @@
 #'   layer_dense(units = num_factor_levels_y, activation = 'softmax')
 #' ```
 #' 
-#' Also note that it may be difficult to obtain reproducible results using this step due to the nature of Tensorflow (see link in References).
+#'   Also note that it may be difficult to obtain reproducible
+#'  results using this step due to the nature of Tensorflow (see
+#'  link in References).
 #' 
 #' tensorflow models cannot be run in parallel within the same 
 #'  session (via `foreach`) or the `parallel` package. If using a
@@ -95,7 +99,8 @@
 #' 
 #' @references Francois C and Allaire JJ (2018) _Deep Learning with R_, Manning
 #' 
-#' "How can I obtain reproducible results using Keras during development?" \url{https://tinyurl.com/keras-repro}
+#' "How can I obtain reproducible results using Keras during development?" 
+#'  \url{https://tinyurl.com/keras-repro}
 #' 
 #' @examples
 #' data(okc)
@@ -118,6 +123,7 @@ step_tfembed <-
            hidden = 0,
            options = tfembed_control(),
            mapping = NULL,
+           history = NULL,
            skip = FALSE) {
     if (is.null(outcome))
       stop("Please list a variable in `outcome`", call. = FALSE)
@@ -132,6 +138,7 @@ step_tfembed <-
         hidden = hidden,
         options = options,
         mapping = mapping,
+        history = history,
         skip = skip
       )
     )
@@ -146,6 +153,7 @@ step_tfembed_new <-
            hidden = NULL,
            options = NULL,
            mapping = NULL,
+           history = NULL,
            skip = FALSE) {
     step(
       subclass = "tfembed",
@@ -157,11 +165,14 @@ step_tfembed_new <-
       trained = trained,
       outcome = outcome,
       mapping = mapping,
+      history = history,
       skip = skip
     )
   }
 
 #' @importFrom recipes check_type
+#' @importFrom dplyr bind_rows
+#' @importFrom tibble as_tibble
 #' @export
 prep.step_tfembed <- function(x, training, info = NULL, ...) {
   col_names <- terms_select(x$terms, info = info)
@@ -177,7 +188,11 @@ prep.step_tfembed <- function(x, training, info = NULL, ...) {
       num = x$number,
       h = x$hidden
     )
-  x$mapping <- res
+  x$mapping <- lapply(res, function(x) x$layer_values)
+  hst <- lapply(res, function(x) as_tibble(x$history))
+  for(i in seq_along(hst)) 
+    hst[[i]]$variable <- names(hst)[i]
+  x$history <- bind_rows(hst)
   x$trained <- TRUE
   x
 }
@@ -239,10 +254,11 @@ tf_coefs <- function(x, y, opt, num, lab, h, ...) {
   model <- model %>%
     compile(
       loss = opt$loss,
+      metrics = opt$metrics,
       optimizer = opt$optimizer
       )
   
-  model %>% fit(
+  history <- model %>% fit(
     x = x,
     y = y,
     epochs = opt$epochs,
@@ -255,7 +271,7 @@ tf_coefs <- function(x, y, opt, num, lab, h, ...) {
   layer_values <- as_tibble(layer_values) %>% 
     setNames(recipes::names0(num, prefix = "..emb")) %>%
     mutate(..level = c("..new", lvl))
-  layer_values
+  list(layer_values = layer_values, history = history)
 }
 
 #' @importFrom dplyr tibble mutate filter left_join %>% arrange contains
@@ -333,10 +349,11 @@ tidy.step_tfembed <- function(x, ...) {
 
 #' @export
 #' @rdname step_tfembed
-#' @param optimizer,loss Arguments to pass to [keras::compile()]
+#' @param optimizer,loss,metrics Arguments to pass to [keras::compile()]
 #' @param epochs,validation_split,batch_size,verbose Arguments to pass to [keras::fit()]
 tfembed_control <- function(
   loss = "mse",
+  metrics = NULL,
   optimizer = "sgd",
   epochs = 20,
   validation_split = 0,
@@ -350,13 +367,14 @@ tfembed_control <- function(
   if(validation_split < 0 | validation_split > 1)
     stop("`validation_split` should be on [0, 1)", call. = FALSE)
   list(
-    loss = loss, optimizer = optimizer, epochs = epochs, 
+    loss = loss, metrics = metrics, optimizer = optimizer, epochs = epochs, 
     validation_split = validation_split, batch_size = batch_size,
     verbose = verbose)
 }
 
 tf_options_check <- function(opt) {
   exp_names <- c('loss',
+                 'metrics',
                  'optimizer',
                  'epochs',
                  'validation_split',
