@@ -97,9 +97,9 @@ The step uses the `stan_glmer` function in the `rstanarm` package. There are a n
 opts <- 
   list(
     ## the number of chains
-    chains = 4,
+    chains = 2,
     ## how many cores to use 
-    cores = 4,
+    cores = 2,
     ## the total number of iterations per chain (low here for time)
     iter = 500,
     ## set the random number seed
@@ -149,4 +149,17 @@ New levels are encoded as:
 ```{r glmer-new}
 tidy(okc_glmer, number = 1) %>%
   dplyr::filter(level == "..new") 
+```
+
+Since the sampling process can take a little while with Stan, we can also estimate the embeddings with `lme4`. This gives us less control over the amount of partial pooling but is much faster:
+
+```{r lme4-fit-defaults}
+okc_glmer <- recipe(Class ~ ., data = okc) %>%
+  step_embed(
+    location,
+    outcome = vars(Class),
+    pooling = TRUE,
+    stan = FALSE
+  ) %>% 
+  prep(training = okc)
 ```

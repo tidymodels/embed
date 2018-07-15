@@ -7,8 +7,8 @@
 \title{Encoding Factors into Multiple Columns}
 \usage{
 step_tfembed(recipe, ..., role = NA, trained = FALSE, outcome = NULL,
-  number = 2, hidden = 0, options = tfembed_control(), mapping = NULL,
-  history = NULL, skip = FALSE)
+  number = 2, hidden = 0, options = tfembed_control(),
+  mapping = NULL, history = NULL, skip = FALSE)
 
 \method{tidy}{step_tfembed}(x, ...)
 
@@ -95,25 +95,25 @@ used in the last layer while softmax is used for factor outcomes
 (with any number of levels).
 
 For example, the \code{keras} code for a numeric outcome and no hidden units used
-here would be\preformatted{  keras_model_sequential() \\\%>\\\% 
+here would be\preformatted{  keras_model_sequential() \\\\%>\\\\% 
   layer_embedding(
     input_dim = num_factor_levels_x + 1,
     output_dim = number,
     input_length = 1
-  ) \\\%>\\\%
-  layer_flatten() \\\%>\\\%
+  ) \\\\%>\\\\%
+  layer_flatten() \\\\%>\\\\%
   layer_dense(units = 1, activation = 'linear')
 }
 
 If a factor outcome is used and 10 hidden units were requested, the code
-would be\preformatted{  keras_model_sequential() \\\%>\\\% 
+would be\preformatted{  keras_model_sequential() \\\\%>\\\\% 
   layer_embedding(
     input_dim = num_factor_levels_x + 1,
     output_dim = number,
     input_length = 1
-   ) \\\%>\\\%
-  layer_flatten() \\\%>\\\%
-  layer_dense(units = 10, activation = "relu") \\\%>\\\%
+   ) \\\\%>\\\\%
+  layer_flatten() \\\\%>\\\\%
+  layer_dense(units = 10, activation = "relu") \\\\%>\\\\%
   layer_dense(units = num_factor_levels_y, activation = 'softmax')
 }
 
@@ -140,7 +140,5 @@ Francois C and Allaire JJ (2018) \emph{Deep Learning with R}, Manning
 "How can I obtain reproducible results using Keras during development?"
 \url{https://tinyurl.com/keras-repro}
 }
-\concept{
-preprocessing encoding
-}
+\concept{preprocessing encoding}
 \keyword{datagen}

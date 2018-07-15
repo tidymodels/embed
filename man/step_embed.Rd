@@ -6,8 +6,9 @@
 \title{Encoding Factors into Linear Functions}
 \usage{
 step_embed(recipe, ..., role = NA, trained = FALSE, outcome = NULL,
-  pooling = FALSE, options = list(seed = sample.int(10^5, 1)),
-  verbose = FALSE, mapping = NULL, skip = FALSE)
+  pooling = FALSE, stan = TRUE, options = list(seed =
+  sample.int(10^5, 1)), verbose = FALSE, mapping = NULL,
+  skip = FALSE)
 
 \method{tidy}{step_embed}(x, ...)
 }
@@ -33,10 +34,19 @@ numeric and two-level factors are currently supported.}
 \item{pooling}{A logical; should partial pooling be used via a hierarchical
 generalized linear model?}
 
-\item{options}{A list of options to pass to \code{\link[rstanarm:stan_glmer]{rstanarm::stan_glmer()}}.}
+\item{stan}{A logical indicating if Stan should be used to estimate the
+embedding. Defaults to \code{TRUE}. When \code{FALSE}, the embedding is estimated
+with \code{lme4} instead. In general, \code{lme4} should be much faster, but does
+allow for as much control over the amount of partial pooling. Ignored when
+\code{pooling = FALSE}.}
+
+\item{options}{A list of options to pass to functions that estimate
+partially pooled embeddings. When \code{stan = TRUE} (the default), passed to
+\code{\link[rstanarm:stan_glmer]{rstanarm::stan_glmer()}}. When \code{stan = FALSE}, passed to \code{\link[lme4:lmer]{lme4::lmer()}}
+for regression problems and \code{\link[lme4:glmer]{lme4::glmer()}} for classification problems.}
 
 \item{verbose}{A logical to control the default printing by
-\code{\link[rstanarm:stan_glmer]{rstanarm::stan_glmer()}}.}
+\code{\link[rstanarm:stan_glmer]{rstanarm::stan_glmer()}}. Ignored when \code{stan = FALSE}.}
 
 \item{mapping}{A list of tibble results that define the
 encoding. This is \code{NULL} until the step is trained by
@@ -85,6 +95,9 @@ argument to the step. Relevant options include \code{chains}, \code{iter},
 \code{cores}, and arguments for the priors (see the links in the
 References below). \code{prior_intercept} is the argument that has the
 most effect on the amount of shrinkage.
+
+For partial pooling when \code{stan = FALSE}, the embedding is estimated with\preformatted{  glmer(outcome ~ (1 | predictor), data = data, ...)
+}
 }
 \examples{
 library(recipes)
@@ -110,7 +123,5 @@ Predictive Modeling," arXiv:1611.09477
 "Estimating Generalized (Non-)Linear Models with Group-Specific
 Terms with \code{rstanarm}" \url{https://tinyurl.com/stan-glm-grouped}
 }
-\concept{
-preprocessing encoding
-}
+\concept{preprocessing encoding}
 \keyword{datagen}
