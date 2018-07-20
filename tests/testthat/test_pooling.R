@@ -13,9 +13,9 @@ context("glmer model, classification")
 test_that("factor encoded predictor", {
   skip_on_cran()
   class_test <- recipe(x2 ~ ., data = ex_dat) %>%
-    step_embed(x3, outcome = vars(x2), 
-               pooling = TRUE, verbose = FALSE,
-               options = opts) %>%
+    step_bayeseffects(x3, outcome = vars(x2), 
+                      verbose = FALSE,
+                      options = opts) %>%
     prep(training = ex_dat, retain = TRUE)
   tr_values <- juice(class_test)$x3
   new_values <- bake(class_test, newdata = new_dat)
@@ -72,9 +72,9 @@ test_that("factor encoded predictor", {
 test_that("character encoded predictor", {
   skip_on_cran()
   class_test <- recipe(x2 ~ ., data = ex_dat_ch) %>%
-    step_embed(x3, outcome = vars(x2), 
-               pooling = TRUE, verbose = FALSE,
-               options = opts) %>%
+    step_bayeseffects(x3, outcome = vars(x2), 
+                      verbose = FALSE,
+                      options = opts) %>%
     prep(training = ex_dat_ch, retain = TRUE,
          options = opts)
   tr_values <- juice(class_test)$x3
@@ -135,9 +135,9 @@ context("glmer model, regression")
 test_that("factor encoded predictor", {
   skip_on_cran()
   reg_test <- recipe(x1 ~ ., data = ex_dat) %>%
-    step_embed(x3, outcome = vars(x1), 
-               pooling = TRUE, verbose = FALSE,
-               options = opts) %>%
+    step_bayeseffects(x3, outcome = vars(x1), 
+                      verbose = FALSE,
+                      options = opts) %>%
     prep(training = ex_dat, retain = TRUE)
   tr_values <- juice(reg_test)$x3
   new_values <- bake(reg_test, newdata = new_dat)
@@ -194,9 +194,9 @@ test_that("factor encoded predictor", {
 test_that("character encoded predictor", {
   skip_on_cran()
   reg_test <- recipe(x1 ~ ., data = ex_dat_ch) %>%
-    step_embed(x3, outcome = vars(x1), 
-               pooling = TRUE, verbose = FALSE,
-               options = opts) %>%
+    step_bayeseffects(x3, outcome = vars(x1), 
+                      verbose = FALSE,
+                      options = opts) %>%
     prep(training = ex_dat_ch, retain = TRUE)
   tr_values <- juice(reg_test)$x3
   new_values <- bake(reg_test, newdata = new_dat_ch)

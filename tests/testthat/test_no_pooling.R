@@ -18,7 +18,7 @@ test_that("factor encoded predictor", {
   
   key <- class_test$steps[[1]]$mapping
   td_obj <- tidy(class_test, number = 1)
-
+  
   expect_equal("x3", names(key))
   
   expect_equal(
@@ -26,7 +26,7 @@ test_that("factor encoded predictor", {
     nrow(key$x3)
   )
   expect_true(sum(key$x3$..level == "..new") == 1)
-
+  
   expect_true(is.numeric(tr_values))
   
   expect_equal(
@@ -243,7 +243,7 @@ test_that("bad args", {
   three_class <- iris
   three_class$fac <- rep(letters[1:3], 50)
   three_class$logical <- rep(c(TRUE, FALSE), 75)
-
+  
   expect_error(
     recipe(Species ~ ., data = three_class) %>%
       step_embed(Sepal.Length, outcome = vars(Species)) %>%
