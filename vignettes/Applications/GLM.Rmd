@@ -15,7 +15,7 @@ library(embed)
 data(okc)
 ```
 
-This method uses a generalized linear model to estimate the effect of each level of a factor predictor on the outcome. These values are retained to serve as the new encodings for the factor levels. `embed` has two estimation methods for accomplishing this: with and without pooling. 
+This method uses a generalized linear model to estimate the effect of each level of a factor predictor on the outcome. These values are retained to serve as the new encodings for the factor levels. This is sometimes referred to as _likelihood encodings_. `embed` has two estimation methods for accomplishing this: with and without pooling. 
 
 The example used here is the OkCupid data from [Kim and Escobedo-Land (2015)(pdf)](http://www.amstat.org/publications/jse/v23n2/kim.pdf). In [Kuhn and Johnson (2018)](http://feat.engineering), these data are used to predict whether a person is in the STEM fields (science, technology, engineering, and mathematics). One predictor, geographic location, is a factor variable. The frequencies of location in the data set used here vary between `r min(table(okc$location))` person and `r max(table(okc$location))` per location. There are `r length(table(okc$location))` locations in the data. Rather than producing `r length(table(okc$location)) - 1` indicator variables for a model, a single numeric variable can be used to represent the _effect_ or _impact_ of the factor level on the outcome. In this case, where a factor outcome is being predicted (STEM or not), the effects are quantified by the log-odds of the location for being STEM.  
 
@@ -32,8 +32,7 @@ props <- okc %>%
     prop = mean(Class == "stem"),
     log_odds  = log(prop/(1-prop)),
     n = length(Class)
-  ) %>% 
-  arrange(n)
+  ) 
 props
 
 # later, for plotting
@@ -46,12 +45,12 @@ In subsequent sections, a logistic regression model is used. When the outcome va
 
 In this case, the effect of each location can be estimated separately for each factor level. One method for conducting this estimation step is to fit a logistic regression with the STEM classification as the outcome and the location as the predictor. From this, the log-odds are naturally estimated by logistic regression. 
 
-For these data, a recipe is created and `step_embed` is used:
+For these data, a recipe is created and `step_lencode_glm` is used:
 
 ```{r simple-glm}
 okc_glm <- recipe(Class ~ ., data = okc) %>%
   # specify the variable being encoded and the outcome
-  step_embed(location, outcome = vars(Class)) %>%
+  step_lencode_glm(location, outcome = vars(Class)) %>%
   # estimate the effects
   prep(training = okc)
 ```
@@ -89,9 +88,11 @@ tidy(okc_glm, number = 1) %>%
 
 This method estimates the effects by using all of the locations at once using a hierarchical Bayesian generalized linear model. The locations are treated as a random set that contributes a random intercept to the previously used logistic regression. 
 
-Partial pooling estimates each effect as a combination of the separate empirical estimates of the log-odds and the prior distribution. For locations with small sample sizes, the final estimate is _shrunken_ towards the overall mean of the log-odds. This makes sense since we have poor information for estimating these locations. For locations with many data points, the estimates reply more on the empirical estimates. [This page](https://cran.r-project.org/web/packages/rstanarm/vignettes/glmer.html) has a good discussion of pooling in Bayesian models. 
+Partial pooling estimates each effect as a combination of the separate empirical estimates of the log-odds and the prior distribution. For locations with small sample sizes, the final estimate is _shrunken_ towards the overall mean of the log-odds. This makes sense since we have poor information for estimating these locations. For locations with many data points, the estimates reply more on the empirical estimates. [This page](https://cran.r-project.org/web/packages/rstanarm/vignettes/glmer.html) has a good discussion of pooling using Bayesian models. 
  
-The step uses the `stan_glmer` function in the `rstanarm` package. There are a number of options that can be used to control the model estimation routine, including:
+### Bayesian Methods
+
+One appraoch to partial pooling is the function `step_lencode_bayes` uses the `stan_glmer` function in the `rstanarm` package. There are a number of options that can be used to control the model estimation routine, including:
 
 ```{r stan-options}
 opts <- 
@@ -111,10 +112,9 @@ Using the default priors, the model is estimated via:
 
 ```{r stan-fit-defaults}
 okc_glmer <- recipe(Class ~ ., data = okc) %>%
-  step_embed(
+  step_lencode_bayes(
     location,
     outcome = vars(Class),
-    pooling = TRUE,
     options = opts
   ) %>% 
   prep(training = okc)
@@ -150,3 +150,6 @@ New levels are encoded as:
 tidy(okc_glmer, number = 1) %>%
   dplyr::filter(level == "..new") 
 ```
+
+### Empirical Bayesian Methods/Mixed Models
+

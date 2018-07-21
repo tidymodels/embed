@@ -10,7 +10,7 @@ context("glm model, classification")
 
 test_that("factor encoded predictor", {
   class_test <- recipe(x2 ~ ., data = ex_dat) %>%
-    step_embed(x3, outcome = vars(x2)) %>%
+    step_lencode_glm(x3, outcome = vars(x2)) %>%
     prep(training = ex_dat, retain = TRUE)
   tr_values <- juice(class_test)$x3
   new_values <- bake(class_test, newdata = new_dat)
@@ -66,7 +66,7 @@ test_that("factor encoded predictor", {
 
 test_that("character encoded predictor", {
   class_test <- recipe(x2 ~ ., data = ex_dat_ch) %>%
-    step_embed(x3, outcome = vars(x2)) %>%
+    step_lencode_glm(x3, outcome = vars(x2)) %>%
     prep(training = ex_dat_ch, retain = TRUE)
   tr_values <- juice(class_test)$x3
   new_values <- bake(class_test, newdata = new_dat_ch)
@@ -125,7 +125,7 @@ context("glm model, regression")
 
 test_that("factor encoded predictor", {
   reg_test <- recipe(x1 ~ ., data = ex_dat) %>%
-    step_embed(x3, outcome = vars(x1)) %>%
+    step_lencode_glm(x3, outcome = vars(x1)) %>%
     prep(training = ex_dat, retain = TRUE)
   tr_values <- juice(reg_test)$x3
   new_values <- bake(reg_test, newdata = new_dat)
@@ -181,7 +181,7 @@ test_that("factor encoded predictor", {
 
 test_that("character encoded predictor", {
   reg_test <- recipe(x1 ~ ., data = ex_dat_ch) %>%
-    step_embed(x3, outcome = vars(x1)) %>%
+    step_lencode_glm(x3, outcome = vars(x1)) %>%
     prep(training = ex_dat_ch, retain = TRUE)
   tr_values <- juice(reg_test)$x3
   new_values <- bake(reg_test, newdata = new_dat_ch)
@@ -246,7 +246,7 @@ test_that("bad args", {
   
   expect_error(
     recipe(Species ~ ., data = three_class) %>%
-      step_embed(Sepal.Length, outcome = vars(Species)) %>%
+      step_lencode_glm(Sepal.Length, outcome = vars(Species)) %>%
       prep(training = three_class, retain = TRUE)
   )
 })
@@ -254,7 +254,7 @@ test_that("bad args", {
 
 test_that('printing', {
   print_test <- recipe(x2 ~ ., data = ex_dat_ch) %>%
-    step_embed(x3, outcome = vars(x2)) 
+    step_lencode_glm(x3, outcome = vars(x2)) 
   expect_output(print(print_test))
   expect_output(prep(print_test, training = ex_dat_ch, verbose = TRUE))
 })

@@ -1,13 +1,13 @@
-#' Encoding Factors into Linear Functions
+#' Supervised Factor Conversions into Linear Functions using Likelihood Encodings
 #'
-#' `step_embed` creates a *specification* of a recipe step that
+#' `step_lencode_glm` creates a *specification* of a recipe step that
 #'  will convert a nominal (i.e. factor) predictor into a single set of
 #'  scores derived from a generalized linear model.
 #'
 #' @param recipe A recipe object. The step will be added to the
 #'  sequence of operations for this recipe.
 #' @param ... One or more selector functions to choose variables.
-#'  For `step_embed`, this indicates the variables to be encoded
+#'  For `step_lencode_glm`, this indicates the variables to be encoded
 #'  into a numeric format. See [recipes::selections()] for more details. For
 #'  the `tidy` method, these are not currently used.
 #' @param role Not used by this step since no new variables are
@@ -62,12 +62,12 @@
 #' data(okc)
 #' 
 #' glm_est <- recipe(Class ~ age + location, data = okc) %>%
-#'   step_embed(location, outcome = vars(Class))
+#'   step_lencode_glm(location, outcome = vars(Class))
 #' 
 #' # See https://topepo.github.io/embed/ for examples
 
 #' @importFrom recipes add_step step terms_select sel2char ellipse_check
-step_embed <-
+step_lencode_glm <-
   function(recipe,
            ...,
            role = NA,
@@ -79,7 +79,7 @@ step_embed <-
       stop("Please list a variable in `outcome`", call. = FALSE)
     add_step(
       recipe,
-      step_embed_new(
+      step_lencode_glm_new(
         terms = ellipse_check(...),
         role = role,
         trained = trained,
@@ -90,7 +90,7 @@ step_embed <-
     )
   }
 
-step_embed_new <-
+step_lencode_glm_new <-
   function(terms = NULL,
            role = NA,
            trained = FALSE,
@@ -98,7 +98,7 @@ step_embed_new <-
            mapping = NULL,
            skip = FALSE) {
     step(
-      subclass = "embed",
+      subclass = "lencode_glm",
       terms = terms,
       role = role,
       trained = trained,
@@ -110,7 +110,7 @@ step_embed_new <-
 
 #' @importFrom recipes check_type
 #' @export
-prep.step_embed <- function(x, training, info = NULL, ...) {
+prep.step_lencode_glm <- function(x, training, info = NULL, ...) {
   col_names <- terms_select(x$terms, info = info)
   check_type(training[, col_names], quant = FALSE)
   y_name <- terms_select(x$outcome, info = info)
@@ -166,7 +166,7 @@ map_glm_coef <- function(dat, mapping) {
 #' @importFrom recipes bake prep
 #' @importFrom purrr map
 #' @export
-bake.step_embed <- function(object, newdata, ...) {
+bake.step_lencode_glm <- function(object, newdata, ...) {
   for (col in names(object$mapping))
     newdata[, col] <- map_glm_coef(newdata[, col], object$mapping[[col]])
 
@@ -175,7 +175,7 @@ bake.step_embed <- function(object, newdata, ...) {
 
 #' @importFrom recipes printer
 #' @export
-print.step_embed <-
+print.step_lencode_glm <-
   function(x, width = max(20, options()$width - 31), ...) {
     cat("Linear embedding for factors via GLM for ", sep = "")
     printer(names(x$mapping), x$terms, x$trained, width = width)
@@ -185,10 +185,10 @@ print.step_embed <-
 #' @importFrom dplyr bind_rows
 #' @importFrom recipes is_trained
 #' @importFrom broom tidy
-#' @rdname step_embed
-#' @param x A `step_embed` object.
+#' @rdname step_lencode_glm
+#' @param x A `step_lencode_glm` object.
 #' @export
-tidy.step_embed <- function(x, ...) {
+tidy.step_lencode_glm <- function(x, ...) {
   if (is_trained(x)) {
     for(i in seq_along(x$mapping))
       x$mapping[[i]]$terms <- names(x$mapping)[i]

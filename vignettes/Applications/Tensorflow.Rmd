@@ -62,10 +62,10 @@ First, we'll fit a model with no hidden units and 10 encoding columns:
 library(embed)
 tf_linear <- recipe(Sale_Price ~ Neighborhood + MS_SubClass, data = ames) %>%
   step_log(Sale_Price, base = 10) %>%
-  step_tfembed(
+  step_embed(
     Neighborhood, outcome = vars(Sale_Price),
     number = 10, 
-    options = tfembed_control(epochs = 50)
+    options = embed_control(epochs = 50)
   ) %>% 
   prep(training = ames)
 ```
@@ -116,11 +116,11 @@ Now let's fit a more complex model with a layer of hidden units.
 ```{r ames-nonlinear}
 tf_nlin <- recipe(Sale_Price ~ Neighborhood + MS_SubClass, data = ames) %>%
   step_log(Sale_Price, base = 10) %>%
-  step_tfembed(
+  step_embed(
     Neighborhood, outcome = vars(Sale_Price),
     number = 10, 
     hidden = 50,
-    options = tfembed_control(epochs = 50)
+    options = embed_control(epochs = 50)
   ) %>% 
   prep(training = ames)
 

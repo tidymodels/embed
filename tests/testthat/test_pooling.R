@@ -13,7 +13,7 @@ context("glmer model, classification")
 test_that("factor encoded predictor", {
   skip_on_cran()
   class_test <- recipe(x2 ~ ., data = ex_dat) %>%
-    step_bayeseffects(x3, outcome = vars(x2), 
+    step_lencode_bayes(x3, outcome = vars(x2), 
                       verbose = FALSE,
                       options = opts) %>%
     prep(training = ex_dat, retain = TRUE)
@@ -72,7 +72,7 @@ test_that("factor encoded predictor", {
 test_that("character encoded predictor", {
   skip_on_cran()
   class_test <- recipe(x2 ~ ., data = ex_dat_ch) %>%
-    step_bayeseffects(x3, outcome = vars(x2), 
+    step_lencode_bayes(x3, outcome = vars(x2), 
                       verbose = FALSE,
                       options = opts) %>%
     prep(training = ex_dat_ch, retain = TRUE,
@@ -135,7 +135,7 @@ context("glmer model, regression")
 test_that("factor encoded predictor", {
   skip_on_cran()
   reg_test <- recipe(x1 ~ ., data = ex_dat) %>%
-    step_bayeseffects(x3, outcome = vars(x1), 
+    step_lencode_bayes(x3, outcome = vars(x1), 
                       verbose = FALSE,
                       options = opts) %>%
     prep(training = ex_dat, retain = TRUE)
@@ -194,7 +194,7 @@ test_that("factor encoded predictor", {
 test_that("character encoded predictor", {
   skip_on_cran()
   reg_test <- recipe(x1 ~ ., data = ex_dat_ch) %>%
-    step_bayeseffects(x3, outcome = vars(x1), 
+    step_lencode_bayes(x3, outcome = vars(x1), 
                       verbose = FALSE,
                       options = opts) %>%
     prep(training = ex_dat_ch, retain = TRUE)

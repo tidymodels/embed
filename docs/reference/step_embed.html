@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Encoding Factors into Linear Functions — step_embed • embed</title>
+<title>Encoding Factors into Multiple Columns — step_embed • embed</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -30,11 +30,12 @@
 
   <link href="../extra.css" rel="stylesheet">
   
-<meta property="og:title" content="Encoding Factors into Linear Functions — step_embed" />
+<meta property="og:title" content="Encoding Factors into Multiple Columns — step_embed" />
 
 <meta property="og:description" content="step_embed creates a specification of a recipe step that
-will convert a nominal (i.e. factor) predictor into a single set of
-scores derived from a generalized linear model." />
+will convert a nominal (i.e. factor) predictor into a set of
+scores derived from a tensorflow model via a word-embedding model.
+embed_control is a simple wrapper for setting default options." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -93,7 +94,7 @@ scores derived from a generalized linear model." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Encoding Factors into Linear Functions</h1>
+    <h1>Encoding Factors into Multiple Columns</h1>
     
     <div class="hidden name"><code>step_embed.Rd</code></div>
     </div>
@@ -101,17 +102,21 @@ scores derived from a generalized linear model." />
     <div class="ref-description">
     
     <p><code>step_embed</code> creates a <em>specification</em> of a recipe step that
-will convert a nominal (i.e. factor) predictor into a single set of
-scores derived from a generalized linear model.</p>
+will convert a nominal (i.e. factor) predictor into a set of
+scores derived from a tensorflow model via a word-embedding model.
+<code>embed_control</code> is a simple wrapper for setting default options.</p>
     
     </div>
 
     <pre class="usage"><span class='fu'>step_embed</span>(<span class='no'>recipe</span>, <span class='no'>...</span>, <span class='kw'>role</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>trained</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>outcome</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>pooling</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>options</span> <span class='kw'>=</span> <span class='fu'>list</span>(<span class='kw'>seed</span> <span class='kw'>=</span> <span class='fu'>sample.int</span>(<span class='fl'>10</span>^<span class='fl'>5</span>, <span class='fl'>1</span>)),
-  <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>mapping</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>skip</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+  <span class='kw'>number</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>hidden</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>options</span> <span class='kw'>=</span> <span class='fu'>embed_control</span>(), <span class='kw'>mapping</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>history</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>skip</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
 
 <span class='co'># S3 method for step_embed</span>
-<span class='fu'>tidy</span>(<span class='no'>x</span>, <span class='no'>...</span>)</pre>
+<span class='fu'>tidy</span>(<span class='no'>x</span>, <span class='no'>...</span>)
+
+<span class='fu'>embed_control</span>(<span class='kw'>loss</span> <span class='kw'>=</span> <span class='st'>"mse"</span>, <span class='kw'>metrics</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>optimizer</span> <span class='kw'>=</span> <span class='st'>"sgd"</span>,
+  <span class='kw'>epochs</span> <span class='kw'>=</span> <span class='fl'>20</span>, <span class='kw'>validation_split</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>batch_size</span> <span class='kw'>=</span> <span class='fl'>32</span>, <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>0</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -145,24 +150,29 @@ used as the outcome in the generalized linear model. Only
 numeric and two-level factors are currently supported.</p></td>
     </tr>
     <tr>
-      <th>pooling</th>
-      <td><p>A logical; should partial pooling be used via a hierarchical
-generalized linear model?</p></td>
+      <th>number</th>
+      <td><p>An integer for the number of resulting variables.</p></td>
+    </tr>
+    <tr>
+      <th>hidden</th>
+      <td><p>An integer for the number of hidden units in a dense ReLu
+layer between the embedding and output later. Use a
+value of zero for no intermediate layer (see Details below).</p></td>
     </tr>
     <tr>
       <th>options</th>
-      <td><p>A list of options to pass to <code><a href='http://www.rdocumentation.org/packages/rstanarm/topics/stan_glmer'>rstanarm::stan_glmer()</a></code>.</p></td>
-    </tr>
-    <tr>
-      <th>verbose</th>
-      <td><p>A logical to control the default printing by
-<code><a href='http://www.rdocumentation.org/packages/rstanarm/topics/stan_glmer'>rstanarm::stan_glmer()</a></code>.</p></td>
+      <td><p>A list of options for the model fitting process.</p></td>
     </tr>
     <tr>
       <th>mapping</th>
       <td><p>A list of tibble results that define the
 encoding. This is <code>NULL</code> until the step is trained by
 <code><a href='http://www.rdocumentation.org/packages/recipes/topics/prep'>recipes::prep.recipe()</a></code>.</p></td>
+    </tr>
+    <tr>
+      <th>history</th>
+      <td><p>A tibble with the convergence statistics for each term. This
+is <code>NULL</code> until the step is trained by <code><a href='http://www.rdocumentation.org/packages/recipes/topics/prep'>recipes::prep.recipe()</a></code>.</p></td>
     </tr>
     <tr>
       <th>skip</th>
@@ -177,6 +187,14 @@ the computations for subsequent operations</p></td>
       <th>x</th>
       <td><p>A <code>step_embed</code> object.</p></td>
     </tr>
+    <tr>
+      <th>optimizer, loss, metrics</th>
+      <td><p>Arguments to pass to <code><a href='http://www.rdocumentation.org/packages/keras/topics/compile'>keras::compile()</a></code></p></td>
+    </tr>
+    <tr>
+      <th>epochs, validation_split, batch_size, verbose</th>
+      <td><p>Arguments to pass to <code><a href='http://www.rdocumentation.org/packages/keras/topics/fit'>keras::fit()</a></code></p></td>
+    </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
@@ -185,49 +203,65 @@ the computations for subsequent operations</p></td>
 to the sequence of existing steps (if any). For the <code>tidy</code>
 method, a tibble with columns <code>terms</code> (the selectors or
 variables for encoding), <code>level</code> (the factor levels), and
-<code>value</code> (the encodings).</p>
+several columns beginning with the prefix <code>emb</code> (the
+encodings).</p>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>For each factor predictor, a generalized linear model
-is fit to the outcome and the coefficients are returned as the
-encoding. These coefficients are on the linear predictor scale
-so, for factor outcomes, they are in log-odds units. The
-coefficients are created using a no intercept model and, when
-two factor outcomes are used, the log-odds reflect the event of
-interest being the <em>first</em> level of the factor.</p>
-<p>For novel levels, a slightly timmed average of the coefficients
-is returned.</p>
-<p>With partial pooling, a hierarchical generalized linear model
-is fit using <code><a href='http://www.rdocumentation.org/packages/rstanarm/topics/stan_glmer'>rstanarm::stan_glmer()</a></code> and no intercept via</p><pre>  stan_glmer(outcome ~ (1 | predictor), data = data, ...)
+    <p>Factor levels are initially assigned at random to the
+new variables and these variables are used in a neural network
+to optimize both the allocation of levels to new columns as well
+as estimating a model to predict the outcome. See Section 6.1.2
+of Francois and Allaire (2018) for more details.</p>
+<p>The new variables are mapped to the specific levels seen at the
+time of model training and an extra instance of the variables
+are used for new levels of the factor.</p>
+<p>This model is trained separately for each factor predictor
+given in the recipe step.</p>
+<p>When the outcome is numeric, a linear activation function is
+used in the last layer while softmax is used for factor outcomes
+(with any number of levels).</p>
+<p>For example, the <code>keras</code> code for a numeric outcome and no hidden units used
+here would be</p><pre>  keras_model_sequential() \%&gt;\% 
+  layer_embedding(
+    input_dim = num_factor_levels_x + 1,
+    output_dim = number,
+    input_length = 1
+  ) \%&gt;\%
+  layer_flatten() \%&gt;\%
+  layer_dense(units = 1, activation = 'linear')
 </pre>
-    <p>where the <code>...</code> include the <code>family</code> argument (automatically
-set by the step) as well as any arguments given to the <code>options</code>
-argument to the step. Relevant options include <code>chains</code>, <code>iter</code>,
-<code>cores</code>, and arguments for the priors (see the links in the
-References below). <code>prior_intercept</code> is the argument that has the
-most effect on the amount of shrinkage.</p>
+    <p>If a factor outcome is used and 10 hidden units were requested, the code
+would be</p><pre>  keras_model_sequential() \%&gt;\% 
+  layer_embedding(
+    input_dim = num_factor_levels_x + 1,
+    output_dim = number,
+    input_length = 1
+   ) \%&gt;\%
+  layer_flatten() \%&gt;\%
+  layer_dense(units = 10, activation = "relu") \%&gt;\%
+  layer_dense(units = num_factor_levels_y, activation = 'softmax')
+</pre>
+    <p>Also note that it may be difficult to obtain reproducible
+results using this step due to the nature of Tensorflow (see
+link in References).</p>
+<p>tensorflow models cannot be run in parallel within the same
+session (via <code>foreach</code>) or the <code>parallel</code> package. If using a
+recipes with this step with <code>caret</code>, avoid parallel processing.</p>
     
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
-    <p>Zumel N and Mount J (2017) "vtreat: a data.frame Processor for
-Predictive Modeling," arXiv:1611.09477</p>
-<p>"Hierarchical Partial Pooling for Repeated Binary Trials"
-<a href='https://tinyurl.com/stan-pooling'>https://tinyurl.com/stan-pooling</a></p>
-<p>"Prior Distributions for `rstanarm`` Models"
-<a href='https://tinyurl.com/stan-priors'>https://tinyurl.com/stan-priors</a></p>
-<p>"Estimating Generalized (Non-)Linear Models with Group-Specific
-Terms with <code>rstanarm</code>" <a href='https://tinyurl.com/stan-glm-grouped'>https://tinyurl.com/stan-glm-grouped</a></p>
+    <p>Francois C and Allaire JJ (2018) <em>Deep Learning with R</em>, Manning</p>
+<p>"How can I obtain reproducible results using Keras during development?"
+<a href='https://tinyurl.com/keras-repro'>https://tinyurl.com/keras-repro</a></p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>library</span>(<span class='no'>recipes</span>)
-<span class='fu'>library</span>(<span class='no'>dplyr</span>)
+    <pre class="examples"><div class='input'><span class='fu'>data</span>(<span class='no'>okc</span>)
 
-<span class='fu'>data</span>(<span class='no'>okc</span>)
-
-<span class='no'>not_pooled</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='http://www.rdocumentation.org/packages/recipes/topics/recipe'>recipe</a></span>(<span class='no'>Class</span> ~ <span class='no'>age</span> + <span class='no'>location</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>okc</span>) <span class='kw'>%&gt;%</span>
-  <span class='fu'>step_embed</span>(<span class='no'>location</span>, <span class='kw'>outcome</span> <span class='kw'>=</span> <span class='fu'><a href='http://dplyr.tidyverse.org/reference/vars.html'>vars</a></span>(<span class='no'>Class</span>))
+<span class='no'>rec</span> <span class='kw'>&lt;-</span> <span class='fu'>recipe</span>(<span class='no'>Class</span> ~ <span class='no'>age</span> + <span class='no'>location</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>okc</span>) <span class='kw'>%&gt;%</span>
+  <span class='fu'>step_embed</span>(<span class='no'>location</span>, <span class='kw'>outcome</span> <span class='kw'>=</span> <span class='fu'>vars</span>(<span class='no'>Class</span>),
+             <span class='kw'>options</span> <span class='kw'>=</span> <span class='fu'>embed_control</span>(<span class='kw'>epochs</span> <span class='kw'>=</span> <span class='fl'>10</span>))
 
 <span class='co'># See https://topepo.github.io/embed/ for examples</span></div></pre>
   </div>

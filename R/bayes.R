@@ -1,6 +1,6 @@
-#' Encoding Factors into Linear Functions Using Bayesian Analysis
+#' Supervised Factor Conversions into Linear Functions using Bayesian Likelihood Encodings
 #'
-#' `step_bayeseffects` creates a *specification* of a recipe step that
+#' `step_lencode_bayes` creates a *specification* of a recipe step that
 #'  will convert a nominal (i.e. factor) predictor into a single set of
 #'  scores derived from a generalized linear model estimated using 
 #'  Bayesian analysis. 
@@ -8,7 +8,7 @@
 #' @param recipe A recipe object. The step will be added to the
 #'  sequence of operations for this recipe.
 #' @param ... One or more selector functions to choose variables.
-#'  For `step_bayeseffects`, this indicates the variables to be encoded
+#'  For `step_lencode_bayes`, this indicates the variables to be encoded
 #'  into a numeric format. See [recipes::selections()] for more details. For
 #'  the `tidy` method, these are not currently used.
 #' @param role Not used by this step since no new variables are
@@ -89,12 +89,12 @@
 #' data(okc)
 #' 
 #' reencoded <- recipe(Class ~ age + location, data = okc) %>%
-#'   step_bayeseffects(location, outcome = vars(Class))
+#'   step_lencode_bayes(location, outcome = vars(Class))
 #' 
 #' # See https://topepo.github.io/embed/ for examples
 
 #' @importFrom recipes add_step step terms_select sel2char ellipse_check
-step_bayeseffects <-
+step_lencode_bayes <-
   function(recipe,
            ...,
            role = NA,
@@ -108,7 +108,7 @@ step_bayeseffects <-
       stop("Please list a variable in `outcome`", call. = FALSE)
     add_step(
       recipe,
-      step_bayeseffects_new(
+      step_lencode_bayes_new(
         terms = ellipse_check(...),
         role = role,
         trained = trained,
@@ -121,7 +121,7 @@ step_bayeseffects <-
     )
   }
 
-step_bayeseffects_new <-
+step_lencode_bayes_new <-
   function(terms = NULL,
            role = NA,
            trained = FALSE,
@@ -131,7 +131,7 @@ step_bayeseffects_new <-
            mapping = NULL,
            skip = FALSE) {
     step(
-      subclass = "bayeseffects",
+      subclass = "lencode_bayes",
       terms = terms,
       role = role,
       trained = trained,
@@ -145,7 +145,7 @@ step_bayeseffects_new <-
 
 #' @importFrom recipes check_type
 #' @export
-prep.step_bayeseffects <- function(x, training, info = NULL, ...) {
+prep.step_lencode_bayes <- function(x, training, info = NULL, ...) {
   col_names <- terms_select(x$terms, info = info)
   check_type(training[, col_names], quant = FALSE)
   y_name <- terms_select(x$outcome, info = info)
@@ -241,7 +241,7 @@ map_glm_coef <- function(dat, mapping) {
 #' @importFrom recipes bake prep
 #' @importFrom purrr map
 #' @export
-bake.step_bayeseffects <- function(object, newdata, ...) {
+bake.step_lencode_bayes <- function(object, newdata, ...) {
   for (col in names(object$mapping))
     newdata[, col] <- map_glm_coef(newdata[, col], object$mapping[[col]])
 
@@ -250,7 +250,7 @@ bake.step_bayeseffects <- function(object, newdata, ...) {
 
 #' @importFrom recipes printer
 #' @export
-print.step_bayeseffects <-
+print.step_lencode_bayes <-
   function(x, width = max(20, options()$width - 31), ...) {
     cat("Linear embedding for factors via GLM for ", sep = "")
     printer(names(x$mapping), x$terms, x$trained, width = width)
@@ -260,10 +260,10 @@ print.step_bayeseffects <-
 #' @importFrom dplyr bind_rows
 #' @importFrom recipes is_trained
 #' @importFrom broom tidy
-#' @rdname step_bayeseffects
-#' @param x A `step_bayeseffects` object.
+#' @rdname step_lencode_bayes
+#' @param x A `step_lencode_bayes` object.
 #' @export
-tidy.step_bayeseffects <- function(x, ...) {
+tidy.step_lencode_bayes <- function(x, ...) {
   if (is_trained(x)) {
     for(i in seq_along(x$mapping))
       x$mapping[[i]]$terms <- names(x$mapping)[i]

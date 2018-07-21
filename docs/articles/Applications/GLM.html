@@ -68,7 +68,7 @@
 
     
     
-<p>This method uses a generalized linear model to estimate the effect of each level of a factor predictor on the outcome. These values are retained to serve as the new encodings for the factor levels. <code>embed</code> has two estimation methods for accomplishing this: with and without pooling.</p>
+<p>This method uses a generalized linear model to estimate the effect of each level of a factor predictor on the outcome. These values are retained to serve as the new encodings for the factor levels. This is sometimes referred to as <em>likelihood encodings</em>. <code>embed</code> has two estimation methods for accomplishing this: with and without pooling.</p>
 <p>The example used here is the OkCupid data from <a href="http://www.amstat.org/publications/jse/v23n2/kim.pdf">Kim and Escobedo-Land (2015)(pdf)</a>. In <a href="http://feat.engineering">Kuhn and Johnson (2018)</a>, these data are used to predict whether a person is in the STEM fields (science, technology, engineering, and mathematics). One predictor, geographic location, is a factor variable. The frequencies of location in the data set used here vary between 1 person and 31064 per location. There are 135 locations in the data. Rather than producing 134 indicator variables for a model, a single numeric variable can be used to represent the <em>effect</em> or <em>impact</em> of the factor level on the outcome. In this case, where a factor outcome is being predicted (STEM or not), the effects are quantified by the log-odds of the location for being STEM.</p>
 <p>We first calculate the raw log-odds for the data (independent of any model):</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">library</span>(tidyverse)</a>
@@ -81,22 +81,21 @@
 <a class="sourceLine" id="cb1-8" data-line-number="8">    <span class="dt">prop =</span> <span class="kw">mean</span>(Class <span class="op">==</span><span class="st"> "stem"</span>),</a>
 <a class="sourceLine" id="cb1-9" data-line-number="9">    <span class="dt">log_odds  =</span> <span class="kw">log</span>(prop<span class="op">/</span>(<span class="dv">1</span><span class="op">-</span>prop)),</a>
 <a class="sourceLine" id="cb1-10" data-line-number="10">    <span class="dt">n =</span> <span class="kw">length</span>(Class)</a>
-<a class="sourceLine" id="cb1-11" data-line-number="11">  ) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb1-12" data-line-number="12"><span class="st">  </span><span class="kw">arrange</span>(n)</a>
-<a class="sourceLine" id="cb1-13" data-line-number="13">props</a></code></pre></div>
+<a class="sourceLine" id="cb1-11" data-line-number="11">  ) </a>
+<a class="sourceLine" id="cb1-12" data-line-number="12">props</a></code></pre></div>
 <pre><code>## # A tibble: 135 x 4
-##    location        prop log_odds     n
-##    &lt;chr&gt;          &lt;dbl&gt;    &lt;dbl&gt; &lt;int&gt;
-##  1 arcadia           0.     -Inf     1
-##  2 ashland           0.     -Inf     1
-##  3 brea              0.     -Inf     1
-##  4 campbell          0.     -Inf     1
-##  5 canyon            0.     -Inf     1
-##  6 canyon country    0.     -Inf     1
-##  7 chico             0.     -Inf     1
-##  8 concord           0.     -Inf     1
-##  9 costa mesa        0.     -Inf     1
-## 10 freedom           0.     -Inf     1
+##    location            prop log_odds     n
+##    &lt;chr&gt;              &lt;dbl&gt;    &lt;dbl&gt; &lt;int&gt;
+##  1 alameda           0.143     -1.79   910
+##  2 albany            0.163     -1.64   233
+##  3 arcadia           0       -Inf        1
+##  4 ashland           0       -Inf        1
+##  5 atherton          0.222     -1.25    45
+##  6 bayshore          0       -Inf        3
+##  7 belmont           0.222     -1.25   243
+##  8 belvedere tiburon 0.0702    -2.58    57
+##  9 benicia           0.0837    -2.39   203
+## 10 berkeley          0.140     -1.82  4212
 ## # ... with 125 more rows</code></pre>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="co"># later, for plotting</span></a>
 <a class="sourceLine" id="cb3-2" data-line-number="2">rng &lt;-<span class="st"> </span><span class="kw">extendrange</span>(props<span class="op">$</span>log_odds[<span class="kw">is.finite</span>(props<span class="op">$</span>log_odds)], <span class="dt">f =</span> <span class="fl">0.1</span>)</a></code></pre></div>
@@ -105,10 +104,10 @@
 <h2 class="hasAnchor">
 <a href="#no-pooling" class="anchor"></a>No Pooling</h2>
 <p>In this case, the effect of each location can be estimated separately for each factor level. One method for conducting this estimation step is to fit a logistic regression with the STEM classification as the outcome and the location as the predictor. From this, the log-odds are naturally estimated by logistic regression.</p>
-<p>For these data, a recipe is created and <code>step_embed</code> is used:</p>
+<p>For these data, a recipe is created and <code>step_lencode_glm</code> is used:</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">okc_glm &lt;-<span class="st"> </span><span class="kw">recipe</span>(Class <span class="op">~</span><span class="st"> </span>., <span class="dt">data =</span> okc) <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb4-2" data-line-number="2"><span class="st">  </span><span class="co"># specify the variable being encoded and the outcome</span></a>
-<a class="sourceLine" id="cb4-3" data-line-number="3"><span class="st">  </span><span class="kw"><a href="../../reference/step_embed.html">step_embed</a></span>(location, <span class="dt">outcome =</span> <span class="kw">vars</span>(Class)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb4-3" data-line-number="3"><span class="st">  </span><span class="kw"><a href="../../reference/step_lencode_glm.html">step_lencode_glm</a></span>(location, <span class="dt">outcome =</span> <span class="kw">vars</span>(Class)) <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb4-4" data-line-number="4"><span class="st">  </span><span class="co"># estimate the effects</span></a>
 <a class="sourceLine" id="cb4-5" data-line-number="5"><span class="st">  </span><span class="kw">prep</span>(<span class="dt">training =</span> okc)</a></code></pre></div>
 <p>The <code>tidy</code> method can be used to extract the encodings and are merged with the raw estimates:</p>
@@ -157,8 +156,11 @@
 <h2 class="hasAnchor">
 <a href="#partial-pooling" class="anchor"></a>Partial Pooling</h2>
 <p>This method estimates the effects by using all of the locations at once using a hierarchical Bayesian generalized linear model. The locations are treated as a random set that contributes a random intercept to the previously used logistic regression.</p>
-<p>Partial pooling estimates each effect as a combination of the separate empirical estimates of the log-odds and the prior distribution. For locations with small sample sizes, the final estimate is <em>shrunken</em> towards the overall mean of the log-odds. This makes sense since we have poor information for estimating these locations. For locations with many data points, the estimates reply more on the empirical estimates. <a href="https://cran.r-project.org/web/packages/rstanarm/vignettes/glmer.html">This page</a> has a good discussion of pooling in Bayesian models.</p>
-<p>The step uses the <code>stan_glmer</code> function in the <code>rstanarm</code> package. There are a number of options that can be used to control the model estimation routine, including:</p>
+<p>Partial pooling estimates each effect as a combination of the separate empirical estimates of the log-odds and the prior distribution. For locations with small sample sizes, the final estimate is <em>shrunken</em> towards the overall mean of the log-odds. This makes sense since we have poor information for estimating these locations. For locations with many data points, the estimates reply more on the empirical estimates. <a href="https://cran.r-project.org/web/packages/rstanarm/vignettes/glmer.html">This page</a> has a good discussion of pooling using Bayesian models.</p>
+<div id="bayesian-methods" class="section level3">
+<h3 class="hasAnchor">
+<a href="#bayesian-methods" class="anchor"></a>Bayesian Methods</h3>
+<p>One appraoch to partial pooling is the function <code>step_lencode_bayes</code> uses the <code>stan_glmer</code> function in the <code>rstanarm</code> package. There are a number of options that can be used to control the model estimation routine, including:</p>
 <div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1">opts &lt;-<span class="st"> </span></a>
 <a class="sourceLine" id="cb12-2" data-line-number="2"><span class="st">  </span><span class="kw">list</span>(</a>
 <a class="sourceLine" id="cb12-3" data-line-number="3">    ## the number of chains</a>
@@ -172,13 +174,12 @@
 <a class="sourceLine" id="cb12-11" data-line-number="11">  )</a></code></pre></div>
 <p>Using the default priors, the model is estimated via:</p>
 <div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1">okc_glmer &lt;-<span class="st"> </span><span class="kw">recipe</span>(Class <span class="op">~</span><span class="st"> </span>., <span class="dt">data =</span> okc) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb13-2" data-line-number="2"><span class="st">  </span><span class="kw"><a href="../../reference/step_embed.html">step_embed</a></span>(</a>
+<a class="sourceLine" id="cb13-2" data-line-number="2"><span class="st">  </span><span class="kw"><a href="../../reference/step_lencode_bayes.html">step_lencode_bayes</a></span>(</a>
 <a class="sourceLine" id="cb13-3" data-line-number="3">    location,</a>
 <a class="sourceLine" id="cb13-4" data-line-number="4">    <span class="dt">outcome =</span> <span class="kw">vars</span>(Class),</a>
-<a class="sourceLine" id="cb13-5" data-line-number="5">    <span class="dt">pooling =</span> <span class="ot">TRUE</span>,</a>
-<a class="sourceLine" id="cb13-6" data-line-number="6">    <span class="dt">options =</span> opts</a>
-<a class="sourceLine" id="cb13-7" data-line-number="7">  ) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb13-8" data-line-number="8"><span class="st">  </span><span class="kw">prep</span>(<span class="dt">training =</span> okc)</a></code></pre></div>
+<a class="sourceLine" id="cb13-5" data-line-number="5">    <span class="dt">options =</span> opts</a>
+<a class="sourceLine" id="cb13-6" data-line-number="6">  ) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb13-7" data-line-number="7"><span class="st">  </span><span class="kw">prep</span>(<span class="dt">training =</span> okc)</a></code></pre></div>
 <p>This took more time than the simple non-pooled model. The embeddings are extracted in the same way:</p>
 <div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1">estimates &lt;-<span class="st"> </span><span class="kw">tidy</span>(okc_glmer, <span class="dt">number =</span> <span class="dv">1</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb14-2" data-line-number="2"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/select.html">select</a></span>(<span class="op">-</span>terms) <span class="op">%&gt;%</span></a>
@@ -216,6 +217,11 @@
 ##   level value terms   
 ##   &lt;chr&gt; &lt;dbl&gt; &lt;chr&gt;   
 ## 1 ..new -1.98 location</code></pre>
+</div>
+<div id="empirical-bayesian-methodsmixed-models" class="section level3">
+<h3 class="hasAnchor">
+<a href="#empirical-bayesian-methodsmixed-models" class="anchor"></a>Empirical Bayesian Methods/Mixed Models</h3>
+</div>
 </div>
   </div>
 

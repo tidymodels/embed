@@ -11,7 +11,7 @@ context("tensorflow model, classification")
 test_that("factor encoded predictor", {
   skip_on_cran()
   class_test <- recipe(x2 ~ ., data = ex_dat) %>%
-    step_tfembed(x3, outcome = vars(x2), options = tfembed_control(verbose = 0)) %>%
+    step_embed(x3, outcome = vars(x2), options = embed_control(verbose = 0)) %>%
     prep(training = ex_dat, retain = TRUE)
   tr_values <- juice(class_test, contains("embed"))
   new_values <- bake(class_test, newdata = new_dat, contains("embed"))
@@ -72,7 +72,7 @@ test_that("factor encoded predictor", {
 test_that("character encoded predictor", {
   skip_on_cran()
   class_test <- recipe(x2 ~ ., data = ex_dat_ch) %>%
-    step_tfembed(x3, outcome = vars(x2), options = tfembed_control(verbose = 0)) %>%
+    step_embed(x3, outcome = vars(x2), options = embed_control(verbose = 0)) %>%
     prep(training = ex_dat_ch, retain = TRUE)
   tr_values <- juice(class_test, contains("embed"))
   new_values <- bake(class_test, newdata = new_dat, contains("embed"))
@@ -136,7 +136,7 @@ context("tensorflow model, regression")
 test_that("factor encoded predictor", {
   skip_on_cran()
   class_test <- recipe(x1 ~ ., data = ex_dat) %>%
-    step_tfembed(x3, outcome = vars(x1), options = tfembed_control(verbose = 0)) %>%
+    step_embed(x3, outcome = vars(x1), options = embed_control(verbose = 0)) %>%
     prep(training = ex_dat, retain = TRUE)
   tr_values <- juice(class_test, contains("embed"))
   new_values <- bake(class_test, newdata = new_dat, contains("embed"))
@@ -197,7 +197,7 @@ test_that("factor encoded predictor", {
 test_that("character encoded predictor", {
   skip_on_cran()
   class_test <- recipe(x1 ~ ., data = ex_dat_ch) %>%
-    step_tfembed(x3, outcome = vars(x1), number = 5, options = tfembed_control(verbose = 0)) %>%
+    step_embed(x3, outcome = vars(x1), number = 5, options = embed_control(verbose = 0)) %>%
     prep(training = ex_dat_ch, retain = TRUE)
   tr_values <- juice(class_test, contains("embed"))
   new_values <- bake(class_test, newdata = new_dat, contains("embed"))
@@ -267,7 +267,7 @@ test_that("bad args", {
   
   expect_error(
     recipe(Species ~ ., data = three_class) %>%
-      step_tfembed(Sepal.Length, outcome = vars(Species)) %>%
+      step_embed(Sepal.Length, outcome = vars(Species)) %>%
       prep(training = three_class, retain = TRUE)
   )
 })
@@ -276,7 +276,7 @@ test_that("bad args", {
 test_that('printing', {
   skip_on_cran()
   print_test <- recipe(x2 ~ ., data = ex_dat_ch) %>%
-    step_tfembed(x3, outcome = vars(x2)) 
+    step_embed(x3, outcome = vars(x2)) 
   expect_output(print(print_test))
   expect_output(prep(print_test, training = ex_dat_ch, verbose = TRUE))
 })
