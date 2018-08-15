@@ -1,5 +1,5 @@
 Package: embed
-Version: 0.0.0.9000
+Version: 0.0.0.9001
 Title: Extra recipes for encoding categorical predictors
 Description: Factor predictors can be converted to one or more numeric representations using simple generalized linear models <arXiv:1611.09477> or nonlinear models <arXiv:1604.06737>. All encoding methods are supervised.
 Authors@R: c(
@@ -18,7 +18,8 @@ Imports:
     utils,
     broom,
     tidyr,
-    tibble
+    tibble,
+    lme4
 Suggests: 
     testthat,
     knitr,

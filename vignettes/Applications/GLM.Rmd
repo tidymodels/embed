@@ -153,3 +153,33 @@ tidy(okc_glmer, number = 1) %>%
 
 ### Empirical Bayesian Methods/Mixed Models
 
+The same generalized linear model can be fit using mixed models via a random intercept. The `lme4` package can also be used to get pooled estimates via `step_lencode_mixed`.
+
+```{r mixed-rec}
+okc_mixed <- recipe(Class ~ ., data = okc) %>%
+  step_lencode_mixed(
+    location,
+    outcome = vars(Class),
+  ) %>% 
+  prep(training = okc)
+
+estimates <- tidy(okc_mixed, number = 1) %>% 
+  dplyr::select(-terms) %>%
+  set_names(c("location", "mixed")) %>%
+    inner_join(estimates, by = "location")
+estimates %>% dplyr::select(location, log_odds, glm, glmer, mixed)
+```
+
+Comparing the raw and mixed model estimates:
+
+```{r mixed-compare}
+estimates %>%
+  dplyr::filter(is.finite(log_odds)) %>%
+  ggplot(aes(x = log_odds, y = mixed)) + 
+  geom_abline(col = "red", alpha = .5) + 
+  geom_point(aes(size = sqrt(n)), alpha = .5) + 
+  xlim(rng) + ylim(rng) +
+  theme_bw()
+```
+
+These values are very similar to the Bayesian estimates. 
