@@ -7,7 +7,7 @@
 
 `embed` is a package that contains extra steps for the [`recipes`](http://cran.rstudio.com/package=recipes) package for embedding categorical predictors into one or more numeric columns. All of the preprocessing methods are _supervised_. 
 
-These steps are contained in a separate package because the package dependencies, [`rstanarm`](http://cran.rstudio.com/package=rstanarm) and [`keras`](http://cran.rstudio.com/package=keras),  are fairly heavy. 
+These steps are contained in a separate package because the package dependencies, [`rstanarm`](http://cran.rstudio.com/package=rstanarm), [`lme4`](http://cran.rstudio.com/package=lme4), and [`keras`](http://cran.rstudio.com/package=keras),  are fairly heavy. 
 
 The steps included are:
 
