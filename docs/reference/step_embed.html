@@ -200,24 +200,24 @@ given in the recipe step.</p>
 used in the last layer while softmax is used for factor outcomes
 (with any number of levels).</p>
 <p>For example, the <code>keras</code> code for a numeric outcome and no hidden units used
-here would be</p><pre>  keras_model_sequential() \%&gt;\% 
+here would be</p><pre>  keras_model_sequential() %&gt;% 
   layer_embedding(
     input_dim = num_factor_levels_x + 1,
     output_dim = num_terms,
     input_length = 1
-  ) \%&gt;\%
-  layer_flatten() \%&gt;\%
+  ) %&gt;%
+  layer_flatten() %&gt;%
   layer_dense(units = 1, activation = 'linear')
 </pre>
     <p>If a factor outcome is used and 10 hidden units were requested, the code
-would be</p><pre>  keras_model_sequential() \%&gt;\% 
+would be</p><pre>  keras_model_sequential() %&gt;% 
   layer_embedding(
     input_dim = num_factor_levels_x + 1,
     output_dim = num_terms,
     input_length = 1
-   ) \%&gt;\%
-  layer_flatten() \%&gt;\%
-  layer_dense(units = 10, activation = "relu") \%&gt;\%
+   ) %&gt;%
+  layer_flatten() %&gt;%
+  layer_dense(units = 10, activation = "relu") %&gt;%
   layer_dense(units = num_factor_levels_y, activation = 'softmax')
 </pre>
     <p>Also note that it may be difficult to obtain reproducible
