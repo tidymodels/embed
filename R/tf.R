@@ -109,7 +109,7 @@
 #'   step_embed(location, outcome = vars(Class),
 #'              options = embed_control(epochs = 10))
 #' 
-#' # See https://topepo.github.io/embed/ for examples
+#' # See https://tidymodels.github.io/embed/ for examples
 
 
 #' @importFrom recipes add_step step terms_select sel2char ellipse_check

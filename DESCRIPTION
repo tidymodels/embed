@@ -32,5 +32,5 @@ LazyData: true
 RoxygenNote: 6.0.1
 Roxygen: list(markdown = TRUE)
 ByteCompile: true
-URL: https://topepo.github.io/embed
-BugReports: https://github.com/topepo/embed/issues
+URL: https://tidymodels.github.io/embed
+BugReports: https://github.com/tidymodels/embed/issues

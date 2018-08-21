@@ -79,7 +79,7 @@
 #' reencoded <- recipe(Class ~ age + location, data = okc) %>%
 #'   step_lencode_mixed(location, outcome = vars(Class))
 #' 
-#' # See https://topepo.github.io/embed/ for examples
+#' # See https://tidymodels.github.io/embed/ for examples
 
 #' @importFrom recipes add_step step terms_select sel2char ellipse_check
 step_lencode_mixed <-
