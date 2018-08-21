@@ -75,7 +75,7 @@ data(okc)
 glm_est <- recipe(Class ~ age + location, data = okc) \%>\%
   step_lencode_glm(location, outcome = vars(Class))
 
-# See https://topepo.github.io/embed/ for examples
+# See https://tidymodels.github.io/embed/ for examples
 }
 \references{
 Micci-Barreca D (2001) "A preprocessing scheme for
