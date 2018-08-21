@@ -16,8 +16,8 @@
 #' @param outcome A call to `vars` to specify which variable is
 #'  used as the outcome in the generalized linear model. Only
 #'  numeric and two-level factors are currently supported.
-#' @param number An integer for the number of resulting variables.
-#' @param hidden An integer for the number of hidden units in a dense ReLu
+#' @param num_terms An integer for the number of resulting variables.
+#' @param hidden_units An integer for the number of hidden units in a dense ReLu
 #'  layer between the embedding and output later. Use a 
 #'  value of zero for no intermediate layer (see Details below). 
 #' @param options A list of options for the model fitting process.
@@ -67,7 +67,7 @@
 #'   keras_model_sequential() \\%>\\% 
 #'   layer_embedding(
 #'     input_dim = num_factor_levels_x + 1,
-#'     output_dim = number,
+#'     output_dim = num_terms,
 #'     input_length = 1
 #'   ) \\%>\\%
 #'   layer_flatten() \\%>\\%
@@ -81,7 +81,7 @@
 #'   keras_model_sequential() \\%>\\% 
 #'   layer_embedding(
 #'     input_dim = num_factor_levels_x + 1,
-#'     output_dim = number,
+#'     output_dim = num_terms,
 #'     input_length = 1
 #'    ) \\%>\\%
 #'   layer_flatten() \\%>\\%
@@ -119,8 +119,8 @@ step_embed <-
            role = NA,
            trained = FALSE,
            outcome = NULL,
-           number = 2,
-           hidden = 0,
+           num_terms = 2,
+           hidden_units = 0,
            options = embed_control(),
            mapping = NULL,
            history = NULL,
@@ -134,8 +134,8 @@ step_embed <-
         role = role,
         trained = trained,
         outcome = outcome,
-        number = number,
-        hidden = hidden,
+        num_terms = num_terms,
+        hidden_units = hidden_units,
         options = options,
         mapping = mapping,
         history = history,
@@ -149,8 +149,8 @@ step_embed_new <-
            role = NA,
            trained = FALSE,
            outcome = NULL,
-           number = NULL,
-           hidden = NULL,
+           num_terms = NULL,
+           hidden_units = NULL,
            options = NULL,
            mapping = NULL,
            history = NULL,
@@ -159,8 +159,8 @@ step_embed_new <-
       subclass = "embed",
       terms = terms,
       role = role,
-      number = number,
-      hidden = hidden,
+      num_terms = num_terms,
+      hidden_units = hidden_units,
       options = options,
       trained = trained,
       outcome = outcome,
@@ -185,8 +185,8 @@ prep.step_embed <- function(x, training, info = NULL, ...) {
       tf_coefs, 
       y = training[, y_name], 
       opt = x$options,
-      num = x$number,
-      h = x$hidden
+      num = x$num_terms,
+      h = x$hidden_units
     )
   x$mapping <- lapply(res, function(x) x$layer_values)
   hst <- lapply(res, function(x) as_tibble(x$history))

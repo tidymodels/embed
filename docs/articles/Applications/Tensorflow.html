@@ -95,7 +95,7 @@ tf_linear &lt;-<span class="st"> </span><span class="kw">recipe</span>(Sale_Pric
 <span class="st">  </span><span class="kw">step_log</span>(Sale_Price, <span class="dt">base =</span> <span class="dv">10</span>) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw"><a href="../../reference/step_embed.html">step_embed</a></span>(
     Neighborhood, <span class="dt">outcome =</span> <span class="kw">vars</span>(Sale_Price),
-    <span class="dt">number =</span> <span class="dv">10</span>, 
+    <span class="dt">num_terms =</span> <span class="dv">10</span>, 
     <span class="dt">options =</span> <span class="kw"><a href="../../reference/step_embed.html">embed_control</a></span>(<span class="dt">epochs =</span> <span class="dv">50</span>)
   ) <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">prep</span>(<span class="dt">training =</span> ames)</code></pre></div>
@@ -103,18 +103,18 @@ tf_linear &lt;-<span class="st"> </span><span class="kw">recipe</span>(Sale_Pric
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">linear_coef &lt;-<span class="st"> </span><span class="kw">tidy</span>(tf_linear, <span class="dt">number =</span> <span class="dv">2</span>)
 linear_coef</code></pre></div>
 <pre><code>## # A tibble: 29 x 12
-##      emb01    emb02   emb03  emb04   emb05    emb06    emb07    emb08
-##      &lt;dbl&gt;    &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;
-##  1  0.0398  0.0438  -0.0385 0.0303 -0.0123 -0.0330   1.41e-2  3.44e-2
-##  2 -0.141   0.0317   0.104  0.0239 -0.150  -0.00200 -3.65e-2 -2.13e-2
-##  3 -0.116   0.0440   0.182  0.0373 -0.174  -0.0597  -1.37e-4 -8.61e-2
-##  4 -0.0969  0.0358   0.114  0.0813 -0.112   0.0195  -5.46e-2 -4.15e-4
-##  5 -0.1000 -0.0478   0.106  0.102  -0.130  -0.0139   2.56e-2 -4.36e-2
-##  6 -0.176  -0.0351   0.164  0.0549 -0.138  -0.0477   2.79e-2 -6.55e-2
-##  7 -0.179   0.0187   0.185  0.105  -0.201  -0.0132   1.11e-3 -3.81e-2
-##  8 -0.108   0.0220   0.183  0.0289 -0.163  -0.0328  -1.24e-2 -8.24e-2
-##  9 -0.150  -0.0226   0.123  0.0491 -0.113   0.0283  -1.35e-4 -1.73e-2
-## 10 -0.136   0.00418  0.0998 0.0489 -0.157  -0.0384  -8.53e-3 -7.23e-2
+##       emb01   emb02    emb03   emb04    emb05   emb06   emb07   emb08
+##       &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;
+##  1 -0.0178   0.0182 -0.00614  0.0483 -3.62e-2 -0.0319  0.0182 -0.0409
+##  2 -0.0293  -0.144  -0.0652   0.0284  8.48e-2  0.0854 -0.0909  0.126 
+##  3  0.0315  -0.135  -0.0789   0.0208  4.17e-2  0.109  -0.118   0.171 
+##  4  0.0104  -0.0956 -0.0728  -0.0131  7.51e-3  0.0442 -0.112   0.129 
+##  5  0.00366 -0.116  -0.0505  -0.0248  6.44e-2  0.121  -0.123   0.103 
+##  6 -0.0464  -0.136  -0.129    0.0151  8.43e-2  0.131  -0.117   0.133 
+##  7  0.0437  -0.165  -0.158   -0.0473  4.95e-2  0.182  -0.172   0.140 
+##  8 -0.0433  -0.124  -0.114   -0.0504  7.39e-2  0.118  -0.161   0.123 
+##  9 -0.0145  -0.124  -0.0916   0.0178 -3.04e-3  0.151  -0.0843  0.129 
+## 10  0.0435  -0.111  -0.132   -0.0356  1.97e-4  0.112  -0.168   0.132 
 ## # ... with 19 more rows, and 4 more variables: emb09 &lt;dbl&gt;, emb10 &lt;dbl&gt;,
 ## #   level &lt;chr&gt;, terms &lt;chr&gt;</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">linear_coef &lt;-<span class="st"> </span>linear_coef <span class="op">%&gt;%</span>
@@ -125,8 +125,8 @@ linear_coef</code></pre></div>
 <span class="st">  </span>dplyr<span class="op">::</span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/select.html">select</a></span>(<span class="kw">starts_with</span>(<span class="st">"emb"</span>), mean) <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">cor</span>()
 linear_cor[<span class="op">-</span><span class="dv">11</span>,<span class="dv">11</span>]</code></pre></div>
-<pre><code>##  emb01  emb02  emb03  emb04  emb05  emb06  emb07  emb08  emb09  emb10 
-## -0.600 -0.077  0.484  0.210 -0.665 -0.197  0.133 -0.101  0.566 -0.581</code></pre>
+<pre><code>## emb01 emb02 emb03 emb04 emb05 emb06 emb07 emb08 emb09 emb10 
+##  0.35 -0.57 -0.59 -0.16  0.39  0.44 -0.47  0.59  0.67 -0.45</code></pre>
 <p>However, this has induced some between-predictor correlations.</p>
 <p><a href="https://en.wikipedia.org/wiki/Multidimensional_scaling">Multidimensional scaling</a> is used to see if there is any information in the data that is associated with the outcome:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">lin_mds &lt;-<span class="st"> </span>linear_coef <span class="op">%&gt;%</span><span class="st"> </span>
@@ -148,8 +148,8 @@ lin_mds<span class="op">$</span>points <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">step_log</span>(Sale_Price, <span class="dt">base =</span> <span class="dv">10</span>) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw"><a href="../../reference/step_embed.html">step_embed</a></span>(
     Neighborhood, <span class="dt">outcome =</span> <span class="kw">vars</span>(Sale_Price),
-    <span class="dt">number =</span> <span class="dv">10</span>, 
-    <span class="dt">hidden =</span> <span class="dv">50</span>,
+    <span class="dt">num_terms =</span> <span class="dv">10</span>, 
+    <span class="dt">hidden_units =</span> <span class="dv">50</span>,
     <span class="dt">options =</span> <span class="kw"><a href="../../reference/step_embed.html">embed_control</a></span>(<span class="dt">epochs =</span> <span class="dv">50</span>)
   ) <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">prep</span>(<span class="dt">training =</span> ames)
@@ -163,8 +163,8 @@ nlin_coef &lt;-<span class="st"> </span><span class="kw">tidy</span>(tf_nlin, <s
 <span class="st">  </span>dplyr<span class="op">::</span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/select.html">select</a></span>(<span class="kw">starts_with</span>(<span class="st">"emb"</span>), mean) <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">cor</span>()
 nlin_cor[<span class="op">-</span><span class="dv">11</span>,<span class="dv">11</span>]</code></pre></div>
-<pre><code>## emb01 emb02 emb03 emb04 emb05 emb06 emb07 emb08 emb09 emb10 
-##  0.58 -0.78 -0.47 -0.79 -0.36  0.63 -0.31  0.44 -0.88  0.65</code></pre>
+<pre><code>##  emb01  emb02  emb03  emb04  emb05  emb06  emb07  emb08  emb09  emb10 
+##  0.668 -0.863 -0.098  0.726  0.025 -0.316  0.055  0.709  0.650 -0.796</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">nlin_mds &lt;-<span class="st"> </span>nlin_coef <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="co"># dplyr::filter(Neighborhood != "..new") %&gt;% </span>
 <span class="st">  </span>dplyr<span class="op">::</span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/select.html">select</a></span>(<span class="kw">starts_with</span>(<span class="st">"emb"</span>)) <span class="op">%&gt;%</span>
@@ -185,9 +185,9 @@ nlin_mds<span class="op">$</span>points <span class="op">%&gt;%</span>
 <span class="st">  </span>dplyr<span class="op">::</span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(level <span class="op">==</span><span class="st"> "..new"</span>) <span class="op">%&gt;%</span>
 <span class="st">  </span>dplyr<span class="op">::</span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/select.html">select</a></span>(<span class="kw">starts_with</span>(<span class="st">"emb"</span>))</code></pre></div>
 <pre><code>## # A tibble: 1 x 10
-##     emb01   emb02  emb03  emb04   emb05   emb06  emb07   emb08  emb09
-##     &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;
-## 1 -0.0125 -0.0207 0.0365 0.0104 -0.0166 -0.0299 0.0114 0.00602 0.0207
+##    emb01  emb02   emb03  emb04   emb05  emb06    emb07   emb08  emb09
+##    &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;    &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;
+## 1 0.0399 0.0401 -0.0248 0.0173 -0.0460 0.0170 -0.00515 -0.0324 0.0465
 ## # ... with 1 more variable: emb10 &lt;dbl&gt;</code></pre>
   </div>
 

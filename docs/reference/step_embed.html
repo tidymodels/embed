@@ -87,8 +87,8 @@ scores derived from a tensorflow model via a word-embedding model.
     </div>
 
     <pre class="usage"><span class='fu'>step_embed</span>(<span class='no'>recipe</span>, <span class='no'>...</span>, <span class='kw'>role</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>trained</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>outcome</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>number</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>hidden</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>options</span> <span class='kw'>=</span> <span class='fu'>embed_control</span>(), <span class='kw'>mapping</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>history</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>skip</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+  <span class='kw'>num_terms</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>hidden_units</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>options</span> <span class='kw'>=</span> <span class='fu'>embed_control</span>(),
+  <span class='kw'>mapping</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>history</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>skip</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
 
 <span class='co'># S3 method for step_embed</span>
 <span class='fu'>tidy</span>(<span class='no'>x</span>, <span class='no'>...</span>)
@@ -128,11 +128,11 @@ used as the outcome in the generalized linear model. Only
 numeric and two-level factors are currently supported.</p></td>
     </tr>
     <tr>
-      <th>number</th>
+      <th>num_terms</th>
       <td><p>An integer for the number of resulting variables.</p></td>
     </tr>
     <tr>
-      <th>hidden</th>
+      <th>hidden_units</th>
       <td><p>An integer for the number of hidden units in a dense ReLu
 layer between the embedding and output later. Use a
 value of zero for no intermediate layer (see Details below).</p></td>
@@ -203,7 +203,7 @@ used in the last layer while softmax is used for factor outcomes
 here would be</p><pre>  keras_model_sequential() \%&gt;\% 
   layer_embedding(
     input_dim = num_factor_levels_x + 1,
-    output_dim = number,
+    output_dim = num_terms,
     input_length = 1
   ) \%&gt;\%
   layer_flatten() \%&gt;\%
@@ -213,7 +213,7 @@ here would be</p><pre>  keras_model_sequential() \%&gt;\%
 would be</p><pre>  keras_model_sequential() \%&gt;\% 
   layer_embedding(
     input_dim = num_factor_levels_x + 1,
-    output_dim = number,
+    output_dim = num_terms,
     input_length = 1
    ) \%&gt;\%
   layer_flatten() \%&gt;\%
@@ -241,7 +241,7 @@ recipes with this step with <code>caret</code>, avoid parallel processing.</p>
   <span class='fu'>step_embed</span>(<span class='no'>location</span>, <span class='kw'>outcome</span> <span class='kw'>=</span> <span class='fu'>vars</span>(<span class='no'>Class</span>),
              <span class='kw'>options</span> <span class='kw'>=</span> <span class='fu'>embed_control</span>(<span class='kw'>epochs</span> <span class='kw'>=</span> <span class='fl'>10</span>))
 
-<span class='co'># See https://topepo.github.io/embed/ for examples</span></div></pre>
+<span class='co'># See https://tidymodels.github.io/embed/ for examples</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

@@ -197,7 +197,7 @@ test_that("factor encoded predictor", {
 test_that("character encoded predictor", {
   skip_on_cran()
   class_test <- recipe(x1 ~ ., data = ex_dat_ch) %>%
-    step_embed(x3, outcome = vars(x1), number = 5, options = embed_control(verbose = 0)) %>%
+    step_embed(x3, outcome = vars(x1), num_terms = 5, options = embed_control(verbose = 0)) %>%
     prep(training = ex_dat_ch, retain = TRUE)
   tr_values <- juice(class_test, contains("embed"))
   new_values <- bake(class_test, newdata = new_dat, contains("embed"))

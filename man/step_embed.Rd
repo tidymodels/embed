@@ -7,8 +7,8 @@
 \title{Encoding Factors into Multiple Columns}
 \usage{
 step_embed(recipe, ..., role = NA, trained = FALSE, outcome = NULL,
-  number = 2, hidden = 0, options = embed_control(), mapping = NULL,
-  history = NULL, skip = FALSE)
+  num_terms = 2, hidden_units = 0, options = embed_control(),
+  mapping = NULL, history = NULL, skip = FALSE)
 
 \method{tidy}{step_embed}(x, ...)
 
@@ -34,9 +34,9 @@ preprocessing have been estimated.}
 used as the outcome in the generalized linear model. Only
 numeric and two-level factors are currently supported.}
 
-\item{number}{An integer for the number of resulting variables.}
+\item{num_terms}{An integer for the number of resulting variables.}
 
-\item{hidden}{An integer for the number of hidden units in a dense ReLu
+\item{hidden_units}{An integer for the number of hidden units in a dense ReLu
 layer between the embedding and output later. Use a
 value of zero for no intermediate layer (see Details below).}
 
@@ -98,7 +98,7 @@ For example, the \code{keras} code for a numeric outcome and no hidden units use
 here would be\preformatted{  keras_model_sequential() \\\%>\\\% 
   layer_embedding(
     input_dim = num_factor_levels_x + 1,
-    output_dim = number,
+    output_dim = num_terms,
     input_length = 1
   ) \\\%>\\\%
   layer_flatten() \\\%>\\\%
@@ -109,7 +109,7 @@ If a factor outcome is used and 10 hidden units were requested, the code
 would be\preformatted{  keras_model_sequential() \\\%>\\\% 
   layer_embedding(
     input_dim = num_factor_levels_x + 1,
-    output_dim = number,
+    output_dim = num_terms,
     input_length = 1
    ) \\\%>\\\%
   layer_flatten() \\\%>\\\%

@@ -64,7 +64,7 @@ tf_linear <- recipe(Sale_Price ~ Neighborhood + MS_SubClass, data = ames) %>%
   step_log(Sale_Price, base = 10) %>%
   step_embed(
     Neighborhood, outcome = vars(Sale_Price),
-    number = 10, 
+    num_terms = 10, 
     options = embed_control(epochs = 50)
   ) %>% 
   prep(training = ames)
@@ -118,8 +118,8 @@ tf_nlin <- recipe(Sale_Price ~ Neighborhood + MS_SubClass, data = ames) %>%
   step_log(Sale_Price, base = 10) %>%
   step_embed(
     Neighborhood, outcome = vars(Sale_Price),
-    number = 10, 
-    hidden = 50,
+    num_terms = 10, 
+    hidden_units = 50,
     options = embed_control(epochs = 50)
   ) %>% 
   prep(training = ames)
