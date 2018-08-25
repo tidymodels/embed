@@ -113,6 +113,9 @@
 #' "How can I obtain reproducible results using Keras during 
 #' development?" \url{https://tinyurl.com/keras-repro}
 #' 
+#' "Concatenate Embeddings for Categorical Variables with Keras" 
+#'  \url{https://flovv.github.io/Embeddings_with_keras_part2/}
+#' 
 #' @examples
 #' data(okc)
 #' 
@@ -225,9 +228,12 @@ prep.step_embed2 <- function(x, training, info = NULL, ...) {
 #' @importFrom keras layer_concatenate layer_input
 #' @importFrom dplyr bind_cols as_tibble ends_with
 #' @importFrom stats setNames
-tf_coefs2 <- function(x, y, z, opt, num, lab, h, ...) {
+tf_coefs2 <- function(x, y, z, opt, num, lab, h, seeds = sample.int(10000, 4), ...) {
   vars <- names(x)
   p <- length(vars)
+  
+  set.seed(seeds[1])
+  tensorflow::use_session_with_seed(seeds[2])
   
   on.exit(keras::backend()$clear_session())
   
@@ -281,16 +287,19 @@ tf_coefs2 <- function(x, y, z, opt, num, lab, h, ...) {
   if (h > 0)
     all_layers <- 
     all_layers %>%
-    layer_dense(units = h, activation = "relu", name = "hidden_layer")
+    layer_dense(units = h, activation = "relu", name = "hidden_layer",
+                kernel_initializer = keras::initializer_glorot_uniform(seed = seeds[3]))
   
   if (factor_y)
     all_layers <- 
     all_layers %>%
-    layer_dense(units = ncol(y), activation = 'softmax', name = "output_layer")
+    layer_dense(units = ncol(y), activation = 'softmax', name = "output_layer",
+                kernel_initializer = keras::initializer_glorot_uniform(seed = seeds[4]))
   else
     all_layers <- 
     all_layers %>%
-    layer_dense(units = 1, activation = 'linear', name = "output_layer")
+    layer_dense(units = 1, activation = 'linear', name = "output_layer",
+                kernel_initializer = keras::initializer_glorot_uniform(seed = seeds[4]))
   
   model <-
     keras::keras_model(inputs = inputs, outputs = all_layers)  
