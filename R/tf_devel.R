@@ -233,6 +233,7 @@ tf_coefs2 <- function(x, y, z, opt, num, lab, h, ...) {
   
   lvl <- lapply(x, levels)
   
+  # convert levels to integers; zero signifies a new level 
   mats <- lapply(x, function(x) matrix(as.numeric(x), ncol = 1))
   
   y <- y[[1]]
@@ -245,16 +246,16 @@ tf_coefs2 <- function(x, y, z, opt, num, lab, h, ...) {
   else
     y <- matrix(y, ncol = 1)
   
+  inputs <- vector(mode = "list", length = p)
+  # For each categorical predictor, make an input layer
   for(i in 1:p) {
-    tmp_in <- layer_input(shape = 1, name = paste0("input_", vars[i]))
-    if(i == 1)
-      inputs <- tmp_in
-    else 
-      inputs <- c(inputs, tmp_in)
+    inputs[[i]] <- layer_input(shape = 1, name = paste0("input_", vars[i]))
   }
   
+  layers <- vector(mode = "list", length = p)
+  # Now add embedding to each layer and then flatten
   for(i in 1:p) {
-    tmp_emb <- 
+    layers[[i]] <- 
       inputs[[i]] %>%
       layer_embedding(
         input_dim = length(lvl[[i]]) + 1,
@@ -263,36 +264,38 @@ tf_coefs2 <- function(x, y, z, opt, num, lab, h, ...) {
         name = paste0("layer_", vars[i])
       ) %>%  
       layer_flatten()
-    if(i == 1)
-      layers <- tmp_emb
-    else 
-      layers <- c(layers, tmp_emb)
   } 
   
   if (is.null(z)) {
-    model <- layer_concatenate(layers)
+    if (p > 1)
+      all_layers <- layer_concatenate(layers)
+    else
+      all_layers <- layers[[1]]
   } else {
     mats$z <- as.matrix(z)
     pred_layer <- layer_input(shape = ncol(z), name = 'other_pred')
-    model <- layer_concatenate(c(layers, pred_layer))
+    all_layers <- layer_concatenate(c(layers, pred_layer))
     inputs <- c(inputs, pred_layer)
   }
   
   if (h > 0)
-    model <- model %>%
+    all_layers <- 
+    all_layers %>%
     layer_dense(units = h, activation = "relu", name = "hidden_layer")
   
   if (factor_y)
-    model <- model %>%
+    all_layers <- 
+    all_layers %>%
     layer_dense(units = ncol(y), activation = 'softmax', name = "output_layer")
   else
-    model <- model %>%
+    all_layers <- 
+    all_layers %>%
     layer_dense(units = 1, activation = 'linear', name = "output_layer")
   
   model <-
-    keras::keras_model(inputs = inputs, outputs = model)  
+    keras::keras_model(inputs = inputs, outputs = all_layers)  
   
-  model <- model %>%
+  model %>%
     compile(
       loss = opt$loss,
       metrics = opt$metrics,
