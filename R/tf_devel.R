@@ -226,6 +226,7 @@ prep.step_embed2 <- function(x, training, info = NULL, ...) {
 #' @importFrom keras keras_model_sequential layer_embedding layer_flatten
 #' @importFrom keras layer_dense compile fit get_layer backend keras_model
 #' @importFrom keras layer_concatenate layer_input
+#' @importFrom tensorflow use_session_with_seed
 #' @importFrom dplyr bind_cols as_tibble ends_with
 #' @importFrom stats setNames
 tf_coefs2 <- function(x, y, z, opt, num, lab, h, seeds = sample.int(10000, 4), ...) {

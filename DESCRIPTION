@@ -19,7 +19,8 @@ Imports:
     broom,
     tidyr,
     tibble,
-    lme4
+    lme4,
+    tensorflow
 Suggests: 
     testthat,
     knitr,
