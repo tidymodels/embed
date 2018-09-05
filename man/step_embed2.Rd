@@ -2,12 +2,15 @@
 % Please edit documentation in R/tf_devel.R
 \name{step_embed2}
 \alias{step_embed2}
+\alias{tidy.step_embed2}
 \title{Encoding Factors into Multiple Columns}
 \usage{
 step_embed2(recipe, ..., role = NA, trained = FALSE, outcome = NULL,
   predictors = NULL, num_terms = 2, hidden_units = 0,
   options = embed_control(), mapping = NULL, history = NULL,
   skip = FALSE)
+
+\method{tidy}{step_embed2}(x, ...)
 }
 \arguments{
 \item{recipe}{A recipe object. The step will be added to the
@@ -57,6 +60,8 @@ operations may not be able to be conducted on new data (e.g.
 processing the outcome variable(s)). Care should be taken when
 using \code{skip = TRUE} as it may affect the computations for
 subsequent operations.}
+
+\item{x}{A \code{step_embed} object.}
 }
 \value{
 An updated version of \code{recipe} with the new step added
@@ -90,25 +95,25 @@ used in the last layer while softmax is used for factor outcomes
 (with any number of levels).
 
 For example, the \code{keras} code for a numeric outcome, one
-categorical predictor, and no hidden units used here would be\preformatted{  keras_model_sequential() \%>\% 
+categorical predictor, and no hidden units used here would be\preformatted{  keras_model_sequential() \\\%>\\\% 
   layer_embedding(
     input_dim = num_factor_levels_x + 1,
     output_dim = num_terms,
     input_length = 1
-  ) \%>\%
-  layer_flatten() \%>\%
+  ) \\\%>\\\%
+  layer_flatten() \\\%>\\\%
   layer_dense(units = 1, activation = 'linear')
 }
 
 If a factor outcome is used and 10 hidden units were requested, the code
-would be\preformatted{  keras_model_sequential() \%>\% 
+would be\preformatted{  keras_model_sequential() \\\%>\\\% 
   layer_embedding(
     input_dim = num_factor_levels_x + 1,
     output_dim = num_terms,
     input_length = 1
-   ) \%>\%
-  layer_flatten() \%>\%
-  layer_dense(units = hidden_units, activation = "relu") \%>\%
+   ) \\\%>\\\%
+  layer_flatten() \\\%>\\\%
+  layer_dense(units = hidden_units, activation = "relu") \\\%>\\\%
   layer_dense(units = num_factor_levels_y, activation = 'softmax')
 }
 
