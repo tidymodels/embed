@@ -25,8 +25,7 @@ Suggests:
     testthat,
     knitr,
     rmarkdown,
-    covr,
-    AmesHousing
+    covr
 License: GPL-2
 Encoding: UTF-8
 LazyData: true

@@ -1,6 +1,6 @@
 #' Encoding Factors into Multiple Columns
 #'
-#' `step_embed2` creates a *specification* of a recipe step that
+#' `step_embed` creates a *specification* of a recipe step that
 #'  will convert a nominal (i.e. factor) predictor into a set of
 #'  scores derived from a tensorflow model via a word-embedding model.
 #'  `embed_control` is a simple wrapper for setting default options. 
@@ -8,7 +8,7 @@
 #' @param recipe A recipe object. The step will be added to the
 #'  sequence of operations for this recipe.
 #' @param ... One or more selector functions to choose variables.
-#'  For `step_embed2`, this indicates the variables to be encoded
+#'  For `step_embed`, this indicates the variables to be encoded
 #'  into a numeric format. See [recipes::selections()] for more
 #'  details. For the `tidy` method, these are not currently used.
 #' @param role Not used by this step since no new variables are
@@ -120,14 +120,14 @@
 #' data(okc)
 #' 
 #' rec <- recipe(Class ~ age + location, data = okc) %>%
-#'   step_embed2(location, outcome = vars(Class),
+#'   step_embed(location, outcome = vars(Class),
 #'              options = embed_control(epochs = 10))
 #' 
 #' # See https://tidymodels.github.io/embed/ for examples
 
 
 #' @importFrom recipes add_step step terms_select sel2char ellipse_check
-step_embed2 <-
+step_embed <-
   function(recipe,
            ...,
            role = NA,
@@ -144,7 +144,7 @@ step_embed2 <-
       stop("Please list a variable in `outcome`", call. = FALSE)
     add_step(
       recipe,
-      step_embed2_new(
+      step_embed_new(
         terms = ellipse_check(...),
         role = role,
         trained = trained,
@@ -160,7 +160,7 @@ step_embed2 <-
     )
   }
 
-step_embed2_new <-
+step_embed_new <-
   function(terms = NULL,
            role = NA,
            trained = FALSE,
@@ -173,7 +173,7 @@ step_embed2_new <-
            history = NULL,
            skip = FALSE) {
     step(
-      subclass = "embed2",
+      subclass = "embed",
       terms = terms,
       role = role,
       num_terms = num_terms,
@@ -192,7 +192,7 @@ step_embed2_new <-
 #' @importFrom dplyr bind_rows
 #' @importFrom tibble as_tibble
 #' @export
-prep.step_embed2 <- function(x, training, info = NULL, ...) {
+prep.step_embed <- function(x, training, info = NULL, ...) {
   col_names <- terms_select(x$terms, info = info)
   check_type(training[, col_names], quant = FALSE)
   y_name <- terms_select(x$outcome, info = info)
@@ -364,7 +364,7 @@ map_tf_coef2 <- function(dat, mapping, prefix) {
 #' @importFrom purrr map
 #' @importFrom dplyr bind_cols
 #' @export
-bake.step_embed2 <- function(object, newdata, ...) {
+bake.step_embed <- function(object, newdata, ...) {
   for (col in names(object$mapping)) {
     tmp <- map_tf_coef2(newdata[, col], object$mapping[[col]], prefix = col)
     newdata <- bind_cols(newdata, tmp)
@@ -379,10 +379,10 @@ bake.step_embed2 <- function(object, newdata, ...) {
 #' @importFrom tidyr gather
 #' @importFrom recipes is_trained
 #' @importFrom broom tidy
-#' @rdname step_embed2
+#' @rdname step_embed
 #' @param x A `step_embed` object.
 #' @export
-tidy.step_embed2 <- function(x, ...) {
+tidy.step_embed <- function(x, ...) {
   if (is_trained(x)) {
     for(i in seq_along(x$mapping))
       x$mapping[[i]]$terms <- names(x$mapping)[i]
@@ -403,15 +403,71 @@ tidy.step_embed2 <- function(x, ...) {
 
 #' @importFrom recipes printer
 #' @export
-print.step_embed2 <-
+print.step_embed <-
   function(x, width = max(20, options()$width - 31), ...) {
     cat("Embedding of factors via tensorflow for ", sep = "")
     printer(names(x$mapping), x$terms, x$trained, width = width)
     invisible(x)
   }
 
+
+
+
+#' @export
+#' @rdname step_embed
+#' @param optimizer,loss,metrics Arguments to pass to [keras::compile()]
+#' @param epochs,validation_split,batch_size,verbose Arguments to pass to [keras::fit()]
+embed_control <- function(
+  loss = "mse",
+  metrics = NULL,
+  optimizer = "sgd",
+  epochs = 20,
+  validation_split = 0,
+  batch_size = 32,
+  verbose = 0
+) {
+  if(batch_size < 1)
+    stop("`batch_size` should be a positive integer", call. = FALSE)
+  if(epochs < 1)
+    stop("`epochs` should be a positive integer", call. = FALSE)  
+  if(validation_split < 0 | validation_split > 1)
+    stop("`validation_split` should be on [0, 1)", call. = FALSE)
+  list(
+    loss = loss, metrics = metrics, optimizer = optimizer, epochs = epochs, 
+    validation_split = validation_split, batch_size = batch_size,
+    verbose = verbose)
+}
+
+tf_options_check <- function(opt) {
+  exp_names <- c('loss',
+                 'metrics',
+                 'optimizer',
+                 'epochs',
+                 'validation_split',
+                 'batch_size',
+                 'verbose')
+  
+  if (length(setdiff(exp_names, names(opt))) > 0)
+    stop("The following options are missing from the `options`: ",
+         paste0(setdiff(exp_names, names(opt)), collapse = ",")) 
+  opt
+}
+
+
+#' @importFrom stats model.matrix
+class2ind <- function (x)  {
+  if (!is.factor(x)) 
+    stop("'x' should be a factor")
+  y <- model.matrix(~x - 1)
+  colnames(y) <- gsub("^x", "", colnames(y))
+  attributes(y)$assign <- NULL
+  attributes(y)$contrasts <- NULL
+  y
+}
+
+
 #' @importFrom utils globalVariables
 utils::globalVariables(
-  c("type", "loss", "epochs")
+  c("type", "loss", "epochs", "..level", "..order")
 )
 

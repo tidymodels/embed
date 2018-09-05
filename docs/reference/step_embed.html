@@ -87,8 +87,9 @@ scores derived from a tensorflow model via a word-embedding model.
     </div>
 
     <pre class="usage"><span class='fu'>step_embed</span>(<span class='no'>recipe</span>, <span class='no'>...</span>, <span class='kw'>role</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>trained</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>outcome</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>num_terms</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>hidden_units</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>options</span> <span class='kw'>=</span> <span class='fu'>embed_control</span>(),
-  <span class='kw'>mapping</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>history</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>skip</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+  <span class='kw'>predictors</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>num_terms</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>hidden_units</span> <span class='kw'>=</span> <span class='fl'>0</span>,
+  <span class='kw'>options</span> <span class='kw'>=</span> <span class='fu'>embed_control</span>(), <span class='kw'>mapping</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>history</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>skip</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
 
 <span class='co'># S3 method for step_embed</span>
 <span class='fu'>tidy</span>(<span class='no'>x</span>, <span class='no'>...</span>)
@@ -108,8 +109,8 @@ sequence of operations for this recipe.</p></td>
       <th>...</th>
       <td><p>One or more selector functions to choose variables.
 For <code>step_embed</code>, this indicates the variables to be encoded
-into a numeric format. See <code><a href='http://www.rdocumentation.org/packages/recipes/topics/selections'>recipes::selections()</a></code> for more details. For
-the <code>tidy</code> method, these are not currently used.</p></td>
+into a numeric format. See <code><a href='http://www.rdocumentation.org/packages/recipes/topics/selections'>recipes::selections()</a></code> for more
+details. For the <code>tidy</code> method, these are not currently used.</p></td>
     </tr>
     <tr>
       <th>role</th>
@@ -124,8 +125,15 @@ preprocessing have been estimated.</p></td>
     <tr>
       <th>outcome</th>
       <td><p>A call to <code>vars</code> to specify which variable is
-used as the outcome in the generalized linear model. Only
+used as the outcome in the neural network. Only
 numeric and two-level factors are currently supported.</p></td>
+    </tr>
+    <tr>
+      <th>predictors</th>
+      <td><p>An optional call to <code>vars</code> to specify any
+variables to be added as additional predictors in the neural
+network. These variables should be numeric and perhaps centered
+and scaled.</p></td>
     </tr>
     <tr>
       <th>num_terms</th>
@@ -133,9 +141,10 @@ numeric and two-level factors are currently supported.</p></td>
     </tr>
     <tr>
       <th>hidden_units</th>
-      <td><p>An integer for the number of hidden units in a dense ReLu
-layer between the embedding and output later. Use a
-value of zero for no intermediate layer (see Details below).</p></td>
+      <td><p>An integer for the number of hidden units
+in a dense ReLu layer between the embedding and output later.
+Use a value of zero for no intermediate layer (see Details
+below).</p></td>
     </tr>
     <tr>
       <th>options</th>
@@ -149,17 +158,19 @@ encoding. This is <code>NULL</code> until the step is trained by
     </tr>
     <tr>
       <th>history</th>
-      <td><p>A tibble with the convergence statistics for each term. This
-is <code>NULL</code> until the step is trained by <code><a href='http://www.rdocumentation.org/packages/recipes/topics/prep'>recipes::prep.recipe()</a></code>.</p></td>
+      <td><p>A tibble with the convergence statistics for
+each term. This is <code>NULL</code> until the step is trained by
+<code><a href='http://www.rdocumentation.org/packages/recipes/topics/prep'>recipes::prep.recipe()</a></code>.</p></td>
     </tr>
     <tr>
       <th>skip</th>
       <td><p>A logical. Should the step be skipped when the
-recipe is baked by <code><a href='http://www.rdocumentation.org/packages/recipes/topics/bake'>recipes::bake.recipe()</a></code>? While all operations are baked
-when <code><a href='http://www.rdocumentation.org/packages/recipes/topics/prep'>recipes::prep.recipe()</a></code> is run, some operations may not be able to be
-conducted on new data (e.g. processing the outcome variable(s)).
-Care should be taken when using <code>skip = TRUE</code> as it may affect
-the computations for subsequent operations</p></td>
+recipe is baked by <code><a href='http://www.rdocumentation.org/packages/recipes/topics/bake'>recipes::bake.recipe()</a></code>? While all
+operations are baked when <code><a href='http://www.rdocumentation.org/packages/recipes/topics/prep'>recipes::prep.recipe()</a></code> is run, some
+operations may not be able to be conducted on new data (e.g.
+processing the outcome variable(s)). Care should be taken when
+using <code>skip = TRUE</code> as it may affect the computations for
+subsequent operations.</p></td>
     </tr>
     <tr>
       <th>x</th>
@@ -181,8 +192,7 @@ the computations for subsequent operations</p></td>
 to the sequence of existing steps (if any). For the <code>tidy</code>
 method, a tibble with columns <code>terms</code> (the selectors or
 variables for encoding), <code>level</code> (the factor levels), and
-several columns beginning with the prefix <code>emb</code> (the
-encodings).</p>
+several columns containing <code>embed</code> in the name.</p>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
@@ -199,28 +209,31 @@ given in the recipe step.</p>
 <p>When the outcome is numeric, a linear activation function is
 used in the last layer while softmax is used for factor outcomes
 (with any number of levels).</p>
-<p>For example, the <code>keras</code> code for a numeric outcome and no hidden units used
-here would be</p><pre>  keras_model_sequential() %&gt;% 
+<p>For example, the <code>keras</code> code for a numeric outcome, one
+categorical predictor, and no hidden units used here would be</p><pre>  keras_model_sequential() \%&gt;\% 
   layer_embedding(
     input_dim = num_factor_levels_x + 1,
     output_dim = num_terms,
     input_length = 1
-  ) %&gt;%
-  layer_flatten() %&gt;%
+  ) \%&gt;\%
+  layer_flatten() \%&gt;\%
   layer_dense(units = 1, activation = 'linear')
 </pre>
     <p>If a factor outcome is used and 10 hidden units were requested, the code
-would be</p><pre>  keras_model_sequential() %&gt;% 
+would be</p><pre>  keras_model_sequential() \%&gt;\% 
   layer_embedding(
     input_dim = num_factor_levels_x + 1,
     output_dim = num_terms,
     input_length = 1
-   ) %&gt;%
-  layer_flatten() %&gt;%
-  layer_dense(units = 10, activation = "relu") %&gt;%
+   ) \%&gt;\%
+  layer_flatten() \%&gt;\%
+  layer_dense(units = hidden_units, activation = "relu") \%&gt;\%
   layer_dense(units = num_factor_levels_y, activation = 'softmax')
 </pre>
-    <p>Also note that it may be difficult to obtain reproducible
+    <p>Other variables specified by <code>predictors</code> are added as an
+additional dense layer after <code>layer_flatten</code> and before the
+hidden layer.</p>
+<p>Also note that it may be difficult to obtain reproducible
 results using this step due to the nature of Tensorflow (see
 link in References).</p>
 <p>tensorflow models cannot be run in parallel within the same
@@ -229,9 +242,12 @@ recipes with this step with <code>caret</code>, avoid parallel processing.</p>
     
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
-    <p>Francois C and Allaire JJ (2018) <em>Deep Learning with R</em>, Manning</p>
-<p>"How can I obtain reproducible results using Keras during development?"
-<a href='https://tinyurl.com/keras-repro'>https://tinyurl.com/keras-repro</a></p>
+    <p>Francois C and Allaire JJ (2018)
+<em>Deep Learning with R</em>, Manning</p>
+<p>"How can I obtain reproducible results using Keras during
+development?" <a href='https://tinyurl.com/keras-repro'>https://tinyurl.com/keras-repro</a></p>
+<p>"Concatenate Embeddings for Categorical Variables with Keras"
+<a href='https://flovv.github.io/Embeddings_with_keras_part2/'>https://flovv.github.io/Embeddings_with_keras_part2/</a></p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
