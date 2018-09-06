@@ -8,9 +8,20 @@ output:
     toc: yes
 ---
 
+```{r check-for-build, echo = FALSE, results='asis'}
+eval_chunks <- as.logical(Sys.getenv("local_vignette_build", FALSE))
+# Change this via `Sys.setenv(local_vignette_build = "TRUE")`
+if(!eval_chunks) 
+  cat(
+    "(These documents take a long time to create, so only the code",
+    "is shown here. The full version is at",
+    "[https://tidymodels.github.io/embed](https://tidymodels.github.io/embed).)"
+    )
+```
+
 
 ```{r setup, include = FALSE}
-library(tidyverse)
+library(tidymodels)
 library(embed)
 data(okc)
 ```
@@ -21,12 +32,13 @@ The example used here is the OkCupid data from [Kim and Escobedo-Land (2015)(pdf
 
 We first calculate the raw log-odds for the data (independent of any model):
 
-```{r raw-data}
-library(tidyverse)
+```{r raw-data, eval = eval_chunks}
+library(tidymodels)
 library(embed)
 data(okc)
 
-props <- okc %>%
+props <- 
+  okc %>%
   group_by(location) %>%
   summarise(
     prop = mean(Class == "stem"),
@@ -47,8 +59,9 @@ In this case, the effect of each location can be estimated separately for each f
 
 For these data, a recipe is created and `step_lencode_glm` is used:
 
-```{r simple-glm}
-okc_glm <- recipe(Class ~ ., data = okc) %>%
+```{r simple-glm, eval = eval_chunks}
+okc_glm <- 
+  recipe(Class ~ ., data = okc) %>%
   # specify the variable being encoded and the outcome
   step_lencode_glm(location, outcome = vars(Class)) %>%
   # estimate the effects
@@ -57,11 +70,12 @@ okc_glm <- recipe(Class ~ ., data = okc) %>%
 
 The `tidy` method can be used to extract the encodings and are merged with the raw estimates:
 
-```{r simple-glm-extract}
+```{r simple-glm-extract, eval = eval_chunks}
 estimates <- tidy(okc_glm, number = 1)
 estimates
 
-estimates <- estimates %>% 
+estimates <- 
+  estimates %>% 
   dplyr::select(-terms) %>%
   set_names(c("location", "glm")) %>%
     inner_join(props, by = "location")
@@ -69,7 +83,7 @@ estimates <- estimates %>%
 
 For the locations with `n > 1`, the estimates are effectively the same:
 
-```{r simple-glm-check}
+```{r simple-glm-check, eval = eval_chunks}
 estimates %>%
   dplyr::filter(is.finite(log_odds)) %>%
   mutate(difference = log_odds-glm) %>%
@@ -79,7 +93,7 @@ estimates %>%
 
 Note that there is also a effect that is used for a novel location for future data sets that is the average effect:
 
-```{r simple-glm-new}
+```{r simple-glm-new, eval = eval_chunks}
 tidy(okc_glm, number = 1) %>%
   dplyr::filter(level == "..new") 
 ```
@@ -94,7 +108,7 @@ Partial pooling estimates each effect as a combination of the separate empirical
 
 One appraoch to partial pooling is the function `step_lencode_bayes` uses the `stan_glmer` function in the `rstanarm` package. There are a number of options that can be used to control the model estimation routine, including:
 
-```{r stan-options}
+```{r stan-options, eval = eval_chunks}
 opts <- 
   list(
     ## the number of chains
@@ -110,8 +124,9 @@ opts <-
 
 Using the default priors, the model is estimated via:
 
-```{r stan-fit-defaults}
-okc_glmer <- recipe(Class ~ ., data = okc) %>%
+```{r stan-fit-defaults, eval = eval_chunks}
+okc_glmer <- 
+  recipe(Class ~ ., data = okc) %>%
   step_lencode_bayes(
     location,
     outcome = vars(Class),
@@ -122,8 +137,9 @@ okc_glmer <- recipe(Class ~ ., data = okc) %>%
 
 This took more time than the simple non-pooled model. The embeddings are extracted in the same way:
 
-```{r stan-extract}
-estimates <- tidy(okc_glmer, number = 1) %>% 
+```{r stan-extract, eval = eval_chunks}
+estimates <- 
+  tidy(okc_glmer, number = 1) %>% 
   dplyr::select(-terms) %>%
   set_names(c("location", "glmer")) %>%
     inner_join(estimates, by = "location")
@@ -134,7 +150,7 @@ Note that the `n = 1` locations have estimates that are less extreme that the na
 
 Let's see the effect of the shrinkage indued by partial pooling by plotting the naive results versus the new results (finite data only):
 
-```{r stan-compare}
+```{r stan-compare, eval = eval_chunks}
 estimates %>%
   dplyr::filter(is.finite(log_odds)) %>%
   ggplot(aes(x = log_odds, y = glmer)) + 
@@ -146,7 +162,7 @@ estimates %>%
 
 New levels are encoded as:
 
-```{r glmer-new}
+```{r glmer-new, eval = eval_chunks}
 tidy(okc_glmer, number = 1) %>%
   dplyr::filter(level == "..new") 
 ```
@@ -155,7 +171,7 @@ tidy(okc_glmer, number = 1) %>%
 
 The same generalized linear model can be fit using mixed models via a random intercept. The `lme4` package can also be used to get pooled estimates via `step_lencode_mixed`.
 
-```{r mixed-rec}
+```{r mixed-rec, eval = eval_chunks}
 okc_mixed <- recipe(Class ~ ., data = okc) %>%
   step_lencode_mixed(
     location,
@@ -172,7 +188,7 @@ estimates %>% dplyr::select(location, log_odds, glm, glmer, mixed)
 
 Comparing the raw and mixed model estimates:
 
-```{r mixed-compare}
+```{r mixed-compare, eval = eval_chunks}
 estimates %>%
   dplyr::filter(is.finite(log_odds)) %>%
   ggplot(aes(x = log_odds, y = mixed)) + 

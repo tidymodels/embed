@@ -67,18 +67,19 @@
 <p>This method uses a generalized linear model to estimate the effect of each level of a factor predictor on the outcome. These values are retained to serve as the new encodings for the factor levels. This is sometimes referred to as <em>likelihood encodings</em>. <code>embed</code> has two estimation methods for accomplishing this: with and without pooling.</p>
 <p>The example used here is the OkCupid data from <a href="http://www.amstat.org/publications/jse/v23n2/kim.pdf">Kim and Escobedo-Land (2015)(pdf)</a>. In <a href="http://feat.engineering">Kuhn and Johnson (2018)</a>, these data are used to predict whether a person is in the STEM fields (science, technology, engineering, and mathematics). One predictor, geographic location, is a factor variable. The frequencies of location in the data set used here vary between 1 person and 31064 per location. There are 135 locations in the data. Rather than producing 134 indicator variables for a model, a single numeric variable can be used to represent the <em>effect</em> or <em>impact</em> of the factor level on the outcome. In this case, where a factor outcome is being predicted (STEM or not), the effects are quantified by the log-odds of the location for being STEM.</p>
 <p>We first calculate the raw log-odds for the data (independent of any model):</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidyverse)
-<span class="kw">library</span>(embed)
-<span class="kw">data</span>(okc)
-
-props &lt;-<span class="st"> </span>okc <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">group_by</span>(location) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">summarise</span>(
-    <span class="dt">prop =</span> <span class="kw">mean</span>(Class <span class="op">==</span><span class="st"> "stem"</span>),
-    <span class="dt">log_odds  =</span> <span class="kw">log</span>(prop<span class="op">/</span>(<span class="dv">1</span><span class="op">-</span>prop)),
-    <span class="dt">n =</span> <span class="kw">length</span>(Class)
-  ) 
-props</code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">library</span>(tidymodels)</a>
+<a class="sourceLine" id="cb1-2" data-line-number="2"><span class="kw">library</span>(embed)</a>
+<a class="sourceLine" id="cb1-3" data-line-number="3"><span class="kw">data</span>(okc)</a>
+<a class="sourceLine" id="cb1-4" data-line-number="4"></a>
+<a class="sourceLine" id="cb1-5" data-line-number="5">props &lt;-<span class="st"> </span></a>
+<a class="sourceLine" id="cb1-6" data-line-number="6"><span class="st">  </span>okc <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb1-7" data-line-number="7"><span class="st">  </span><span class="kw">group_by</span>(location) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb1-8" data-line-number="8"><span class="st">  </span><span class="kw">summarise</span>(</a>
+<a class="sourceLine" id="cb1-9" data-line-number="9">    <span class="dt">prop =</span> <span class="kw">mean</span>(Class <span class="op">==</span><span class="st"> "stem"</span>),</a>
+<a class="sourceLine" id="cb1-10" data-line-number="10">    <span class="dt">log_odds  =</span> <span class="kw">log</span>(prop<span class="op">/</span>(<span class="dv">1</span><span class="op">-</span>prop)),</a>
+<a class="sourceLine" id="cb1-11" data-line-number="11">    <span class="dt">n =</span> <span class="kw">length</span>(Class)</a>
+<a class="sourceLine" id="cb1-12" data-line-number="12">  ) </a>
+<a class="sourceLine" id="cb1-13" data-line-number="13">props</a></code></pre></div>
 <pre><code>## # A tibble: 135 x 4
 ##    location            prop log_odds     n
 ##    &lt;chr&gt;              &lt;dbl&gt;    &lt;dbl&gt; &lt;int&gt;
@@ -93,22 +94,23 @@ props</code></pre></div>
 ##  9 benicia           0.0837    -2.39   203
 ## 10 berkeley          0.140     -1.82  4212
 ## # ... with 125 more rows</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># later, for plotting</span>
-rng &lt;-<span class="st"> </span><span class="kw">extendrange</span>(props<span class="op">$</span>log_odds[<span class="kw">is.finite</span>(props<span class="op">$</span>log_odds)], <span class="dt">f =</span> <span class="fl">0.1</span>)</code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="co"># later, for plotting</span></a>
+<a class="sourceLine" id="cb3-2" data-line-number="2">rng &lt;-<span class="st"> </span><span class="kw">extendrange</span>(props<span class="op">$</span>log_odds[<span class="kw">is.finite</span>(props<span class="op">$</span>log_odds)], <span class="dt">f =</span> <span class="fl">0.1</span>)</a></code></pre></div>
 <p>In subsequent sections, a logistic regression model is used. When the outcome variable is numeric, the steps automatically use linear regression models to estimate effects.</p>
 <div id="no-pooling" class="section level2">
 <h2 class="hasAnchor">
 <a href="#no-pooling" class="anchor"></a>No Pooling</h2>
 <p>In this case, the effect of each location can be estimated separately for each factor level. One method for conducting this estimation step is to fit a logistic regression with the STEM classification as the outcome and the location as the predictor. From this, the log-odds are naturally estimated by logistic regression.</p>
 <p>For these data, a recipe is created and <code>step_lencode_glm</code> is used:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">okc_glm &lt;-<span class="st"> </span><span class="kw">recipe</span>(Class <span class="op">~</span><span class="st"> </span>., <span class="dt">data =</span> okc) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="co"># specify the variable being encoded and the outcome</span>
-<span class="st">  </span><span class="kw"><a href="../../reference/step_lencode_glm.html">step_lencode_glm</a></span>(location, <span class="dt">outcome =</span> <span class="kw">vars</span>(Class)) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="co"># estimate the effects</span>
-<span class="st">  </span><span class="kw">prep</span>(<span class="dt">training =</span> okc)</code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">okc_glm &lt;-<span class="st"> </span></a>
+<a class="sourceLine" id="cb4-2" data-line-number="2"><span class="st">  </span><span class="kw">recipe</span>(Class <span class="op">~</span><span class="st"> </span>., <span class="dt">data =</span> okc) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb4-3" data-line-number="3"><span class="st">  </span><span class="co"># specify the variable being encoded and the outcome</span></a>
+<a class="sourceLine" id="cb4-4" data-line-number="4"><span class="st">  </span><span class="kw"><a href="../../reference/step_lencode_glm.html">step_lencode_glm</a></span>(location, <span class="dt">outcome =</span> <span class="kw">vars</span>(Class)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb4-5" data-line-number="5"><span class="st">  </span><span class="co"># estimate the effects</span></a>
+<a class="sourceLine" id="cb4-6" data-line-number="6"><span class="st">  </span><span class="kw">prep</span>(<span class="dt">training =</span> okc)</a></code></pre></div>
 <p>The <code>tidy</code> method can be used to extract the encodings and are merged with the raw estimates:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">estimates &lt;-<span class="st"> </span><span class="kw">tidy</span>(okc_glm, <span class="dt">number =</span> <span class="dv">1</span>)
-estimates</code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">estimates &lt;-<span class="st"> </span><span class="kw">tidy</span>(okc_glm, <span class="dt">number =</span> <span class="dv">1</span>)</a>
+<a class="sourceLine" id="cb5-2" data-line-number="2">estimates</a></code></pre></div>
 <pre><code>## # A tibble: 136 x 3
 ##    level              value terms   
 ##    &lt;chr&gt;              &lt;dbl&gt; &lt;chr&gt;   
@@ -123,16 +125,17 @@ estimates</code></pre></div>
 ##  9 benicia            -2.39 location
 ## 10 berkeley           -1.82 location
 ## # ... with 126 more rows</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">estimates &lt;-<span class="st"> </span>estimates <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span>dplyr<span class="op">::</span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/select.html">select</a></span>(<span class="op">-</span>terms) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">set_names</span>(<span class="kw">c</span>(<span class="st">"location"</span>, <span class="st">"glm"</span>)) <span class="op">%&gt;%</span>
-<span class="st">    </span><span class="kw">inner_join</span>(props, <span class="dt">by =</span> <span class="st">"location"</span>)</code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1">estimates &lt;-<span class="st"> </span></a>
+<a class="sourceLine" id="cb7-2" data-line-number="2"><span class="st">  </span>estimates <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb7-3" data-line-number="3"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/select.html">select</a></span>(<span class="op">-</span>terms) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb7-4" data-line-number="4"><span class="st">  </span><span class="kw">set_names</span>(<span class="kw">c</span>(<span class="st">"location"</span>, <span class="st">"glm"</span>)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb7-5" data-line-number="5"><span class="st">    </span><span class="kw">inner_join</span>(props, <span class="dt">by =</span> <span class="st">"location"</span>)</a></code></pre></div>
 <p>For the locations with <code>n &gt; 1</code>, the estimates are effectively the same:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">estimates <span class="op">%&gt;%</span>
-<span class="st">  </span>dplyr<span class="op">::</span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(<span class="kw">is.finite</span>(log_odds)) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">difference =</span> log_odds<span class="op">-</span>glm) <span class="op">%&gt;%</span>
-<span class="st">  </span>dplyr<span class="op">::</span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/select.html">select</a></span>(difference) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">summary</span>()</code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1">estimates <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb8-2" data-line-number="2"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(<span class="kw">is.finite</span>(log_odds)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb8-3" data-line-number="3"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">difference =</span> log_odds<span class="op">-</span>glm) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb8-4" data-line-number="4"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/select.html">select</a></span>(difference) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb8-5" data-line-number="5"><span class="st">  </span><span class="kw">summary</span>()</a></code></pre></div>
 <pre><code>##    difference        
 ##  Min.   :-2.016e-13  
 ##  1st Qu.:-6.661e-15  
@@ -141,8 +144,8 @@ estimates</code></pre></div>
 ##  3rd Qu.: 6.661e-16  
 ##  Max.   : 3.666e-13</code></pre>
 <p>Note that there is also a effect that is used for a novel location for future data sets that is the average effect:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">tidy</span>(okc_glm, <span class="dt">number =</span> <span class="dv">1</span>) <span class="op">%&gt;%</span>
-<span class="st">  </span>dplyr<span class="op">::</span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(level <span class="op">==</span><span class="st"> "..new"</span>) </code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1"><span class="kw">tidy</span>(okc_glm, <span class="dt">number =</span> <span class="dv">1</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb10-2" data-line-number="2"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(level <span class="op">==</span><span class="st"> "..new"</span>) </a></code></pre></div>
 <pre><code>## # A tibble: 1 x 3
 ##   level value terms   
 ##   &lt;chr&gt; &lt;dbl&gt; &lt;chr&gt;   
@@ -157,31 +160,33 @@ estimates</code></pre></div>
 <h3 class="hasAnchor">
 <a href="#bayesian-methods" class="anchor"></a>Bayesian Methods</h3>
 <p>One appraoch to partial pooling is the function <code>step_lencode_bayes</code> uses the <code>stan_glmer</code> function in the <code>rstanarm</code> package. There are a number of options that can be used to control the model estimation routine, including:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">opts &lt;-<span class="st"> </span>
-<span class="st">  </span><span class="kw">list</span>(
-    ## the number of chains
-    <span class="dt">chains =</span> <span class="dv">4</span>,
-    ## how many cores to use 
-    <span class="dt">cores =</span> <span class="dv">4</span>,
-    ## the total number of iterations per chain (low here for time)
-    <span class="dt">iter =</span> <span class="dv">500</span>,
-    ## set the random number seed
-    <span class="dt">seed =</span> <span class="dv">8779</span>
-  )</code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1">opts &lt;-<span class="st"> </span></a>
+<a class="sourceLine" id="cb12-2" data-line-number="2"><span class="st">  </span><span class="kw">list</span>(</a>
+<a class="sourceLine" id="cb12-3" data-line-number="3">    ## the number of chains</a>
+<a class="sourceLine" id="cb12-4" data-line-number="4">    <span class="dt">chains =</span> <span class="dv">4</span>,</a>
+<a class="sourceLine" id="cb12-5" data-line-number="5">    ## how many cores to use </a>
+<a class="sourceLine" id="cb12-6" data-line-number="6">    <span class="dt">cores =</span> <span class="dv">4</span>,</a>
+<a class="sourceLine" id="cb12-7" data-line-number="7">    ## the total number of iterations per chain (low here for time)</a>
+<a class="sourceLine" id="cb12-8" data-line-number="8">    <span class="dt">iter =</span> <span class="dv">500</span>,</a>
+<a class="sourceLine" id="cb12-9" data-line-number="9">    ## set the random number seed</a>
+<a class="sourceLine" id="cb12-10" data-line-number="10">    <span class="dt">seed =</span> <span class="dv">8779</span></a>
+<a class="sourceLine" id="cb12-11" data-line-number="11">  )</a></code></pre></div>
 <p>Using the default priors, the model is estimated via:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">okc_glmer &lt;-<span class="st"> </span><span class="kw">recipe</span>(Class <span class="op">~</span><span class="st"> </span>., <span class="dt">data =</span> okc) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw"><a href="../../reference/step_lencode_bayes.html">step_lencode_bayes</a></span>(
-    location,
-    <span class="dt">outcome =</span> <span class="kw">vars</span>(Class),
-    <span class="dt">options =</span> opts
-  ) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">prep</span>(<span class="dt">training =</span> okc)</code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1">okc_glmer &lt;-<span class="st"> </span></a>
+<a class="sourceLine" id="cb13-2" data-line-number="2"><span class="st">  </span><span class="kw">recipe</span>(Class <span class="op">~</span><span class="st"> </span>., <span class="dt">data =</span> okc) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb13-3" data-line-number="3"><span class="st">  </span><span class="kw"><a href="../../reference/step_lencode_bayes.html">step_lencode_bayes</a></span>(</a>
+<a class="sourceLine" id="cb13-4" data-line-number="4">    location,</a>
+<a class="sourceLine" id="cb13-5" data-line-number="5">    <span class="dt">outcome =</span> <span class="kw">vars</span>(Class),</a>
+<a class="sourceLine" id="cb13-6" data-line-number="6">    <span class="dt">options =</span> opts</a>
+<a class="sourceLine" id="cb13-7" data-line-number="7">  ) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb13-8" data-line-number="8"><span class="st">  </span><span class="kw">prep</span>(<span class="dt">training =</span> okc)</a></code></pre></div>
 <p>This took more time than the simple non-pooled model. The embeddings are extracted in the same way:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">estimates &lt;-<span class="st"> </span><span class="kw">tidy</span>(okc_glmer, <span class="dt">number =</span> <span class="dv">1</span>) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span>dplyr<span class="op">::</span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/select.html">select</a></span>(<span class="op">-</span>terms) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">set_names</span>(<span class="kw">c</span>(<span class="st">"location"</span>, <span class="st">"glmer"</span>)) <span class="op">%&gt;%</span>
-<span class="st">    </span><span class="kw">inner_join</span>(estimates, <span class="dt">by =</span> <span class="st">"location"</span>)
-estimates <span class="op">%&gt;%</span><span class="st"> </span>dplyr<span class="op">::</span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/select.html">select</a></span>(location, log_odds, glm, glmer)</code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1">estimates &lt;-<span class="st"> </span></a>
+<a class="sourceLine" id="cb14-2" data-line-number="2"><span class="st">  </span><span class="kw">tidy</span>(okc_glmer, <span class="dt">number =</span> <span class="dv">1</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb14-3" data-line-number="3"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/select.html">select</a></span>(<span class="op">-</span>terms) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb14-4" data-line-number="4"><span class="st">  </span><span class="kw">set_names</span>(<span class="kw">c</span>(<span class="st">"location"</span>, <span class="st">"glmer"</span>)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb14-5" data-line-number="5"><span class="st">    </span><span class="kw">inner_join</span>(estimates, <span class="dt">by =</span> <span class="st">"location"</span>)</a>
+<a class="sourceLine" id="cb14-6" data-line-number="6">estimates <span class="op">%&gt;%</span><span class="st"> </span>dplyr<span class="op">::</span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/select.html">select</a></span>(location, log_odds, glm, glmer)</a></code></pre></div>
 <pre><code>## # A tibble: 135 x 4
 ##    location          log_odds    glm glmer
 ##    &lt;chr&gt;                &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;
@@ -198,17 +203,17 @@ estimates <span class="op">%&gt;%</span><span class="st"> </span>dplyr<span clas
 ## # ... with 125 more rows</code></pre>
 <p>Note that the <code>n = 1</code> locations have estimates that are less extreme that the naive estimates. Also,</p>
 <p>Let’s see the effect of the shrinkage indued by partial pooling by plotting the naive results versus the new results (finite data only):</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">estimates <span class="op">%&gt;%</span>
-<span class="st">  </span>dplyr<span class="op">::</span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(<span class="kw">is.finite</span>(log_odds)) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> log_odds, <span class="dt">y =</span> glmer)) <span class="op">+</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">geom_abline</span>(<span class="dt">col =</span> <span class="st">"red"</span>, <span class="dt">alpha =</span> .<span class="dv">5</span>) <span class="op">+</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">size =</span> <span class="kw">sqrt</span>(n)), <span class="dt">alpha =</span> .<span class="dv">5</span>) <span class="op">+</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">xlim</span>(rng) <span class="op">+</span><span class="st"> </span><span class="kw">ylim</span>(rng) <span class="op">+</span>
-<span class="st">  </span><span class="kw">theme_bw</span>()</code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1">estimates <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb16-2" data-line-number="2"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(<span class="kw">is.finite</span>(log_odds)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb16-3" data-line-number="3"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> log_odds, <span class="dt">y =</span> glmer)) <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb16-4" data-line-number="4"><span class="st">  </span><span class="kw">geom_abline</span>(<span class="dt">col =</span> <span class="st">"red"</span>, <span class="dt">alpha =</span> <span class="fl">.5</span>) <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb16-5" data-line-number="5"><span class="st">  </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">size =</span> <span class="kw">sqrt</span>(n)), <span class="dt">alpha =</span> <span class="fl">.5</span>) <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb16-6" data-line-number="6"><span class="st">  </span><span class="kw">xlim</span>(rng) <span class="op">+</span><span class="st"> </span><span class="kw">ylim</span>(rng) <span class="op">+</span></a>
+<a class="sourceLine" id="cb16-7" data-line-number="7"><span class="st">  </span><span class="kw">theme_bw</span>()</a></code></pre></div>
 <p><img src="GLM_files/figure-html/stan-compare-1.png" width="700"></p>
 <p>New levels are encoded as:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">tidy</span>(okc_glmer, <span class="dt">number =</span> <span class="dv">1</span>) <span class="op">%&gt;%</span>
-<span class="st">  </span>dplyr<span class="op">::</span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(level <span class="op">==</span><span class="st"> "..new"</span>) </code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" data-line-number="1"><span class="kw">tidy</span>(okc_glmer, <span class="dt">number =</span> <span class="dv">1</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb17-2" data-line-number="2"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(level <span class="op">==</span><span class="st"> "..new"</span>) </a></code></pre></div>
 <pre><code>## # A tibble: 1 x 3
 ##   level value terms   
 ##   &lt;chr&gt; &lt;dbl&gt; &lt;chr&gt;   
@@ -218,18 +223,18 @@ estimates <span class="op">%&gt;%</span><span class="st"> </span>dplyr<span clas
 <h3 class="hasAnchor">
 <a href="#empirical-bayesian-methodsmixed-models" class="anchor"></a>Empirical Bayesian Methods/Mixed Models</h3>
 <p>The same generalized linear model can be fit using mixed models via a random intercept. The <code>lme4</code> package can also be used to get pooled estimates via <code>step_lencode_mixed</code>.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">okc_mixed &lt;-<span class="st"> </span><span class="kw">recipe</span>(Class <span class="op">~</span><span class="st"> </span>., <span class="dt">data =</span> okc) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw"><a href="../../reference/step_lencode_mixed.html">step_lencode_mixed</a></span>(
-    location,
-    <span class="dt">outcome =</span> <span class="kw">vars</span>(Class),
-  ) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">prep</span>(<span class="dt">training =</span> okc)
-
-estimates &lt;-<span class="st"> </span><span class="kw">tidy</span>(okc_mixed, <span class="dt">number =</span> <span class="dv">1</span>) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span>dplyr<span class="op">::</span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/select.html">select</a></span>(<span class="op">-</span>terms) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">set_names</span>(<span class="kw">c</span>(<span class="st">"location"</span>, <span class="st">"mixed"</span>)) <span class="op">%&gt;%</span>
-<span class="st">    </span><span class="kw">inner_join</span>(estimates, <span class="dt">by =</span> <span class="st">"location"</span>)
-estimates <span class="op">%&gt;%</span><span class="st"> </span>dplyr<span class="op">::</span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/select.html">select</a></span>(location, log_odds, glm, glmer, mixed)</code></pre></div>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb19-1" data-line-number="1">okc_mixed &lt;-<span class="st"> </span><span class="kw">recipe</span>(Class <span class="op">~</span><span class="st"> </span>., <span class="dt">data =</span> okc) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb19-2" data-line-number="2"><span class="st">  </span><span class="kw"><a href="../../reference/step_lencode_mixed.html">step_lencode_mixed</a></span>(</a>
+<a class="sourceLine" id="cb19-3" data-line-number="3">    location,</a>
+<a class="sourceLine" id="cb19-4" data-line-number="4">    <span class="dt">outcome =</span> <span class="kw">vars</span>(Class),</a>
+<a class="sourceLine" id="cb19-5" data-line-number="5">  ) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb19-6" data-line-number="6"><span class="st">  </span><span class="kw">prep</span>(<span class="dt">training =</span> okc)</a>
+<a class="sourceLine" id="cb19-7" data-line-number="7"></a>
+<a class="sourceLine" id="cb19-8" data-line-number="8">estimates &lt;-<span class="st"> </span><span class="kw">tidy</span>(okc_mixed, <span class="dt">number =</span> <span class="dv">1</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb19-9" data-line-number="9"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/select.html">select</a></span>(<span class="op">-</span>terms) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb19-10" data-line-number="10"><span class="st">  </span><span class="kw">set_names</span>(<span class="kw">c</span>(<span class="st">"location"</span>, <span class="st">"mixed"</span>)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb19-11" data-line-number="11"><span class="st">    </span><span class="kw">inner_join</span>(estimates, <span class="dt">by =</span> <span class="st">"location"</span>)</a>
+<a class="sourceLine" id="cb19-12" data-line-number="12">estimates <span class="op">%&gt;%</span><span class="st"> </span>dplyr<span class="op">::</span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/select.html">select</a></span>(location, log_odds, glm, glmer, mixed)</a></code></pre></div>
 <pre><code>## # A tibble: 135 x 5
 ##    location          log_odds    glm glmer mixed
 ##    &lt;chr&gt;                &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
@@ -245,13 +250,13 @@ estimates <span class="op">%&gt;%</span><span class="st"> </span>dplyr<span clas
 ## 10 berkeley             -1.82  -1.82 -1.82 -1.82
 ## # ... with 125 more rows</code></pre>
 <p>Comparing the raw and mixed model estimates:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">estimates <span class="op">%&gt;%</span>
-<span class="st">  </span>dplyr<span class="op">::</span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(<span class="kw">is.finite</span>(log_odds)) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> log_odds, <span class="dt">y =</span> mixed)) <span class="op">+</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">geom_abline</span>(<span class="dt">col =</span> <span class="st">"red"</span>, <span class="dt">alpha =</span> .<span class="dv">5</span>) <span class="op">+</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">size =</span> <span class="kw">sqrt</span>(n)), <span class="dt">alpha =</span> .<span class="dv">5</span>) <span class="op">+</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">xlim</span>(rng) <span class="op">+</span><span class="st"> </span><span class="kw">ylim</span>(rng) <span class="op">+</span>
-<span class="st">  </span><span class="kw">theme_bw</span>()</code></pre></div>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb21-1" data-line-number="1">estimates <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb21-2" data-line-number="2"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(<span class="kw">is.finite</span>(log_odds)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb21-3" data-line-number="3"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> log_odds, <span class="dt">y =</span> mixed)) <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb21-4" data-line-number="4"><span class="st">  </span><span class="kw">geom_abline</span>(<span class="dt">col =</span> <span class="st">"red"</span>, <span class="dt">alpha =</span> <span class="fl">.5</span>) <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb21-5" data-line-number="5"><span class="st">  </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">size =</span> <span class="kw">sqrt</span>(n)), <span class="dt">alpha =</span> <span class="fl">.5</span>) <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb21-6" data-line-number="6"><span class="st">  </span><span class="kw">xlim</span>(rng) <span class="op">+</span><span class="st"> </span><span class="kw">ylim</span>(rng) <span class="op">+</span></a>
+<a class="sourceLine" id="cb21-7" data-line-number="7"><span class="st">  </span><span class="kw">theme_bw</span>()</a></code></pre></div>
 <p><img src="GLM_files/figure-html/mixed-compare-1.png" width="700"></p>
 <p>These values are very similar to the Bayesian estimates.</p>
 </div>

@@ -65,130 +65,93 @@
     
     
 <p>The approach encodes categorical data as multiple numeric variables using a <em>word embedding</em> approach. Originally intended as a way to take a large number of word identifiers and represent them in a smaller dimension. Good references on this are <a href="https://arxiv.org/abs/1604.06737">Guo and Berkhahn (2016)</a> and Chapter 6 of <a href="https://www.manning.com/books/deep-learning-with-r">Francois and Allaire (2018)</a>.</p>
-<p>The methodology first translates the <em>C</em> factor levels as a set of integer values then randomly allocates them to the new <em>D</em> numeric columns. These columns are optionally connected in a neural network to an intermediate layer of hidden units. This implementation uses a single layer with ReLu activations. Finally, an output layer is used with either linear activation (for numeric outcomes) or softmax (for classification).</p>
+<p>The methodology first translates the <em>C</em> factor levels as a set of integer values then randomly allocates them to the new <em>D</em> numeric columns. These columns are optionally connected in a neural network to an intermediate layer of hidden units. Optionally, other predictors can be added to the network in the usual way (via the <code>predictors</code> argument) that also link to the hidden layer. This implementation uses a single layer with ReLu activations. Finally, an output layer is used with either linear activation (for numeric outcomes) or softmax (for classification).</p>
 <p>To translate this model to a set of embeddings, the coefficients of the original embedding layer are used to represent the original factor levels.</p>
 <p>As an example, we use the Ames housing data where the sale price of houses are being predicted. One predictor, neighborhood, has the most factor levels of the predictors.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidyverse)
-<span class="kw">library</span>(AmesHousing)
-ames &lt;-<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/AmesHousing/topics/make_ames">make_ames</a></span>()
-<span class="kw">length</span>(<span class="kw">levels</span>(ames<span class="op">$</span>Neighborhood))</code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">library</span>(tidymodels)</a>
+<a class="sourceLine" id="cb1-2" data-line-number="2"><span class="kw">library</span>(AmesHousing)</a>
+<a class="sourceLine" id="cb1-3" data-line-number="3">ames &lt;-<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/AmesHousing/topics/make_ames">make_ames</a></span>()</a>
+<a class="sourceLine" id="cb1-4" data-line-number="4"><span class="kw">length</span>(<span class="kw">levels</span>(ames<span class="op">$</span>Neighborhood))</a></code></pre></div>
 <pre><code>## [1] 28</code></pre>
 <p>The distribution of data in the neighborhood is not uniform:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(ames, <span class="kw">aes</span>(<span class="dt">x =</span> Neighborhood)) <span class="op">+</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">geom_bar</span>() <span class="op">+</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">coord_flip</span>() <span class="op">+</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">xlab</span>(<span class="st">""</span>) <span class="op">+</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">theme_bw</span>()</code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw">ggplot</span>(ames, <span class="kw">aes</span>(<span class="dt">x =</span> Neighborhood)) <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb3-2" data-line-number="2"><span class="st">  </span><span class="kw">geom_bar</span>() <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb3-3" data-line-number="3"><span class="st">  </span><span class="kw">coord_flip</span>() <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb3-4" data-line-number="4"><span class="st">  </span><span class="kw">xlab</span>(<span class="st">""</span>) <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb3-5" data-line-number="5"><span class="st">  </span><span class="kw">theme_bw</span>()</a></code></pre></div>
 <p><img src="Tensorflow_files/figure-html/ames-xtab-1.png" width="700"></p>
 <p>Fo plotting later, we calculate the simple means per neighborhood:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">means &lt;-<span class="st"> </span>ames <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">group_by</span>(Neighborhood) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">summarise</span>(
-    <span class="dt">mean =</span> <span class="kw">mean</span>(<span class="kw">log10</span>(Sale_Price)),
-    <span class="dt">n =</span> <span class="kw">length</span>(Sale_Price),
-    <span class="dt">lon =</span> <span class="kw">median</span>(Longitude),
-    <span class="dt">lat =</span> <span class="kw">median</span>(Latitude)
-  )</code></pre></div>
-<p>First, we’ll fit a model with no hidden units and 10 encoding columns:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(embed)
-tf_linear &lt;-<span class="st"> </span><span class="kw">recipe</span>(Sale_Price <span class="op">~</span><span class="st"> </span>Neighborhood <span class="op">+</span><span class="st"> </span>MS_SubClass, <span class="dt">data =</span> ames) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">step_log</span>(Sale_Price, <span class="dt">base =</span> <span class="dv">10</span>) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw"><a href="../../reference/step_embed.html">step_embed</a></span>(
-    Neighborhood, <span class="dt">outcome =</span> <span class="kw">vars</span>(Sale_Price),
-    <span class="dt">num_terms =</span> <span class="dv">10</span>, 
-    <span class="dt">options =</span> <span class="kw"><a href="../../reference/step_embed.html">embed_control</a></span>(<span class="dt">epochs =</span> <span class="dv">50</span>)
-  ) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">prep</span>(<span class="dt">training =</span> ames)</code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">means &lt;-<span class="st"> </span></a>
+<a class="sourceLine" id="cb4-2" data-line-number="2"><span class="st">  </span>ames <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb4-3" data-line-number="3"><span class="st">  </span><span class="kw">group_by</span>(Neighborhood) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb4-4" data-line-number="4"><span class="st">  </span><span class="kw">summarise</span>(</a>
+<a class="sourceLine" id="cb4-5" data-line-number="5">    <span class="dt">mean =</span> <span class="kw">mean</span>(<span class="kw">log10</span>(Sale_Price)),</a>
+<a class="sourceLine" id="cb4-6" data-line-number="6">    <span class="dt">n =</span> <span class="kw">length</span>(Sale_Price),</a>
+<a class="sourceLine" id="cb4-7" data-line-number="7">    <span class="dt">lon =</span> <span class="kw">median</span>(Longitude),</a>
+<a class="sourceLine" id="cb4-8" data-line-number="8">    <span class="dt">lat =</span> <span class="kw">median</span>(Latitude)</a>
+<a class="sourceLine" id="cb4-9" data-line-number="9">  )</a></code></pre></div>
+<p>We’ll fit a model with 10 hidden units and 3 encoding columns:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="kw">library</span>(embed)</a>
+<a class="sourceLine" id="cb5-2" data-line-number="2">tf_embed &lt;-<span class="st"> </span></a>
+<a class="sourceLine" id="cb5-3" data-line-number="3"><span class="st">  </span><span class="kw">recipe</span>(Sale_Price <span class="op">~</span><span class="st"> </span>., <span class="dt">data =</span> ames) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb5-4" data-line-number="4"><span class="st">  </span><span class="kw">step_log</span>(Sale_Price, <span class="dt">base =</span> <span class="dv">10</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb5-5" data-line-number="5"><span class="st">  </span><span class="co"># Add some other predictors that can be used by the network. We</span></a>
+<a class="sourceLine" id="cb5-6" data-line-number="6"><span class="st">  </span><span class="co"># preprocess them first</span></a>
+<a class="sourceLine" id="cb5-7" data-line-number="7"><span class="st">  </span><span class="kw">step_YeoJohnson</span>(Lot_Area, Full_Bath, Gr_Liv_Area)  <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb5-8" data-line-number="8"><span class="st">  </span><span class="kw">step_range</span>(Lot_Area, Full_Bath, Gr_Liv_Area)  <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb5-9" data-line-number="9"><span class="st">  </span><span class="kw"><a href="../../reference/step_embed.html">step_embed</a></span>(</a>
+<a class="sourceLine" id="cb5-10" data-line-number="10">    Neighborhood, </a>
+<a class="sourceLine" id="cb5-11" data-line-number="11">    <span class="dt">outcome =</span> <span class="kw">vars</span>(Sale_Price),</a>
+<a class="sourceLine" id="cb5-12" data-line-number="12">    <span class="dt">predictors =</span> <span class="kw">vars</span>(Lot_Area, Full_Bath, Gr_Liv_Area),</a>
+<a class="sourceLine" id="cb5-13" data-line-number="13">    <span class="dt">num_terms =</span> <span class="dv">5</span>, </a>
+<a class="sourceLine" id="cb5-14" data-line-number="14">    <span class="dt">hidden_units =</span> <span class="dv">10</span>, </a>
+<a class="sourceLine" id="cb5-15" data-line-number="15">    <span class="dt">options =</span> <span class="kw"><a href="../../reference/step_embed.html">embed_control</a></span>(<span class="dt">epochs =</span> <span class="dv">75</span>, <span class="dt">validation_split =</span> <span class="fl">0.2</span>)</a>
+<a class="sourceLine" id="cb5-16" data-line-number="16">  ) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb5-17" data-line-number="17"><span class="st">  </span><span class="kw">prep</span>(<span class="dt">training =</span> ames)</a></code></pre></div>
+<pre><code>## Set session seed to 8584 (disabled GPU, CPU parallelism)</code></pre>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1">tf_embed<span class="op">$</span>steps[[<span class="dv">4</span>]]<span class="op">$</span>history <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb7-2" data-line-number="2"><span class="st">  </span><span class="kw">filter</span>(epochs <span class="op">&gt;</span><span class="st"> </span><span class="dv">1</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb7-3" data-line-number="3"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> epochs, <span class="dt">y =</span> loss, <span class="dt">col =</span> type)) <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb7-4" data-line-number="4"><span class="st">  </span><span class="kw">geom_line</span>()</a></code></pre></div>
+<p><img src="Tensorflow_files/figure-html/ames-linear-1.png" width="700"></p>
 <p>The embeddings are obtained using the <code>tidy</code> method:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">linear_coef &lt;-<span class="st"> </span><span class="kw">tidy</span>(tf_linear, <span class="dt">number =</span> <span class="dv">2</span>)
-linear_coef</code></pre></div>
-<pre><code>## # A tibble: 29 x 12
-##       emb01   emb02    emb03   emb04    emb05   emb06   emb07   emb08
-##       &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;
-##  1 -0.0178   0.0182 -0.00614  0.0483 -3.62e-2 -0.0319  0.0182 -0.0409
-##  2 -0.0293  -0.144  -0.0652   0.0284  8.48e-2  0.0854 -0.0909  0.126 
-##  3  0.0315  -0.135  -0.0789   0.0208  4.17e-2  0.109  -0.118   0.171 
-##  4  0.0104  -0.0956 -0.0728  -0.0131  7.51e-3  0.0442 -0.112   0.129 
-##  5  0.00366 -0.116  -0.0505  -0.0248  6.44e-2  0.121  -0.123   0.103 
-##  6 -0.0464  -0.136  -0.129    0.0151  8.43e-2  0.131  -0.117   0.133 
-##  7  0.0437  -0.165  -0.158   -0.0473  4.95e-2  0.182  -0.172   0.140 
-##  8 -0.0433  -0.124  -0.114   -0.0504  7.39e-2  0.118  -0.161   0.123 
-##  9 -0.0145  -0.124  -0.0916   0.0178 -3.04e-3  0.151  -0.0843  0.129 
-## 10  0.0435  -0.111  -0.132   -0.0356  1.97e-4  0.112  -0.168   0.132 
-## # ... with 19 more rows, and 4 more variables: emb09 &lt;dbl&gt;, emb10 &lt;dbl&gt;,
-## #   level &lt;chr&gt;, terms &lt;chr&gt;</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">linear_coef &lt;-<span class="st"> </span>linear_coef <span class="op">%&gt;%</span>
-<span class="st">  </span>dplyr<span class="op">::</span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/select.html">rename</a></span>(<span class="dt">Neighborhood =</span> level) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">inner_join</span>(means, <span class="dt">by =</span> <span class="st">"Neighborhood"</span>)</code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1">hood_coef &lt;-<span class="st"> </span></a>
+<a class="sourceLine" id="cb8-2" data-line-number="2"><span class="st">  </span><span class="kw">tidy</span>(tf_embed, <span class="dt">number =</span> <span class="dv">4</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb8-3" data-line-number="3"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/select.html">select</a></span>(<span class="op">-</span>terms)  <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb8-4" data-line-number="4"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/select.html">rename</a></span>(<span class="dt">Neighborhood =</span> level) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb8-5" data-line-number="5"><span class="st">  </span><span class="co"># Make names smaller</span></a>
+<a class="sourceLine" id="cb8-6" data-line-number="6"><span class="st">  </span><span class="kw">rename_at</span>(<span class="kw">vars</span>(<span class="kw">contains</span>(<span class="st">"emb"</span>)), <span class="kw">funs</span>(<span class="kw">gsub</span>(<span class="st">"Neighborhood_"</span>, <span class="st">""</span>, ., <span class="dt">fixed =</span> <span class="ot">TRUE</span>)))</a>
+<a class="sourceLine" id="cb8-7" data-line-number="7">hood_coef</a></code></pre></div>
+<pre><code>## # A tibble: 29 x 6
+##     embed_1   embed_2   embed_3  embed_4  embed_5 Neighborhood      
+##       &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt; &lt;chr&gt;             
+##  1  0.0228  -0.0492    0.000988 -0.0373   0.0482  ..new             
+##  2 -0.0746  -0.0410    0.0154   -0.0324  -0.0138  North_Ames        
+##  3 -0.00122 -0.0613   -0.0108   -0.0659  -0.0767  College_Creek     
+##  4 -0.0367   0.0154    0.0312   -0.0133   0.0501  Old_Town          
+##  5 -0.0379  -0.000608  0.0349   -0.00905 -0.00314 Edwards           
+##  6 -0.0104  -0.0547   -0.0946   -0.0748  -0.0152  Somerset          
+##  7 -0.00219 -0.103    -0.0628   -0.0855  -0.124   Northridge_Heights
+##  8 -0.0250   0.00946  -0.0471   -0.0272  -0.0302  Gilbert           
+##  9 -0.0391  -0.0133    0.00236  -0.0152  -0.0289  Sawyer            
+## 10  0.0171  -0.0549    0.00365  -0.0690  -0.00606 Northwest_Ames    
+## # ... with 19 more rows</code></pre>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1">hood_coef &lt;-<span class="st"> </span></a>
+<a class="sourceLine" id="cb10-2" data-line-number="2"><span class="st">  </span>hood_coef <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb10-3" data-line-number="3"><span class="st">  </span><span class="kw">inner_join</span>(means, <span class="dt">by =</span> <span class="st">"Neighborhood"</span>)</a></code></pre></div>
 <p>There is some columns that are correlated with the outcome:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">linear_cor &lt;-<span class="st"> </span>linear_coef <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span>dplyr<span class="op">::</span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/select.html">select</a></span>(<span class="kw">starts_with</span>(<span class="st">"emb"</span>), mean) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">cor</span>()
-linear_cor[<span class="op">-</span><span class="dv">11</span>,<span class="dv">11</span>]</code></pre></div>
-<pre><code>## emb01 emb02 emb03 emb04 emb05 emb06 emb07 emb08 emb09 emb10 
-##  0.35 -0.57 -0.59 -0.16  0.39  0.44 -0.47  0.59  0.67 -0.45</code></pre>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1">hood_coef <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb11-2" data-line-number="2"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/select.html">select</a></span>(mean, <span class="kw">contains</span>(<span class="st">"emb"</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb11-3" data-line-number="3"><span class="st">  </span><span class="kw">cor</span>() <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb11-4" data-line-number="4"><span class="st">  </span><span class="kw">round</span>(<span class="dv">2</span>)</a></code></pre></div>
+<pre><code>##          mean embed_1 embed_2 embed_3 embed_4 embed_5
+## mean     1.00    0.36   -0.47   -0.83   -0.61   -0.67
+## embed_1  0.36    1.00    0.17   -0.30   -0.01   -0.11
+## embed_2 -0.47    0.17    1.00    0.41    0.48    0.47
+## embed_3 -0.83   -0.30    0.41    1.00    0.50    0.62
+## embed_4 -0.61   -0.01    0.48    0.50    1.00    0.49
+## embed_5 -0.67   -0.11    0.47    0.62    0.49    1.00</code></pre>
 <p>However, this has induced some between-predictor correlations.</p>
-<p><a href="https://en.wikipedia.org/wiki/Multidimensional_scaling">Multidimensional scaling</a> is used to see if there is any information in the data that is associated with the outcome:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">lin_mds &lt;-<span class="st"> </span>linear_coef <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span>dplyr<span class="op">::</span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/select.html">select</a></span>(<span class="kw">starts_with</span>(<span class="st">"emb"</span>)) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">dist</span>() <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">sammon</span>(<span class="dt">trace =</span> <span class="ot">FALSE</span>)
-lin_mds<span class="op">$</span>points <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">as.data.frame</span>() <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">bind_cols</span>(linear_coef <span class="op">%&gt;%</span><span class="st"> </span>dplyr<span class="op">::</span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/select.html">select</a></span>(Neighborhood, mean)) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">gather</span>(comp, mds_value, <span class="op">-</span>Neighborhood, <span class="op">-</span>mean) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> mds_value, <span class="dt">y =</span> mean)) <span class="op">+</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">alpha =</span> <span class="fl">0.5</span>) <span class="op">+</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span>comp) <span class="op">+</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">theme_bw</span>()</code></pre></div>
-<p><img src="Tensorflow_files/figure-html/linear-mds-1.png" width="700"></p>
-<p>Note that, since these methods are <strong>supervised</strong>, using the new encodings in a model where <em>the same data are being used</em>, the estimate of model performance may yield overly optimistic results.</p>
-<p>Now let’s fit a more complex model with a layer of hidden units.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">tf_nlin &lt;-<span class="st"> </span><span class="kw">recipe</span>(Sale_Price <span class="op">~</span><span class="st"> </span>Neighborhood <span class="op">+</span><span class="st"> </span>MS_SubClass, <span class="dt">data =</span> ames) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">step_log</span>(Sale_Price, <span class="dt">base =</span> <span class="dv">10</span>) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw"><a href="../../reference/step_embed.html">step_embed</a></span>(
-    Neighborhood, <span class="dt">outcome =</span> <span class="kw">vars</span>(Sale_Price),
-    <span class="dt">num_terms =</span> <span class="dv">10</span>, 
-    <span class="dt">hidden_units =</span> <span class="dv">50</span>,
-    <span class="dt">options =</span> <span class="kw"><a href="../../reference/step_embed.html">embed_control</a></span>(<span class="dt">epochs =</span> <span class="dv">50</span>)
-  ) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">prep</span>(<span class="dt">training =</span> ames)
-
-nlin_coef &lt;-<span class="st"> </span><span class="kw">tidy</span>(tf_nlin, <span class="dt">number =</span> <span class="dv">2</span>) <span class="op">%&gt;%</span>
-<span class="st">  </span>dplyr<span class="op">::</span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/select.html">rename</a></span>(<span class="dt">Neighborhood =</span> level) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">inner_join</span>(means, <span class="dt">by =</span> <span class="st">"Neighborhood"</span>)</code></pre></div>
-<pre><code>## Warning: Column `Neighborhood` joining character vector and factor,
-## coercing into character vector</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">nlin_cor &lt;-<span class="st"> </span>nlin_coef <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span>dplyr<span class="op">::</span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/select.html">select</a></span>(<span class="kw">starts_with</span>(<span class="st">"emb"</span>), mean) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">cor</span>()
-nlin_cor[<span class="op">-</span><span class="dv">11</span>,<span class="dv">11</span>]</code></pre></div>
-<pre><code>##  emb01  emb02  emb03  emb04  emb05  emb06  emb07  emb08  emb09  emb10 
-##  0.668 -0.863 -0.098  0.726  0.025 -0.316  0.055  0.709  0.650 -0.796</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">nlin_mds &lt;-<span class="st"> </span>nlin_coef <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="co"># dplyr::filter(Neighborhood != "..new") %&gt;% </span>
-<span class="st">  </span>dplyr<span class="op">::</span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/select.html">select</a></span>(<span class="kw">starts_with</span>(<span class="st">"emb"</span>)) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">dist</span>() <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">sammon</span>(<span class="dt">trace =</span> <span class="ot">FALSE</span>)
-nlin_mds<span class="op">$</span>points <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">as.data.frame</span>() <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">bind_cols</span>(nlin_coef <span class="op">%&gt;%</span><span class="st"> </span>dplyr<span class="op">::</span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/select.html">select</a></span>(Neighborhood, mean)) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">gather</span>(comp, mds_value, <span class="op">-</span>Neighborhood, <span class="op">-</span>mean) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> mds_value, <span class="dt">y =</span> mean)) <span class="op">+</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">alpha =</span> <span class="fl">0.5</span>) <span class="op">+</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span>comp) <span class="op">+</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">theme_bw</span>()</code></pre></div>
-<p><img src="Tensorflow_files/figure-html/ames-nonlinear-1.png" width="700"></p>
-<p>Arguably, there appears to be a slightly better association with the sample means using the extra layer.</p>
-<p>The new levels are encoded as:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">tidy</span>(tf_nlin, <span class="dt">number =</span> <span class="dv">2</span>) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span>dplyr<span class="op">::</span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(level <span class="op">==</span><span class="st"> "..new"</span>) <span class="op">%&gt;%</span>
-<span class="st">  </span>dplyr<span class="op">::</span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/select.html">select</a></span>(<span class="kw">starts_with</span>(<span class="st">"emb"</span>))</code></pre></div>
-<pre><code>## # A tibble: 1 x 10
-##    emb01  emb02   emb03  emb04   emb05  emb06    emb07   emb08  emb09
-##    &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;    &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;
-## 1 0.0399 0.0401 -0.0248 0.0173 -0.0460 0.0170 -0.00515 -0.0324 0.0465
-## # ... with 1 more variable: emb10 &lt;dbl&gt;</code></pre>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

@@ -23,9 +23,12 @@ Some references for these methods are:
 * Zumel N and Mount J (2017) "[`vtreat`: a `data.frame` Processor for Predictive Modeling](https://arxiv.org/abs/1611.09477)"
 
 
-To install it, use:
+To install the package:
 
-``` r
+```r
+install.packages("embed")
+
+## for development version:
 require("devtools")
 install_github("tidymodels/embed")
 ```

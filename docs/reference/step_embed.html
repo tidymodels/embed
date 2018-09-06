@@ -204,8 +204,10 @@ of Francois and Allaire (2018) for more details.</p>
 <p>The new variables are mapped to the specific levels seen at the
 time of model training and an extra instance of the variables
 are used for new levels of the factor.</p>
-<p>This model is trained separately for each factor predictor
-given in the recipe step.</p>
+<p>One model is created for each call to <code>step_embed</code>. All terms
+given to the step are estimated and encoded in the same model
+which would also contain predictors give in <code>predictors</code> (if
+any).</p>
 <p>When the outcome is numeric, a linear activation function is
 used in the last layer while softmax is used for factor outcomes
 (with any number of levels).</p>
@@ -219,7 +221,7 @@ categorical predictor, and no hidden units used here would be</p><pre>  keras_mo
   layer_flatten() \%&gt;\%
   layer_dense(units = 1, activation = 'linear')
 </pre>
-    <p>If a factor outcome is used and 10 hidden units were requested, the code
+    <p>If a factor outcome is used and hidden units were requested, the code
 would be</p><pre>  keras_model_sequential() \%&gt;\% 
   layer_embedding(
     input_dim = num_factor_levels_x + 1,
@@ -237,8 +239,9 @@ hidden layer.</p>
 results using this step due to the nature of Tensorflow (see
 link in References).</p>
 <p>tensorflow models cannot be run in parallel within the same
-session (via <code>foreach</code>) or the <code>parallel</code> package. If using a
-recipes with this step with <code>caret</code>, avoid parallel processing.</p>
+session (via <code>foreach</code> or <code>futures</code>) or the <code>parallel</code> package.
+If using a recipes with this step with <code>caret</code>, avoid parallel
+processing.</p>
     
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
