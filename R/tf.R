@@ -59,8 +59,10 @@
 #'  time of model training and an extra instance of the variables
 #'  are used for new levels of the factor.
 #'
-#' This model is trained separately for each factor predictor
-#'  given in the recipe step.
+#' One model is created for each call to `step_embed`. All terms
+#'  given to the step are estimated and encoded in the same model
+#'  which would also contain predictors give in `predictors` (if 
+#'  any). 
 #' 
 #' When the outcome is numeric, a linear activation function is
 #'  used in the last layer while softmax is used for factor outcomes
@@ -80,7 +82,7 @@
 #'   layer_dense(units = 1, activation = 'linear')
 #' ```
 #'
-#' If a factor outcome is used and 10 hidden units were requested, the code 
+#' If a factor outcome is used and hidden units were requested, the code 
 #' would be
 #'
 #' ```
@@ -103,9 +105,10 @@
 #'  results using this step due to the nature of Tensorflow (see
 #'  link in References).
 #' 
-#' tensorflow models cannot be run in parallel within the same 
-#'  session (via `foreach`) or the `parallel` package. If using a
-#'  recipes with this step with `caret`, avoid parallel processing. 
+#' tensorflow models cannot be run in parallel within the same
+#'  session (via `foreach` or `futures`) or the `parallel` package.
+#'  If using a recipes with this step with `caret`, avoid parallel
+#'  processing.
 #' 
 #' @references Francois C and Allaire JJ (2018) 
 #' _Deep Learning with R_, Manning
