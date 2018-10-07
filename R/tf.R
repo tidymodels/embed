@@ -202,6 +202,7 @@ prep.step_embed <- function(x, training, info = NULL, ...) {
   y_name <- terms_select(x$outcome, info = info)
   if (length(x$predictors) > 0) {
     pred_names <- terms_select(x$predictors, info = info)
+    print(pred_names)
     check_type(training[, pred_names], quant = TRUE)
   }
   else
