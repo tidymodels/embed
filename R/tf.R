@@ -11,8 +11,9 @@
 #'  For `step_embed`, this indicates the variables to be encoded
 #'  into a numeric format. See [recipes::selections()] for more
 #'  details. For the `tidy` method, these are not currently used.
-#' @param role Not used by this step since no new variables are
-#'  created.
+#' @param role For model terms created by this step, what analysis
+#'  role should they be assigned?. By default, the function assumes
+#'  that the embedding variables created will be used as predictors in a model.
 #' @param outcome A call to `vars` to specify which variable is
 #'  used as the outcome in the neural network. Only
 #'  numeric and two-level factors are currently supported.
@@ -133,7 +134,7 @@
 step_embed <-
   function(recipe,
            ...,
-           role = NA,
+           role = "predictor",
            trained = FALSE,
            outcome = NULL,
            predictors = NULL,
@@ -216,11 +217,14 @@ prep.step_embed <- function(x, training, info = NULL, ...) {
       num = x$num_terms,
       h = x$hidden_units
     )
+  
+  # compute epochs actuually trained for
+  epochs <- min(res$history$params$epochs, length(res$history$metrics[[1]]))
 
   x$mapping <- res$layer_values
   x$history <- 
     as_tibble(res$history$metrics) %>%
-    mutate(epochs = 1:res$history$params$epochs) %>%
+    mutate(epochs = 1:epochs) %>%
     gather(type, loss, -epochs)
   x$trained <- TRUE
   x
@@ -323,7 +327,8 @@ tf_coefs2 <- function(x, y, z, opt, num, lab, h, seeds = sample.int(10000, 4), .
       epochs = opt$epochs,
       validation_split = opt$validation_split,
       batch_size = opt$batch_size,
-      verbose = opt$verbose
+      verbose = opt$verbose,
+      callbacks = opt$callbacks
     )
 
   layer_values <- vector(mode = "list", length = p)
@@ -419,7 +424,7 @@ print.step_embed <-
 #' @export
 #' @rdname step_embed
 #' @param optimizer,loss,metrics Arguments to pass to [keras::compile()]
-#' @param epochs,validation_split,batch_size,verbose Arguments to pass to [keras::fit()]
+#' @param epochs,validation_split,batch_size,verbose,callbacks Arguments to pass to [keras::fit()]
 embed_control <- function(
   loss = "mse",
   metrics = NULL,
@@ -427,7 +432,8 @@ embed_control <- function(
   epochs = 20,
   validation_split = 0,
   batch_size = 32,
-  verbose = 0
+  verbose = 0,
+  callbacks = NULL
 ) {
   if(batch_size < 1)
     stop("`batch_size` should be a positive integer", call. = FALSE)
@@ -438,7 +444,7 @@ embed_control <- function(
   list(
     loss = loss, metrics = metrics, optimizer = optimizer, epochs = epochs, 
     validation_split = validation_split, batch_size = batch_size,
-    verbose = verbose)
+    verbose = verbose, callbacks = callbacks)
 }
 
 tf_options_check <- function(opt) {

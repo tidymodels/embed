@@ -6,15 +6,16 @@
 \alias{embed_control}
 \title{Encoding Factors into Multiple Columns}
 \usage{
-step_embed(recipe, ..., role = NA, trained = FALSE, outcome = NULL,
-  predictors = NULL, num_terms = 2, hidden_units = 0,
+step_embed(recipe, ..., role = "predictor", trained = FALSE,
+  outcome = NULL, predictors = NULL, num_terms = 2, hidden_units = 0,
   options = embed_control(), mapping = NULL, history = NULL,
   skip = FALSE)
 
 \method{tidy}{step_embed}(x, ...)
 
 embed_control(loss = "mse", metrics = NULL, optimizer = "sgd",
-  epochs = 20, validation_split = 0, batch_size = 32, verbose = 0)
+  epochs = 20, validation_split = 0, batch_size = 32, verbose = 0,
+  callbacks = NULL)
 }
 \arguments{
 \item{recipe}{A recipe object. The step will be added to the
@@ -25,8 +26,9 @@ For \code{step_embed}, this indicates the variables to be encoded
 into a numeric format. See \code{\link[recipes:selections]{recipes::selections()}} for more
 details. For the \code{tidy} method, these are not currently used.}
 
-\item{role}{Not used by this step since no new variables are
-created.}
+\item{role}{For model terms created by this step, what analysis
+role should they be assigned?. By default, the function assumes
+that the embedding variables created will be used as predictors in a model.}
 
 \item{trained}{A logical to indicate if the quantities for
 preprocessing have been estimated.}
@@ -69,7 +71,7 @@ subsequent operations.}
 
 \item{optimizer, loss, metrics}{Arguments to pass to \code{\link[keras:compile]{keras::compile()}}}
 
-\item{epochs, validation_split, batch_size, verbose}{Arguments to pass to \code{\link[keras:fit]{keras::fit()}}}
+\item{epochs, validation_split, batch_size, verbose, callbacks}{Arguments to pass to \code{\link[keras:fit]{keras::fit()}}}
 }
 \value{
 An updated version of \code{recipe} with the new step added
@@ -105,25 +107,25 @@ used in the last layer while softmax is used for factor outcomes
 (with any number of levels).
 
 For example, the \code{keras} code for a numeric outcome, one
-categorical predictor, and no hidden units used here would be\preformatted{  keras_model_sequential() \\%>\\% 
+categorical predictor, and no hidden units used here would be\preformatted{  keras_model_sequential() \\\%>\\\% 
   layer_embedding(
     input_dim = num_factor_levels_x + 1,
     output_dim = num_terms,
     input_length = 1
-  ) \\%>\\%
-  layer_flatten() \\%>\\%
+  ) \\\%>\\\%
+  layer_flatten() \\\%>\\\%
   layer_dense(units = 1, activation = 'linear')
 }
 
 If a factor outcome is used and hidden units were requested, the code
-would be\preformatted{  keras_model_sequential() \\%>\\% 
+would be\preformatted{  keras_model_sequential() \\\%>\\\% 
   layer_embedding(
     input_dim = num_factor_levels_x + 1,
     output_dim = num_terms,
     input_length = 1
-   ) \\%>\\%
-  layer_flatten() \\%>\\%
-  layer_dense(units = hidden_units, activation = "relu") \\%>\\%
+   ) \\\%>\\\%
+  layer_flatten() \\\%>\\\%
+  layer_dense(units = hidden_units, activation = "relu") \\\%>\\\%
   layer_dense(units = num_factor_levels_y, activation = 'softmax')
 }
 
