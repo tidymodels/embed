@@ -184,7 +184,6 @@ print.step_lencode_glm <-
 
 #' @importFrom dplyr bind_rows
 #' @importFrom recipes is_trained
-#' @importFrom broom tidy
 #' @rdname step_lencode_glm
 #' @param x A `step_lencode_glm` object.
 #' @export

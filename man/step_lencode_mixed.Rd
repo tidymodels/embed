@@ -100,7 +100,5 @@ prediction problems," ACM SIGKDD Explorations Newsletter, 3(1),
 Zumel N and Mount J (2017) "vtreat: a data.frame Processor for
 Predictive Modeling," arXiv:1611.09477
 }
-\concept{
-preprocessing encoding
-}
+\concept{preprocessing encoding}
 \keyword{datagen}

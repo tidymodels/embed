@@ -259,7 +259,6 @@ print.step_lencode_bayes <-
 
 #' @importFrom dplyr bind_rows
 #' @importFrom recipes is_trained
-#' @importFrom broom tidy
 #' @rdname step_lencode_bayes
 #' @param x A `step_lencode_bayes` object.
 #' @export
