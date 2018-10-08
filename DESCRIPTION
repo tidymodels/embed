@@ -35,4 +35,5 @@ ByteCompile: true
 URL: https://tidymodels.github.io/embed
 BugReports: https://github.com/tidymodels/embed/issues
 Remotes:
-    r-lib/generics
+    r-lib/generics,
+    tidymodels/recipes
