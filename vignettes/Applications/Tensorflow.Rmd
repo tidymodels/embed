@@ -12,7 +12,7 @@ output:
 ```{r check-for-build, echo = FALSE, results='asis'}
 eval_chunks <- as.logical(Sys.getenv("local_vignette_build", FALSE))
 # Change this via `Sys.setenv(local_vignette_build = "TRUE")`
-if(!eval_chunks) 
+if (!eval_chunks) 
   cat(
     "(These documents take a long time to create, so only the code",
     "is shown here. The full version is at",
@@ -25,7 +25,7 @@ library(tidymodels)
 library(keras)
 library(AmesHousing)
 library(embed)
-options(digits = 2)
+options(digits = 3)
 set.seed(24566)
 ```
 
