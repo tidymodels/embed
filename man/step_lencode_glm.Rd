@@ -5,8 +5,8 @@
 \alias{tidy.step_lencode_glm}
 \title{Supervised Factor Conversions into Linear Functions using Likelihood Encodings}
 \usage{
-step_lencode_glm(recipe, ..., role = NA, trained = FALSE, outcome = NULL,
-  mapping = NULL, skip = FALSE)
+step_lencode_glm(recipe, ..., role = NA, trained = FALSE,
+  outcome = NULL, mapping = NULL, skip = FALSE)
 
 \method{tidy}{step_lencode_glm}(x, ...)
 }
@@ -86,7 +86,5 @@ prediction problems," ACM SIGKDD Explorations Newsletter, 3(1),
 Zumel N and Mount J (2017) "vtreat: a data.frame Processor for
 Predictive Modeling," arXiv:1611.09477
 }
-\concept{
-preprocessing encoding
-}
+\concept{preprocessing encoding}
 \keyword{datagen}

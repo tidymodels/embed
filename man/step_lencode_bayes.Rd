@@ -113,7 +113,5 @@ Predictive Modeling," arXiv:1611.09477
 "Estimating Generalized (Non-)Linear Models with Group-Specific
 Terms with \code{rstanarm}" \url{https://tinyurl.com/stan-glm-grouped}
 }
-\concept{
-preprocessing encoding
-}
+\concept{preprocessing encoding}
 \keyword{datagen}
