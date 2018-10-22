@@ -1,7 +1,7 @@
 # R for travis: see documentation at https://docs.travis-ci.com/user/languages/r
 language: r
 
-dist: precise
+dist: trusty
 sudo: true
 
 r:
@@ -9,7 +9,9 @@ r:
 - devel
 
 env:
+  global:
   - KERAS_BACKEND="tensorflow"
+  - MAKEFLAGS="-j 2"
 
 r_binary_packages: 
  - rstan
@@ -52,7 +54,7 @@ r_binary_packages:
  - BH
 
 cache:
-  packages: true
+  packages: false
   directories:
     - $HOME/.keras
     - $HOME/.cache/pip
