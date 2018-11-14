@@ -10,11 +10,11 @@ context("glm model, classification")
 
 test_that("factor encoded predictor", {
   class_test <- recipe(x2 ~ ., data = ex_dat) %>%
-    step_lencode_glm(x3, outcome = vars(x2)) %>%
+    step_lencode_glm(x3, outcome = vars(x2), id = "id") %>%
     prep(training = ex_dat, retain = TRUE)
   tr_values <- juice(class_test)$x3
-  new_values <- bake(class_test, newdata = new_dat)
-  new_values_ch <- bake(class_test, newdata = new_dat_ch)
+  new_values <- bake(class_test, new_data = new_dat)
+  new_values_ch <- bake(class_test, new_data = new_dat_ch)
   
   key <- class_test$steps[[1]]$mapping
   td_obj <- tidy(class_test, number = 1)
@@ -69,8 +69,8 @@ test_that("character encoded predictor", {
     step_lencode_glm(x3, outcome = vars(x2)) %>%
     prep(training = ex_dat_ch, retain = TRUE)
   tr_values <- juice(class_test)$x3
-  new_values <- bake(class_test, newdata = new_dat_ch)
-  new_values_fc <- bake(class_test, newdata = new_dat)  
+  new_values <- bake(class_test, new_data = new_dat_ch)
+  new_values_fc <- bake(class_test, new_data = new_dat)  
   key <- class_test$steps[[1]]$mapping
   td_obj <- tidy(class_test, number = 1)
   
@@ -128,8 +128,8 @@ test_that("factor encoded predictor", {
     step_lencode_glm(x3, outcome = vars(x1)) %>%
     prep(training = ex_dat, retain = TRUE)
   tr_values <- juice(reg_test)$x3
-  new_values <- bake(reg_test, newdata = new_dat)
-  new_values_ch <- bake(reg_test, newdata = new_dat_ch)
+  new_values <- bake(reg_test, new_data = new_dat)
+  new_values_ch <- bake(reg_test, new_data = new_dat_ch)
   td_obj <- tidy(reg_test, number = 1)
   
   key <- reg_test$steps[[1]]$mapping
@@ -184,8 +184,8 @@ test_that("character encoded predictor", {
     step_lencode_glm(x3, outcome = vars(x1)) %>%
     prep(training = ex_dat_ch, retain = TRUE)
   tr_values <- juice(reg_test)$x3
-  new_values <- bake(reg_test, newdata = new_dat_ch)
-  new_values_fc <- bake(reg_test, newdata = new_dat)  
+  new_values <- bake(reg_test, new_data = new_dat_ch)
+  new_values_fc <- bake(reg_test, new_data = new_dat)  
   key <- reg_test$steps[[1]]$mapping
   td_obj <- tidy(reg_test, number = 1)
   

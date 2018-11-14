@@ -1,5 +1,5 @@
 Package: embed
-Version: 0.0.1
+Version: 0.0.1.9000
 Title: Extra Recipes for Encoding Categorical Predictors
 Description: Factor predictors can be converted to one or more numeric representations using simple generalized linear models <arXiv:1611.09477> or nonlinear models <arXiv:1604.06737>. All encoding methods are supervised.
 Authors@R: c(
@@ -7,7 +7,7 @@ Authors@R: c(
     person("RStudio", role = "cph"))
 Depends: 
     R (>= 3.1),
-    recipes (>= 0.1.3)
+    recipes (>= 0.1.3.9002)
 Imports: 
     rstanarm,
     keras,
@@ -16,7 +16,7 @@ Imports:
     purrr,
     rlang,
     utils,
-    broom,
+    generics,
     tidyr,
     tibble,
     lme4,
@@ -26,6 +26,8 @@ Suggests:
     knitr,
     rmarkdown,
     covr
+Remotes:
+    tidymodels/recipes
 License: GPL-2
 Encoding: UTF-8
 LazyData: true

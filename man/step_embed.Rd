@@ -9,7 +9,7 @@
 step_embed(recipe, ..., role = NA, trained = FALSE, outcome = NULL,
   predictors = NULL, num_terms = 2, hidden_units = 0,
   options = embed_control(), mapping = NULL, history = NULL,
-  skip = FALSE)
+  skip = FALSE, id = rand_id("lencode_bayes"))
 
 \method{tidy}{step_embed}(x, ...)
 
@@ -64,6 +64,8 @@ operations may not be able to be conducted on new data (e.g.
 processing the outcome variable(s)). Care should be taken when
 using \code{skip = TRUE} as it may affect the computations for
 subsequent operations.}
+
+\item{id}{A character string that is unique to this step to identify it.}
 
 \item{x}{A \code{step_embed} object.}
 

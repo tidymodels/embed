@@ -30,6 +30,7 @@
 #'  the computations for subsequent operations
 #' @param trained A logical to indicate if the quantities for
 #'  preprocessing have been estimated.
+#' @param id A character string that is unique to this step to identify it.
 #' @return An updated version of `recipe` with the new step added
 #'  to the sequence of existing steps (if any). For the `tidy`
 #'  method, a tibble with columns `terms` (the selectors or
@@ -93,7 +94,7 @@
 #' 
 #' # See https://tidymodels.github.io/embed/ for examples
 
-#' @importFrom recipes add_step step terms_select sel2char ellipse_check
+#' @importFrom recipes add_step step terms_select sel2char ellipse_check rand_id
 step_lencode_bayes <-
   function(recipe,
            ...,
@@ -103,7 +104,8 @@ step_lencode_bayes <-
            options = list(seed = sample.int(10^5, 1)),
            verbose = FALSE,
            mapping = NULL,
-           skip = FALSE) {
+           skip = FALSE,
+           id = rand_id("lencode_bayes")) {
     if (is.null(outcome))
       stop("Please list a variable in `outcome`", call. = FALSE)
     add_step(
@@ -116,20 +118,14 @@ step_lencode_bayes <-
         options = options,
         verbose = verbose,
         mapping = mapping,
-        skip = skip
+        skip = skip,
+        id = id
       )
     )
   }
 
 step_lencode_bayes_new <-
-  function(terms = NULL,
-           role = NA,
-           trained = FALSE,
-           outcome = NULL,
-           options = NULL,
-           verbose = FALSE,
-           mapping = NULL,
-           skip = FALSE) {
+  function(terms, role, trained, outcome, options, verbose, mapping, skip, id) {
     step(
       subclass = "lencode_bayes",
       terms = terms,
@@ -139,7 +135,8 @@ step_lencode_bayes_new <-
       options = options,
       verbose = verbose,
       mapping = mapping,
-      skip = skip
+      skip = skip,
+      id = id
     )
   }
 
@@ -152,9 +149,17 @@ prep.step_lencode_bayes <- function(x, training, info = NULL, ...) {
   res <-
     map(training[, col_names], stan_coefs, y = training[, y_name],
         x$options, x$verbose)
-  x$mapping <- res
-  x$trained <- TRUE
-  x
+  step_lencode_bayes_new(
+    terms = x$terms,
+    role = x$role,
+    trained = TRUE,
+    outcome = x$outcome,
+    options = x$options,
+    verbose = x$verbose,
+    mapping = res,
+    skip = x$skip,
+    id = x$id
+  )
 }
 
 #' @importFrom stats as.formula glm binomial coef gaussian na.omit
@@ -241,11 +246,11 @@ map_glm_coef <- function(dat, mapping) {
 #' @importFrom recipes bake prep
 #' @importFrom purrr map
 #' @export
-bake.step_lencode_bayes <- function(object, newdata, ...) {
+bake.step_lencode_bayes <- function(object, new_data, ...) {
   for (col in names(object$mapping))
-    newdata[, col] <- map_glm_coef(newdata[, col], object$mapping[[col]])
+    new_data[, col] <- map_glm_coef(new_data[, col], object$mapping[[col]])
 
-  newdata
+  new_data
 }
 
 #' @importFrom recipes printer
@@ -259,10 +264,10 @@ print.step_lencode_bayes <-
 
 #' @importFrom dplyr bind_rows
 #' @importFrom recipes is_trained
-#' @importFrom broom tidy
 #' @rdname step_lencode_bayes
 #' @param x A `step_lencode_bayes` object.
 #' @export
+#' @export tidy.step_lencode_bayes
 tidy.step_lencode_bayes <- function(x, ...) {
   if (is_trained(x)) {
     for(i in seq_along(x$mapping))
@@ -278,6 +283,7 @@ tidy.step_lencode_bayes <- function(x, ...) {
       terms = term_names
     )
   }
+  res$id <- x$id
   res
 }
 

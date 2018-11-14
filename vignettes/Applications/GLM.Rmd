@@ -71,7 +71,8 @@ okc_glm <-
 The `tidy` method can be used to extract the encodings and are merged with the raw estimates:
 
 ```{r simple-glm-extract, eval = eval_chunks}
-estimates <- tidy(okc_glm, number = 1)
+estimates <- 
+  tidy(okc_glm, number = 1)
 estimates
 
 estimates <- 
@@ -172,14 +173,16 @@ tidy(okc_glmer, number = 1) %>%
 The same generalized linear model can be fit using mixed models via a random intercept. The `lme4` package can also be used to get pooled estimates via `step_lencode_mixed`.
 
 ```{r mixed-rec, eval = eval_chunks}
-okc_mixed <- recipe(Class ~ ., data = okc) %>%
+okc_mixed <- 
+  recipe(Class ~ ., data = okc) %>%
   step_lencode_mixed(
     location,
     outcome = vars(Class),
   ) %>% 
   prep(training = okc)
 
-estimates <- tidy(okc_mixed, number = 1) %>% 
+estimates <- 
+  tidy(okc_mixed, number = 1) %>% 
   dplyr::select(-terms) %>%
   set_names(c("location", "mixed")) %>%
     inner_join(estimates, by = "location")
