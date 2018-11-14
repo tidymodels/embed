@@ -387,7 +387,6 @@ bake.step_embed <- function(object, newdata, ...) {
 #' @importFrom dplyr bind_rows 
 #' @importFrom tidyr gather
 #' @importFrom recipes is_trained
-#' @importFrom broom tidy
 #' @rdname step_embed
 #' @param x A `step_embed` object.
 #' @export

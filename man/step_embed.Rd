@@ -106,7 +106,7 @@ When the outcome is numeric, a linear activation function is
 used in the last layer while softmax is used for factor outcomes
 (with any number of levels).
 
-For example, the \code{keras} code for a numeric outcome, one
+For example, the \code{keras} code for a numeric outcome, one 
 categorical predictor, and no hidden units used here would be
                                                                
 \preformatted{  keras_model_sequential() \\\%>\\\% 
@@ -120,7 +120,6 @@ categorical predictor, and no hidden units used here would be
 }
 
 If a factor outcome is used and hidden units were requested, the code
-
 would be
 \preformatted{  
   keras_model_sequential() \\\%>\\\% 

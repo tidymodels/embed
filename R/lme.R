@@ -222,7 +222,6 @@ print.step_lencode_mixed <-
 
 #' @importFrom dplyr bind_rows
 #' @importFrom recipes is_trained
-#' @importFrom broom tidy
 #' @rdname step_lencode_mixed
 #' @param x A `step_lencode_mixed` object.
 #' @export
