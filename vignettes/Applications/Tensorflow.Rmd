@@ -100,7 +100,7 @@ The embeddings are obtained using the `tidy` method:
 ```{r linear-coefs, warning = FALSE, eval = eval_chunks}
 hood_coef <- 
   tidy(tf_embed, number = 4) %>%
-  dplyr::select(-terms)  %>%
+  dplyr::select(-terms, -id)  %>%
   dplyr::rename(Neighborhood = level) %>%
   # Make names smaller
   rename_at(vars(contains("emb")), funs(gsub("Neighborhood_", "", ., fixed = TRUE)))

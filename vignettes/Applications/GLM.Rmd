@@ -77,7 +77,7 @@ estimates
 
 estimates <- 
   estimates %>% 
-  dplyr::select(-terms) %>%
+  dplyr::select(-terms, -id) %>%
   set_names(c("location", "glm")) %>%
     inner_join(props, by = "location")
 ```
@@ -141,7 +141,7 @@ This took more time than the simple non-pooled model. The embeddings are extract
 ```{r stan-extract, eval = eval_chunks}
 estimates <- 
   tidy(okc_glmer, number = 1) %>% 
-  dplyr::select(-terms) %>%
+  dplyr::select(-terms, -id) %>%
   set_names(c("location", "glmer")) %>%
     inner_join(estimates, by = "location")
 estimates %>% dplyr::select(location, log_odds, glm, glmer)
@@ -183,7 +183,7 @@ okc_mixed <-
 
 estimates <- 
   tidy(okc_mixed, number = 1) %>% 
-  dplyr::select(-terms) %>%
+  dplyr::select(-terms, -id) %>%
   set_names(c("location", "mixed")) %>%
     inner_join(estimates, by = "location")
 estimates %>% dplyr::select(location, log_odds, glm, glmer, mixed)
