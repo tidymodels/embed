@@ -7,7 +7,8 @@
 \usage{
 step_lencode_bayes(recipe, ..., role = NA, trained = FALSE,
   outcome = NULL, options = list(seed = sample.int(10^5, 1)),
-  verbose = FALSE, mapping = NULL, skip = FALSE)
+  verbose = FALSE, mapping = NULL, skip = FALSE,
+  id = rand_id("lencode_bayes"))
 
 \method{tidy}{step_lencode_bayes}(x, ...)
 }
@@ -45,6 +46,8 @@ when \code{\link[recipes:prep.recipe]{recipes::prep.recipe()}} is run, some oper
 conducted on new data (e.g. processing the outcome variable(s)).
 Care should be taken when using \code{skip = TRUE} as it may affect
 the computations for subsequent operations}
+
+\item{id}{A character string that is unique to this step to identify it.}
 
 \item{x}{A \code{step_lencode_bayes} object.}
 }

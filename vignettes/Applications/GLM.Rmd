@@ -22,6 +22,7 @@ if(!eval_chunks)
 
 ```{r setup, include = FALSE}
 library(tidymodels)
+library(ggiraph)
 library(embed)
 data(okc)
 ```
@@ -44,8 +45,10 @@ props <-
     prop = mean(Class == "stem"),
     log_odds  = log(prop/(1-prop)),
     n = length(Class)
-  ) 
-props
+  ) %>% 
+  mutate(label = paste0(gsub("_", " ", location), " (n=", n, ")"))
+props %>%
+  select(-label)
 
 # later, for plotting
 rng <- extendrange(props$log_odds[is.finite(props$log_odds)], f = 0.1)
@@ -71,20 +74,21 @@ okc_glm <-
 The `tidy` method can be used to extract the encodings and are merged with the raw estimates:
 
 ```{r simple-glm-extract, eval = eval_chunks}
-estimates <- tidy(okc_glm, number = 1)
-estimates
+glm_estimates <- 
+  tidy(okc_glm, number = 1) %>% 
+  dplyr::select(-terms, -id) 
+glm_estimates
 
-estimates <- 
-  estimates %>% 
-  dplyr::select(-terms) %>%
+glm_estimates <- 
+  glm_estimates%>%
   set_names(c("location", "glm")) %>%
-    inner_join(props, by = "location")
+    inner_join(props, by = "location") 
 ```
 
 For the locations with `n > 1`, the estimates are effectively the same:
 
 ```{r simple-glm-check, eval = eval_chunks}
-estimates %>%
+glm_estimates %>%
   dplyr::filter(is.finite(log_odds)) %>%
   mutate(difference = log_odds-glm) %>%
   dplyr::select(difference) %>%
@@ -95,7 +99,8 @@ Note that there is also a effect that is used for a novel location for future da
 
 ```{r simple-glm-new, eval = eval_chunks}
 tidy(okc_glm, number = 1) %>%
-  dplyr::filter(level == "..new") 
+  dplyr::filter(level == "..new") %>%
+  select(-id)
 ```
 
 ## Partial Pooling
@@ -138,12 +143,12 @@ okc_glmer <-
 This took more time than the simple non-pooled model. The embeddings are extracted in the same way:
 
 ```{r stan-extract, eval = eval_chunks}
-estimates <- 
+all_estimates <- 
   tidy(okc_glmer, number = 1) %>% 
-  dplyr::select(-terms) %>%
+  dplyr::select(-terms, -id) %>%
   set_names(c("location", "glmer")) %>%
-    inner_join(estimates, by = "location")
-estimates %>% dplyr::select(location, log_odds, glm, glmer)
+    inner_join(glm_estimates, by = "location")
+all_estimates %>% dplyr::select(location, log_odds, glm, glmer)
 ```
 
 Note that the `n = 1` locations have estimates that are less extreme that the naive estimates. Also, 
@@ -151,20 +156,26 @@ Note that the `n = 1` locations have estimates that are less extreme that the na
 Let's see the effect of the shrinkage indued by partial pooling by plotting the naive results versus the new results (finite data only):
 
 ```{r stan-compare, eval = eval_chunks}
-estimates %>%
+theme_set(theme_bw() + theme(legend.position = "top"))
+
+pooled_plot <-
+  all_estimates %>%
   dplyr::filter(is.finite(log_odds)) %>%
   ggplot(aes(x = log_odds, y = glmer)) + 
   geom_abline(col = "red", alpha = .5) + 
-  geom_point(aes(size = sqrt(n)), alpha = .5) + 
-  xlim(rng) + ylim(rng) +
-  theme_bw()
+  geom_point_interactive(aes(size = sqrt(n), tooltip = label), alpha = .5) +
+  xlim(rng) + ylim(rng) 
+  
+# Convert the plot to a format that the html file can handle
+ggiraph(ggobj = pooled_plot)  
 ```
 
 New levels are encoded as:
 
 ```{r glmer-new, eval = eval_chunks}
 tidy(okc_glmer, number = 1) %>%
-  dplyr::filter(level == "..new") 
+  dplyr::filter(level == "..new") %>%
+  dplyr::select(-terms, -id)
 ```
 
 ### Empirical Bayesian Methods/Mixed Models
@@ -172,30 +183,35 @@ tidy(okc_glmer, number = 1) %>%
 The same generalized linear model can be fit using mixed models via a random intercept. The `lme4` package can also be used to get pooled estimates via `step_lencode_mixed`.
 
 ```{r mixed-rec, eval = eval_chunks}
-okc_mixed <- recipe(Class ~ ., data = okc) %>%
+okc_mixed <- 
+  recipe(Class ~ ., data = okc) %>%
   step_lencode_mixed(
     location,
     outcome = vars(Class),
   ) %>% 
   prep(training = okc)
 
-estimates <- tidy(okc_mixed, number = 1) %>% 
-  dplyr::select(-terms) %>%
+all_estimates <- 
+  tidy(okc_mixed, number = 1) %>% 
+  dplyr::select(-terms, -id) %>%
   set_names(c("location", "mixed")) %>%
-    inner_join(estimates, by = "location")
-estimates %>% dplyr::select(location, log_odds, glm, glmer, mixed)
+    inner_join(all_estimates, by = "location")
+all_estimates %>% 
+  dplyr::select(location, log_odds, glm, glmer, mixed)
 ```
 
 Comparing the raw and mixed model estimates:
 
 ```{r mixed-compare, eval = eval_chunks}
-estimates %>%
+mixed_plot <-
+  all_estimates %>%
   dplyr::filter(is.finite(log_odds)) %>%
   ggplot(aes(x = log_odds, y = mixed)) + 
   geom_abline(col = "red", alpha = .5) + 
-  geom_point(aes(size = sqrt(n)), alpha = .5) + 
-  xlim(rng) + ylim(rng) +
-  theme_bw()
+  geom_point_interactive(aes(size = sqrt(n), tooltip = label), alpha = .5) + 
+  xlim(rng) + ylim(rng) 
+
+ggiraph(ggobj = mixed_plot)
 ```
 
 These values are very similar to the Bayesian estimates. 

@@ -6,7 +6,8 @@
 \title{Supervised Factor Conversions into Linear Functions using Likelihood Encodings}
 \usage{
 step_lencode_glm(recipe, ..., role = NA, trained = FALSE,
-  outcome = NULL, mapping = NULL, skip = FALSE)
+  outcome = NULL, mapping = NULL, skip = FALSE,
+  id = rand_id("lencode_bayes"))
 
 \method{tidy}{step_lencode_glm}(x, ...)
 }
@@ -39,6 +40,8 @@ when \code{\link[recipes:prep.recipe]{recipes::prep.recipe()}} is run, some oper
 conducted on new data (e.g. processing the outcome variable(s)).
 Care should be taken when using \code{skip = TRUE} as it may affect
 the computations for subsequent operations}
+
+\item{id}{A character string that is unique to this step to identify it.}
 
 \item{x}{A \code{step_lencode_glm} object.}
 }

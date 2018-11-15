@@ -11,11 +11,11 @@ context("tensorflow model, classification")
 test_that("factor encoded predictor", {
   skip_on_cran()
   class_test <- recipe(x2 ~ ., data = ex_dat) %>%
-    step_embed(x3, outcome = vars(x2), options = embed_control(verbose = 0)) %>%
+    step_embed(x3, outcome = vars(x2), options = embed_control(verbose = 0), id = "id") %>%
     prep(training = ex_dat, retain = TRUE)
   tr_values <- juice(class_test, contains("embed"))
-  new_values <- bake(class_test, newdata = new_dat, contains("embed"))
-  new_values_ch <- bake(class_test, newdata = new_dat_ch, contains("embed"))
+  new_values <- bake(class_test, new_data = new_dat, contains("embed"))
+  new_values_ch <- bake(class_test, new_data = new_dat_ch, contains("embed"))
   
   key <- class_test$steps[[1]]$mapping
   td_obj <- tidy(class_test, number = 1)
@@ -75,8 +75,8 @@ test_that("character encoded predictor", {
     step_embed(x3, outcome = vars(x2), options = embed_control(verbose = 0)) %>%
     prep(training = ex_dat_ch, retain = TRUE)
   tr_values <- juice(class_test, contains("embed"))
-  new_values <- bake(class_test, newdata = new_dat, contains("embed"))
-  new_values_fc <- bake(class_test, newdata = new_dat, contains("embed"))
+  new_values <- bake(class_test, new_data = new_dat, contains("embed"))
+  new_values_fc <- bake(class_test, new_data = new_dat, contains("embed"))
   
   key <- class_test$steps[[1]]$mapping
   td_obj <- tidy(class_test, number = 1)
@@ -139,8 +139,8 @@ test_that("factor encoded predictor", {
     step_embed(x3, outcome = vars(x1), options = embed_control(verbose = 0)) %>%
     prep(training = ex_dat, retain = TRUE)
   tr_values <- juice(class_test, contains("embed"))
-  new_values <- bake(class_test, newdata = new_dat, contains("embed"))
-  new_values_ch <- bake(class_test, newdata = new_dat_ch, contains("embed"))
+  new_values <- bake(class_test, new_data = new_dat, contains("embed"))
+  new_values_ch <- bake(class_test, new_data = new_dat_ch, contains("embed"))
   
   key <- class_test$steps[[1]]$mapping
   td_obj <- tidy(class_test, number = 1)
@@ -200,8 +200,8 @@ test_that("character encoded predictor", {
     step_embed(x3, outcome = vars(x1), num_terms = 5, options = embed_control(verbose = 0)) %>%
     prep(training = ex_dat_ch, retain = TRUE)
   tr_values <- juice(class_test, contains("embed"))
-  new_values <- bake(class_test, newdata = new_dat, contains("embed"))
-  new_values_fc <- bake(class_test, newdata = new_dat, contains("embed"))
+  new_values <- bake(class_test, new_data = new_dat, contains("embed"))
+  new_values_fc <- bake(class_test, new_data = new_dat, contains("embed"))
   
   key <- class_test$steps[[1]]$mapping
   td_obj <- tidy(class_test, number = 1)

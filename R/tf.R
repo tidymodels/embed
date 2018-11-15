@@ -42,6 +42,7 @@
 #'  subsequent operations.
 #' @param trained A logical to indicate if the quantities for
 #'  preprocessing have been estimated.
+#' @param id A character string that is unique to this step to identify it.
 #' @return An updated version of `recipe` with the new step added
 #'  to the sequence of existing steps (if any). For the `tidy`
 #'  method, a tibble with columns `terms` (the selectors or
@@ -143,7 +144,8 @@ step_embed <-
            options = embed_control(),
            mapping = NULL,
            history = NULL,
-           skip = FALSE) {
+           skip = FALSE,
+           id = rand_id("lencode_bayes")) {
     if (is.null(outcome))
       stop("Please list a variable in `outcome`", call. = FALSE)
     add_step(
@@ -159,23 +161,15 @@ step_embed <-
         options = options,
         mapping = mapping,
         history = history,
-        skip = skip
+        skip = skip,
+        id = id
       )
     )
   }
 
 step_embed_new <-
-  function(terms = NULL,
-           role = NA,
-           trained = FALSE,
-           outcome = NULL,
-           predictors = NULL,
-           num_terms = NULL,
-           hidden_units = NULL,
-           options = NULL,
-           mapping = NULL,
-           history = NULL,
-           skip = FALSE) {
+  function(terms, role, trained, outcome, predictors, num_terms, hidden_units,
+           options, mapping, history, skip, id) {
     step(
       subclass = "embed",
       terms = terms,
@@ -188,7 +182,8 @@ step_embed_new <-
       predictors = predictors,
       mapping = mapping,
       history = history,
-      skip = skip
+      skip = skip,
+      id = id
     )
   }
 
@@ -202,7 +197,6 @@ prep.step_embed <- function(x, training, info = NULL, ...) {
   y_name <- terms_select(x$outcome, info = info)
   if (length(x$predictors) > 0) {
     pred_names <- terms_select(x$predictors, info = info)
-    print(pred_names)
     check_type(training[, pred_names], quant = TRUE)
   }
   else
@@ -222,13 +216,23 @@ prep.step_embed <- function(x, training, info = NULL, ...) {
   # compute epochs actuually trained for
   epochs <- min(res$history$params$epochs, length(res$history$metrics[[1]]))
 
-  x$mapping <- res$layer_values
-  x$history <- 
-    as_tibble(res$history$metrics) %>%
-    mutate(epochs = 1:epochs) %>%
-    gather(type, loss, -epochs)
-  x$trained <- TRUE
-  x
+  step_embed_new(
+    terms = x$terms,
+    role = x$role,
+    trained = TRUE,
+    outcome = x$outcome,
+    predictors = x$predictors,
+    num_terms = x$num_terms,
+    hidden_units = x$hidden_units,
+    options = x$options,
+    mapping = res$layer_values,
+    history = 
+      as_tibble(res$history$metrics) %>%
+      mutate(epochs = 1:epochs) %>%
+      gather(type, loss, -epochs),
+    skip = x$skip,
+    id = x$id
+  )
 }
 
 #' @importFrom keras keras_model_sequential layer_embedding layer_flatten
@@ -373,15 +377,15 @@ map_tf_coef2 <- function(dat, mapping, prefix) {
 #' @importFrom purrr map
 #' @importFrom dplyr bind_cols
 #' @export
-bake.step_embed <- function(object, newdata, ...) {
+bake.step_embed <- function(object, new_data, ...) {
   for (col in names(object$mapping)) {
-    tmp <- map_tf_coef2(newdata[, col], object$mapping[[col]], prefix = col)
-    newdata <- bind_cols(newdata, tmp)
+    tmp <- map_tf_coef2(new_data[, col], object$mapping[[col]], prefix = col)
+    new_data <- bind_cols(new_data, tmp)
     rm(tmp)
   }
-  newdata <- newdata[, !(names(newdata) %in% names(object$mapping))]
+  new_data <- new_data[, !(names(new_data) %in% names(object$mapping))]
   
-  newdata
+  new_data
 }
 
 #' @importFrom dplyr bind_rows 
@@ -390,6 +394,7 @@ bake.step_embed <- function(object, newdata, ...) {
 #' @rdname step_embed
 #' @param x A `step_embed` object.
 #' @export
+#' @export tidy.step_embed
 tidy.step_embed <- function(x, ...) {
   if (is_trained(x)) {
     for(i in seq_along(x$mapping))
@@ -405,6 +410,7 @@ tidy.step_embed <- function(x, ...) {
       terms = term_names
     )
   }
+  res$id <- x$id
   res
 }
 

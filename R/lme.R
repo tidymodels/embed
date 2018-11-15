@@ -28,6 +28,7 @@
 #'  the computations for subsequent operations
 #' @param trained A logical to indicate if the quantities for
 #'  preprocessing have been estimated.
+#' @param id A character string that is unique to this step to identify it.
 #' @return An updated version of `recipe` with the new step added
 #'  to the sequence of existing steps (if any). For the `tidy`
 #'  method, a tibble with columns `terms` (the selectors or
@@ -90,7 +91,8 @@ step_lencode_mixed <-
            outcome = NULL,
            options = list(verbose = 0),
            mapping = NULL,
-           skip = FALSE) {
+           skip = FALSE,
+           id = rand_id("lencode_bayes")) {
     if (is.null(outcome))
       stop("Please list a variable in `outcome`", call. = FALSE)
     add_step(
@@ -102,19 +104,14 @@ step_lencode_mixed <-
         outcome = outcome,
         options = options,
         mapping = mapping,
-        skip = skip
+        skip = skip,
+        id = id
       )
     )
   }
 
 step_lencode_mixed_new <-
-  function(terms = NULL,
-           role = NA,
-           trained = FALSE,
-           outcome = NULL,
-           options = NULL,
-           mapping = NULL,
-           skip = FALSE) {
+  function(terms, role, trained, outcome, options, mapping, skip, id) {
     step(
       subclass = "lencode_mixed",
       terms = terms,
@@ -123,7 +120,8 @@ step_lencode_mixed_new <-
       outcome = outcome,
       options = options,
       mapping = mapping,
-      skip = skip
+      skip = skip,
+      id = id
     )
   }
 
@@ -143,9 +141,16 @@ prep.step_lencode_mixed <- function(x, training, info = NULL, ...) {
   res <-
     map(training[, col_names], lme_coefs, y = training[[y_name]],
         x$options)
-  x$mapping <- res
-  x$trained <- TRUE
-  x
+  step_lencode_mixed_new(
+    terms = x$terms,
+    role = x$role,
+    trained = TRUE,
+    outcome = x$outcome,
+    options = x$options,
+    mapping = res,
+    skip = x$skip,
+    id = x$id
+  ) 
 }
 
 #' @importFrom stats as.formula binomial coef gaussian na.omit
@@ -204,11 +209,11 @@ map_lme_coef <- function(dat, mapping) {
 #' @importFrom recipes bake prep
 #' @importFrom purrr map
 #' @export
-bake.step_lencode_mixed <- function(object, newdata, ...) {
+bake.step_lencode_mixed <- function(object, new_data, ...) {
   for (col in names(object$mapping))
-    newdata[, col] <- map_lme_coef(newdata[, col], object$mapping[[col]])
+    new_data[, col] <- map_lme_coef(new_data[, col], object$mapping[[col]])
 
-  newdata
+  new_data
 }
 
 #' @importFrom recipes printer
@@ -225,6 +230,7 @@ print.step_lencode_mixed <-
 #' @rdname step_lencode_mixed
 #' @param x A `step_lencode_mixed` object.
 #' @export
+#' @export tidy.step_lencode_mixed
 tidy.step_lencode_mixed <- function(x, ...) {
   if (is_trained(x)) {
     for(i in seq_along(x$mapping))
@@ -240,6 +246,7 @@ tidy.step_lencode_mixed <- function(x, ...) {
       terms = term_names
     )
   }
+  res$id <- x$id
   res
 }
 

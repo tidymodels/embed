@@ -7,9 +7,9 @@
 \title{Encoding Factors into Multiple Columns}
 \usage{
 step_embed(recipe, ..., role = "predictor", trained = FALSE,
-  outcome = NULL, predictors = NULL, num_terms = 2, hidden_units = 0,
-  options = embed_control(), mapping = NULL, history = NULL,
-  skip = FALSE)
+  outcome = NULL, predictors = NULL, num_terms = 2,
+  hidden_units = 0, options = embed_control(), mapping = NULL,
+  history = NULL, skip = FALSE, id = rand_id("lencode_bayes"))
 
 \method{tidy}{step_embed}(x, ...)
 
@@ -67,6 +67,8 @@ processing the outcome variable(s)). Care should be taken when
 using \code{skip = TRUE} as it may affect the computations for
 subsequent operations.}
 
+\item{id}{A character string that is unique to this step to identify it.}
+
 \item{x}{A \code{step_embed} object.}
 
 \item{optimizer, loss, metrics}{Arguments to pass to \code{\link[keras:compile]{keras::compile()}}}
@@ -106,10 +108,8 @@ When the outcome is numeric, a linear activation function is
 used in the last layer while softmax is used for factor outcomes
 (with any number of levels).
 
-For example, the \code{keras} code for a numeric outcome, one 
-categorical predictor, and no hidden units used here would be
-                                                               
-\preformatted{  keras_model_sequential() \\\%>\\\% 
+For example, the \code{keras} code for a numeric outcome, one
+categorical predictor, and no hidden units used here would be\preformatted{  keras_model_sequential() \\\%>\\\% 
   layer_embedding(
     input_dim = num_factor_levels_x + 1,
     output_dim = num_terms,
@@ -120,9 +120,7 @@ categorical predictor, and no hidden units used here would be
 }
 
 If a factor outcome is used and hidden units were requested, the code
-would be
-\preformatted{  
-  keras_model_sequential() \\\%>\\\% 
+would be\preformatted{  keras_model_sequential() \\\%>\\\% 
   layer_embedding(
     input_dim = num_factor_levels_x + 1,
     output_dim = num_terms,

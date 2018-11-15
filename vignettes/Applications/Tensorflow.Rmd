@@ -25,7 +25,9 @@ library(tidymodels)
 library(keras)
 library(AmesHousing)
 library(embed)
-options(digits = 3)
+library(ggplot2)
+library(ggiraph)
+options(digits = 2)
 set.seed(24566)
 ```
 
@@ -89,10 +91,13 @@ tf_embed <-
   ) %>% 
   prep(training = ames)
 
+theme_set(theme_bw() + theme(legend.position = "top"))
+
 tf_embed$steps[[4]]$history %>%
   filter(epochs > 1) %>%
   ggplot(aes(x = epochs, y = loss, col = type)) + 
-  geom_line()
+  geom_line() + 
+  scale_y_log10() 
 ```
 
 The embeddings are obtained using the `tidy` method:
@@ -100,7 +105,7 @@ The embeddings are obtained using the `tidy` method:
 ```{r linear-coefs, warning = FALSE, eval = eval_chunks}
 hood_coef <- 
   tidy(tf_embed, number = 4) %>%
-  dplyr::select(-terms)  %>%
+  dplyr::select(-terms, -id)  %>%
   dplyr::rename(Neighborhood = level) %>%
   # Make names smaller
   rename_at(vars(contains("emb")), funs(gsub("Neighborhood_", "", ., fixed = TRUE)))
@@ -109,15 +114,41 @@ hood_coef
 hood_coef <- 
   hood_coef %>% 
   inner_join(means, by = "Neighborhood")
+hood_coef
 ```
 
-There is some columns that are correlated with the outcome:
+
+We can make a simple, interactive plot of the new features versus the outcome:
+
+```{r}
+tf_plot <- 
+  hood_coef %>%
+  dplyr::select(-lon, -lat) %>%
+  gather(variable, value, starts_with("embed")) %>%
+  # Clean up the embedding names and add a new variable as a hover-over/tool tip
+  # aesthetic for the plot
+  mutate(
+    label = paste0(gsub("_", " ", Neighborhood), " (n=", n, ")"),
+    variable = gsub("_", " ", variable)
+    ) %>%
+  ggplot(aes(x = value, y = mean)) + 
+  geom_point_interactive(aes(size = sqrt(n), tooltip = label), alpha = .5) + 
+  facet_wrap(~variable, scales = "free_x") + 
+  theme_bw() + 
+  theme(legend.position = "top") + 
+  ylab("Mean (log scale)") + 
+  xlab("Embedding")
+
+# Convert the plot to a format that the html file can handle
+ggiraph(ggobj = tf_plot)
+```
+
+
+However, this has induced some between-predictor correlations:
 
 ```{r linear-cor, eval = eval_chunks}
 hood_coef %>% 
-  dplyr::select(mean, contains("emb")) %>% 
+  dplyr::select(contains("emb")) %>% 
   cor() %>%
   round(2)
 ```
-
-However, this has induced some between-predictor correlations. 

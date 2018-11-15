@@ -7,7 +7,7 @@ Authors@R: c(
     person("RStudio", role = "cph"))
 Depends: 
     R (>= 3.1),
-    recipes (>= 0.1.3)
+    recipes (>= 0.1.3.9002)
 Imports: 
     rstanarm,
     keras,
@@ -26,6 +26,8 @@ Suggests:
     knitr,
     rmarkdown,
     covr
+Remotes:
+    tidymodels/recipes
 License: GPL-2
 Encoding: UTF-8
 LazyData: true
@@ -34,6 +36,3 @@ Roxygen: list(markdown = TRUE)
 ByteCompile: true
 URL: https://tidymodels.github.io/embed
 BugReports: https://github.com/tidymodels/embed/issues
-Remotes:
-    r-lib/generics,
-    tidymodels/recipes
