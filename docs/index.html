@@ -40,7 +40,7 @@
         <a class="navbar-brand" href="index.html">embed</a>
         <div class="info">
           <span class="partof">part of <a href="https://github.com/tidymodels">tidymodels</a></span>
-          <span class="version version-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.1</span>
+          <span class="version version-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.2</span>
         </div>
       </div>
     </div>
@@ -67,14 +67,14 @@
       
       </header><div class="row">
   <div class="contents col-md-9">
-    
+
 <p><a href="https://travis-ci.org/tidymodels/embed"><img src="https://travis-ci.org/tidymodels/embed.svg?branch=master" alt="Travis build status"></a> <a href="https://codecov.io/github/tidymodels/embed?branch=master"><img src="https://codecov.io/gh/tidymodels/embed/branch/master/graph/badge.svg" alt="Coverage status"></a> <a href="http://cran.r-project.org/web/packages/embed"><img src="http://www.r-pkg.org/badges/version/embed" alt="CRAN_Status_Badge"></a> <a href="http://cran.rstudio.com/package=embed"><img src="http://cranlogs.r-pkg.org/badges/embed" alt="Downloads"></a> <img src="https://img.shields.io/badge/lifecycle-experimental-orange.svg"></p>
 <p><code>embed</code> is a package that contains extra steps for the <a href="http://cran.rstudio.com/package=recipes"><code>recipes</code></a> package for embedding categorical predictors into one or more numeric columns. All of the preprocessing methods are <em>supervised</em>.</p>
 <p>These steps are contained in a separate package because the package dependencies, <a href="http://cran.rstudio.com/package=rstanarm"><code>rstanarm</code></a>, <a href="http://cran.rstudio.com/package=lme4"><code>lme4</code></a>, and <a href="http://cran.rstudio.com/package=keras"><code>keras</code></a>, are fairly heavy.</p>
 <p>The steps included are:</p>
 <ul>
 <li><p><code>step_lencode_glm</code>, <code>step_lencode_bayes</code>, and <code>step_lencode_mixed</code> estimate the effect of each of the factor levels on the outcome and these estimates are used as the new encoding. The estimates are estimated by a generalized linear model. This step can be executed without pooling (via <code>glm</code>) or with partial pooling (<code>stan_glm</code> or <code>lmer</code>). Currently implemented for numeric and two-class outcomes.</p></li>
-<li><p><code>step_embed</code> uses <code><a href="http://www.rdocumentation.org/packages/keras/topics/layer_embedding">keras::layer_embedding</a></code> to translate the original <em>C</em> factor levels into a set of <em>D</em> new variables (&lt; <em>C</em>). The model fitting routine optimizes which factor levels are mapped to each of the new variables as well as the corresponding regression coefficients (i.e., neural network weights) that will be used as the new encodings.</p></li>
+<li><p><code>step_embed</code> uses <code><a href="https://www.rdocumentation.org/packages/keras/topics/layer_embedding">keras::layer_embedding</a></code> to translate the original <em>C</em> factor levels into a set of <em>D</em> new variables (&lt; <em>C</em>). The model fitting routine optimizes which factor levels are mapped to each of the new variables as well as the corresponding regression coefficients (i.e., neural network weights) that will be used as the new encodings.</p></li>
 </ul>
 <p>Some references for these methods are:</p>
 <ul>
@@ -84,11 +84,11 @@
 <li>Zumel N and Mount J (2017) “<a href="https://arxiv.org/abs/1611.09477"><code>vtreat</code>: a <code>data.frame</code> Processor for Predictive Modeling</a>”</li>
 </ul>
 <p>To install the package:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">install.packages</span>(<span class="st">"embed"</span>)</a>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/install.packages">install.packages</a></span>(<span class="st">"embed"</span>)</a>
 <a class="sourceLine" id="cb1-2" data-line-number="2"></a>
 <a class="sourceLine" id="cb1-3" data-line-number="3">## for development version:</a>
-<a class="sourceLine" id="cb1-4" data-line-number="4"><span class="kw">require</span>(<span class="st">"devtools"</span>)</a>
-<a class="sourceLine" id="cb1-5" data-line-number="5"><span class="kw"><a href="http://www.rdocumentation.org/packages/devtools/topics/install_github">install_github</a></span>(<span class="st">"tidymodels/embed"</span>)</a></code></pre></div>
+<a class="sourceLine" id="cb1-4" data-line-number="4"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">require</a></span>(<span class="st">"devtools"</span>)</a>
+<a class="sourceLine" id="cb1-5" data-line-number="5"><span class="kw"><a href="https://www.rdocumentation.org/packages/devtools/topics/reexports">install_github</a></span>(<span class="st">"tidymodels/embed"</span>)</a></code></pre></div>
 
   </div>
 
