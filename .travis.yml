@@ -5,13 +5,19 @@ dist: trusty
 sudo: true
 
 r:
-- release
-- devel
+  - 3.2
+  - 3.3
+  - 3.4
+  - 3.5
+  - 3.6
+  - devel
 
 env:
   global:
   - KERAS_BACKEND="tensorflow"
   - MAKEFLAGS="-j 2"
+
+cran: https://cran.rstudio.com
 
 r_binary_packages: 
  - rstan
@@ -69,6 +75,7 @@ before_install:
   - sudo apt-get -y install libnlopt-dev 
   - sudo apt-get update
   - sudo apt-get -y install python3
+  - mkdir -p ~/.R/
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then echo "CXX14 = g++-7 -fPIC" >> ~/.R/Makevars; fi
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then echo "CXX14FLAGS = -mtune=native -march=native -Wno-unused-variable -Wno-unused-function -Wno-unused-local-typedefs -Wno-ignored-attributes -Wno-deprecated-declarations -Wno-attributes -O3" >> ~/.R/Makevars; fi
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then echo "CXX14 = clang++ -arch x86_64 -ftemplate-depth-256" >> ~/.R/Makevars; fi
