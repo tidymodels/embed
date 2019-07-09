@@ -182,7 +182,8 @@ process.</p></td>
     </tr>
     <tr>
       <th>epochs</th>
-      <td><p>Number of iterations for the neighbor optimization.</p></td>
+      <td><p>Number of iterations for the neighbor optimization. See
+<code><a href='https://rdrr.io/pkg/uwot/man/umap.html'>uwot::umap()</a></code> for mroe details.</p></td>
     </tr>
     <tr>
       <th>options</th>
@@ -205,7 +206,7 @@ be kept (in addition to the new embedding variables).</p></td>
     </tr>
     <tr>
       <th>object</th>
-      <td><p>A list of tibble results that define the encoding. This is
+      <td><p>An object that defines the encoding. This is
 <code>NULL</code> until the step is trained by <code><a href='https://rdrr.io/pkg/recipes/man/prep.html'>recipes::prep.recipe()</a></code>.</p></td>
     </tr>
     <tr>
@@ -236,12 +237,16 @@ returned.</p>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>For each factor predictor</p>
+    <p>UMAP, short for Uniform Manifold Approximation and Projection, is a nonlinear
+dimension reduction technique that finds local, low-dimensional
+representations of the data. It can be run unsupervised or supervised with
+different types of outcome data (e.g. numeric, factor, etc).</p>
     
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
     <p>McInnes, L., &amp; Healy, J. (2018). UMAP: Uniform Manifold Approximation and
 Projection for Dimension Reduction. <a href=' https://arxiv.org/abs/1802.03426'> https://arxiv.org/abs/1802.03426</a>.</p>
+<p>"How UMAP Works" <a href='https://umap-learn.readthedocs.io/en/latest/how_umap_works.html'>https://umap-learn.readthedocs.io/en/latest/how_umap_works.html</a></p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
