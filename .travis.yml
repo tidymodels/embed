@@ -27,6 +27,10 @@ matrix:
     after_success:
     - Rscript -e 'covr::codecov()'
 
+allow_failures:
+  - r: 3.2         # rstanarm is R >= 3.4.0
+  - r: 3.3         # rstanarm is R >= 3.4.0
+
 env:
   global:
   - KERAS_BACKEND="tensorflow"
