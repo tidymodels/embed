@@ -44,7 +44,8 @@ the target simplicial set.}
 \item{learn_rate}{Positive number of the learning rate for the optimization
 process.}
 
-\item{epochs}{Number of iterations for the neighbor optimization.}
+\item{epochs}{Number of iterations for the neighbor optimization. See
+\code{\link[uwot:umap]{uwot::umap()}} for mroe details.}
 
 \item{options}{A list of options to pass to \code{\link[uwot:umap]{uwot::umap()}}. The arguments
 \code{X}, \code{n_neighbors}, \code{n_components}, \code{min_dist}, \code{n_epochs}, \code{ret_model}, and
@@ -59,7 +60,7 @@ calling \code{\link[=prep.recipe]{prep.recipe()}} or \code{\link[=bake.recipe]{b
 \item{retain}{A single logical for whether the original predictors should
 be kept (in addition to the new embedding variables).}
 
-\item{object}{A list of tibble results that define the encoding. This is
+\item{object}{An object that defines the encoding. This is
 \code{NULL} until the step is trained by \code{\link[recipes:prep.recipe]{recipes::prep.recipe()}}.}
 
 \item{skip}{A logical. Should the step be skipped when the recipe is baked
@@ -84,7 +85,10 @@ returned.
 will project a set of features into a smaller space.
 }
 \details{
-For each factor predictor
+UMAP, short for Uniform Manifold Approximation and Projection, is a nonlinear
+dimension reduction technique that finds local, low-dimensional
+representations of the data. It can be run unsupervised or supervised with
+different types of outcome data (e.g. numeric, factor, etc).
 }
 \examples{
 library(recipes)
@@ -112,6 +116,8 @@ bake(supervised, new_data = te, Species, starts_with("umap")) \%>\%
 \references{
 McInnes, L., & Healy, J. (2018). UMAP: Uniform Manifold Approximation and
 Projection for Dimension Reduction. \url{ https://arxiv.org/abs/1802.03426}.
+
+"How UMAP Works" \url{https://umap-learn.readthedocs.io/en/latest/how_umap_works.html}
 }
 \concept{preprocessing encoding}
 \keyword{datagen}

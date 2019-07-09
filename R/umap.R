@@ -18,7 +18,8 @@
 #' @param num_comp An integer for the number of UMAP components. 
 #' @param neighbors An integer for the number of nearest neighbors used to construct 
 #'  the target simplicial set.
-#' @param epochs Number of iterations for the neighbor optimization. 
+#' @param epochs Number of iterations for the neighbor optimization. See 
+#'  [uwot::umap()] for mroe details.  
 #' @param learn_rate Positive number of the learning rate for the optimization
 #'  process. 
 #' @param outcome A call to `vars` to specify which variable is
@@ -33,7 +34,7 @@
 #'  calling [prep.recipe()] or [bake.recipe()].
 #' @param retain A single logical for whether the original predictors should
 #'  be kept (in addition to the new embedding variables).
-#' @param object A list of tibble results that define the encoding. This is
+#' @param object An object that defines the encoding. This is
 #'  `NULL` until the step is trained by [recipes::prep.recipe()].
 #' @param skip A logical. Should the step be skipped when the recipe is baked
 #'  by [recipes::bake.recipe()]? While all operations are baked when
@@ -51,12 +52,18 @@
 #' @keywords datagen 
 #' @concept preprocessing encoding
 #' @export
-#' @details For each factor predictor
-#' 
+#' @details 
+#' UMAP, short for Uniform Manifold Approximation and Projection, is a nonlinear 
+#'  dimension reduction technique that finds local, low-dimensional 
+#'  representations of the data. It can be run unsupervised or supervised with 
+#'  different types of outcome data (e.g. numeric, factor, etc).
 #' 
 #' @references 
 #' McInnes, L., & Healy, J. (2018). UMAP: Uniform Manifold Approximation and 
 #'  Projection for Dimension Reduction. \url{ https://arxiv.org/abs/1802.03426}.
+#'  
+#' "How UMAP Works" \url{https://umap-learn.readthedocs.io/en/latest/how_umap_works.html}  
+#'  
 #' 
 #' @examples
 #' library(recipes)
