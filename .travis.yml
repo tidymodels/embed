@@ -13,13 +13,11 @@ matrix:
   - r: devel
   - r: release
   - r: 3.5
-  - r: 3.4
-  - r: 3.3
-  - r: 3.2    
 
-allow_failures:
-  - r: 3.2         # rstanarm is R >= 3.4.0
-  - r: 3.3         # rstanarm is R >= 3.4.0
+#  - r: 3.4 # embed "could not be installed" ?
+#  - r: 3.3 # rstanarm is R >= 3.4.0
+#  - r: 3.2 # rstanarm is R >= 3.4.0
+    
 
 # ------------------------------------------------------------------------------
 
