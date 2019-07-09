@@ -76,6 +76,8 @@
 #'   step_umap(all_predictors(), outcome = vars(Species), num_comp = 2) %>% 
 #'   prep(training = tr)
 #' 
+#' theme_set(theme_bw())
+#' 
 #' bake(sup, new_data = te, Species, starts_with("umap")) %>% 
 #'   ggplot(aes(x = umap_1, y = umap_2, col = Species)) + 
 #'   geom_point(alpha = .5) 
