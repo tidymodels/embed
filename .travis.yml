@@ -4,13 +4,23 @@ language: r
 dist: trusty
 sudo: true
 
-r:
-  - 3.2
-  - 3.3
-  - 3.4
-  - 3.5
-  - 3.6
-  - devel
+matrix:
+  include:
+  - os: linux
+    dist: trusty
+    r: release
+    r_binary_packages:
+    - devtools
+    addons:
+      apt:
+        sources:
+        - ubuntu-toolchain-r-test
+        packages:
+        - g++-7
+      env:
+        - MATRIX_EVAL="CC=gcc-7 && CXX=g++-7"
+    after_success:
+    - Rscript -e 'covr::codecov()'
 
 env:
   global:
@@ -18,46 +28,6 @@ env:
   - MAKEFLAGS="-j 2"
 
 cran: https://cran.rstudio.com
-
-r_binary_packages: 
- - rstan
- - rstanarm
- - igraph
- - RCurl
- - dplyr
- - git2r
- - shiny
- - glue
- - magrittr
- - stringi
- - colorspace
- - assertthat
- - utf8
- - stringr
- - RColorBrewer
- - dichromat
- - munsell
- - labeling
- - R6
- - viridisLite
- - cli
- - crayon
- - pillar
- - rlang
- - digest
- - gtable
- - plyr
- - reshape2
- - scales
- - tibble
- - lazyeval
- - ggplot2
- - StanHeaders
- - inline
- - gridExtra
- - Rcpp
- - RcppEigen
- - BH
 
 cache:
   packages: false
