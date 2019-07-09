@@ -194,20 +194,29 @@ glm_coefs <- function(x, y, ...) {
 #' @importFrom rlang set_names
 #' @importFrom dplyr bind_rows
 stan_coefs <- function(x, y, options, verbose, ...) {
-  fam <- if (is.factor(y[[1]]))
-    binomial()
-  else
-    gaussian()
+  if (is.factor(y[[1]])) {
+    fam <- binomial()
+  } else {
+    fam <- gaussian()
+  }
   form <- as.formula(paste0(names(y), "~ (1|value)"))
+  
+  if (is.vector(x) | is.factor(x)) {
+    x <- tibble(value = x)
+  } else {
+    x <- as_tibble(x)
+  }
+  
   args <-
     list(
       form,
-      data = bind_cols(as_tibble(x), y),
+      data = bind_cols(x, y),
       family = fam,
       na.action = na.omit
     )
-  if (length(options) > 0)
+  if (length(options) > 0) {
     args <- c(args, options)
+  }
   if (!verbose) {
     junk <- capture.output(mod <- do.call("stan_glmer", args))
   } else {
@@ -231,12 +240,14 @@ stan_coefs <- function(x, y, options, verbose, ...) {
 #' @importFrom dplyr tibble mutate filter left_join %>% arrange 
 map_glm_coef <- function(dat, mapping) {
   new_val <- mapping$..value[mapping$..level == "..new"]
-  dat <- dat %>% 
+  dat <- 
+    dat %>% 
     mutate(..order = 1:nrow(dat)) %>%
     set_names(c("..level", "..order")) %>%
     mutate(..level = as.character(..level))
   mapping <- mapping %>% dplyr::filter(..level != "..new")
-  dat <- left_join(dat, mapping, by = "..level") %>%
+  dat <- 
+    left_join(dat, mapping, by = "..level") %>%
     arrange(..order)
   dat$..value[is.na(dat$..value)] <- new_val
   dat$..value

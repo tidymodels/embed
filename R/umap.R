@@ -223,8 +223,8 @@ bake.step_umap <- function(object, new_data, ...) {
       )
   )
   
+  colnames(res) <- names0(ncol(res), "umap_")
   res <- dplyr::as_tibble(res)
-  res <- setNames(res, names0(ncol(res), "umap_"))
   
   new_data <- bind_cols(new_data, res)
   if (!object$retain) {
