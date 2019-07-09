@@ -1,3 +1,8 @@
+# `embed` 0.0.3
+
+ * `step_umap()` was added for both supervised and unsupervised encodings. 
+
+
 # `embed` 0.0.2
 
 A mostly maintainence release to be compatible with version 0.1.3 of `recipes`. 

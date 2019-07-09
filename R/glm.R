@@ -127,12 +127,19 @@ prep.step_lencode_glm <- function(x, training, info = NULL, ...) {
 #' @importFrom stats as.formula glm binomial coef gaussian na.omit
 #' @importFrom dplyr bind_cols as_tibble
 glm_coefs <- function(x, y, ...) {
-  fam <- if(is.factor(y[[1]])) binomial else gaussian
+  fam <- if (is.factor(y[[1]])) binomial else gaussian
   form <- as.formula(paste0(names(y), "~ 0 + value"))
+  
+  if (is.vector(x) | is.factor(x)) {
+    x <- tibble(value = x)
+  } else {
+    x <- as_tibble(x)
+  }
+  
   mod <-
     glm(
       form,
-      data = bind_cols(as_tibble(x), y),
+      data = bind_cols(x, y),
       family = fam,
       na.action = na.omit,
       ...

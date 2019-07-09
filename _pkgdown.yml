@@ -4,6 +4,10 @@ template:
     part_of: <a href="https://github.com/tidymodels">tidymodels</a>
     footer: <code>embed</code> is a part of the <strong>tidymodels</strong> ecosystem, a collection of modeling packages designed with common APIs and a shared philosophy.
 
+figures:
+  fig.width: 8
+  fig.height: 5.75
+
 
 # https://github.com/tidyverse/tidytemplate for css
 
@@ -18,4 +22,6 @@ navbar:
     href: articles/Applications/Tensorflow.html  
   - text: Reference
     href: reference/index.html 
+  - text: News
+    href: news/index.html           
 
