@@ -19,7 +19,7 @@
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 
 <!-- clipboard.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
 
 <!-- sticky kit -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
@@ -28,6 +28,8 @@
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../pkgdown.js"></script>
 <link href="../tidyverse-2.css" rel="stylesheet">
+
+
 
 <meta property="og:title" content="Encoding Factors into Multiple Columns — step_embed" />
 
@@ -56,6 +58,7 @@ embed_control is a simple wrapper for setting default options." />
 
  gtag('config', 'UA-115082821-1');
 </script>
+
   </head>
 
   <body>
@@ -75,7 +78,7 @@ embed_control is a simple wrapper for setting default options." />
         <a class="navbar-brand" href="../index.html">embed</a>
         <div class="info">
           <span class="partof">part of <a href="https://github.com/tidymodels">tidymodels</a></span>
-          <span class="version version-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.0.1.9000</span>
+          <span class="version version-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.0.2.9000</span>
         </div>
       </div>
     </div>
@@ -90,6 +93,9 @@ embed_control is a simple wrapper for setting default options." />
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
+<li>
+  <a href="../news/index.html">News</a>
+</li>
         
       </ul>
       
@@ -98,6 +104,7 @@ embed_control is a simple wrapper for setting default options." />
 </div><!--/.navbar -->
 
       
+
       </header>
 
 <div class="row">
@@ -123,7 +130,7 @@ scores derived from a tensorflow model via a word-embedding model.
   <span class='kw'>history</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>skip</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>id</span> <span class='kw'>=</span> <span class='fu'>rand_id</span>(<span class='st'>"lencode_bayes"</span>))
 
 <span class='co'># S3 method for step_embed</span>
-<span class='fu'><a href='https://www.rdocumentation.org/packages/generics/topics/tidy'>tidy</a></span>(<span class='no'>x</span>, <span class='no'>...</span>)
+<span class='fu'><a href='https://rdrr.io/pkg/generics/man/tidy.html'>tidy</a></span>(<span class='no'>x</span>, <span class='no'>...</span>)
 
 <span class='fu'>embed_control</span>(<span class='kw'>loss</span> <span class='kw'>=</span> <span class='st'>"mse"</span>, <span class='kw'>metrics</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>optimizer</span> <span class='kw'>=</span> <span class='st'>"sgd"</span>,
   <span class='kw'>epochs</span> <span class='kw'>=</span> <span class='fl'>20</span>, <span class='kw'>validation_split</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>batch_size</span> <span class='kw'>=</span> <span class='fl'>32</span>, <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>0</span>,
@@ -141,7 +148,7 @@ sequence of operations for this recipe.</p></td>
       <th>...</th>
       <td><p>One or more selector functions to choose variables.
 For <code>step_embed</code>, this indicates the variables to be encoded
-into a numeric format. See <code><a href='https://www.rdocumentation.org/packages/recipes/topics/selections'>recipes::selections()</a></code> for more
+into a numeric format. See <code><a href='https://rdrr.io/pkg/recipes/man/selections.html'>recipes::selections()</a></code> for more
 details. For the <code>tidy</code> method, these are not currently used.</p></td>
     </tr>
     <tr>
@@ -187,22 +194,22 @@ below).</p></td>
       <th>mapping</th>
       <td><p>A list of tibble results that define the
 encoding. This is <code>NULL</code> until the step is trained by
-<code><a href='https://www.rdocumentation.org/packages/recipes/topics/prep'>recipes::prep.recipe()</a></code>.</p></td>
+<code><a href='https://rdrr.io/pkg/recipes/man/prep.html'>recipes::prep.recipe()</a></code>.</p></td>
     </tr>
     <tr>
       <th>history</th>
       <td><p>A tibble with the convergence statistics for
 each term. This is <code>NULL</code> until the step is trained by
-<code><a href='https://www.rdocumentation.org/packages/recipes/topics/prep'>recipes::prep.recipe()</a></code>.</p></td>
+<code><a href='https://rdrr.io/pkg/recipes/man/prep.html'>recipes::prep.recipe()</a></code>.</p></td>
     </tr>
     <tr>
       <th>skip</th>
       <td><p>A logical. Should the step be skipped when the
-recipe is baked by <code><a href='https://www.rdocumentation.org/packages/recipes/topics/bake'>recipes::bake.recipe()</a></code>? While all
-operations are baked when <code><a href='https://www.rdocumentation.org/packages/recipes/topics/prep'>recipes::prep.recipe()</a></code> is run, some
+recipe is baked by <code><a href='https://rdrr.io/pkg/recipes/man/bake.html'>recipes::bake.recipe()</a></code>? While all
+operations are baked when <code><a href='https://rdrr.io/pkg/recipes/man/prep.html'>recipes::prep.recipe()</a></code> is run, some
 operations may not be able to be conducted on new data (e.g.
 processing the outcome variable(s)). Care should be taken when
-using <code><a href='https://www.rdocumentation.org/packages/base/topics/assignOps'>skip = TRUE</a></code> as it may affect the computations for
+using <code>skip = TRUE</code> as it may affect the computations for
 subsequent operations.</p></td>
     </tr>
     <tr>
@@ -215,11 +222,11 @@ subsequent operations.</p></td>
     </tr>
     <tr>
       <th>optimizer, loss, metrics</th>
-      <td><p>Arguments to pass to <code><a href='https://www.rdocumentation.org/packages/keras/topics/reexports'>keras::compile()</a></code></p></td>
+      <td><p>Arguments to pass to <code><a href='https://rdrr.io/pkg/keras/man/reexports.html'>keras::compile()</a></code></p></td>
     </tr>
     <tr>
       <th>epochs, validation_split, batch_size, verbose, callbacks</th>
-      <td><p>Arguments to pass to <code><a href='https://www.rdocumentation.org/packages/keras/topics/reexports'>keras::fit()</a></code></p></td>
+      <td><p>Arguments to pass to <code><a href='https://rdrr.io/pkg/keras/man/reexports.html'>keras::fit()</a></code></p></td>
     </tr>
     </table>
     
@@ -291,7 +298,7 @@ development?" <a href='https://tinyurl.com/keras-repro'>https://tinyurl.com/kera
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/data'>data</a></span>(<span class='no'>okc</span>)
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>okc</span>)
 
 <span class='no'>rec</span> <span class='kw'>&lt;-</span> <span class='fu'>recipe</span>(<span class='no'>Class</span> ~ <span class='no'>age</span> + <span class='no'>location</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>okc</span>) <span class='kw'>%&gt;%</span>
   <span class='fu'>step_embed</span>(<span class='no'>location</span>, <span class='kw'>outcome</span> <span class='kw'>=</span> <span class='fu'>vars</span>(<span class='no'>Class</span>),
@@ -316,6 +323,7 @@ development?" <a href='https://tinyurl.com/keras-repro'>https://tinyurl.com/kera
   </div>
 </div>
 
+
       <footer>
       <div class="tidyverse">
   <p><code>embed</code> is a part of the <strong>tidymodels</strong> ecosystem, a collection of modeling packages designed with common APIs and a shared philosophy.</p>
@@ -327,11 +335,14 @@ development?" <a href='https://tinyurl.com/keras-repro'>https://tinyurl.com/kera
     Site built by <a href="https://pkgdown.r-lib.org">pkgdown</a>.
   </p>
 </div>
+
       </footer>
    </div>
 
   
 
+
   </body>
 </html>
+
 
