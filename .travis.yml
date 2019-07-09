@@ -8,12 +8,13 @@ matrix:
   include:
   - os: linux
     dist: trusty
-    r: devel
-    r: release
-    r: 3.5
-    r: 3.4
-    r: 3.3
-    r: 3.2
+    r: 
+      - devel
+      - release
+      - 3.5
+      - 3.4
+      - 3.3
+      - 3.2
     r_binary_packages:
     - devtools
     addons:
