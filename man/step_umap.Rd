@@ -91,20 +91,21 @@ library(recipes)
 library(dplyr)
 library(ggplot2)
 
-set.seed(1957)
-split <- sample(1:150, size = 100)
-tr <- iris[ split, ]
-te <- iris[-split, ]
+split <- seq.int(1, 150, by = 9)
+tr <- iris[-split, ]
+te <- iris[ split, ]
 
 set.seed(11)
-sup <- 
+supervised <- 
   recipe(Species ~ ., data = tr) \%>\%
   step_center(all_predictors()) \%>\% 
   step_scale(all_predictors()) \%>\% 
   step_umap(all_predictors(), outcome = vars(Species), num_comp = 2) \%>\% 
   prep(training = tr)
 
-bake(sup, new_data = te, Species, starts_with("umap")) \%>\% 
+theme_set(theme_bw())
+
+bake(supervised, new_data = te, Species, starts_with("umap")) \%>\% 
   ggplot(aes(x = umap_1, y = umap_2, col = Species)) + 
   geom_point(alpha = .5) 
 }

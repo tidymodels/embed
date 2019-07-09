@@ -63,13 +63,12 @@
 #' library(dplyr)
 #' library(ggplot2)
 #' 
-#' set.seed(1957)
-#' split <- sample(1:150, size = 100)
-#' tr <- iris[ split, ]
-#' te <- iris[-split, ]
+#' split <- seq.int(1, 150, by = 9)
+#' tr <- iris[-split, ]
+#' te <- iris[ split, ]
 #' 
 #' set.seed(11)
-#' sup <- 
+#' supervised <- 
 #'   recipe(Species ~ ., data = tr) %>%
 #'   step_center(all_predictors()) %>% 
 #'   step_scale(all_predictors()) %>% 
@@ -78,7 +77,7 @@
 #' 
 #' theme_set(theme_bw())
 #' 
-#' bake(sup, new_data = te, Species, starts_with("umap")) %>% 
+#' bake(supervised, new_data = te, Species, starts_with("umap")) %>% 
 #'   ggplot(aes(x = umap_1, y = umap_2, col = Species)) + 
 #'   geom_point(alpha = .5) 
 #' @importFrom recipes add_step step terms_select sel2char ellipse_check rand_id
