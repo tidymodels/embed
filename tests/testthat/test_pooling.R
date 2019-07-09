@@ -4,7 +4,7 @@ library(testthat)
 
 source("make_example_data.R")
 
-opts <- list(seed= 34677, chains = 2, iter = 500)
+opts <- list(seed = 34677, chains = 2, iter = 500)
 
 ###################################################################
 
@@ -19,8 +19,9 @@ test_that("factor encoded predictor", {
     prep(training = ex_dat, retain = TRUE)
   tr_values <- juice(class_test)$x3
   new_values <- bake(class_test, new_data = new_dat)
-  new_values_ch <- bake(class_test, new_data = new_dat_ch)
-  
+  expect_warning(
+    new_values_ch <- bake(class_test, new_data = new_dat_ch)
+  )
   key <- class_test$steps[[1]]$mapping
   td_obj <- tidy(class_test, number = 1)
   
@@ -142,7 +143,9 @@ test_that("factor encoded predictor", {
     prep(training = ex_dat, retain = TRUE)
   tr_values <- juice(reg_test)$x3
   new_values <- bake(reg_test, new_data = new_dat)
-  new_values_ch <- bake(reg_test, new_data = new_dat_ch)
+  expect_warning(
+    new_values_ch <- bake(reg_test, new_data = new_dat_ch)
+  )
   td_obj <- tidy(reg_test, number = 1)
   
   key <- reg_test$steps[[1]]$mapping
