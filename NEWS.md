@@ -1,6 +1,9 @@
 # `embed` 0.0.3
 
+## New Steps
+
  * `step_umap()` was added for both supervised and unsupervised encodings. 
+ * `step_woe()` created weight of evidence encodings.
 
 
 # `embed` 0.0.2

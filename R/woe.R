@@ -84,10 +84,11 @@
 #'
 #' woe_models <- prep(rec, training = credit_tr)
 #'
-#' woe_te <- bake(woe_models, new_data = credit_te)
-#'
-#' head(woe_te)
-#' tidy(rec, number = 1)
+#' # the encoding:
+#' bake(woe_models, new_data = credit_te %>% slice(1:5), starts_with("woe"))
+#' # the original data
+#' credit_te %>% slice(1:5) %>% dplyr::select(Job, Home)
+#' # the details:
 #' tidy(woe_models, number = 1)
 #'
 #' # Example of custom dictionary + tweaking

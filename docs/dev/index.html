@@ -80,6 +80,7 @@
 <ul>
 <li><p><code>step_lencode_glm</code>, <code>step_lencode_bayes</code>, and <code>step_lencode_mixed</code> estimate the effect of each of the factor levels on the outcome and these estimates are used as the new encoding. The estimates are estimated by a generalized linear model. This step can be executed without pooling (via <code>glm</code>) or with partial pooling (<code>stan_glm</code> or <code>lmer</code>). Currently implemented for numeric and two-class outcomes.</p></li>
 <li><p><code>step_embed</code> uses <code><a href="https://rdrr.io/pkg/keras/man/layer_embedding.html">keras::layer_embedding</a></code> to translate the original <em>C</em> factor levels into a set of <em>D</em> new variables (&lt; <em>C</em>). The model fitting routine optimizes which factor levels are mapped to each of the new variables as well as the corresponding regression coefficients (i.e., neural network weights) that will be used as the new encodings.</p></li>
+<li><p><code>step_woe</code> creates new variables based on weight of evidence encodings.</p></li>
 </ul>
 <p>For numeric predictors:</p>
 <ul>
@@ -90,10 +91,11 @@
 <ul>
 <li>Francois C and Allaire JJ (2018) <a href="https://www.manning.com/books/deep-learning-with-r"><em>Deep Learning with R</em></a>, Manning</li>
 <li>Guo, C and Berkhahn F (2016) “<a href="https://arxiv.org/abs/1604.06737">Entity Embeddings of Categorical Variables</a>”</li>
-<li>Micci-Barreca D (2001) “A preprocessing scheme for high-cardinality categorical attributes in classification and prediction problems,” ACM SIGKDD Explorations Newsletter, 3(1), 27-32.</li>
+<li>Micci-Barreca D (2001) “<a href="https://scholar.google.com/scholar?hl=en&amp;as_sdt=0%2C5&amp;q=A+preprocessing+scheme+for+high-cardinality+categorical+attributes+in+classification+and+prediction+problems&amp;btnG=">A preprocessing scheme for high-cardinality categorical attributes in classification and prediction problems</a>,” ACM SIGKDD Explorations Newsletter, 3(1), 27-32.</li>
 <li>Zumel N and Mount J (2017) “<a href="https://arxiv.org/abs/1611.09477"><code>vtreat</code>: a <code>data.frame</code> Processor for Predictive Modeling</a>”</li>
 <li>McInnes L and Healy J (2018) <a href="https://arxiv.org/abs/1802.03426">UMAP: Uniform Manifold Approximation and Projection for Dimension Reduction</a>
 </li>
+<li>Good, I. J. (1985), “<a href="https://scholar.google.com/scholar?hl=en&amp;as_sdt=0%2C5&amp;q=Weight+of+evidence%3A+A+brief+survey&amp;btnG=">Weight of evidence: A brief survey</a>”, Bayesian Statistics, 2, pp.249-270.</li>
 </ul>
 <p>To install the package:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">"embed"</span>)</a>

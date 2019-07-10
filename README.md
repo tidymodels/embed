@@ -15,6 +15,8 @@ The steps for categorical predictors are:
 
 * `step_embed` uses `keras::layer_embedding` to translate the original _C_ factor levels into a set of _D_ new variables (< _C_). The model fitting routine optimizes which factor levels are mapped to each of the new variables as well as the corresponding regression coefficients (i.e., neural network weights) that will be used as the new encodings.  
 
+* `step_woe` creates new variables based on weight of evidence encodings. 
+
 For numeric predictors:
 
  * `step_umap` uses a nonlinear transformation similar to t-SNE but can be used to project the transformation on new data. Both supervised and unsupervised methods can be used. 
@@ -23,9 +25,10 @@ Some references for these methods are:
 
 * Francois C and Allaire JJ (2018) [_Deep Learning with R_](https://www.manning.com/books/deep-learning-with-r), Manning
 * Guo, C and Berkhahn F (2016) "[Entity Embeddings of Categorical Variables](https://arxiv.org/abs/1604.06737)"
-* Micci-Barreca D (2001) "A preprocessing scheme for high-cardinality categorical attributes in classification and prediction problems," ACM SIGKDD Explorations Newsletter, 3(1), 27-32.
+* Micci-Barreca D (2001) "[A preprocessing scheme for high-cardinality categorical attributes in classification and prediction problems](https://scholar.google.com/scholar?hl=en&as_sdt=0%2C5&q=A+preprocessing+scheme+for+high-cardinality+categorical+attributes+in+classification+and+prediction+problems&btnG=)," ACM SIGKDD Explorations Newsletter, 3(1), 27-32.
 * Zumel N and Mount J (2017) "[`vtreat`: a `data.frame` Processor for Predictive Modeling](https://arxiv.org/abs/1611.09477)"
 * McInnes L and Healy J (2018) [UMAP: Uniform Manifold Approximation and Projection for Dimension Reduction](https://arxiv.org/abs/1802.03426)
+* Good, I. J. (1985), "[Weight of evidence: A brief survey](https://scholar.google.com/scholar?hl=en&as_sdt=0%2C5&q=Weight+of+evidence%3A+A+brief+survey&btnG=)", Bayesian Statistics, 2, pp.249-270.
 
 
 
