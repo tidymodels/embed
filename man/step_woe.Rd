@@ -12,6 +12,9 @@ step_woe(recipe, ..., role = "predictor", outcome, trained = FALSE,
 \method{tidy}{step_woe}(x, ...)
 }
 \arguments{
+\item{recipe}{A recipe object. The step will be added to the
+sequence of operations for this recipe.}
+
 \item{...}{One or more selector functions to choose which
 variables will be used to compute the components. See
 \code{\link[=selections]{selections()}} for more details. For the \code{tidy}
@@ -23,6 +26,9 @@ that the new woe components columns created by the original
 variables will be used as predictors in a model.}
 
 \item{outcome}{The bare name of the binary outcome.}
+
+\item{trained}{A logical to indicate if the quantities for
+preprocessing have been estimated.}
 
 \item{dictionary}{A tbl. A map of levels and woe values. It must
 have the same layout than the output returned from \code{\link[=dictionary]{dictionary()}}.
@@ -36,6 +42,15 @@ Also kwon as 'pseudocount' parameter of the Laplace smoothing technique.}
 
 \item{prefix}{A character string that will be the prefix to the
 resulting new variables. See notes below.}
+
+\item{skip}{A logical. Should the step be skipped when the
+recipe is baked by \code{\link[recipes:bake.recipe]{recipes::bake.recipe()}}? While all operations are baked
+when \code{\link[recipes:prep.recipe]{recipes::prep.recipe()}} is run, some operations may not be able to be
+conducted on new data (e.g. processing the outcome variable(s)).
+Care should be taken when using \code{skip = TRUE} as it may affect
+the computations for subsequent operations}
+
+\item{id}{A character string that is unique to this step to identify it.}
 
 \item{x}{A \code{step_woe} object.}
 }

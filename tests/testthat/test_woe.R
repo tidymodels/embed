@@ -1,6 +1,5 @@
 library(testthat)
 library(dplyr)
-library(magrittr)
 
 context("woe")
 
@@ -23,38 +22,38 @@ df <- data.frame(x1 = sample(c("A", "B", "C"), size = 20, replace = TRUE) %>% fa
 # woe_table
 
 test_that("woe_table do not accept different length inputs", {
-  expect_error(recipes:::woe_table(rep(c(0, 1), 20), rep(letters[1:4], 5)))
+  expect_error(embed:::woe_table(rep(c(0, 1), 20), rep(letters[1:4], 5)))
 })
 
 test_that("woe_table accepts only outcome with 2 distinct categories", {
-  expect_error(recipes:::woe_table(rep(letters[1:3], 10), rep(c(0, 1, 2), 10)))
-  expect_error(recipes:::woe_table(rep(letters[1:3], 10), rep(c(0), 30)))
-  expect_error(recipes:::woe_table(df$x2, df$x1))
+  expect_error(embed:::woe_table(rep(letters[1:3], 10), rep(c(0, 1, 2), 10)))
+  expect_error(embed:::woe_table(rep(letters[1:3], 10), rep(c(0), 30)))
+  expect_error(embed:::woe_table(df$x2, df$x1))
 })
 
 test_that("woe_table returns a proper tibble", {
-  expect_equal(dim(recipes:::woe_table(df$x1, df$y)), c(3, 7))
-  expect_identical(names(recipes:::woe_table(df$x1, df$y)), c("predictor", "n_tot", "n_A", "n_B", "p_A", "p_B", "woe"))
+  expect_equal(dim(embed:::woe_table(df$x1, df$y)), c(3, 7))
+  expect_identical(names(embed:::woe_table(df$x1, df$y)), c("predictor", "n_tot", "n_A", "n_B", "p_A", "p_B", "woe"))
 })
 
 test_that("logical outcome variables are treated properly", {
-  expect_equal(dim(recipes:::woe_table(c("A", "A", "A", "B"), c(TRUE, FALSE, TRUE, FALSE))), c(2, 7))
+  expect_equal(dim(embed:::woe_table(c("A", "A", "A", "B"), c(TRUE, FALSE, TRUE, FALSE))), c(2, 7))
 })
 
 test_that("logical predictor variable are treated properly", {
-  expect_equal(class(recipes:::woe_table(c(TRUE, FALSE, TRUE, FALSE), c("A", "A", "A", "B"))$predictor), "character")
+  expect_equal(class(embed:::woe_table(c(TRUE, FALSE, TRUE, FALSE), c("A", "A", "A", "B"))$predictor), "character")
 })
 
 test_that("woe_table ruturns no messages nor warnings", {
-  expect_silent(recipes:::woe_table(c(TRUE, FALSE, TRUE, FALSE), c("A", "A", "A", "B")))
-  expect_silent(recipes:::woe_table(c(TRUE, FALSE, TRUE, FALSE, NA), c("A", "A", "A", "B", "B")))
-  expect_silent(recipes:::woe_table(as.factor(c(TRUE, FALSE, TRUE, FALSE, NA)), c("A", "A", "A", "B", "B")))
-  expect_silent(recipes:::woe_table(df$x1, df$y))
+  expect_silent(embed:::woe_table(c(TRUE, FALSE, TRUE, FALSE), c("A", "A", "A", "B")))
+  expect_silent(embed:::woe_table(c(TRUE, FALSE, TRUE, FALSE, NA), c("A", "A", "A", "B", "B")))
+  expect_silent(embed:::woe_table(as.factor(c(TRUE, FALSE, TRUE, FALSE, NA)), c("A", "A", "A", "B", "B")))
+  expect_silent(embed:::woe_table(df$x1, df$y))
 })
 
 test_that("Laplace works", {
-  expect_true(all(is.finite(recipes:::woe_table(c("A", "A", "B", "B"), c(0, 0, 0, 1), Laplace = 1e-6)$woe)))
-  expect_false(all(is.finite(recipes:::woe_table(c("A", "A", "B", "B"), c(0, 0, 0, 1), Laplace = 0)$woe)))
+  expect_true(all(is.finite(embed:::woe_table(c("A", "A", "B", "B"), c(0, 0, 0, 1), Laplace = 1e-6)$woe)))
+  expect_false(all(is.finite(embed:::woe_table(c("A", "A", "B", "B"), c(0, 0, 0, 1), Laplace = 0)$woe)))
 })
 
 

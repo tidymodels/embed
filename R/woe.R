@@ -4,7 +4,7 @@
 #'  recipe step that will transform nominal data into its numerical
 #'  transformation based on weights of evidence against a binary outcome.
 #'
-#' @inheritParams step_center
+#' @inheritParams step_lencode_bayes
 #' @inherit step_center return
 #' @param ... One or more selector functions to choose which
 #'  variables will be used to compute the components. See
@@ -424,4 +424,6 @@ tidy.step_woe <- function(x, ...) {
 # ------------------------------------------------------------------------------
 
 #' @importFrom utils globalVariables
-utils::globalVariables(c("n", "p", "predictor", "summary_outcome", "value", "woe"))
+utils::globalVariables(
+  c("n", "p", "predictor", "summary_outcome", "value", "woe", "select", "variable", ".")
+  )
