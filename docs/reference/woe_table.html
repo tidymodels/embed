@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Objects exported from other packages — reexports • embed</title>
+<title>Crosstable with woe between a binary outcome and a predictor variable. — woe_table • embed</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -31,16 +31,13 @@
 
 
 
-<meta property="og:title" content="Objects exported from other packages — reexports" />
+<meta property="og:title" content="Crosstable with woe between a binary outcome and a predictor variable. — woe_table" />
 
-<meta property="og:description" content="These objects are imported from other packages. Follow the links
-below to see their documentation.
-
-  genericstidy
-" />
+<meta property="og:description" content="Calculates some summaries and the WoE (Weight of Evidence) between a binary
+outcome and a given predictor variable. Used to biuld the dictionary." />
 <meta name="twitter:card" content="summary" />
 
-<meta name="robots" content="noindex">
+
 
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
@@ -79,7 +76,7 @@ below to see their documentation.
         <a class="navbar-brand" href="../index.html">embed</a>
         <div class="info">
           <span class="partof">part of <a href="https://github.com/tidymodels">tidymodels</a></span>
-          <span class="version version-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.0.3.9000</span>
+          <span class="version version-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.3</span>
         </div>
       </div>
     </div>
@@ -111,28 +108,61 @@ below to see their documentation.
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Objects exported from other packages</h1>
+    <h1>Crosstable with woe between a binary outcome and a predictor variable.</h1>
     
-    <div class="hidden name"><code>reexports.Rd</code></div>
+    <div class="hidden name"><code>woe_table.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>These objects are imported from other packages. Follow the links
-below to see their documentation.</p>
-<dl class='dl-horizontal'>
-  <dt>generics</dt><dd><p><code><a href='https://rdrr.io/pkg/generics/man/tidy.html'>tidy</a></code></p></dd>
-</dl>
+    <p>Calculates some summaries and the WoE (Weight of Evidence) between a binary
+outcome and a given predictor variable. Used to biuld the dictionary.</p>
     
     </div>
 
-        
+    <pre class="usage"><span class='fu'>woe_table</span>(<span class='no'>predictor</span>, <span class='no'>outcome</span>, <span class='kw'>Laplace</span> <span class='kw'>=</span> <span class='fl'>1e-06</span>)</pre>
+    
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>predictor</th>
+      <td><p>A atomic vector, usualy with few distinct values.</p></td>
+    </tr>
+    <tr>
+      <th>outcome</th>
+      <td><p>The dependent variable. A atomic vector with exactly 2 distinct values.</p></td>
+    </tr>
+    <tr>
+      <th>Laplace</th>
+      <td><p>The <code>pseudocount</code> parameter of the Laplace Smoothing
+estimator. Default to 1e-6. Value to avoid -Inf/Inf from predictor category with only
+one outcome class. Set to 0 to allow Inf/-Inf.</p></td>
+    </tr>
+    </table>
+    
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>a tibble with counts, proportions and woe.
+Warning: woe can possibly be -Inf. Use 'Laplace' arg to avoid that.</p>
+    
+    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
+
+    <p>Kullback, S. (1959). <em>Information Theory and Statistics.</em> Wiley, New York.</p>
+<p>Hastie, T., Tibshirani, R. and Friedman, J. (1986). <em>Elements of Statistical Learning</em>, Second Edition, Springer, 2009.</p>
+<p>Good, I. J. (1985), "Weight of evidence: A brief survey", <em>Bayesian Statistics</em>, 2, pp.249-270.</p>
+    
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
-                </ul>
+      <li><a href="#arguments">Arguments</a></li>
+      
+      <li><a href="#value">Value</a></li>
+
+      <li><a href="#references">References</a></li>
+          </ul>
 
   </div>
 </div>
