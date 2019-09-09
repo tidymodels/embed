@@ -282,6 +282,7 @@ dictionary <- function(.data, outcome, ..., Laplace = 1e-6) {
 #'
 #'
 #' @importFrom rlang !!
+#' @importFrom dplyr one_of
 #' @export
 add_woe <- function(.data, outcome, ..., dictionary = NULL, prefix = "woe") {
   if (missing(.data)) {
@@ -330,9 +331,9 @@ add_woe <- function(.data, outcome, ..., dictionary = NULL, prefix = "woe") {
   
   # See https://tidyr.tidyverse.org/dev/articles/in-packages.html
   if (tidyr_new_interface()) {
-    output <- tidyr::nest(output, data = -variable)
+    output <- tidyr::nest(output, woe_table = -dplyr::one_of("variable"))
   } else {
-    output <- tidyr::nest(output, -variable)
+    output <- tidyr::nest(output, .key = "woe_table")
   }
   
   output <- 

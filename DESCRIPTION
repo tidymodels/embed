@@ -17,7 +17,7 @@ Imports:
     rlang,
     utils,
     generics,
-    tidyr,
+    tidyr (>= 0.8.3),
     tibble,
     lme4,
     tensorflow,
