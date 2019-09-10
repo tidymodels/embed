@@ -1,3 +1,10 @@
+# `embed` 0.0.4
+
+ * Methods were added for a future generic called `tunable()`. This outlines which parameters in a step can/could be tuned.
+
+ * Small updates to work with different versions of `tidyr`.  
+ 
+
 # `embed` 0.0.3
 
 ## New Steps
