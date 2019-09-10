@@ -420,7 +420,7 @@ tidy.step_woe <- function(x, ...) {
     res <- x$dictionary
   } else {
     term_names <- sel2char(x$terms)
-    res <- tibble(variable = term_names,
+    res <- tibble(terms = term_names,
                   predictor = rlang::na_chr,
                   ntot = rlang::na_int,
                   n_0 = rlang::na_int,
