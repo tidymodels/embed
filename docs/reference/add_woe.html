@@ -76,7 +76,7 @@ given binary outcome." />
         <a class="navbar-brand" href="../index.html">embed</a>
         <div class="info">
           <span class="partof">part of <a href="https://github.com/tidymodels">tidymodels</a></span>
-          <span class="version version-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.3</span>
+          <span class="version version-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.4</span>
         </div>
       </div>
     </div>
@@ -163,7 +163,7 @@ returned from it.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
-<span class='no'>mtcars</span> <span class='kw'>%&gt;%</span> <span class='fu'>add_woe</span>(<span class='no'>am</span>, <span class='no'>cyl</span>, <span class='no'>gear</span>:<span class='no'>carb</span>)</div><div class='output co'>#&gt; <span style='color: #555555;'># A tibble: 32 x 14</span><span>
+<span class='no'>mtcars</span> <span class='kw'>%&gt;%</span> <span class='fu'>add_woe</span>(<span class='no'>am</span>, <span class='no'>cyl</span>, <span class='no'>gear</span>:<span class='no'>carb</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: `.key` is deprecated</span></div><div class='output co'>#&gt; <span style='color: #555555;'># A tibble: 32 x 14</span><span>
 #&gt;      mpg   cyl  disp    hp  drat    wt  qsec    vs    am  gear  carb woe_cyl
 #&gt;    </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>   </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>
 #&gt; </span><span style='color: #555555;'> 1</span><span>  21       6  160    110  3.9   2.62  16.5     0     1     4     4  0.091</span><span style='text-decoration: underline;'>8</span><span>
