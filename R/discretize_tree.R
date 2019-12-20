@@ -86,15 +86,15 @@ step_discretize_tree <-
            trained = FALSE,
            outcome = NULL,
            learn_rate = 0.3,
-           num_breaks = 10,
+           num_breaks = 10, # TODO maybe default this to a smaller value for smaller data sets. 
            tree_depth = 1,
            rules = NULL,
+           # TODO I don't think that we need to rename since we are replacing with a single column
            prefix = "bin_tree",
            skip = FALSE,
            id = rand_id("discretize_tree")) {
-    if (is.null(outcome)) {
-      stop("`outcome` should select one column.", call. = FALSE)
-    }
+    if (is.null(outcome))
+      stop("`outcome` should select at least one column.", call. = FALSE)
 
     add_step(
       recipe,
@@ -156,54 +156,84 @@ run_xgboost <- function(.train, .test, .learn_rate, .num_breaks, .tree_depth, .o
 }
 
 xgb_binning <- function(df, outcome, predictor, learn_rate, num_breaks, tree_depth){
+  if (is.character(df[[outcome]])) {
+    df[[outcome]] <- as.factor(df[[outcome]])
+  }
   # Checking the number of levels of the outcome
-  levels <- sort(unique(df[[outcome]]))
-
-  if (any(is.na((levels)))) {
+  levels <- levels(df[[outcome]])
+  
+  if (any(is.na(df[[outcome]]))) {
     stop("Outcome variable contains missing values.", call. = FALSE)
   }
-
-  # Defining the objective function
-  if (length(levels) == 2) {
-    objective <- "binary:logistic"
-  } else if (class(df[[outcome]]) %in% c("double", "integer")) {
-    objective <- "reg:squarederror"
-  } else {
-    stop(
-      "Outcome variable needs to have two levels (binary classification)
-         or be a double/ integer (regression)",
-      call. = FALSE
-    )
-  }
-
+  
+  # ----------------------------------------------------------------------------
+  
+  # TODO prop should probably be a parameter
+  # What to do if it is 1 (or bound it so that test has at least 2 data points)?
   split <- rsample::initial_split(df, prop = 0.8, strata = outcome)
   train <- rsample::training(split)
   test  <- rsample::testing(split)
-
-  xgb_train <- xgboost::xgb.DMatrix(
-    data = as.matrix(train[, predictor]),
-    label = ifelse(train[[outcome]] == levels[[1]], 0, 1)
-  )
-
-  xgb_test <- xgboost::xgb.DMatrix(
-    data = as.matrix(test[, predictor]),
-    label = ifelse(test[[outcome]] == levels[[1]], 0, 1)
-  )
+  
+  # Defining the objective function
+  if (is.null(levels)) {
+    objective <- "reg:squarederror"
+    xgb_train <- xgboost::xgb.DMatrix(
+      data = as.matrix(train[, predictor]),
+      label = train[[outcome]]
+    )
+    
+    xgb_test <- xgboost::xgb.DMatrix(
+      data = as.matrix(test[, predictor]),
+      label = test[[outcome]]
+    )
+    
+  } else {
+    
+    if (length(levels) == 2) {
+      objective <- "binary:logistic"
+    } else {
+      rlang::abort("Outcome variable needs to have two levels (binary classification)")
+    }
+    xgb_train <- xgboost::xgb.DMatrix(
+      data = as.matrix(train[, predictor]),
+      label = ifelse(train[[outcome]] == levels[[1]], 0, 1)
+    )
+    
+    xgb_test <- xgboost::xgb.DMatrix(
+      data = as.matrix(test[, predictor]),
+      label = ifelse(test[[outcome]] == levels[[1]], 0, 1)
+    )
+    
+  } 
 
   xgb_mdl <- withr:::with_seed(
     sample.int(10^6, 1),
-    run_xgboost(xgb_train, xgb_test, learn_rate, num_breaks, tree_depth, objective)
+    run_xgboost(
+      xgb_train,
+      .test = xgb_test,
+      .learn_rate = learn_rate,
+      .num_breaks = num_breaks,
+      .tree_depth = tree_depth,
+      .objective = objective
     )
+  )
 
+  # Changes: keep all iterations up to the best one. Otherwise, it only kept the
+  # split in the final tree. Also, just save the unique splits insread of the 
+  # data frame. 
   xgb_split <-
     xgboost::xgb.model.dt.tree(
       model = xgb_mdl,
-      trees = xgb_mdl$best_iteration,
+      trees = 1:xgb_mdl$best_iteration,
       use_int_id = TRUE
     ) %>%
     tibble::as_tibble() %>%
-    dplyr::select(Node, Feature, Split, Yes, No, Missing)
-  
+    dplyr::select(Node, Feature, Split, Yes, No, Missing) %>% 
+    stats::na.omit() %>% 
+    dplyr::distinct(Split) %>% 
+    dplyr::arrange(Split) %>% 
+    dplyr::pull(Split)
+  xgb_split
 }
 
 #' @export
@@ -216,18 +246,22 @@ prep.step_discretize_tree <- function(x, training, info = NULL, ...) {
   
   y_name <- recipes::terms_select(terms = x$outcome, info = info)
   
+  col_names <- col_names[col_names != y_name]
+  # TODO test to see if length(col_names) >= 1 here
+  
+  # TODO Have a check for the minimum number of unique data points in the column
+  # in order to run the step. Otherwise, take it out of col_names. I think that 
+  # num_unique = 20 is probably a good default. 
+  
   for (i in seq_along(col_names)) {
-    if (col_names[[i]] == y_name) {
-      next
-    } else {
-      rules[[i]] <-
-        xgb_binning(training,
-                    y_name,
-                    col_names[[i]],
-                    x$learn_rate,
-                    x$num_breaks,
-                    x$tree_depth)
-    }
+    rules[[i]] <-
+      xgb_binning(training,
+                  y_name,
+                  col_names[[i]],
+                  x$learn_rate,
+                  x$num_breaks,
+                  x$tree_depth)
+    
   }
   
   names(rules) <- col_names
@@ -253,14 +287,17 @@ bake.step_discretize_tree <- function(object, new_data, ...) {
   
   for (i in seq_along(vars)) {
     var <- names(vars)[[i]]
+    
+    # TODO not sure that you need to make a copy
+    
     binned_data <- new_data
     
     binned_data[, var] <- cut(
       new_data[[var]],
-      breaks = c(-Inf, unique(vars[[var]]$Split), Inf),
+      breaks = c(-Inf, object$rules[[i]], Inf),
       include.lowest = TRUE,
       right = FALSE,
-      dig.lab = 4
+      dig.lab = 4  
     )
     
     names(binned_data)[names(binned_data) == var] <-
@@ -278,3 +315,8 @@ print.step_discretize_tree <-
     printer(names(x$rules), x$terms, x$trained, width = width)
     invisible(x)
   }
+
+
+# TODO a tidy() method that returns a tibble with columns for terms (the column
+# names) and `values` (the break values))
+
