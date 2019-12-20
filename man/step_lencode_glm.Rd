@@ -5,9 +5,16 @@
 \alias{tidy.step_lencode_glm}
 \title{Supervised Factor Conversions into Linear Functions using Likelihood Encodings}
 \usage{
-step_lencode_glm(recipe, ..., role = NA, trained = FALSE,
-  outcome = NULL, mapping = NULL, skip = FALSE,
-  id = rand_id("lencode_bayes"))
+step_lencode_glm(
+  recipe,
+  ...,
+  role = NA,
+  trained = FALSE,
+  outcome = NULL,
+  mapping = NULL,
+  skip = FALSE,
+  id = rand_id("lencode_bayes")
+)
 
 \method{tidy}{step_lencode_glm}(x, ...)
 }
