@@ -1,5 +1,6 @@
 library(testthat)
 library(dplyr)
+library(modeldata)
 
 context("woe")
 

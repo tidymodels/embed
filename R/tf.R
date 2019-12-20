@@ -122,6 +122,7 @@
 #'  \url{https://flovv.github.io/Embeddings_with_keras_part2/}
 #' 
 #' @examples
+#' library(modeldata)
 #' data(okc)
 #' 
 #' rec <- recipe(Class ~ age + location, data = okc) %>%
