@@ -5,11 +5,24 @@
 \alias{tidy.step_umap}
 \title{Supervised and unsupervised uniform manifold approximation and projection (UMAP)}
 \usage{
-step_umap(recipe, ..., role = "predictor", trained = FALSE,
-  outcome = NULL, neighbors = 15, num_comp = 2, min_dist = 0.01,
-  learn_rate = 1, epochs = NULL, options = list(verbose = FALSE,
-  n_threads = 1), seed = sample(10^5, 2), retain = FALSE,
-  object = NULL, skip = FALSE, id = rand_id("umap"))
+step_umap(
+  recipe,
+  ...,
+  role = "predictor",
+  trained = FALSE,
+  outcome = NULL,
+  neighbors = 15,
+  num_comp = 2,
+  min_dist = 0.01,
+  learn_rate = 1,
+  epochs = NULL,
+  options = list(verbose = FALSE, n_threads = 1),
+  seed = sample(10^5, 2),
+  retain = FALSE,
+  object = NULL,
+  skip = FALSE,
+  id = rand_id("umap")
+)
 
 \method{tidy}{step_umap}(x, ...)
 }

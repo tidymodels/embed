@@ -5,9 +5,18 @@
 \alias{tidy.step_woe}
 \title{Weight of evidence transformation}
 \usage{
-step_woe(recipe, ..., role = "predictor", outcome, trained = FALSE,
-  dictionary = NULL, Laplace = 1e-06, prefix = "woe", skip = FALSE,
-  id = rand_id("woe"))
+step_woe(
+  recipe,
+  ...,
+  role = "predictor",
+  outcome,
+  trained = FALSE,
+  dictionary = NULL,
+  Laplace = 1e-06,
+  prefix = "woe",
+  skip = FALSE,
+  id = rand_id("woe")
+)
 
 \method{tidy}{step_woe}(x, ...)
 }
@@ -97,7 +106,7 @@ the levels of one given predictor. One easy way to do this is by
 tweaking an output returned from \code{dictionary()}.
 }
 \examples{
-
+library(modeldata)
 data("credit_data")
 
 set.seed(111)

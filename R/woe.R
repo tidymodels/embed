@@ -70,7 +70,7 @@
 #' Good, I. J. (1985), "Weight of evidence: A brief survey", _Bayesian Statistics_, 2, pp.249-270.
 #'
 #' @examples
-#'
+#' library(modeldata)
 #' data("credit_data")
 #'
 #' set.seed(111)

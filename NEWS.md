@@ -1,3 +1,8 @@
+# `embed` 0.0.4.9000
+
+ * The example data are now in the `modeldata` package. 
+
+
 # `embed` 0.0.4
 
  * Methods were added for a future generic called `tunable()`. This outlines which parameters in a step can/could be tuned.
