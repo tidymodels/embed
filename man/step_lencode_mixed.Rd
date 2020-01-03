@@ -5,9 +5,17 @@
 \alias{tidy.step_lencode_mixed}
 \title{Supervised Factor Conversions into Linear Functions using Bayesian Likelihood Encodings}
 \usage{
-step_lencode_mixed(recipe, ..., role = NA, trained = FALSE,
-  outcome = NULL, options = list(verbose = 0), mapping = NULL,
-  skip = FALSE, id = rand_id("lencode_bayes"))
+step_lencode_mixed(
+  recipe,
+  ...,
+  role = NA,
+  trained = FALSE,
+  outcome = NULL,
+  options = list(verbose = 0),
+  mapping = NULL,
+  skip = FALSE,
+  id = rand_id("lencode_bayes")
+)
 
 \method{tidy}{step_lencode_mixed}(x, ...)
 }

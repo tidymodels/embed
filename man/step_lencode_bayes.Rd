@@ -5,10 +5,18 @@
 \alias{tidy.step_lencode_bayes}
 \title{Supervised Factor Conversions into Linear Functions using Bayesian Likelihood Encodings}
 \usage{
-step_lencode_bayes(recipe, ..., role = NA, trained = FALSE,
-  outcome = NULL, options = list(seed = sample.int(10^5, 1)),
-  verbose = FALSE, mapping = NULL, skip = FALSE,
-  id = rand_id("lencode_bayes"))
+step_lencode_bayes(
+  recipe,
+  ...,
+  role = NA,
+  trained = FALSE,
+  outcome = NULL,
+  options = list(seed = sample.int(10^5, 1)),
+  verbose = FALSE,
+  mapping = NULL,
+  skip = FALSE,
+  id = rand_id("lencode_bayes")
+)
 
 \method{tidy}{step_lencode_bayes}(x, ...)
 }

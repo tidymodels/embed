@@ -6,16 +6,34 @@
 \alias{embed_control}
 \title{Encoding Factors into Multiple Columns}
 \usage{
-step_embed(recipe, ..., role = "predictor", trained = FALSE,
-  outcome = NULL, predictors = NULL, num_terms = 2,
-  hidden_units = 0, options = embed_control(), mapping = NULL,
-  history = NULL, skip = FALSE, id = rand_id("lencode_bayes"))
+step_embed(
+  recipe,
+  ...,
+  role = "predictor",
+  trained = FALSE,
+  outcome = NULL,
+  predictors = NULL,
+  num_terms = 2,
+  hidden_units = 0,
+  options = embed_control(),
+  mapping = NULL,
+  history = NULL,
+  skip = FALSE,
+  id = rand_id("lencode_bayes")
+)
 
 \method{tidy}{step_embed}(x, ...)
 
-embed_control(loss = "mse", metrics = NULL, optimizer = "sgd",
-  epochs = 20, validation_split = 0, batch_size = 32, verbose = 0,
-  callbacks = NULL)
+embed_control(
+  loss = "mse",
+  metrics = NULL,
+  optimizer = "sgd",
+  epochs = 20,
+  validation_split = 0,
+  batch_size = 32,
+  verbose = 0,
+  callbacks = NULL
+)
 }
 \arguments{
 \item{recipe}{A recipe object. The step will be added to the
@@ -109,25 +127,25 @@ used in the last layer while softmax is used for factor outcomes
 (with any number of levels).
 
 For example, the \code{keras} code for a numeric outcome, one
-categorical predictor, and no hidden units used here would be\preformatted{  keras_model_sequential() \\\\%>\\\\% 
+categorical predictor, and no hidden units used here would be\preformatted{  keras_model_sequential() \\\\\%>\\\\\% 
   layer_embedding(
     input_dim = num_factor_levels_x + 1,
     output_dim = num_terms,
     input_length = 1
-  ) \\\\%>\\\\%
-  layer_flatten() \\\\%>\\\\%
+  ) \\\\\%>\\\\\%
+  layer_flatten() \\\\\%>\\\\\%
   layer_dense(units = 1, activation = 'linear')
 }
 
 If a factor outcome is used and hidden units were requested, the code
-would be\preformatted{  keras_model_sequential() \\\\%>\\\\% 
+would be\preformatted{  keras_model_sequential() \\\\\%>\\\\\% 
   layer_embedding(
     input_dim = num_factor_levels_x + 1,
     output_dim = num_terms,
     input_length = 1
-   ) \\\\%>\\\\%
-  layer_flatten() \\\\%>\\\\%
-  layer_dense(units = hidden_units, activation = "relu") \\\\%>\\\\%
+   ) \\\\\%>\\\\\%
+  layer_flatten() \\\\\%>\\\\\%
+  layer_dense(units = hidden_units, activation = "relu") \\\\\%>\\\\\%
   layer_dense(units = num_factor_levels_y, activation = 'softmax')
 }
 
