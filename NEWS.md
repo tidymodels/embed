@@ -1,6 +1,8 @@
 # `embed` 0.0.5
 
  * The example data are now in the `modeldata` package. 
+ 
+ * Small TF updates to `step_embed()`. 
 
 
 # `embed` 0.0.4

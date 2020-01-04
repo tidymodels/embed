@@ -1,8 +1,8 @@
-library(testthat)
-library(dplyr)
-library(modeldata)
-
 context("woe")
+
+source(testthat::test_path("test_helpers.R"))
+
+# ------------------------------------------------------------------------------
 
 data("credit_data")
 

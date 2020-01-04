@@ -1,12 +1,9 @@
-library(embed)
-library(dplyr)
-library(testthat)
-
-source("make_example_data.R")
-
-###################################################################
-
 context("tensorflow model, classification")
+
+source(testthat::test_path("make_example_data.R"))
+source(testthat::test_path("test_helpers.R"))
+
+# ------------------------------------------------------------------------------
 
 test_that("factor encoded predictor", {
   skip_on_cran()
@@ -131,7 +128,7 @@ test_that("character encoded predictor", {
   )   
 })
 
-###################################################################
+# ------------------------------------------------------------------------------
 
 context("tensorflow model, regression")
 
@@ -258,7 +255,7 @@ test_that("character encoded predictor", {
 })
 
 
-###################################################################
+# ------------------------------------------------------------------------------
 
 context("tensorflow model, arguments")
 

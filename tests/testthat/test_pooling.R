@@ -1,14 +1,11 @@
-library(embed)
-library(dplyr)
-library(testthat)
+context("glmer model, classification")
 
-source("make_example_data.R")
+source(testthat::test_path("make_example_data.R"))
+source(testthat::test_path("test_helpers.R"))
 
 opts <- list(seed = 34677, chains = 2, iter = 500)
 
-###################################################################
-
-context("glmer model, classification")
+# ------------------------------------------------------------------------------
 
 test_that("factor encoded predictor", {
   skip_on_cran()
@@ -136,7 +133,7 @@ test_that("character encoded predictor", {
   )     
 })
 
-###################################################################
+# ------------------------------------------------------------------------------
 
 context("glmer model, regression")
 
