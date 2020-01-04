@@ -239,7 +239,6 @@ prep.step_embed <- function(x, training, info = NULL, ...) {
 #' @importFrom keras keras_model_sequential layer_embedding layer_flatten
 #' @importFrom keras layer_dense compile fit get_layer backend keras_model
 #' @importFrom keras layer_concatenate layer_input
-#' @importFrom tensorflow use_session_with_seed
 #' @importFrom dplyr bind_cols as_tibble ends_with
 #' @importFrom stats setNames
 tf_coefs2 <- function(x, y, z, opt, num, lab, h, seeds = sample.int(10000, 4), ...) {
@@ -247,8 +246,8 @@ tf_coefs2 <- function(x, y, z, opt, num, lab, h, seeds = sample.int(10000, 4), .
   p <- length(vars)
   
   set.seed(seeds[1])
-  tensorflow::use_session_with_seed(seeds[2])
-  
+  tensorflow::tf$random$set_seed(seeds[2])
+
   on.exit(keras::backend()$clear_session())
   
   lvl <- lapply(x, levels)
@@ -257,8 +256,9 @@ tf_coefs2 <- function(x, y, z, opt, num, lab, h, seeds = sample.int(10000, 4), .
   mats <- lapply(x, function(x) matrix(as.numeric(x), ncol = 1))
   
   y <- y[[1]]
-  if(is.character(y))
+  if (is.character(y)) {
     y <- as.factor(y)
+  }
   factor_y <- is.factor(y)
   
   if (factor_y)
@@ -268,13 +268,13 @@ tf_coefs2 <- function(x, y, z, opt, num, lab, h, seeds = sample.int(10000, 4), .
   
   inputs <- vector(mode = "list", length = p)
   # For each categorical predictor, make an input layer
-  for(i in 1:p) {
+  for (i in 1:p) {
     inputs[[i]] <- layer_input(shape = 1, name = paste0("input_", vars[i]))
   }
   
   layers <- vector(mode = "list", length = p)
   # Now add embedding to each layer and then flatten
-  for(i in 1:p) {
+  for (i in 1:p) {
     layers[[i]] <- 
       inputs[[i]] %>%
       layer_embedding(

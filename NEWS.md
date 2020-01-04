@@ -1,4 +1,4 @@
-# `embed` 0.0.4.9000
+# `embed` 0.0.5
 
  * The example data are now in the `modeldata` package. 
 
