@@ -246,7 +246,12 @@ tf_coefs2 <- function(x, y, z, opt, num, lab, h, seeds = sample.int(10000, 4), .
   p <- length(vars)
   
   set.seed(seeds[1])
-  tensorflow::tf$random$set_seed(seeds[2])
+  
+  if (tensorflow::tf_version() == "2.0") {
+    tensorflow::tf$random$set_seed(seeds[2])
+  } else {
+    tensorflow::use_session_with_seed(seeds[2])
+  }
 
   on.exit(keras::backend()$clear_session())
   
