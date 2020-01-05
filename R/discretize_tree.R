@@ -339,7 +339,7 @@ prep.step_discretize_tree <- function(x, training, info = NULL, ...) {
     learn_rate = x$learn_rate,
     num_breaks = x$num_breaks,
     tree_depth = x$tree_depth,
-    rules = rules,
+    rules = rules, # is this rules object defined here correctly? I think yet but getting a weird error when checking the tidy method
     skip = x$skip,
     id = x$id
   )
