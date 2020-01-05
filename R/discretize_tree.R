@@ -398,13 +398,14 @@ tidy.step_discretize_tree <- function(x, ...) {
 
 # ------------------------------------------------------------------------------
 
-#' #' @importFrom utils packageVersion
-#' tidyr_new_interface <- function() {
-#'   utils::packageVersion("tidyr") > "0.8.99"
-#' }
+# TODO once other things are finalised and working
+# #' @importFrom utils packageVersion
+# tidyr_new_interface <- function() {
+#   utils::packageVersion("tidyr") > "0.8.99"
+# }
 
 
-#' #' @importFrom utils globalVariables
-#' utils::globalVariables(
-#'   c("n", "p", "predictor", "summary_outcome", "value", "woe", "select", "variable", ".")
-#' )
+# #' @importFrom utils globalVariables
+# utils::globalVariables(
+#   c("n", "p", "predictor", "summary_outcome", "value", "woe", "select", "variable", ".")
+# )

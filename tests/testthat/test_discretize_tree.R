@@ -423,6 +423,11 @@ test_that("printing", {
 
 test_that("tidy", {
   
+  # TODO getting this weird error when running tidy"
+  #  Error in dots_values(...) : object 'rules' not found 
+  # I was trying to find it somewhere online but I can't really
+  # find out why I'm getting it
+  
   # General use
   xgb_rec <-
     recipe(Status ~ ., data = credit_data_train) %>%
