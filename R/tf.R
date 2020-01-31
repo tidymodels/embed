@@ -148,7 +148,7 @@ step_embed <-
            skip = FALSE,
            id = rand_id("lencode_bayes")) {
     if (is.null(outcome))
-      stop("Please list a variable in `outcome`", call. = FALSE)
+      rlang::abort("Please list a variable in `outcome`")
     add_step(
       recipe,
       step_embed_new(
@@ -448,11 +448,11 @@ embed_control <- function(
   callbacks = NULL
 ) {
   if(batch_size < 1)
-    stop("`batch_size` should be a positive integer", call. = FALSE)
+    rlang::abort("`batch_size` should be a positive integer")
   if(epochs < 1)
-    stop("`epochs` should be a positive integer", call. = FALSE)  
+    rlang::abort("`epochs` should be a positive integer")  
   if(validation_split < 0 | validation_split > 1)
-    stop("`validation_split` should be on [0, 1)", call. = FALSE)
+    rlang::abort("`validation_split` should be on [0, 1)")
   list(
     loss = loss, metrics = metrics, optimizer = optimizer, epochs = epochs, 
     validation_split = validation_split, batch_size = batch_size,
@@ -469,8 +469,12 @@ tf_options_check <- function(opt) {
                  'verbose')
   
   if (length(setdiff(exp_names, names(opt))) > 0)
-    stop("The following options are missing from the `options`: ",
-         paste0(setdiff(exp_names, names(opt)), collapse = ",")) 
+    rlang::abort(
+      paste0(
+        "The following options are missing from the `options`: ",
+        paste0(setdiff(exp_names, names(opt)), collapse = ",")
+      )
+    )
   opt
 }
 
@@ -478,7 +482,7 @@ tf_options_check <- function(opt) {
 #' @importFrom stats model.matrix
 class2ind <- function (x)  {
   if (!is.factor(x)) 
-    stop("'x' should be a factor")
+    rlang::abort("'x' should be a factor")
   y <- model.matrix(~x - 1)
   colnames(y) <- gsub("^x", "", colnames(y))
   attributes(y)$assign <- NULL
