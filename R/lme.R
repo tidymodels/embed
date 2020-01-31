@@ -138,6 +138,7 @@ prep.step_lencode_mixed <- function(x, training, info = NULL, ...) {
         "Mixed effects methods here are only implemented for ",
         "two-class problems."
       )
+      )
     }
   }
   res <-
