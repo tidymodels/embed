@@ -115,7 +115,7 @@ step_woe <- function(recipe,
                      skip = FALSE,
                      id = rand_id("woe")) {
   if (missing(outcome)) {
-    stop('argument "outcome" is missing, with no default', call. = FALSE)
+    rlang::abort('argument "outcome" is missing, with no default')
   }
   
   add_step(
@@ -174,9 +174,8 @@ woe_table <- function(predictor, outcome, Laplace = 1e-6) {
   outcome_original_labels <- unique(outcome)
   
   if (length(outcome_original_labels) != 2) {
-    stop(sprintf("'outcome' must have exactly 2 categories (has %s)",
-                 length(outcome_original_labels)),
-         call. = FALSE)
+    rlang::abort(sprintf("'outcome' must have exactly 2 categories (has %s)",
+                 length(outcome_original_labels)))
   }
   
   if (is.factor(predictor)) {
@@ -286,10 +285,10 @@ dictionary <- function(.data, outcome, ..., Laplace = 1e-6) {
 #' @export
 add_woe <- function(.data, outcome, ..., dictionary = NULL, prefix = "woe") {
   if (missing(.data)) {
-    stop('argument ".data" is missing, with no default', call. = FALSE)
+    rlang::abort('argument ".data" is missing, with no default')
   }
   if (missing(outcome)) {
-    stop('argument "outcome" is missing, with no default', call. = FALSE)
+    rlang::abort('argument "outcome" is missing, with no default')
   }
   
   outcome <- rlang::enquo(outcome)
@@ -297,13 +296,13 @@ add_woe <- function(.data, outcome, ..., dictionary = NULL, prefix = "woe") {
     dictionary <- dictionary(.data,!!outcome, ...)
   } else {
     if (is.null(dictionary$variable)) {
-      stop('column "variable" is missing in dictionary.', call. = FALSE)
+      rlang::abort('column "variable" is missing in dictionary.')
     }
     if (is.null(dictionary$predictor)) {
-      stop('column "predictor" is missing in dictionary.', call. = FALSE)
+      rlang::abort('column "predictor" is missing in dictionary.')
     }
     if (is.null(dictionary$woe)) {
-      stop('column "woe" is missing in dictionary.', call. = FALSE)
+      rlang::abort('column "woe" is missing in dictionary.')
     }
   }
   
@@ -313,9 +312,13 @@ add_woe <- function(.data, outcome, ..., dictionary = NULL, prefix = "woe") {
     level_counts,
     names(level_counts),
     ~ if(.x > 50)
-      warning("Variable ", .y, " has ", .x,
-              " unique values. Is this expected? In case of numeric variable, see ?step_discretize()."),
-    call. = FALSE)
+      rlang::warn(
+        paste0(
+          "Variable ", .y, " has ", .x,
+          " unique values. Is this expected? In case of numeric variable, ",
+          "see ?step_discretize().")
+        )
+  )
   
   
   if (missing(...)) {
