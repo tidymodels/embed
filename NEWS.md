@@ -1,4 +1,6 @@
-# embed (development version)
+# embed 0.0.6
+
+* Small changes for base R's `stringsAsFactors` change. 
 
 # `embed` 0.0.5
 
