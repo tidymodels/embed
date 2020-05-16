@@ -57,7 +57,7 @@ embed_control is a simple wrapper for setting default options." />
 
   </head>
 
-  <body>
+  <body data-spy="scroll" data-target="#toc">
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -74,7 +74,7 @@ embed_control is a simple wrapper for setting default options." />
         <a class="navbar-brand" href="../index.html">embed</a>
         <div class="info">
           <span class="partof">part of <a href="https://github.com/tidymodels">tidymodels</a></span>
-          <span class="version version-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.0.4.9000</span>
+          <span class="version version-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.0.6.9000</span>
         </div>
       </div>
     </div>
@@ -92,7 +92,12 @@ embed_control is a simple wrapper for setting default options." />
 <li>
   <a href="../news/index.html">News</a>
 </li>
-        
+        <li>
+  <a href="https://github.com/tidymodels/embed/">
+    <span class="fab fa fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
       </ul>
       
     </div><!--/.nav-collapse -->
@@ -107,7 +112,7 @@ embed_control is a simple wrapper for setting default options." />
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Encoding Factors into Multiple Columns</h1>
-    
+    <small class="dont-index">Source: <a href='https://github.com/tidymodels/embed/blob/master/R/tf.R'><code>R/tf.R</code></a></small>
     <div class="hidden name"><code>step_embed.Rd</code></div>
     </div>
 
@@ -267,25 +272,25 @@ any).</p>
 used in the last layer while softmax is used for factor outcomes
 (with any number of levels).</p>
 <p>For example, the <code>keras</code> code for a numeric outcome, one
-categorical predictor, and no hidden units used here would be</p><pre>  keras_model_sequential() \\%&gt;\\% 
+categorical predictor, and no hidden units used here would be</p><pre>  keras_model_sequential() \\%&amp;gt;\\% 
   layer_embedding(
     input_dim = num_factor_levels_x + 1,
     output_dim = num_terms,
     input_length = 1
-  ) \\%&gt;\\%
-  layer_flatten() \\%&gt;\\%
+  ) \\%&amp;gt;\\%
+  layer_flatten() \\%&amp;gt;\\%
   layer_dense(units = 1, activation = 'linear')
 </pre>
 
 <p>If a factor outcome is used and hidden units were requested, the code
-would be</p><pre>  keras_model_sequential() \\%&gt;\\% 
+would be</p><pre>  keras_model_sequential() \\%&amp;gt;\\% 
   layer_embedding(
     input_dim = num_factor_levels_x + 1,
     output_dim = num_terms,
     input_length = 1
-   ) \\%&gt;\\%
-  layer_flatten() \\%&gt;\\%
-  layer_dense(units = hidden_units, activation = "relu") \\%&gt;\\%
+   ) \\%&amp;gt;\\%
+  layer_flatten() \\%&amp;gt;\\%
+  layer_dense(units = hidden_units, activation = "relu") \\%&amp;gt;\\%
   layer_dense(units = num_factor_levels_y, activation = 'softmax')
 </pre>
 
@@ -319,15 +324,9 @@ development?" <a href='https://tinyurl.com/keras-repro'>https://tinyurl.com/kera
 <span class='co'># See https://tidymodels.github.io/embed/ for examples</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
-    <h2>Contents</h2>
-    <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
-      <li><a href="#value">Value</a></li>
-      <li><a href="#details">Details</a></li>
-      <li><a href="#references">References</a></li>
-      <li><a href="#examples">Examples</a></li>
-    </ul>
-
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
   </div>
 </div>
 

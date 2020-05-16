@@ -20,7 +20,7 @@
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
 </head>
-<body>
+<body data-spy="scroll" data-target="#toc">
     <div class="container template-home">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -36,7 +36,7 @@
         <a class="navbar-brand" href="index.html">embed</a>
         <div class="info">
           <span class="partof">part of <a href="https://github.com/tidymodels">tidymodels</a></span>
-          <span class="version version-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.0.4.9000</span>
+          <span class="version version-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.0.6.9000</span>
         </div>
       </div>
     </div>
@@ -54,7 +54,12 @@
 <li>
   <a href="news/index.html">News</a>
 </li>
-        
+        <li>
+  <a href="https://github.com/tidymodels/embed/">
+    <span class="fab fa fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
       </ul>
 </div>
 <!--/.nav-collapse -->
@@ -68,7 +73,7 @@
       </header><div class="row">
   <div class="contents col-md-9">
 
-<p><a href="https://github.com/tidymodels/embed"><img src="https://github.com/tidymodels/embed/workflows/R-CMD-check/badge.svg" alt="R build status"></a> <a href="https://codecov.io/github/tidymodels/embed?branch=master"><img src="https://codecov.io/gh/tidymodels/embed/branch/master/graph/badge.svg" alt="Coverage status"></a> <a href="http://cran.r-project.org/web/packages/embed"><img src="http://www.r-pkg.org/badges/version/embed" alt="CRAN_Status_Badge"></a> <a href="http://cran.rstudio.com/package=embed"><img src="http://cranlogs.r-pkg.org/badges/embed" alt="Downloads"></a> <img src="https://img.shields.io/badge/lifecycle-maturing-blue.svg"></p>
+
 <p><code>embed</code> is a package that contains extra steps for the <a href="http://cran.rstudio.com/package=recipes"><code>recipes</code></a> package for embedding predictors into one or more numeric columns. All of the preprocessing methods are <em>supervised</em>.</p>
 <p>These steps are contained in a separate package because the package dependencies, <a href="http://cran.rstudio.com/package=rstanarm"><code>rstanarm</code></a>, <a href="http://cran.rstudio.com/package=lme4"><code>lme4</code></a>, and <a href="http://cran.rstudio.com/package=keras"><code>keras</code></a>, are fairly heavy.</p>
 <p>The steps for categorical predictors are:</p>
@@ -93,11 +98,11 @@
 <li>Good, I. J. (1985), “<a href="https://scholar.google.com/scholar?hl=en&amp;as_sdt=0%2C5&amp;q=Weight+of+evidence%3A+A+brief+survey&amp;btnG=">Weight of evidence: A brief survey</a>”, Bayesian Statistics, 2, pp.249-270.</li>
 </ul>
 <p>To install the package:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">"embed"</span>)</a>
-<a class="sourceLine" id="cb1-2" data-line-number="2"></a>
-<a class="sourceLine" id="cb1-3" data-line-number="3"><span class="co">## for development version:</span></a>
-<a class="sourceLine" id="cb1-4" data-line-number="4"><span class="kw"><a href="https://rdrr.io/r/base/library.html">require</a></span>(<span class="st">"devtools"</span>)</a>
-<a class="sourceLine" id="cb1-5" data-line-number="5"><span class="kw"><a href="https://rdrr.io/pkg/devtools/man/remote-reexports.html">install_github</a></span>(<span class="st">"tidymodels/embed"</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">"embed"</span>)
+
+<span class="co">## for development version:</span>
+<span class="fu"><a href="https://rdrr.io/r/base/library.html">require</a></span>(<span class="st">"devtools"</span>)
+<span class="fu"><a href="https://devtools.r-lib.org//reference/remote-reexports.html">install_github</a></span>(<span class="st">"tidymodels/embed"</span>)</pre></div>
 
   </div>
 
@@ -106,6 +111,8 @@
 <h2>Links</h2>
 <ul class="list-unstyled">
 <li>Download from CRAN at <br><a href="https://cloud.r-project.org/package=embed">https://​cloud.r-project.org/​package=embed</a>
+</li>
+<li>Browse source code at <br><a href="https://github.com/tidymodels/embed/">https://​github.com/​tidymodels/​embed/​</a>
 </li>
 <li>Report a bug at <br><a href="https://github.com/tidymodels/embed/issues">https://​github.com/​tidymodels/​embed/​issues</a>
 </li>
@@ -125,7 +132,16 @@
 </ul>
 </div>
 
-  </div>
+  <div class="dev-status">
+<h2>Dev status</h2>
+<ul class="list-unstyled">
+<li><a href="https://github.com/tidymodels/embed"><img src="https://github.com/tidymodels/embed/workflows/R-CMD-check/badge.svg" alt="R build status"></a></li>
+<li><a href="https://codecov.io/github/tidymodels/embed?branch=master"><img src="https://codecov.io/gh/tidymodels/embed/branch/master/graph/badge.svg" alt="Coverage status"></a></li>
+<li><a href="http://cran.r-project.org/web/packages/embed"><img src="http://www.r-pkg.org/badges/version/embed" alt="CRAN_Status_Badge"></a></li>
+<li><a href="http://cran.rstudio.com/package=embed"><img src="http://cranlogs.r-pkg.org/badges/embed" alt="Downloads"></a></li>
+</ul>
+</div>
+</div>
 </div>
 
 
