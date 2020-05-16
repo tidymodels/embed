@@ -1,7 +1,8 @@
-library(testthat)
-library(dplyr)
-
 context("woe")
+
+source(testthat::test_path("test_helpers.R"))
+
+# ------------------------------------------------------------------------------
 
 data("credit_data")
 
@@ -14,7 +15,8 @@ credit_te <- credit_data[-in_training, ]
 
 set.seed(1)
 df <- data.frame(x1 = sample(c("A", "B", "C"), size = 20, replace = TRUE) %>% factor,
-                 x2 = sample(c("A", "B", "C"), size = 20, replace = TRUE)) %>%
+                 x2 = sample(c("A", "B", "C"), size = 20, replace = TRUE),
+                 stringsAsFactors = TRUE) %>%
   mutate(y = rbinom(20, 1, prob = 1/(1 + exp(-1 * (-4 + as.numeric(x1) + as.numeric(x2)))))) %>%
   mutate(y = if_else(y == 1, "A", "B"))
 

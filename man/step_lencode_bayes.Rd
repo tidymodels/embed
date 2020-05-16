@@ -98,6 +98,7 @@ most effect on the amount of shrinkage.
 \examples{
 library(recipes)
 library(dplyr)
+library(modeldata)
 
 data(okc)
 

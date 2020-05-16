@@ -8,3 +8,5 @@ Applications/Tensorflow.Rmd
 ^.*\.Rproj$
 ^\.Rproj\.user$
 .github
+^codecov\.yml$
+^\.github/workflows/R-CMD-check\.yaml$

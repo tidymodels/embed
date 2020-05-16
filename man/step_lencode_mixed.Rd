@@ -93,6 +93,7 @@ others.
 \examples{
 library(recipes)
 library(dplyr)
+library(modeldata)
 
 data(okc)
 

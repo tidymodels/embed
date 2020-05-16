@@ -1,6 +1,6 @@
-library(embed)
-library(dplyr)
-library(testthat)
+context("umap")
+
+source(testthat::test_path("test_helpers.R"))
 
 # ------------------------------------------------------------------------------
 
@@ -13,10 +13,6 @@ tr <- iris_dat[-split, ]
 te <- iris_dat[ split, ]
 
 # ------------------------------------------------------------------------------
-
-
-
-context("umap")
 
 test_that("factor outcome", {
   

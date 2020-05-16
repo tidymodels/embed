@@ -74,6 +74,7 @@
 #' @examples
 #' library(recipes)
 #' library(dplyr)
+#' library(modeldata)
 #' 
 #' data(okc)
 #' 
@@ -94,7 +95,7 @@ step_lencode_mixed <-
            skip = FALSE,
            id = rand_id("lencode_bayes")) {
     if (is.null(outcome))
-      stop("Please list a variable in `outcome`", call. = FALSE)
+      rlang::abort("Please list a variable in `outcome`")
     add_step(
       recipe,
       step_lencode_mixed_new(
@@ -133,9 +134,11 @@ prep.step_lencode_mixed <- function(x, training, info = NULL, ...) {
   y_name <- terms_select(x$outcome, info = info)
   if (is.factor(training[[y_name]])) {
     if (length(levels(training[[y_name]])) > 2) {
-      stop("Mixed effects methods here are on;y implemented for ",
-           "two-class problems.",
-           call. = FALSE)
+      rlang::abort(paste0(
+        "Mixed effects methods here are only implemented for ",
+        "two-class problems."
+      )
+      )
     }
   }
   res <-

@@ -79,6 +79,7 @@ is returned.
 \examples{
 library(recipes)
 library(dplyr)
+library(modeldata)
 
 data(okc)
 

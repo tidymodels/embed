@@ -106,7 +106,7 @@ the levels of one given predictor. One easy way to do this is by
 tweaking an output returned from \code{dictionary()}.
 }
 \examples{
-
+library(modeldata)
 data("credit_data")
 
 set.seed(111)

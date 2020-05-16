@@ -24,6 +24,8 @@ if(!eval_chunks)
 library(tidymodels)
 library(ggiraph)
 library(embed)
+library(modeldata)
+
 data(okc)
 ```
 
@@ -36,6 +38,8 @@ We first calculate the raw log-odds for the data (independent of any model):
 ```{r raw-data, eval = eval_chunks}
 library(tidymodels)
 library(embed)
+library(modeldata)
+
 data(okc)
 
 props <- 

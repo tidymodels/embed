@@ -163,6 +163,7 @@ If using a recipes with this step with \code{caret}, avoid parallel
 processing.
 }
 \examples{
+library(modeldata)
 data(okc)
 
 rec <- recipe(Class ~ age + location, data = okc) \%>\%
