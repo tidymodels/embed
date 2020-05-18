@@ -122,6 +122,7 @@
 #'  \url{https://flovv.github.io/Embeddings_with_keras_part2/}
 #' 
 #' @examples
+#' library(modeldata)
 #' data(okc)
 #' 
 #' rec <- recipe(Class ~ age + location, data = okc) %>%
@@ -147,7 +148,7 @@ step_embed <-
            skip = FALSE,
            id = rand_id("lencode_bayes")) {
     if (is.null(outcome))
-      stop("Please list a variable in `outcome`", call. = FALSE)
+      rlang::abort("Please list a variable in `outcome`")
     add_step(
       recipe,
       step_embed_new(
@@ -238,7 +239,6 @@ prep.step_embed <- function(x, training, info = NULL, ...) {
 #' @importFrom keras keras_model_sequential layer_embedding layer_flatten
 #' @importFrom keras layer_dense compile fit get_layer backend keras_model
 #' @importFrom keras layer_concatenate layer_input
-#' @importFrom tensorflow use_session_with_seed
 #' @importFrom dplyr bind_cols as_tibble ends_with
 #' @importFrom stats setNames
 tf_coefs2 <- function(x, y, z, opt, num, lab, h, seeds = sample.int(10000, 4), ...) {
@@ -246,8 +246,13 @@ tf_coefs2 <- function(x, y, z, opt, num, lab, h, seeds = sample.int(10000, 4), .
   p <- length(vars)
   
   set.seed(seeds[1])
-  tensorflow::use_session_with_seed(seeds[2])
   
+  if (tensorflow::tf_version() == "2.0") {
+    tensorflow::tf$random$set_seed(seeds[2])
+  } else {
+    tensorflow::use_session_with_seed(seeds[2])
+  }
+
   on.exit(keras::backend()$clear_session())
   
   lvl <- lapply(x, levels)
@@ -256,8 +261,9 @@ tf_coefs2 <- function(x, y, z, opt, num, lab, h, seeds = sample.int(10000, 4), .
   mats <- lapply(x, function(x) matrix(as.numeric(x), ncol = 1))
   
   y <- y[[1]]
-  if(is.character(y))
+  if (is.character(y)) {
     y <- as.factor(y)
+  }
   factor_y <- is.factor(y)
   
   if (factor_y)
@@ -267,13 +273,13 @@ tf_coefs2 <- function(x, y, z, opt, num, lab, h, seeds = sample.int(10000, 4), .
   
   inputs <- vector(mode = "list", length = p)
   # For each categorical predictor, make an input layer
-  for(i in 1:p) {
+  for (i in 1:p) {
     inputs[[i]] <- layer_input(shape = 1, name = paste0("input_", vars[i]))
   }
   
   layers <- vector(mode = "list", length = p)
   # Now add embedding to each layer and then flatten
-  for(i in 1:p) {
+  for (i in 1:p) {
     layers[[i]] <- 
       inputs[[i]] %>%
       layer_embedding(
@@ -442,11 +448,11 @@ embed_control <- function(
   callbacks = NULL
 ) {
   if(batch_size < 1)
-    stop("`batch_size` should be a positive integer", call. = FALSE)
+    rlang::abort("`batch_size` should be a positive integer")
   if(epochs < 1)
-    stop("`epochs` should be a positive integer", call. = FALSE)  
+    rlang::abort("`epochs` should be a positive integer")  
   if(validation_split < 0 | validation_split > 1)
-    stop("`validation_split` should be on [0, 1)", call. = FALSE)
+    rlang::abort("`validation_split` should be on [0, 1)")
   list(
     loss = loss, metrics = metrics, optimizer = optimizer, epochs = epochs, 
     validation_split = validation_split, batch_size = batch_size,
@@ -463,8 +469,12 @@ tf_options_check <- function(opt) {
                  'verbose')
   
   if (length(setdiff(exp_names, names(opt))) > 0)
-    stop("The following options are missing from the `options`: ",
-         paste0(setdiff(exp_names, names(opt)), collapse = ",")) 
+    rlang::abort(
+      paste0(
+        "The following options are missing from the `options`: ",
+        paste0(setdiff(exp_names, names(opt)), collapse = ",")
+      )
+    )
   opt
 }
 
@@ -472,7 +482,7 @@ tf_options_check <- function(opt) {
 #' @importFrom stats model.matrix
 class2ind <- function (x)  {
   if (!is.factor(x)) 
-    stop("'x' should be a factor")
+    rlang::abort("'x' should be a factor")
   y <- model.matrix(~x - 1)
   colnames(y) <- gsub("^x", "", colnames(y))
   attributes(y)$assign <- NULL

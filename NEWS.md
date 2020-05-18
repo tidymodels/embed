@@ -1,3 +1,16 @@
+# embed (development version)
+
+# embed 0.0.6
+
+* Small changes for base R's `stringsAsFactors` change. 
+
+# `embed` 0.0.5
+
+ * The example data are now in the `modeldata` package. 
+ 
+ * Small TF updates to `step_embed()`. 
+
+
 # `embed` 0.0.4
 
  * Methods were added for a future generic called `tunable()`. This outlines which parameters in a step can/could be tuned.

@@ -1,12 +1,10 @@
-library(embed)
-library(dplyr)
-library(testthat)
-
-source("make_example_data.R")
-
-###################################################################
-
 context("glm model, classification")
+
+source(testthat::test_path("make_example_data.R"))
+source(testthat::test_path("test_helpers.R"))
+
+# ------------------------------------------------------------------------------
+
 
 test_that("factor encoded predictor", {
   class_test <- recipe(x2 ~ ., data = ex_dat) %>%
@@ -120,7 +118,7 @@ test_that("character encoded predictor", {
   )     
 })
 
-###################################################################
+# ------------------------------------------------------------------------------
 
 context("glm model, regression")
 
@@ -238,7 +236,7 @@ test_that("character encoded predictor", {
 })
 
 
-###################################################################
+# ------------------------------------------------------------------------------
 
 context("glm model, arguments")
 

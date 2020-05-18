@@ -1,22 +1,22 @@
-library(embed)
-library(dplyr)
-library(testthat)
+context("glmer model, classification")
 
-source("make_example_data.R")
+source(testthat::test_path("make_example_data.R"))
+source(testthat::test_path("test_helpers.R"))
 
 opts <- list(seed = 34677, chains = 2, iter = 500)
 
-###################################################################
-
-context("glmer model, classification")
+# ------------------------------------------------------------------------------
 
 test_that("factor encoded predictor", {
   skip_on_cran()
-  class_test <- recipe(x2 ~ ., data = ex_dat) %>%
-    step_lencode_bayes(x3, outcome = vars(x2), 
-                      verbose = FALSE,
-                      options = opts) %>%
-    prep(training = ex_dat, retain = TRUE)
+  expect_warning(
+    class_test <- recipe(x2 ~ ., data = ex_dat) %>%
+      step_lencode_bayes(x3, outcome = vars(x2), 
+                         verbose = FALSE,
+                         options = opts) %>%
+      prep(training = ex_dat, retain = TRUE),
+    "Bulk Effective Samples Size"
+  )
   tr_values <- juice(class_test)$x3
   new_values <- bake(class_test, new_data = new_dat)
   expect_warning(
@@ -72,13 +72,16 @@ test_that("factor encoded predictor", {
 
 test_that("character encoded predictor", {
   skip_on_cran()
-  class_test <- recipe(x2 ~ ., data = ex_dat_ch) %>%
-    step_lencode_bayes(x3, outcome = vars(x2), 
-                      verbose = FALSE,
-                      options = opts, 
-                      id = "id") %>%
-    prep(training = ex_dat_ch, retain = TRUE,
-         options = opts)
+  expect_warning(
+    class_test <- recipe(x2 ~ ., data = ex_dat_ch) %>%
+      step_lencode_bayes(x3, outcome = vars(x2), 
+                         verbose = FALSE,
+                         options = opts, 
+                         id = "id") %>%
+      prep(training = ex_dat_ch, retain = TRUE,
+           options = opts),
+    "Bulk Effective Samples Size"
+  )
   tr_values <- juice(class_test)$x3
   new_values <- bake(class_test, new_data = new_dat_ch)
   new_values_fc <- bake(class_test, new_data = new_dat)  
@@ -130,17 +133,20 @@ test_that("character encoded predictor", {
   )     
 })
 
-###################################################################
+# ------------------------------------------------------------------------------
 
 context("glmer model, regression")
 
 test_that("factor encoded predictor", {
   skip_on_cran()
-  reg_test <- recipe(x1 ~ ., data = ex_dat) %>%
-    step_lencode_bayes(x3, outcome = vars(x1), 
-                      verbose = FALSE,
-                      options = opts) %>%
-    prep(training = ex_dat, retain = TRUE)
+  expect_warning(
+    reg_test <- recipe(x1 ~ ., data = ex_dat) %>%
+      step_lencode_bayes(x3, outcome = vars(x1), 
+                         verbose = FALSE,
+                         options = opts) %>%
+      prep(training = ex_dat, retain = TRUE),
+    "Bulk Effective Samples Size"
+  )
   tr_values <- juice(reg_test)$x3
   new_values <- bake(reg_test, new_data = new_dat)
   expect_warning(
@@ -197,11 +203,14 @@ test_that("factor encoded predictor", {
 
 test_that("character encoded predictor", {
   skip_on_cran()
-  reg_test <- recipe(x1 ~ ., data = ex_dat_ch) %>%
-    step_lencode_bayes(x3, outcome = vars(x1), 
-                      verbose = FALSE,
-                      options = opts) %>%
-    prep(training = ex_dat_ch, retain = TRUE)
+  expect_warning(
+    reg_test <- recipe(x1 ~ ., data = ex_dat_ch) %>%
+      step_lencode_bayes(x3, outcome = vars(x1), 
+                         verbose = FALSE,
+                         options = opts) %>%
+      prep(training = ex_dat_ch, retain = TRUE),
+    "Bulk Effective Samples Size"
+  )
   tr_values <- juice(reg_test)$x3
   new_values <- bake(reg_test, new_data = new_dat_ch)
   new_values_fc <- bake(reg_test, new_data = new_dat)  

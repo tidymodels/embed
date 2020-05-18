@@ -1,4 +1,4 @@
-[![Travis build status](https://travis-ci.org/tidymodels/embed.svg?branch=master)](https://travis-ci.org/tidymodels/embed)
+[![R build status](https://github.com/tidymodels/embed/workflows/R-CMD-check/badge.svg)](https://github.com/tidymodels/embed)
 [![Coverage status](https://codecov.io/gh/tidymodels/embed/branch/master/graph/badge.svg)](https://codecov.io/github/tidymodels/embed?branch=master)
 [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/embed)](http://cran.r-project.org/web/packages/embed)
 [![Downloads](http://cranlogs.r-pkg.org/badges/embed)](http://cran.rstudio.com/package=embed)
