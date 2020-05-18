@@ -2,6 +2,7 @@
 % Please edit documentation in R/discretize_tree.R
 \name{step_discretize_tree}
 \alias{step_discretize_tree}
+\alias{tidy.step_discretize_tree}
 \title{Discretize numeric variables with XgBoost}
 \usage{
 step_discretize_tree(
@@ -10,14 +11,16 @@ step_discretize_tree(
   role = NA,
   trained = FALSE,
   outcome = NULL,
+  prop = 0.8,
   learn_rate = 0.3,
   num_breaks = 10,
   tree_depth = 1,
   rules = NULL,
-  prefix = "bin_tree",
   skip = FALSE,
   id = rand_id("discretize_tree")
 )
+
+\method{tidy}{step_discretize_tree}(x, ...)
 }
 \arguments{
 \item{recipe}{A recipe object. The step will be added to the sequence of
@@ -35,6 +38,9 @@ have been estimated.}
 outcome to train XgBoost models in order to discretize explanatory
 variables.}
 
+\item{prop}{The share of data used for training the splits (the rest is used
+for early stopping). Defaults to 0.80.}
+
 \item{learn_rate}{The rate at which the boosting algorithm adapts from
 iteration-to-iteration. Corresponds to 'eta' in the \pkg{xgboost} package.
 Defaults to 0.3.}
@@ -49,8 +55,7 @@ Corresponds to 'max_depth' in the \pkg{xgboost} package. Defaults to 1.}
 \item{rules}{The splitting rules of the best XgBoost tree to retain for
 each variable.}
 
-\item{prefix}{A character string that will be the prefix to the resulting
-new variables. Defaults to "xgb_bin".}
+\item{x}{A \code{step_discretize_tree} object.}
 }
 \value{
 An updated version of \code{recipe} with the new step added to the
@@ -87,14 +92,16 @@ The new variables will have names that begin with \code{prefix} followed
 by their original name.
 }
 \examples{
-library(modeldata)
-data(credit_data)
+data(credit_data, package = "modeldata")
+
 library(rsample)
 
 split <- initial_split(credit_data, strata = "Status")
 
 credit_data_tr <- training(split)
 credit_data_te <- testing(split)
+
+# ------------------------------------------------------------------------------
 
 xgb_rec <- 
   recipe(Status ~ ., data = credit_data_tr) \%>\%

@@ -59,8 +59,8 @@
 #'  by their original name.
 #'
 #' @examples
-#' library(modeldata)
-#' data(credit_data)
+#' data(credit_data, package = "modeldata")
+#' 
 #' library(rsample)
 #'
 #' split <- initial_split(credit_data, strata = "Status")
@@ -68,6 +68,8 @@
 #' credit_data_tr <- training(split)
 #' credit_data_te <- testing(split)
 #'
+#' # ------------------------------------------------------------------------------
+#' 
 #' xgb_rec <- 
 #'   recipe(Status ~ ., data = credit_data_tr) %>%
 #'   step_medianimpute(all_numeric()) %>%
@@ -157,6 +159,7 @@ run_xgboost <- function(.train, .test, .learn_rate, .num_breaks, .tree_depth, .o
   )
 }
 
+
 xgb_binning <- function(df, outcome, predictor, prop, learn_rate, num_breaks, tree_depth){
   
   # Assuring correct types
@@ -183,7 +186,7 @@ xgb_binning <- function(df, outcome, predictor, prop, learn_rate, num_breaks, tr
   # Changes: I also realized that results for a single column are not reproducable given a training set
   # because sampling is not persistent, therefore I added a specific random seed here
   # which makes the results much more stable and not so much dependent on inner sampling
-  split <- withr:::with_seed(
+  split <- withr::with_seed(
     42,
     # suppressing rsample messages regarding stratification (regression)
     suppressWarnings(rsample::initial_split(df, prop = prop, strata = outcome))
@@ -198,9 +201,9 @@ xgb_binning <- function(df, outcome, predictor, prop, learn_rate, num_breaks, tr
   
   xgb_rec <- train %>% 
     dplyr::select(-one_of(outcome)) %>% 
-    recipe(~ .) %>% 
-    step_integer(all_predictors()) %>% 
-    prep(retain = TRUE)
+    recipes::recipe(~ .) %>% 
+    recipes::step_integer(recipes::all_predictors()) %>% 
+    recipes::prep(retain = TRUE)
   
   # Defining the objective function
   if (is.null(levels)) {
@@ -233,7 +236,7 @@ xgb_binning <- function(df, outcome, predictor, prop, learn_rate, num_breaks, tr
     )
   }
   
-  xgb_mdl <- withr:::with_seed(
+  xgb_mdl <- withr::with_seed(
     sample.int(10^6, 1),
     run_xgboost(
         xgb_train,
@@ -399,7 +402,7 @@ tidy.step_discretize_tree <- function(x, ...) {
 # ------------------------------------------------------------------------------
 
 # TODO once other things are finalised and working
-# #' @importFrom utils packageVersion
+
 # tidyr_new_interface <- function() {
 #   utils::packageVersion("tidyr") > "0.8.99"
 # }
