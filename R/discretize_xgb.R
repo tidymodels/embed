@@ -103,6 +103,8 @@ step_discretize_xgb <-
       rlang::abort("`outcome` should select at least one column.")
     }
 
+    recipes::recipes_pkg_check("xgboost")
+    
     add_step(
       recipe,
       step_discretize_xgb_new(
