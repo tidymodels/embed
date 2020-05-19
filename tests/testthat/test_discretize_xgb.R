@@ -2,7 +2,7 @@ library(testthat)
 library(dplyr)
 library(rsample)
 
-context("discretize_tree")
+context("discretize_xgb")
 
 source(test_path("make_binned_data.R"))
 
@@ -203,12 +203,12 @@ test_that("xgb_binning for regression", {
   
 })
 
-test_that("step_discretize_tree for classification", {
+test_that("step_discretize_xgb for classification", {
   set.seed(125)
   # General use
   xgb_rec <-
     recipe(class ~ ., data = sim_tr_cls) %>%
-    step_discretize_tree(all_predictors(), outcome = "class")
+    step_discretize_xgb(all_predictors(), outcome = "class")
   
   set.seed(28)
   xgb_rec <- prep(xgb_rec, training = sim_tr_cls)
@@ -239,7 +239,7 @@ test_that("step_discretize_tree for classification", {
   # Too few data
   expect_error(
     recipe(class ~ ., data = sim_tr_cls[1:10, ]) %>%
-      step_discretize_tree(all_predictors(), outcome = "class") %>% 
+      step_discretize_xgb(all_predictors(), outcome = "class") %>% 
       prep(),
     "Too few observations in the early stopping validation set"
   )
@@ -255,7 +255,7 @@ test_that("step_discretize_tree for classification", {
     select(one_of(predictors_non_numeric)) %>% 
     recipe(Status ~ .) %>%
     step_medianimpute(all_numeric()) %>%
-    step_discretize_tree(all_numeric(), outcome = "Status")
+    step_discretize_xgb(all_numeric(), outcome = "Status")
   
   expect_error(
     prep(xgb_rec, 
@@ -269,7 +269,7 @@ test_that("step_discretize_tree for classification", {
   msg <- capture_message(
     recipe(Status ~ ., data = credit_data_train) %>%
       step_medianimpute(all_numeric()) %>%
-      step_discretize_tree(all_numeric(), outcome = "Status") %>%
+      step_discretize_xgb(all_numeric(), outcome = "Status") %>%
       prep(retain = TRUE)
   )
   
@@ -282,12 +282,12 @@ test_that("step_discretize_tree for classification", {
   
 })
 
-test_that("step_discretize_tree for regression", {
+test_that("step_discretize_xgb for regression", {
   # General use
   set.seed(83834)
   xgb_rec <-
     recipe(y ~ ., data = sim_tr_reg) %>%
-    step_discretize_tree(all_predictors(), outcome = "y")
+    step_discretize_xgb(all_predictors(), outcome = "y")
   tidy_untrained <- tidy(xgb_rec, 1)
   
   xgb_rec <- prep(xgb_rec, training = sim_tr_reg)
@@ -340,7 +340,7 @@ test_that("step_discretize_tree for regression", {
   expect_warning(
     xgb_rec <-
       recipe(y ~ ., data = sim_tr_reg[1:100,]) %>%
-      step_discretize_tree(all_predictors(), outcome = "y") %>% 
+      step_discretize_xgb(all_predictors(), outcome = "y") %>% 
       prep(),
     "Predictors 'x' were not processed"
   )
@@ -354,7 +354,7 @@ test_that("step_discretize_tree for regression", {
     select(one_of(predictors_non_numeric)) %>% 
     recipe(age ~ .) %>%
     step_medianimpute(all_numeric()) %>%
-    step_discretize_tree(all_predictors(), outcome = "age")
+    step_discretize_xgb(all_predictors(), outcome = "age")
   
   expect_error(
     prep(xgb_rec, 
@@ -368,7 +368,7 @@ test_that("step_discretize_tree for regression", {
 test_that("printing", {
   xgb_rec <-
     recipe(class ~ ., data = sim_tr_cls) %>%
-    step_discretize_tree(all_predictors(), outcome = "class")
+    step_discretize_xgb(all_predictors(), outcome = "class")
   
   expect_output(print(xgb_rec))
   expect_output(prep(xgb_rec, verbose = TRUE))

@@ -56,7 +56,7 @@ tunable.step_woe <- function(x, ...) {
 
 #' @export
 #' @rdname tunable.step_embed
-tunable.step_discretize_tree <- function(x, ...) {
+tunable.step_discretize_xgb <- function(x, ...) {
   tibble::tibble(
     name = c("learn_rate", "num_breaks", "tree_depth"),
     call_info = list(
@@ -65,7 +65,7 @@ tunable.step_discretize_tree <- function(x, ...) {
       list(pkg = "dials", fun = "tree_depth")
     ),
     source = "recipe",
-    component = "step_discretize_tree",
+    component = "step_discretize_xgb",
     component_id = x$id
   )
 }

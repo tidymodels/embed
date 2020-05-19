@@ -1,6 +1,6 @@
 #' Discretize numeric variables with XgBoost
 #'
-#' `step_discretize_tree` creates a *specification* of a recipe step that will
+#' `step_discretize_xgb` creates a *specification* of a recipe step that will
 #'  discretize numeric data (e.g. integers or doubles) into bins in a
 #'  supervised way using an XgBoost model.
 #'
@@ -41,7 +41,7 @@
 #' @concept discretization
 #' @concept factors
 #' @export
-#' @details `step_discretize_tree()` creates non-uniform bins from numerical
+#' @details `step_discretize_xgb()` creates non-uniform bins from numerical
 #'  variables by utilizing the information about the outcome variable and
 #'  applying the xgboost model. It is advised to impute missing values before
 #'  this step. This step is intended to be used particularly with linear models
@@ -76,14 +76,14 @@
 #' xgb_rec <- 
 #'   recipe(Status ~ ., data = credit_data_tr) %>%
 #'   step_medianimpute(all_numeric()) %>%
-#'   step_discretize_tree(all_numeric(), outcome = "Status")
+#'   step_discretize_xgb(all_numeric(), outcome = "Status")
 #'
 #' xgb_rec <- prep(xgb_rec, training = credit_data_tr)
 #'
 #' xgb_test_bins <- bake(xgb_rec, credit_data_te)
 #' @seealso [recipes::recipe()] [recipes::prep.recipe()] [recipes::bake.recipe()]
 
-step_discretize_tree <-
+step_discretize_xgb <-
   function(recipe,
            ...,
            role = NA,
@@ -97,7 +97,7 @@ step_discretize_tree <-
            tree_depth = 1,
            rules = NULL,
            skip = FALSE,
-           id = rand_id("discretize_tree")) {
+           id = rand_id("discretize_xgb")) {
     
     if (is.null(outcome)) {
       rlang::abort("`outcome` should select at least one column.")
@@ -105,7 +105,7 @@ step_discretize_tree <-
 
     add_step(
       recipe,
-      step_discretize_tree_new(
+      step_discretize_xgb_new(
         terms = ellipse_check(...),
         role = role,
         trained = trained,
@@ -121,11 +121,11 @@ step_discretize_tree <-
     )
   }
 
-step_discretize_tree_new <-
+step_discretize_xgb_new <-
   function(terms, role, trained, outcome, prop, learn_rate, num_breaks,
            tree_depth, rules, skip, id) {
     step(
-      subclass = "discretize_tree",
+      subclass = "discretize_xgb",
       terms = terms,
       role = role,
       trained = trained,
@@ -246,7 +246,7 @@ xgb_binning <- function(df, outcome, predictor, prop, learn_rate, num_breaks, tr
   if (inherits(xgb_mdl, "try-error")) {
     err <- conditionMessage(attr(xgb_mdl, "condition"))
     msg <- 
-      paste0("`step_discretize_tree()` failed to create a tree with error for ",
+      paste0("`step_discretize_xgb()` failed to create a tree with error for ",
              "predictor '", predictor, "', which will not be binned. The error: ", 
              err)
     rlang::warn(msg)
@@ -270,7 +270,7 @@ xgb_binning <- function(df, outcome, predictor, prop, learn_rate, num_breaks, tr
   if (inherits(xgb_tree, "try-error")) {
     err <- conditionMessage(attr(xgb_tree, "condition"))
     msg <- 
-      paste0("`step_discretize_tree()` failed to create a tree with error for ",
+      paste0("`step_discretize_xgb()` failed to create a tree with error for ",
              "predictor '", predictor, "', which will not be binned. The error: ", 
              err)
     rlang::warn(msg)
@@ -294,7 +294,7 @@ xgb_binning <- function(df, outcome, predictor, prop, learn_rate, num_breaks, tr
 }
 
 #' @export
-prep.step_discretize_tree <- function(x, training, info = NULL, ...) {
+prep.step_discretize_xgb <- function(x, training, info = NULL, ...) {
   
   col_names <- recipes::terms_select(terms = x$terms, info = info)
   check_type(training[, col_names])
@@ -350,7 +350,7 @@ prep.step_discretize_tree <- function(x, training, info = NULL, ...) {
     names(rules) <- col_names
   }
   
-  step_discretize_tree_new(
+  step_discretize_xgb_new(
     terms = x$terms,
     role = x$role,
     trained = TRUE,
@@ -366,7 +366,7 @@ prep.step_discretize_tree <- function(x, training, info = NULL, ...) {
 }
 
 #' @export
-bake.step_discretize_tree <- function(object, new_data, ...) {
+bake.step_discretize_xgb <- function(object, new_data, ...) {
   vars <- object$rules
   
   for (i in seq_along(vars)) {
@@ -390,16 +390,16 @@ bake.step_discretize_tree <- function(object, new_data, ...) {
 }
 
 #' @export
-print.step_discretize_tree <- function(x, width = max(20, options()$width - 30), ...) {
+print.step_discretize_xgb <- function(x, width = max(20, options()$width - 30), ...) {
     cat("Discretizing variables using XgBoost ")
     recipes::printer(names(x$rules), x$terms, x$trained, width = width)
     invisible(x)
   }
 
-#' @rdname step_discretize_tree
-#' @param x A `step_discretize_tree` object.
+#' @rdname step_discretize_xgb
+#' @param x A `step_discretize_xgb` object.
 #' @export
-tidy.step_discretize_tree <- function(x, ...) {
+tidy.step_discretize_xgb <- function(x, ...) {
   if (recipes::is_trained(x)) {
     num_splits <- purrr::map_int(x$rules, length)
     
