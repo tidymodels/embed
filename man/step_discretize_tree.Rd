@@ -39,21 +39,30 @@ outcome to train XgBoost models in order to discretize explanatory
 variables.}
 
 \item{prop}{The share of data used for training the splits (the rest is used
-for early stopping). Defaults to 0.80.}
+as a validation set for early stopping). Defaults to 0.80.}
 
 \item{learn_rate}{The rate at which the boosting algorithm adapts from
-iteration-to-iteration. Corresponds to 'eta' in the \pkg{xgboost} package.
+iteration-to-iteration. Corresponds to \code{eta} in the \pkg{xgboost} package.
 Defaults to 0.3.}
 
-\item{num_breaks}{The maximum number of discrete bins to bucket continuous
-features. Corresponds to 'max_bin' in the \pkg{xgboost} package. Defaults to
+\item{num_breaks}{The \emph{maximum} number of discrete bins to bucket continuous
+features. Corresponds to \code{max_bin} in the \pkg{xgboost} package. Defaults to
 10.}
 
 \item{tree_depth}{The maximum depth of the tree (i.e. number of splits).
-Corresponds to 'max_depth' in the \pkg{xgboost} package. Defaults to 1.}
+Corresponds to \code{max_depth} in the \pkg{xgboost} package. Defaults to 1.}
 
 \item{rules}{The splitting rules of the best XgBoost tree to retain for
 each variable.}
+
+\item{skip}{A logical. Should the step be skipped when the
+recipe is baked by \code{\link[recipes:bake.recipe]{recipes::bake.recipe()}}? While all operations are baked
+when \code{\link[recipes:prep.recipe]{recipes::prep.recipe()}} is run, some operations may not be able to be
+conducted on new data (e.g. processing the outcome variable(s)).
+Care should be taken when using \code{skip = TRUE} as it may affect
+the computations for subsequent operations}
+
+\item{id}{A character string that is unique to this step to identify it.}
 
 \item{x}{A \code{step_discretize_tree} object.}
 }
@@ -67,7 +76,7 @@ discretize numeric data (e.g. integers or doubles) into bins in a
 supervised way using an XgBoost model.
 }
 \details{
-step_discretize_tree creates non-uniform bins from numerical
+\code{step_discretize_tree()} creates non-uniform bins from numerical
 variables by utilizing the information about the outcome variable and
 applying the xgboost model. It is advised to impute missing values before
 this step. This step is intended to be used particularly with linear models
@@ -81,30 +90,23 @@ package, which makes this discretization method prone to overfitting.
 The pre-defined values of the underlying xgboost learns should give good
 and reasonably complex results. However, if one wishes to tune them the
 recommended path would be to first start with changing the value of
-'num_breaks' to e.g.: 20 or 30. If that doesn't give satisfactory results
-one could experiment with increasing the 'tree_depth' parameter.
+\code{num_breaks} to e.g.: 20 or 30. If that doesn't give satisfactory results
+one could experiment with increasing the \code{tree_depth} parameter.
 
 This step requires the \pkg{xgboost} package. If not installed, the
 step will stop with a note about installing the package.
 
-Note that the original variables will be replaced with the new bins.
-The new variables will have names that begin with \code{prefix} followed
-by their original name.
+Note that the original data will be replaced with the new bins.
 }
 \examples{
-library(recipes)
-
-
-data(credit_data, package = "modeldata")
-
+library(modeldata)
+data(credit_data)
 library(rsample)
 
 split <- initial_split(credit_data, strata = "Status")
 
 credit_data_tr <- training(split)
 credit_data_te <- testing(split)
-
-# ------------------------------------------------------------------------------
 
 xgb_rec <- 
   recipe(Status ~ ., data = credit_data_tr) \%>\%
@@ -116,7 +118,7 @@ xgb_rec <- prep(xgb_rec, training = credit_data_tr)
 xgb_test_bins <- bake(xgb_rec, credit_data_te)
 }
 \seealso{
-\code{\link[=recipe]{recipe()}} \code{\link[=prep.recipe]{prep.recipe()}} \code{\link[=bake.recipe]{bake.recipe()}}
+\code{\link[recipes:recipe]{recipes::recipe()}} \code{\link[recipes:prep.recipe]{recipes::prep.recipe()}} \code{\link[recipes:bake.recipe]{recipes::bake.recipe()}}
 }
 \concept{discretization}
 \concept{factors}

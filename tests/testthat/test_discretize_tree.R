@@ -166,20 +166,6 @@ test_that("xgb_binning for classification", {
     "failed to create a tree with error for predictor 'Seniority'"
   )
   
-  # Insufficient data points in inner test set
-  expect_error(
-    embed:::xgb_binning(
-      credit_data_small,
-      "Status",
-      "Seniority",
-      prop = 0.90,
-      learn_rate = 0.3,
-      num_breaks = 10,
-      tree_depth = 1
-    ),
-    "Too few observations in the inner test set"
-  )
-  
 })
 
 test_that("xgb_binning for regression", {
@@ -213,20 +199,6 @@ test_that("xgb_binning for regression", {
       tree_depth = 1
     ),
     "failed to create a tree with error for predictor 'height'"
-  )
-  
-  # Insufficient data points in inner test set
-  expect_error(
-    embed:::xgb_binning(
-      credit_data_small,
-      "Status",
-      "Seniority",
-      prop = 0.90,
-      learn_rate = 0.3,
-      num_breaks = 10,
-      tree_depth = 1
-    ),
-    "Too few observations in the inner test set."
   )
   
 })
@@ -264,6 +236,15 @@ test_that("step_discretize_tree for classification", {
     levels(xgb_test_bins$z)
   )
  
+  # Too few data
+  expect_error(
+    recipe(class ~ ., data = sim_tr_cls[1:10, ]) %>%
+      step_discretize_tree(all_predictors(), outcome = "class") %>% 
+      prep(),
+    "Too few observations in the early stopping validation set"
+  )
+  
+  
   
   # No numeric variables present
   predictors_non_numeric <- c(

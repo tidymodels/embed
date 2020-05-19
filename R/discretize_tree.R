@@ -15,17 +15,24 @@
 #'  outcome to train XgBoost models in order to discretize explanatory
 #'  variables.
 #' @param prop The share of data used for training the splits (the rest is used
-#' for early stopping). Defaults to 0.80.
+#'  as a validation set for early stopping). Defaults to 0.80.
 #' @param learn_rate The rate at which the boosting algorithm adapts from
-#'  iteration-to-iteration. Corresponds to 'eta' in the \pkg{xgboost} package.
+#'  iteration-to-iteration. Corresponds to `eta` in the \pkg{xgboost} package.
 #'  Defaults to 0.3.
-#' @param num_breaks The maximum number of discrete bins to bucket continuous
-#'  features. Corresponds to 'max_bin' in the \pkg{xgboost} package. Defaults to
+#' @param num_breaks The _maximum_ number of discrete bins to bucket continuous
+#'  features. Corresponds to `max_bin` in the \pkg{xgboost} package. Defaults to
 #'  10.
 #' @param tree_depth The maximum depth of the tree (i.e. number of splits).
-#' Corresponds to 'max_depth' in the \pkg{xgboost} package. Defaults to 1.
+#' Corresponds to `max_depth` in the \pkg{xgboost} package. Defaults to 1.
 #' @param rules The splitting rules of the best XgBoost tree to retain for
 #'  each variable.
+#' @param id A character string that is unique to this step to identify it.
+#' @param skip A logical. Should the step be skipped when the
+#'  recipe is baked by [recipes::bake.recipe()]? While all operations are baked
+#'  when [recipes::prep.recipe()] is run, some operations may not be able to be
+#'  conducted on new data (e.g. processing the outcome variable(s)).
+#'  Care should be taken when using `skip = TRUE` as it may affect
+#'  the computations for subsequent operations
 #' @return An updated version of `recipe` with the new step added to the
 #'  sequence of existing steps (if any).
 #' @keywords binning
@@ -34,7 +41,7 @@
 #' @concept discretization
 #' @concept factors
 #' @export
-#' @details step_discretize_tree creates non-uniform bins from numerical
+#' @details `step_discretize_tree()` creates non-uniform bins from numerical
 #'  variables by utilizing the information about the outcome variable and
 #'  applying the xgboost model. It is advised to impute missing values before
 #'  this step. This step is intended to be used particularly with linear models
@@ -48,15 +55,13 @@
 #' The pre-defined values of the underlying xgboost learns should give good
 #'  and reasonably complex results. However, if one wishes to tune them the
 #'  recommended path would be to first start with changing the value of
-#'  'num_breaks' to e.g.: 20 or 30. If that doesn't give satisfactory results
-#'  one could experiment with increasing the 'tree_depth' parameter.
+#'  `num_breaks` to e.g.: 20 or 30. If that doesn't give satisfactory results
+#'  one could experiment with increasing the `tree_depth` parameter.
 #'
 #' This step requires the \pkg{xgboost} package. If not installed, the
 #'  step will stop with a note about installing the package.
 #'
-#' Note that the original variables will be replaced with the new bins.
-#'  The new variables will have names that begin with `prefix` followed
-#'  by their original name.
+#' Note that the original data will be replaced with the new bins.
 #'
 #' @examples
 #' library(modeldata)
@@ -76,7 +81,7 @@
 #' xgb_rec <- prep(xgb_rec, training = credit_data_tr)
 #'
 #' xgb_test_bins <- bake(xgb_rec, credit_data_te)
-#' @seealso [recipe()] [prep.recipe()] [bake.recipe()]
+#' @seealso [recipes::recipe()] [recipes::prep.recipe()] [recipes::bake.recipe()]
 
 step_discretize_tree <-
   function(recipe,
@@ -94,8 +99,9 @@ step_discretize_tree <-
            skip = FALSE,
            id = rand_id("discretize_tree")) {
     
-    if (is.null(outcome))
+    if (is.null(outcome)) {
       rlang::abort("`outcome` should select at least one column.")
+    }
 
     add_step(
       recipe,
@@ -167,10 +173,10 @@ xgb_binning <- function(df, outcome, predictor, prop, learn_rate, num_breaks, tr
   # Checking the number of levels of the outcome
   levels <- levels(df[[outcome]])
   
-
   # ----------------------------------------------------------------------------
   
-  # I added this as I realized that before I wasn't asserting that the algo runs on each numeric column individually
+  # I added this as I realized that before I wasn't asserting that the algo runs 
+  # on each numeric column individually
   df <- df[colnames(df) %in% c(outcome, predictor)]
   df <- df[complete.cases(df),, drop = FALSE]
   
@@ -181,7 +187,7 @@ xgb_binning <- function(df, outcome, predictor, prop, learn_rate, num_breaks, tr
   # Changes: I also realized that results for a single column are not reproducible given a training set
   # because sampling is not persistent, therefore I added a specific random seed here
   # which makes the results much more stable and not so much dependent on inner sampling
-  split <- withr:::with_seed(
+  split <- withr::with_seed(
     sample.int(10^6, 1),
     # suppressing rsample messages regarding stratification (regression)
     suppressWarnings(rsample::initial_split(df, prop = prop, strata = outcome))
@@ -189,14 +195,10 @@ xgb_binning <- function(df, outcome, predictor, prop, learn_rate, num_breaks, tr
 
   train <- rsample::training(split)
   test  <- rsample::testing(split)
-  
-  if (nrow(test) < 2){
-    rlang::abort("Too few observations in the inner test set. Consider decreasing the `prop` parameter.")
-  }
-  
+
   # Defining the objective function
   if (is.null(levels)) {
-    objective <- "reg:squarederror"
+    objective <- "reg:linear"
     xgb_train <- xgboost::xgb.DMatrix(
       data = as.matrix(train[[predictor]], ncol = 1),
       label = train[[outcome]]
@@ -227,7 +229,7 @@ xgb_binning <- function(df, outcome, predictor, prop, learn_rate, num_breaks, tr
   
   xgb_mdl <- 
     try(
-      withr:::with_seed(
+      withr::with_seed(
         sample.int(10^6, 1),
         run_xgboost(
           xgb_train,
@@ -301,9 +303,14 @@ prep.step_discretize_tree <- function(x, training, info = NULL, ...) {
   
   col_names <- col_names[col_names != y_name]
   
-  # TODO check data size here once: 
+  test_size <- sum(complete.cases(training)) * (1 - x$prop)
   
-  
+  if (floor(test_size) < 2){
+    rlang::abort(
+      paste("Too few observations in the early stopping validation set.",
+            "Consider decreasing the `prop` parameter.")
+    )
+  }
   
   # Changes: check for the minimum number of unique data points in the column
   # in order to run the step. Otherwise, take it out of col_names. I think that 
@@ -382,6 +389,7 @@ bake.step_discretize_tree <- function(object, new_data, ...) {
   tibble::as_tibble(new_data)
 }
 
+#' @export
 print.step_discretize_tree <- function(x, width = max(20, options()$width - 30), ...) {
     cat("Discretizing variables using XgBoost ")
     recipes::printer(names(x$rules), x$terms, x$trained, width = width)
@@ -400,24 +408,10 @@ tidy.step_discretize_tree <- function(x, ...) {
       values = unlist(x$rules, use.names = FALSE)
     )
   } else {
-    term_names <- sel2char(x$terms)
+    term_names <- recipes::sel2char(x$terms)
     res <- tibble(variable = term_names,
                   values = rlang::na_chr)
   }
   res$id <- x$id
   res
 }
-
-# ------------------------------------------------------------------------------
-
-# TODO once other things are finalised and working
-# #' @importFrom utils packageVersion
-# tidyr_new_interface <- function() {
-#   utils::packageVersion("tidyr") > "0.8.99"
-# }
-
-
-# #' @importFrom utils globalVariables
-# utils::globalVariables(
-#   c("n", "p", "predictor", "summary_outcome", "value", "woe", "select", "variable", ".")
-# )
