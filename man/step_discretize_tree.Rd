@@ -92,6 +92,9 @@ The new variables will have names that begin with \code{prefix} followed
 by their original name.
 }
 \examples{
+library(recipes)
+
+
 data(credit_data, package = "modeldata")
 
 library(rsample)

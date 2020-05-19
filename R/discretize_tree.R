@@ -59,8 +59,8 @@
 #'  by their original name.
 #'
 #' @examples
-#' data(credit_data, package = "modeldata")
-#' 
+#' library(modeldata)
+#' data(credit_data)
 #' library(rsample)
 #'
 #' split <- initial_split(credit_data, strata = "Status")
@@ -68,8 +68,6 @@
 #' credit_data_tr <- training(split)
 #' credit_data_te <- testing(split)
 #'
-#' # ------------------------------------------------------------------------------
-#' 
 #' xgb_rec <- 
 #'   recipe(Status ~ ., data = credit_data_tr) %>%
 #'   step_medianimpute(all_numeric()) %>%
@@ -159,7 +157,6 @@ run_xgboost <- function(.train, .test, .learn_rate, .num_breaks, .tree_depth, .o
   )
 }
 
-
 xgb_binning <- function(df, outcome, predictor, prop, learn_rate, num_breaks, tree_depth){
   
   # Assuring correct types
@@ -170,24 +167,22 @@ xgb_binning <- function(df, outcome, predictor, prop, learn_rate, num_breaks, tr
   # Checking the number of levels of the outcome
   levels <- levels(df[[outcome]])
   
-  if (any(is.na(df[[outcome]]))) {
-    rlang::abort("Outcome variable contains missing values.")
-  }
-  
+
   # ----------------------------------------------------------------------------
   
   # I added this as I realized that before I wasn't asserting that the algo runs on each numeric column individually
   df <- df[colnames(df) %in% c(outcome, predictor)]
+  df <- df[complete.cases(df),, drop = FALSE]
   
   # Changes: prop now is a parameter with 0.80 as default. If prop is equal 
   # to 1 then rsample returns it standard error: Error: `prop` must be a number on (0, 1).
   # If there are less than 2 observations in the test set then an error is given
   
-  # Changes: I also realized that results for a single column are not reproducable given a training set
+  # Changes: I also realized that results for a single column are not reproducible given a training set
   # because sampling is not persistent, therefore I added a specific random seed here
   # which makes the results much more stable and not so much dependent on inner sampling
-  split <- withr::with_seed(
-    42,
+  split <- withr:::with_seed(
+    sample.int(10^6, 1),
     # suppressing rsample messages regarding stratification (regression)
     suppressWarnings(rsample::initial_split(df, prop = prop, strata = outcome))
   )
@@ -196,25 +191,19 @@ xgb_binning <- function(df, outcome, predictor, prop, learn_rate, num_breaks, tr
   test  <- rsample::testing(split)
   
   if (nrow(test) < 2){
-    rlang::abort("Too few observations in the inner test set. Consider decreasing the prop parameter.")
+    rlang::abort("Too few observations in the inner test set. Consider decreasing the `prop` parameter.")
   }
-  
-  xgb_rec <- train %>% 
-    dplyr::select(-one_of(outcome)) %>% 
-    recipes::recipe(~ .) %>% 
-    recipes::step_integer(recipes::all_predictors()) %>% 
-    recipes::prep(retain = TRUE)
   
   # Defining the objective function
   if (is.null(levels)) {
     objective <- "reg:squarederror"
     xgb_train <- xgboost::xgb.DMatrix(
-      data = as.matrix(juice(xgb_rec)), # this approach is needed to ensure all variables are represented as integers
+      data = as.matrix(train[[predictor]], ncol = 1),
       label = train[[outcome]]
     )
     
     xgb_test <- xgboost::xgb.DMatrix(
-      data = as.matrix(bake(xgb_rec, new_data = test)),
+      data = as.matrix(test[[predictor]], ncol = 1),
       label = test[[outcome]]
     )
     
@@ -226,51 +215,66 @@ xgb_binning <- function(df, outcome, predictor, prop, learn_rate, num_breaks, tr
       rlang::abort("Outcome variable needs to have two levels (binary classification).")
     }
     xgb_train <- xgboost::xgb.DMatrix(
-      data = as.matrix(juice(xgb_rec)),
+      data = as.matrix(train[[predictor]], ncol = 1),
       label = ifelse(train[[outcome]] == levels[[1]], 0, 1)
     )
     
     xgb_test <- xgboost::xgb.DMatrix(
-      data = as.matrix(bake(xgb_rec, new_data = test)),
+      data = as.matrix(test[[predictor]], ncol = 1),
       label = ifelse(test[[outcome]] == levels[[1]], 0, 1)
     )
   }
   
-  xgb_mdl <- withr::with_seed(
-    sample.int(10^6, 1),
-    run_xgboost(
-        xgb_train,
-        .test = xgb_test,
-        .learn_rate = learn_rate,
-        .num_breaks = num_breaks,
-        .tree_depth = tree_depth,
-        .objective = objective
-      )
-  )
+  xgb_mdl <- 
+    try(
+      withr:::with_seed(
+        sample.int(10^6, 1),
+        run_xgboost(
+          xgb_train,
+          .test = xgb_test,
+          .learn_rate = learn_rate,
+          .num_breaks = num_breaks,
+          .tree_depth = tree_depth,
+          .objective = objective
+        )
+      ),
+      silent = TRUE
+    )
+  
+  if (inherits(xgb_mdl, "try-error")) {
+    err <- conditionMessage(attr(xgb_mdl, "condition"))
+    msg <- 
+      paste0("`step_discretize_tree()` failed to create a tree with error for ",
+             "predictor '", predictor, "', which will not be binned. The error: ", 
+             err)
+    rlang::warn(msg)
+    return(numeric(0))
+  }
   
   # Changes: if there is insufficient training data/ variation then xgboost model is constant
   # and no splits will be returned. Additional check will inform the user
   # that the dataset is insufficient for this particular case
   # https://github.com/dmlc/xgboost/issues/2876
   # https://stackoverflow.com/questions/42670033/r-getting-non-tree-model-detected-this-function-can-only-be-used-with-tree-mo
-  xgb_tree <- tryCatch(
+  xgb_tree <- try(
     xgboost::xgb.model.dt.tree(
       model = xgb_mdl,
       trees = 1:xgb_mdl$best_iteration,
       use_int_id = TRUE
     ),
-    error = function(e){
-      "constant model"
-    }
+    silent = TRUE
   )
   
-  # TODO I'm not really happy with the way this is currently handled? Could you perhaps support here?
-  if(all(length(xgb_tree) == 1, xgb_tree == "constant model")){
-    rlang::abort(
-      "No splits could be calculated as there is inssuficient training data/ insufficient data variation for XgBoost. Consider increasing the prop parameter to devote more data to the inner training set."
-    )
+  if (inherits(xgb_tree, "try-error")) {
+    err <- conditionMessage(attr(xgb_tree, "condition"))
+    msg <- 
+      paste0("`step_discretize_tree()` failed to create a tree with error for ",
+             "predictor '", predictor, "', which will not be binned. The error: ", 
+             err)
+    rlang::warn(msg)
+    return(numeric(0))
   }
-  
+
   # Changes: keep all iterations up to the best one. Otherwise, it only kept the
   # split in the final tree. Also, just save the unique splits instead of the 
   # data frame. 
@@ -297,24 +301,24 @@ prep.step_discretize_tree <- function(x, training, info = NULL, ...) {
   
   col_names <- col_names[col_names != y_name]
   
+  # TODO check data size here once: 
+  
+  
+  
   # Changes: check for the minimum number of unique data points in the column
   # in order to run the step. Otherwise, take it out of col_names. I think that 
   # num_unique = 20 is probably a good default
-  col_names_removed <- NULL
-  for (i in seq_along(col_names)){
-    if(length(unique(unlist(training[, col_names[[i]]]))) < 20){
-      col_names_removed <- c(col_names_removed, col_names[[i]])
-    }
-  }
-  col_names <- col_names[!(col_names %in% col_names_removed)]
-  
-  if (length(col_names_removed) > 0){
-    message(
+  num_unique <- purrr::map_int(training[, col_names], ~ length(unique(.x)))
+  too_few <- num_unique < 20
+  if (any(too_few)) {
+    rlang::warn(
       paste0(
-      "The following columns were removed from processing due to insufficient number of unique observations (minimum 20): ", 
-      paste(col_names_removed, sep = "", collapse = ", "), "."
+        "More than 20 unique training set values are required. ",
+        "Predictors ", paste0("'", col_names[too_few], "'", collapse = ", "),
+        " were not processed; their original values will be used."
       )
     )
+    col_names <- col_names[!too_few]
   }
   
   rules <- vector("list", length(col_names))
@@ -331,7 +335,13 @@ prep.step_discretize_tree <- function(x, training, info = NULL, ...) {
       )
   }
   
-  names(rules) <- col_names
+  has_splits <- purrr::map_lgl(rules, ~ length(.x) >  0)
+  
+  rules <- rules[has_splits]
+  col_names <- col_names[has_splits]
+  if (length(col_names) > 0) {
+    names(rules) <- col_names
+  }
   
   step_discretize_tree_new(
     terms = x$terms,
@@ -342,7 +352,7 @@ prep.step_discretize_tree <- function(x, training, info = NULL, ...) {
     learn_rate = x$learn_rate,
     num_breaks = x$num_breaks,
     tree_depth = x$tree_depth,
-    rules = rules, # is this rules object defined here correctly? I think yet but getting a weird error when checking the tidy method
+    rules = rules, 
     skip = x$skip,
     id = x$id
   )
@@ -353,29 +363,28 @@ bake.step_discretize_tree <- function(object, new_data, ...) {
   vars <- object$rules
   
   for (i in seq_along(vars)) {
-    var <- names(vars)[[i]]
-    
-    # Not sure what you mean?
-    
-    binned_data <- new_data
-    
-    binned_data[, var] <- cut(
-      new_data[[var]],
-      breaks = c(-Inf, object$rules[[i]], Inf),
-      include.lowest = TRUE,
-      right = FALSE,
-      dig.lab = 4  
-    )
-    
-    recipes::check_name(binned_data, new_data, object)
-    new_data <- binned_data
+    if (length(vars[[i]]) > 0) {
+      var <- names(vars)[[i]]
+      binned_data <- new_data
+      
+      binned_data[[var]] <- cut(
+        new_data[[var]],
+        breaks = c(-Inf, object$rules[[i]], Inf),
+        include.lowest = TRUE,
+        right = FALSE,
+        dig.lab = 4  
+      )
+      
+      recipes::check_name(binned_data, new_data, object)
+      new_data <- binned_data
+    }
   }
   tibble::as_tibble(new_data)
 }
 
 print.step_discretize_tree <- function(x, width = max(20, options()$width - 30), ...) {
     cat("Discretizing variables using XgBoost ")
-    printer(names(x$rules), x$terms, x$trained, width = width)
+    recipes::printer(names(x$rules), x$terms, x$trained, width = width)
     invisible(x)
   }
 
@@ -383,18 +392,18 @@ print.step_discretize_tree <- function(x, width = max(20, options()$width - 30),
 #' @param x A `step_discretize_tree` object.
 #' @export
 tidy.step_discretize_tree <- function(x, ...) {
-  print("hello?")
-  # if (is_trained(x)) {
-  #   res <- tibble("variable" = NA, "values" = NA)
-  #   for(i in seq_along(x$col_names))
-  #     print(x$col_names)
-  #     rules <- expand_grid("variable" = x$col_names[[i]], "values" = x$rules[[i]])
-  #     res <- bind_rows(res, rules)
-  #   } else {
-  #   term_names <- sel2char(x$terms)
-  #   res <- tibble(variable = term_names,
-  #                 values = rlang::na_chr)
-  # }
+  if (recipes::is_trained(x)) {
+    num_splits <- purrr::map_int(x$rules, length)
+    
+    res <- tibble(
+      terms = rep(names(x$rules), num_splits), 
+      values = unlist(x$rules, use.names = FALSE)
+    )
+  } else {
+    term_names <- sel2char(x$terms)
+    res <- tibble(variable = term_names,
+                  values = rlang::na_chr)
+  }
   res$id <- x$id
   res
 }
@@ -402,7 +411,7 @@ tidy.step_discretize_tree <- function(x, ...) {
 # ------------------------------------------------------------------------------
 
 # TODO once other things are finalised and working
-
+# #' @importFrom utils packageVersion
 # tidyr_new_interface <- function() {
 #   utils::packageVersion("tidyr") > "0.8.99"
 # }
