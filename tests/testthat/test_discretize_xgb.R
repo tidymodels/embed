@@ -283,6 +283,9 @@ test_that("step_discretize_xgb for classification", {
 })
 
 test_that("step_discretize_xgb for regression", {
+  # Skip on R < 3.6 since the rng is different. 
+  skip_if(utils::compareVersion(as.character(getRversion()), "3.6.0") > 1)
+  
   # General use
   set.seed(83834)
   xgb_rec <-
