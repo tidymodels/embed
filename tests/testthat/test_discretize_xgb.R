@@ -284,7 +284,7 @@ test_that("step_discretize_xgb for classification", {
 
 test_that("step_discretize_xgb for regression", {
   # Skip on R < 3.6 since the rng is different. 
-  skip_if(utils::compareVersion(as.character(getRversion()), "3.6.0") > 1)
+  skip_if(utils::compareVersion("3.5.3", as.character(getRversion())) < 0)
   
   # General use
   set.seed(83834)
