@@ -139,6 +139,7 @@ context("glmer model, regression")
 
 test_that("factor encoded predictor", {
   skip_on_cran()
+  skip_on_os("mac")
   expect_warning({
     set.seed(8283)
     reg_test <- recipe(x1 ~ ., data = ex_dat) %>%
@@ -205,6 +206,7 @@ test_that("factor encoded predictor", {
 
 test_that("character encoded predictor", {
   skip_on_cran()
+  skip_on_os("mac")
   expect_warning({
     set.seed(8283)
     reg_test <- recipe(x1 ~ ., data = ex_dat_ch) %>%
