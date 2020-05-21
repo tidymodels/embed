@@ -74,13 +74,13 @@
 #'  categorical predictor, and no hidden units used here would be
 #' 
 #' ```
-#'   keras_model_sequential() \\%>\\% 
+#'   keras_model_sequential() %>% 
 #'   layer_embedding(
 #'     input_dim = num_factor_levels_x + 1,
 #'     output_dim = num_terms,
 #'     input_length = 1
-#'   ) \\%>\\%
-#'   layer_flatten() \\%>\\%
+#'   ) %>%
+#'   layer_flatten() %>%
 #'   layer_dense(units = 1, activation = 'linear')
 #' ```
 #'
@@ -88,14 +88,14 @@
 #' would be
 #'
 #' ```
-#'   keras_model_sequential() \\%>\\% 
+#'   keras_model_sequential() %>% 
 #'   layer_embedding(
 #'     input_dim = num_factor_levels_x + 1,
 #'     output_dim = num_terms,
 #'     input_length = 1
-#'    ) \\%>\\%
-#'   layer_flatten() \\%>\\%
-#'   layer_dense(units = hidden_units, activation = "relu") \\%>\\%
+#'    ) %>%
+#'   layer_flatten() %>%
+#'   layer_dense(units = hidden_units, activation = "relu") %>%
 #'   layer_dense(units = num_factor_levels_y, activation = 'softmax')
 #' ```
 #' 
