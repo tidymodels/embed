@@ -35,15 +35,23 @@ test_that("woe_table accepts only outcome with 2 distinct categories", {
 
 test_that("woe_table returns a proper tibble", {
   expect_equal(dim(embed:::woe_table(df$x1, df$y)), c(3, 7))
-  expect_identical(names(embed:::woe_table(df$x1, df$y)), c("predictor", "n_tot", "n_A", "n_B", "p_A", "p_B", "woe"))
+  expect_identical(names(embed:::woe_table(df$x1, df$y)),
+                   c("predictor", "n_tot", "n_A", "n_B", "p_A", "p_B", "woe"))
 })
 
 test_that("logical outcome variables are treated properly", {
-  expect_equal(dim(embed:::woe_table(c("A", "A", "A", "B"), c(TRUE, FALSE, TRUE, FALSE))), c(2, 7))
+  expect_equal(
+    dim(
+      embed:::woe_table(c("A", "A", "A", "B"), c(TRUE, FALSE, TRUE, FALSE))), 
+    c(2, 7)
+  )
 })
 
 test_that("logical predictor variable are treated properly", {
-  expect_equal(class(embed:::woe_table(c(TRUE, FALSE, TRUE, FALSE), c("A", "A", "A", "B"))$predictor), "character")
+  expect_equal(
+    class(embed:::woe_table(c(TRUE, FALSE, TRUE, FALSE), c("A", "A", "A", "B"))$predictor), 
+    "character"
+  )
 })
 
 test_that("woe_table ruturns no messages nor warnings", {
@@ -136,7 +144,7 @@ test_that("step_woe", {
   add_woe_output <-
     credit_te %>%
     add_woe(Status, Job, Home, dictionary = woe_dict)  %>%
-    dplyr::select(-Job, -Home)
+    dplyr::select(one_of(names(bake_woe_output)))
 
   #
   expect_equal(bake_woe_output, add_woe_output)
