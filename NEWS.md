@@ -1,5 +1,9 @@
 # embed (development version)
 
+ * Changes for `dplyr` 1.0.0
+ 
+ * Added `step_feature_hash()` for creating dummy variables. 
+
 # embed 0.0.6
 
 * Small changes for base R's `stringsAsFactors` change. 

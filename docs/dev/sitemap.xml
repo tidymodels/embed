@@ -16,6 +16,9 @@
     <loc>https://embed.tidymodels.org/reference/step_embed.html</loc>
   </url>
   <url>
+    <loc>https://embed.tidymodels.org/reference/step_feature_hash.html</loc>
+  </url>
+  <url>
     <loc>https://embed.tidymodels.org/reference/step_lencode_bayes.html</loc>
   </url>
   <url>
