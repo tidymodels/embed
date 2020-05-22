@@ -36,5 +36,5 @@ LazyData: true
 RoxygenNote: 7.1.0.9000
 Roxygen: list(markdown = TRUE)
 ByteCompile: true
-URL: https://tidymodels.github.io/embed, https://github.com/tidymodels/embed
+URL:  https://embed.tidymodels.org, https://github.com/tidymodels/embed
 BugReports: https://github.com/tidymodels/embed/issues

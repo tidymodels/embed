@@ -72,6 +72,7 @@ test_that("factor encoded predictor", {
 
 test_that("character encoded predictor", {
   skip_on_cran()
+  skip_on_os("mac")
   expect_warning(
     class_test <- recipe(x2 ~ ., data = ex_dat_ch) %>%
       step_lencode_bayes(x3, outcome = vars(x2), 
@@ -139,6 +140,7 @@ context("glmer model, regression")
 
 test_that("factor encoded predictor", {
   skip_on_cran()
+  skip_on_os("mac")
   expect_warning(
     reg_test <- recipe(x1 ~ ., data = ex_dat) %>%
       step_lencode_bayes(x3, outcome = vars(x1), 
@@ -203,6 +205,7 @@ test_that("factor encoded predictor", {
 
 test_that("character encoded predictor", {
   skip_on_cran()
+  skip_on_os("mac")
   expect_warning(
     reg_test <- recipe(x1 ~ ., data = ex_dat_ch) %>%
       step_lencode_bayes(x3, outcome = vars(x1), 
