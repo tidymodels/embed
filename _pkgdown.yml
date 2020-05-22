@@ -1,8 +1,8 @@
 template:
   package: tidytemplate
   params:
-    part_of: <a href="https://github.com/tidymodels">tidymodels</a>
-    footer: <code>embed</code> is a part of the <strong>tidymodels</strong> ecosystem, a collection of modeling packages designed with common APIs and a shared philosophy.
+    part_of: <a href="https://tidymodels.org">tidymodels</a>
+    footer: embed is a part of the <strong>tidymodels</strong> ecosystem, a collection of modeling packages designed with common APIs and a shared philosophy.
 
 figures:
   fig.width: 8

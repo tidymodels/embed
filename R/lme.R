@@ -83,7 +83,7 @@
 #' 
 #' # See https://tidymodels.github.io/embed/ for examples
 
-#' @importFrom recipes add_step step terms_select sel2char ellipse_check
+
 step_lencode_mixed <-
   function(recipe,
            ...,
@@ -126,7 +126,6 @@ step_lencode_mixed_new <-
     )
   }
 
-#' @importFrom recipes check_type
 #' @export
 prep.step_lencode_mixed <- function(x, training, info = NULL, ...) {
   col_names <- terms_select(x$terms, info = info)
@@ -156,9 +155,7 @@ prep.step_lencode_mixed <- function(x, training, info = NULL, ...) {
   ) 
 }
 
-#' @importFrom stats as.formula binomial coef gaussian na.omit
-#' @importFrom dplyr bind_cols as_tibble
-#' @importFrom lme4 glmer lmer
+
 lme_coefs <- function(x, y, ...) {
   
   args <- list(
@@ -194,7 +191,7 @@ lme_coefs <- function(x, y, ...) {
   )
 }
 
-#' @importFrom dplyr tibble mutate filter left_join %>% arrange 
+
 map_lme_coef <- function(dat, mapping) {
   new_val <- mapping$..value[mapping$..level == "..new"]
   dat <- dat %>% 
@@ -208,9 +205,7 @@ map_lme_coef <- function(dat, mapping) {
   dat$..value
 }
 
-#' @import rlang
-#' @importFrom recipes bake prep
-#' @importFrom purrr map
+
 #' @export
 bake.step_lencode_mixed <- function(object, new_data, ...) {
   for (col in names(object$mapping))
@@ -219,7 +214,6 @@ bake.step_lencode_mixed <- function(object, new_data, ...) {
   new_data
 }
 
-#' @importFrom recipes printer
 #' @export
 print.step_lencode_mixed <-
   function(x, width = max(20, options()$width - 31), ...) {
@@ -228,8 +222,7 @@ print.step_lencode_mixed <-
     invisible(x)
   }
 
-#' @importFrom dplyr bind_rows
-#' @importFrom recipes is_trained
+
 #' @rdname step_lencode_mixed
 #' @param x A `step_lencode_mixed` object.
 #' @export
@@ -253,5 +246,3 @@ tidy.step_lencode_mixed <- function(x, ...) {
   res
 }
 
-#' @importFrom utils globalVariables
-utils::globalVariables(c("..level", "..order"))

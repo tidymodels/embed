@@ -139,12 +139,15 @@ context("glmer model, regression")
 
 test_that("factor encoded predictor", {
   skip_on_cran()
-  expect_warning(
+  skip_on_os("mac")
+  expect_warning({
+    set.seed(8283)
     reg_test <- recipe(x1 ~ ., data = ex_dat) %>%
       step_lencode_bayes(x3, outcome = vars(x1), 
                          verbose = FALSE,
                          options = opts) %>%
-      prep(training = ex_dat, retain = TRUE),
+      prep(training = ex_dat, retain = TRUE)
+    },
     "Bulk Effective Samples Size"
   )
   tr_values <- juice(reg_test)$x3
@@ -203,13 +206,16 @@ test_that("factor encoded predictor", {
 
 test_that("character encoded predictor", {
   skip_on_cran()
-  expect_warning(
+  skip_on_os("mac")
+  expect_warning({
+    set.seed(8283)
     reg_test <- recipe(x1 ~ ., data = ex_dat_ch) %>%
       step_lencode_bayes(x3, outcome = vars(x1), 
                          verbose = FALSE,
                          options = opts) %>%
-      prep(training = ex_dat_ch, retain = TRUE),
-    "Bulk Effective Samples Size"
+      prep(training = ex_dat_ch, retain = TRUE)
+  },
+  "Bulk Effective Samples Size"
   )
   tr_values <- juice(reg_test)$x3
   new_values <- bake(reg_test, new_data = new_dat_ch)

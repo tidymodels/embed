@@ -36,6 +36,4 @@ returned from it.
 
 mtcars \%>\% add_woe(am, cyl, gear:carb)
 
-
-
 }

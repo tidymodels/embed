@@ -52,7 +52,7 @@
 
   </head>
 
-  <body>
+  <body data-spy="scroll" data-target="#toc">
     <div class="container template-reference-index">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -68,8 +68,8 @@
       <div class="navbar-brand-container">
         <a class="navbar-brand" href="../index.html">embed</a>
         <div class="info">
-          <span class="partof">part of <a href="https://github.com/tidymodels">tidymodels</a></span>
-          <span class="version version-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.0.4.9000</span>
+          <span class="partof">part of <a href="https://tidymodels.org">tidymodels</a></span>
+          <span class="version version-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.0.6.9000</span>
         </div>
       </div>
     </div>
@@ -87,7 +87,12 @@
 <li>
   <a href="../news/index.html">News</a>
 </li>
-        
+        <li>
+  <a href="https://github.com/tidymodels/embed/">
+    <span class="fab fa fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
       </ul>
       
     </div><!--/.nav-collapse -->
@@ -119,6 +124,11 @@
           <p class="section-desc"></p>
         </th>
       </tr>
+      
+      
+    </tbody><tbody>
+      
+      
       <tr>
         
         <td>
@@ -131,6 +141,18 @@
           <p><code><a href="dictionary.html">dictionary()</a></code> </p>
         </td>
         <td><p>Weight of evidence dictionary</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="step_discretize_cart.html">step_discretize_cart()</a></code> <code><a href="step_discretize_cart.html">tidy(<i>&lt;step_discretize_cart&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Discretize numeric variables with CART</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="step_discretize_xgb.html">step_discretize_xgb()</a></code> <code><a href="step_discretize_xgb.html">tidy(<i>&lt;step_discretize_xgb&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Discretize numeric variables with XgBoost</p></td>
       </tr><tr>
         
         <td>
@@ -179,17 +201,16 @@
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
-    <h2>Contents</h2>
-    <ul class="nav nav-pills nav-stacked">
-      <li><a href="#section-all-functions">All functions</a></li>
-    </ul>
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
   </div>
 </div>
 
 
       <footer>
       <div class="tidyverse">
-  <p><code>embed</code> is a part of the <strong>tidymodels</strong> ecosystem, a collection of modeling packages designed with common APIs and a shared philosophy.</p>
+  <p>embed is a part of the <strong>tidymodels</strong> ecosystem, a collection of modeling packages designed with common APIs and a shared philosophy.</p>
 </div>
 
 <div class="author">

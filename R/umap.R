@@ -87,7 +87,7 @@
 #' bake(supervised, new_data = te, Species, starts_with("umap")) %>% 
 #'   ggplot(aes(x = umap_1, y = umap_2, col = Species)) + 
 #'   geom_point(alpha = .5) 
-#' @importFrom recipes add_step step terms_select sel2char ellipse_check rand_id
+
 step_umap <-
   function(recipe,
            ...,
@@ -161,7 +161,6 @@ step_umap_new <-
     )
   }
 
-#' @importFrom uwot umap
 umap_fit_call <- function(obj, y = NULL) {
   cl <- rlang::call2("umap", .ns = "uwot", X = rlang::expr(training[, col_names]))
   if (!is.null(y)) {
@@ -180,8 +179,7 @@ umap_fit_call <- function(obj, y = NULL) {
 }
 
 
-#' @importFrom recipes check_type
-#' @importFrom withr with_seed
+
 #' @export
 prep.step_umap <- function(x, training, info = NULL, ...) {
   col_names <- terms_select(x$terms, info = info)
@@ -215,10 +213,6 @@ prep.step_umap <- function(x, training, info = NULL, ...) {
   )
 }
 
-#' @import rlang
-#' @importFrom recipes bake prep
-#' @importFrom uwot umap_transform
-#' @importFrom purrr map
 #' @export
 bake.step_umap <- function(object, new_data, ...) {
   withr::with_seed(
@@ -240,7 +234,6 @@ bake.step_umap <- function(object, new_data, ...) {
   new_data
 }
 
-#' @importFrom recipes printer
 #' @export
 print.step_umap <-
   function(x, width = max(20, options()$width - 31), ...) {
@@ -249,8 +242,6 @@ print.step_umap <-
     invisible(x)
   }
 
-#' @importFrom dplyr bind_rows
-#' @importFrom recipes is_trained
 #' @rdname step_umap
 #' @param x A `step_umap` object.
 #' @export
@@ -265,10 +256,5 @@ tidy.step_umap <- function(x, ...) {
   res$id <- x$id
   res
 }
-
-#' @importFrom utils globalVariables
-utils::globalVariables(
-  c("training", "col_names", "y_name")
-)
 
 

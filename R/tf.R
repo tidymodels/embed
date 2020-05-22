@@ -74,13 +74,13 @@
 #'  categorical predictor, and no hidden units used here would be
 #' 
 #' ```
-#'   keras_model_sequential() \\%>\\% 
+#'   keras_model_sequential() %>% 
 #'   layer_embedding(
 #'     input_dim = num_factor_levels_x + 1,
 #'     output_dim = num_terms,
 #'     input_length = 1
-#'   ) \\%>\\%
-#'   layer_flatten() \\%>\\%
+#'   ) %>%
+#'   layer_flatten() %>%
 #'   layer_dense(units = 1, activation = 'linear')
 #' ```
 #'
@@ -88,14 +88,14 @@
 #' would be
 #'
 #' ```
-#'   keras_model_sequential() \\%>\\% 
+#'   keras_model_sequential() %>% 
 #'   layer_embedding(
 #'     input_dim = num_factor_levels_x + 1,
 #'     output_dim = num_terms,
 #'     input_length = 1
-#'    ) \\%>\\%
-#'   layer_flatten() \\%>\\%
-#'   layer_dense(units = hidden_units, activation = "relu") \\%>\\%
+#'    ) %>%
+#'   layer_flatten() %>%
+#'   layer_dense(units = hidden_units, activation = "relu") %>%
 #'   layer_dense(units = num_factor_levels_y, activation = 'softmax')
 #' ```
 #' 
@@ -132,7 +132,7 @@
 #' # See https://tidymodels.github.io/embed/ for examples
 
 
-#' @importFrom recipes add_step step terms_select sel2char ellipse_check
+
 step_embed <-
   function(recipe,
            ...,
@@ -188,9 +188,6 @@ step_embed_new <-
     )
   }
 
-#' @importFrom recipes check_type
-#' @importFrom dplyr bind_rows
-#' @importFrom tibble as_tibble
 #' @export
 prep.step_embed <- function(x, training, info = NULL, ...) {
   col_names <- terms_select(x$terms, info = info)
@@ -236,11 +233,7 @@ prep.step_embed <- function(x, training, info = NULL, ...) {
   )
 }
 
-#' @importFrom keras keras_model_sequential layer_embedding layer_flatten
-#' @importFrom keras layer_dense compile fit get_layer backend keras_model
-#' @importFrom keras layer_concatenate layer_input
-#' @importFrom dplyr bind_cols as_tibble ends_with
-#' @importFrom stats setNames
+
 tf_coefs2 <- function(x, y, z, opt, num, lab, h, seeds = sample.int(10000, 4), ...) {
   vars <- names(x)
   p <- length(vars)
@@ -357,9 +350,7 @@ tf_coefs2 <- function(x, y, z, opt, num, lab, h, seeds = sample.int(10000, 4), .
   list(layer_values = layer_values, history = history)
 }
 
-#' @importFrom dplyr tibble mutate filter left_join %>% arrange contains
-#' @importFrom stats complete.cases
-#' @importFrom recipes names0
+
 map_tf_coef2 <- function(dat, mapping, prefix) {
   new_val <- mapping %>%
     dplyr::filter(..level == "..new") %>%
@@ -378,10 +369,7 @@ map_tf_coef2 <- function(dat, mapping, prefix) {
   
 }
 
-#' @import rlang
-#' @importFrom recipes bake prep
-#' @importFrom purrr map
-#' @importFrom dplyr bind_cols
+
 #' @export
 bake.step_embed <- function(object, new_data, ...) {
   for (col in names(object$mapping)) {
@@ -394,9 +382,7 @@ bake.step_embed <- function(object, new_data, ...) {
   new_data
 }
 
-#' @importFrom dplyr bind_rows 
-#' @importFrom tidyr gather
-#' @importFrom recipes is_trained
+
 #' @rdname step_embed
 #' @param x A `step_embed` object.
 #' @export
@@ -420,8 +406,6 @@ tidy.step_embed <- function(x, ...) {
   res
 }
 
-
-#' @importFrom recipes printer
 #' @export
 print.step_embed <-
   function(x, width = max(20, options()$width - 31), ...) {
@@ -479,7 +463,7 @@ tf_options_check <- function(opt) {
 }
 
 
-#' @importFrom stats model.matrix
+
 class2ind <- function (x)  {
   if (!is.factor(x)) 
     rlang::abort("'x' should be a factor")
@@ -489,10 +473,4 @@ class2ind <- function (x)  {
   attributes(y)$contrasts <- NULL
   y
 }
-
-
-#' @importFrom utils globalVariables
-utils::globalVariables(
-  c("type", "loss", "epochs", "..level", "..order")
-)
 
