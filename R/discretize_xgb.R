@@ -24,6 +24,8 @@
 #'  10.
 #' @param tree_depth The maximum depth of the tree (i.e. number of splits).
 #' Corresponds to `max_depth` in the \pkg{xgboost} package. Defaults to 1.
+#' @param min_n The minimum number of instances needed to be in each node.
+#' Corresponds to `min_child_weight` in the \pkg{xgboost} package. Defaults to 5.
 #' @param rules The splitting rules of the best XgBoost tree to retain for
 #'  each variable.
 #' @param id A character string that is unique to this step to identify it.
@@ -52,11 +54,11 @@
 #'  an internal early stopping scheme implemented in the \pkg{xgboost}
 #'  package, which makes this discretization method prone to overfitting.
 #'
-#' The pre-defined values of the underlying xgboost learns should give good
+#' The pre-defined values of the underlying xgboost learns good
 #'  and reasonably complex results. However, if one wishes to tune them the
 #'  recommended path would be to first start with changing the value of
 #'  `num_breaks` to e.g.: 20 or 30. If that doesn't give satisfactory results
-#'  one could experiment with increasing the `tree_depth` parameter.
+#'  one could experiment with modifying the `tree_depth` or `min_n` parameters.
 #'
 #' This step requires the \pkg{xgboost} package. If not installed, the
 #'  step will stop with a note about installing the package.
@@ -95,6 +97,7 @@ step_discretize_xgb <-
            # the XgBoost uses 256 as default. Furthermore, this parameter is defined as the maximum
            # number of bins - smaller number could be chosen by the algorithm
            tree_depth = 1,
+           min_n = 5,
            rules = NULL,
            skip = FALSE,
            id = rand_id("discretize_xgb")) {
@@ -116,6 +119,7 @@ step_discretize_xgb <-
         learn_rate = learn_rate,
         num_breaks = num_breaks,
         tree_depth = tree_depth,
+        min_n = min_n,
         rules = rules,
         skip = skip,
         id = id
@@ -125,7 +129,7 @@ step_discretize_xgb <-
 
 step_discretize_xgb_new <-
   function(terms, role, trained, outcome, prop, learn_rate, num_breaks,
-           tree_depth, rules, skip, id) {
+           tree_depth, min_n, rules, skip, id) {
     step(
       subclass = "discretize_xgb",
       terms = terms,
@@ -136,20 +140,35 @@ step_discretize_xgb_new <-
       learn_rate = learn_rate,
       num_breaks = num_breaks,
       tree_depth = tree_depth,
+      min_n = min_n,
       rules = rules,
       skip = skip,
       id = id
     )
   }
 
-run_xgboost <- function(.train, .test, .learn_rate, .num_breaks, .tree_depth, .objective){
-  xgboost::xgb.train(
-    params = list(
+run_xgboost <- function(.train, .test, .learn_rate, .num_breaks, .tree_depth, .min_n, .objective, .num_class){
+  
+  # Need to set an additional parameter (num_class) when perfoming multi-classification
+  if(.objective == "multi:softprob"){
+    .params = list(
       eta = .learn_rate,
       max_bin = .num_breaks,
       max_depth = .tree_depth,
-      min_child_weight = 5
-    ),
+      min_child_weight = .min_n,
+      num_class = .num_class
+    ) 
+  } else {
+    .params = list(
+      eta = .learn_rate,
+      max_bin = .num_breaks,
+      max_depth = .tree_depth,
+      min_child_weight = .min_n
+    )
+  }
+  
+  xgboost::xgb.train(
+    params = .params,
     nrounds = 100, # TODO do you think nrounds and early_stopping_rounds are high enough? 
     # Should we expose them as parameters to the user?
     data = .train,
@@ -165,7 +184,7 @@ run_xgboost <- function(.train, .test, .learn_rate, .num_breaks, .tree_depth, .o
   )
 }
 
-xgb_binning <- function(df, outcome, predictor, prop, learn_rate, num_breaks, tree_depth){
+xgb_binning <- function(df, outcome, predictor, prop, learn_rate, num_breaks, tree_depth, min_n){
   
   # Assuring correct types
   if (is.character(df[[outcome]])) {
@@ -181,6 +200,12 @@ xgb_binning <- function(df, outcome, predictor, prop, learn_rate, num_breaks, tr
   # on each numeric column individually
   df <- df[colnames(df) %in% c(outcome, predictor)]
   df <- df[complete.cases(df),, drop = FALSE]
+  
+  # Changes: I added conversion of the target to integer starting from 0
+  # for multi-classification problems (XgBoost requirement)
+  if (length(levels) >= 3) {
+    df[[outcome]] <- as.integer(df[[outcome]]) - 1
+  }
   
   # Changes: prop now is a parameter with 0.80 as default. If prop is equal 
   # to 1 then rsample returns it standard error: Error: `prop` must be a number on (0, 1).
@@ -215,18 +240,34 @@ xgb_binning <- function(df, outcome, predictor, prop, learn_rate, num_breaks, tr
     
     if (length(levels) == 2) {
       objective <- "binary:logistic"
+      
+      xgb_train <- xgboost::xgb.DMatrix(
+        data = as.matrix(train[[predictor]], ncol = 1),
+        label = ifelse(train[[outcome]] == levels[[1]], 0, 1)
+      )
+      
+      xgb_test <- xgboost::xgb.DMatrix(
+        data = as.matrix(test[[predictor]], ncol = 1),
+        label = ifelse(test[[outcome]] == levels[[1]], 0, 1)
+      )
+      
+    } else if (length(levels) >= 3) {
+      objective <- "multi:softprob" # returning estimated probability
+      num_class <- length(levels)
+      
+      xgb_train <- xgboost::xgb.DMatrix(
+        data = as.matrix(train[[predictor]], ncol = 1),
+        label = train[[outcome]]
+      )
+      
+      xgb_test <- xgboost::xgb.DMatrix(
+        data = as.matrix(test[[predictor]], ncol = 1),
+        label = test[[outcome]]
+      )
+      
     } else {
-      rlang::abort("Outcome variable needs to have two levels (binary classification).")
+      rlang::abort("Outcome variable doesn't conform to regresion or classification task.")
     }
-    xgb_train <- xgboost::xgb.DMatrix(
-      data = as.matrix(train[[predictor]], ncol = 1),
-      label = ifelse(train[[outcome]] == levels[[1]], 0, 1)
-    )
-    
-    xgb_test <- xgboost::xgb.DMatrix(
-      data = as.matrix(test[[predictor]], ncol = 1),
-      label = ifelse(test[[outcome]] == levels[[1]], 0, 1)
-    )
   }
   
   xgb_mdl <- 
@@ -239,7 +280,9 @@ xgb_binning <- function(df, outcome, predictor, prop, learn_rate, num_breaks, tr
           .learn_rate = learn_rate,
           .num_breaks = num_breaks,
           .tree_depth = tree_depth,
-          .objective = objective
+          .min_n = min_n,
+          .objective = objective,
+          .num_class = num_class
         )
       ),
       silent = TRUE
@@ -340,7 +383,8 @@ prep.step_discretize_xgb <- function(x, training, info = NULL, ...) {
       x$prop,
       x$learn_rate,
       x$num_breaks,
-      x$tree_depth
+      x$tree_depth,
+      x$min_n
       )
   }
   
@@ -361,6 +405,7 @@ prep.step_discretize_xgb <- function(x, training, info = NULL, ...) {
     learn_rate = x$learn_rate,
     num_breaks = x$num_breaks,
     tree_depth = x$tree_depth,
+    min_n = x$min_n,
     rules = rules, 
     skip = x$skip,
     id = x$id

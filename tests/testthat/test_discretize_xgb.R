@@ -6,10 +6,11 @@ context("discretize_xgb")
 
 source(test_path("make_binned_data.R"))
 
-# ------------------------------------------------------------------------------
-
 data("credit_data", package = "modeldata")
 data("okc", package = "modeldata")
+data("attrition", package = "modeldata")
+
+# ------------------------------------------------------------------------------
 
 # Data for classification problem testing
 set.seed(42)
@@ -19,7 +20,6 @@ credit_data_test <- testing(credit_data_split)
 
 set.seed(2393)
 credit_data_small <- dplyr::sample_n(credit_data_train, 20)
-
 
 rec_credit <- credit_data_train %>%
   select(-Status) %>% 
@@ -39,13 +39,31 @@ xgb_credit_test <- xgboost::xgb.DMatrix(
 
 # ------------------------------------------------------------------------------
 
-set.seed(8497)
-sim_tr_cls <- sim_data_2class(1000)
-sim_te_cls <- sim_data_2class(100)
+# Data for multi-classification problem testing
+set.seed(42)
+attrition <- attrition %>% mutate(EducationField = as.integer(EducationField) - 1)
+attrition_data_split <- initial_split(attrition, strata = "EducationField")
+attrition_data_train <- training(attrition_data_split)
+attrition_data_test <- testing(attrition_data_split)
 
-set.seed(8497)
-sim_tr_reg <- sim_data_reg(1000)
-sim_te_reg <- sim_data_reg(100)
+set.seed(2393)
+attrition_data_small <- dplyr::sample_n(attrition_data_train, 10)
+
+rec_attrition <- attrition_data_train %>%
+  select(-EducationField) %>% 
+  recipe(~ .) %>% 
+  step_integer(all_predictors()) %>% 
+  prep(retain = TRUE)
+
+xgb_attrition_train <- xgboost::xgb.DMatrix(
+  data = as.matrix(juice(rec_attrition)),
+  label = attrition_data_train$EducationField
+)
+
+xgb_attrition_test <- xgboost::xgb.DMatrix(
+  data = as.matrix(bake(rec_attrition, new_data = attrition_data_test)),
+  label = attrition_data_test$EducationField
+)
 
 # ------------------------------------------------------------------------------
 
@@ -76,6 +94,20 @@ xgb_okc_test <- xgboost::xgb.DMatrix(
 
 # ------------------------------------------------------------------------------
 
+set.seed(8497)
+sim_tr_cls <- sim_data_2class(1000)
+sim_te_cls <- sim_data_2class(100)
+
+set.seed(8497)
+sim_tr_mcls <- sim_data_3class(1000)
+sim_te_mcls <- sim_data_3class(100)
+
+set.seed(8497)
+sim_tr_reg <- sim_data_reg(1000)
+sim_te_reg <- sim_data_reg(100)
+
+# ------------------------------------------------------------------------------
+
 test_that("run_xgboost for classification", {
   
   xgboost <- embed:::run_xgboost(
@@ -84,6 +116,7 @@ test_that("run_xgboost for classification", {
     .learn_rate = 0.3,
     .num_breaks = 10,
     .tree_depth = 1,
+    .min_n = 5,
     .objective = "binary:logistic"
   )
   
@@ -95,6 +128,27 @@ test_that("run_xgboost for classification", {
   
 })
 
+test_that("run_xgboost for multi-classification", {
+  
+  xgboost <- embed:::run_xgboost(
+    xgb_attrition_train,
+    xgb_attrition_test,
+    .learn_rate = 0.3,
+    .num_breaks = 10,
+    .tree_depth = 1,
+    .min_n = 5,
+    .num_class = 6, # label must be in [0, num_class)
+    .objective = "multi:softprob"
+  )
+  
+  expect_output(print(xgboost))
+  expect_equal(length(xgboost$params), 9)
+  expect_equal(xgboost$nfeatures, 30)
+  expect_equal(xgboost$params$tree_method, "hist")
+  expect_equal(xgboost$params$objective, "multi:softprob")
+  
+})
+
 test_that("run_xgboost for regression", {
   
   xgboost <- embed:::run_xgboost(
@@ -103,6 +157,7 @@ test_that("run_xgboost for regression", {
     .learn_rate = 0.3,
     .num_breaks = 10,
     .tree_depth = 1,
+    .min_n = 5,
     .objective = "reg:squarederror"
   )
   
@@ -117,6 +172,7 @@ test_that("run_xgboost for regression", {
 test_that("xgb_binning for classification", {
   
   # Usual case
+  set.seed(8497)
   xgb_binning <- embed:::xgb_binning(
     credit_data_train,
     "Status",
@@ -124,32 +180,13 @@ test_that("xgb_binning for classification", {
     prop = 0.80,
     learn_rate = 0.3,
     num_breaks = 10,
-    tree_depth = 1
+    tree_depth = 1,
+    min_n = 5
   )
   
   expect_output(print(xgb_binning))
   expect_equal(length(xgb_binning), 6)
   expect_type(xgb_binning, "double")
-  
- 
-  # Target has more than three levels
-  credit_data_levels <- credit_data_train
-  credit_data_levels$Status <- as.character(credit_data_levels$Status)
-  credit_data_levels[1, "Status"] <- "third_level"
-  
-  expect_error(
-    embed:::xgb_binning(
-      credit_data_levels,
-      "Status",
-      "Seniority",
-      prop = 0.80,
-      learn_rate = 0.3,
-      num_breaks = 10,
-      tree_depth = 1
-    ),
-    "Outcome variable needs to have two levels (binary classification).",
-    fixed = TRUE
-  )
   
   # Algorithm runs on a too small training set/ insufficient variation in data
 
@@ -161,14 +198,53 @@ test_that("xgb_binning for classification", {
       prop = 0.70,
       learn_rate = 0.3,
       num_breaks = 10,
-      tree_depth = 1
+      tree_depth = 1,
+      min_n = 5
     ),
     "failed to create a tree with error for predictor 'Seniority'"
   )
   
 })
 
+test_that("xgb_binning for multi-classification", {
+  
+  # Usual case
+  set.seed(8497)
+  xgb_binning <- embed:::xgb_binning(
+    attrition_data_train,
+    "EducationField",
+    "Age",
+    prop = 0.80,
+    learn_rate = 0.3,
+    num_breaks = 10,
+    tree_depth = 1,
+    min_n = 5
+  )
+  
+  expect_output(print(xgb_binning))
+  expect_equal(length(xgb_binning), 6)
+  expect_type(xgb_binning, "double")
+  
+  # Algorithm runs on a too small training set/ insufficient variation in data
+  
+  expect_warning(
+    embed:::xgb_binning(
+      attrition_data_small,
+      "EducationField",
+      "Age",
+      prop = 0.70,
+      learn_rate = 0.3,
+      num_breaks = 10,
+      tree_depth = 1,
+      min_n = 5
+    ),
+    "failed to create a tree with error for predictor 'Age'"
+  )
+  
+})
+
 test_that("xgb_binning for regression", {
+  
   set.seed(4235)
   # Usual case
   xgb_binning <- embed:::xgb_binning(
@@ -178,7 +254,8 @@ test_that("xgb_binning for regression", {
     prop = 0.80,
     learn_rate = 0.3,
     num_breaks = 10,
-    tree_depth = 1
+    tree_depth = 1,
+    min_n = 5
   )
   
   expect_output(print(xgb_binning))
@@ -196,7 +273,8 @@ test_that("xgb_binning for regression", {
       prop = 0.70,
       learn_rate = 0.3,
       num_breaks = 10,
-      tree_depth = 1
+      tree_depth = 1,
+      min_n = 5
     ),
     "failed to create a tree with error for predictor 'height'"
   )
@@ -244,8 +322,6 @@ test_that("step_discretize_xgb for classification", {
     "Too few observations in the early stopping validation set"
   )
   
-  
-  
   # No numeric variables present
   predictors_non_numeric <- c(
     "Status", "Home", "Marital"
@@ -266,7 +342,7 @@ test_that("step_discretize_xgb for classification", {
   )
   
   # Information about insufficient datapoints for Time predictor
-  msg <- capture_message(
+  msg <- capture_warning(
     recipe(Status ~ ., data = credit_data_train) %>%
       step_medianimpute(all_numeric()) %>%
       step_discretize_xgb(all_numeric(), outcome = "Status") %>%
@@ -275,9 +351,76 @@ test_that("step_discretize_xgb for classification", {
   
   expect_true(
     grepl(
-      "Time",
+      "More than 20 unique training set values are required. Predictors 'Time' were not processed; their original values will be used.",
       msg
     )
+  )
+  
+})
+
+test_that("step_discretize_xgb for multi-classification", {
+  set.seed(125)
+  # General use
+  xgb_rec <-
+    recipe(class ~ ., data = sim_tr_mcls) %>%
+    step_discretize_xgb(all_predictors(), outcome = "class")
+  
+  set.seed(28)
+  xgb_rec <- prep(xgb_rec, training = sim_tr_mcls)
+  
+  xgb_train_bins <- bake(xgb_rec, sim_tr_mcls)
+  xgb_test_bins <- bake(xgb_rec, sim_te_mcls)
+  
+  expect_output(print(xgb_train_bins))
+  expect_output(print(xgb_test_bins))
+  expect_equal(
+    levels(xgb_train_bins$x),
+    c("[-Inf,0.6806)", "[0.6806, Inf]")
+  )
+  expect_equal(
+    levels(xgb_train_bins$z),
+    c("[-Inf,0.3249)", "[0.3249, Inf]")
+  )
+  
+  expect_equal(
+    levels(xgb_train_bins$x),
+    levels(xgb_test_bins$x)
+  )
+  expect_equal(
+    levels(xgb_train_bins$z),
+    levels(xgb_test_bins$z)
+  )
+  
+  # Too few data
+  expect_error(
+    recipe(class ~ ., data = sim_tr_mcls[1:10, ]) %>%
+      step_discretize_xgb(all_predictors(), outcome = "class") %>% 
+      prep(),
+    "Too few observations in the early stopping validation set"
+  )
+  
+  
+  # No numeric variables present
+  predictors_non_numeric <- c(
+    "Attrition", "BusinessTravel", "Department",
+    "Education", "EnvironmentSatisfaction", "Gender",
+    "JobInvolvement", "JobRole", "JobSatisfaction",
+    "MaritalStatus", "OverTime", "PerformanceRating",
+    "RelationshipSatisfaction", "WorkLifeBalance"
+  )
+  
+  xgb_rec <- attrition_data_train %>% 
+    select(one_of(predictors_non_numeric)) %>% 
+    recipe(BusinessTravel ~ .) %>%
+    step_medianimpute(all_numeric()) %>%
+    step_discretize_xgb(all_numeric(), outcome = "BusinessTravel")
+  
+  expect_error(
+    prep(xgb_rec, 
+         attrition_data_train %>% 
+           select(one_of(predictors_non_numeric)))
+    ,
+    "No variables or terms were selected."
   )
   
 })
