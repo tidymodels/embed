@@ -58,11 +58,12 @@ tunable.step_woe <- function(x, ...) {
 #' @rdname tunable.step_embed
 tunable.step_discretize_xgb <- function(x, ...) {
   tibble::tibble(
-    name = c("learn_rate", "num_breaks", "tree_depth"),
+    name = c("learn_rate", "num_breaks", "tree_depth", "min_n"),
     call_info = list(
       list(pkg = "dials", fun = "learn_rate"), # do I assume correctly that if no new range is given, dials defaults are assumed?
       list(pkg = "dials", fun = "num_breaks", range = c(5, 30)), # is it possible to define a set of integers instead of range?
-      list(pkg = "dials", fun = "tree_depth")
+      list(pkg = "dials", fun = "tree_depth"),
+      list(pkg = "dials", fun = "min_n")
     ),
     source = "recipe",
     component = "step_discretize_xgb",
