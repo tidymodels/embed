@@ -5,6 +5,7 @@
 \alias{tunable.step_umap}
 \alias{tunable.step_woe}
 \alias{tunable.step_discretize_xgb}
+\alias{tunable.step_discretize_cart}
 \title{tunable methods for embed}
 \usage{
 tunable.step_embed(x, ...)
@@ -14,6 +15,8 @@ tunable.step_umap(x, ...)
 tunable.step_woe(x, ...)
 
 tunable.step_discretize_xgb(x, ...)
+
+tunable.step_discretize_cart(x, ...)
 }
 \arguments{
 \item{x}{A recipe step object}

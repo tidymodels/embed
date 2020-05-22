@@ -93,9 +93,7 @@ step_discretize_xgb <-
            outcome = NULL,
            prop = 0.80,
            learn_rate = 0.3,
-           num_breaks = 10, # I actually think it's a reasonable, minimal default as 
-           # the XgBoost uses 256 as default. Furthermore, this parameter is defined as the maximum
-           # number of bins - smaller number could be chosen by the algorithm
+           num_breaks = 10,
            tree_depth = 1,
            min_n = 5,
            rules = NULL,
@@ -169,8 +167,7 @@ run_xgboost <- function(.train, .test, .learn_rate, .num_breaks, .tree_depth, .m
   
   xgboost::xgb.train(
     params = .params,
-    nrounds = 100, # TODO do you think nrounds and early_stopping_rounds are high enough? 
-    # Should we expose them as parameters to the user?
+    nrounds = 100, 
     data = .train,
     watchlist = list(
       train = .train,
@@ -196,13 +193,9 @@ xgb_binning <- function(df, outcome, predictor, prop, learn_rate, num_breaks, tr
   
   # ----------------------------------------------------------------------------
   
-  # I added this as I realized that before I wasn't asserting that the algo runs 
-  # on each numeric column individually
   df <- df[colnames(df) %in% c(outcome, predictor)]
   df <- df[complete.cases(df),, drop = FALSE]
   
-  # Changes: I added conversion of the target to integer starting from 0
-  # for multi-classification problems (XgBoost requirement)
   if (length(levels) >= 3) {
     df[[outcome]] <- as.integer(df[[outcome]]) - 1
   }

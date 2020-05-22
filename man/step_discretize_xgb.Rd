@@ -15,6 +15,7 @@ step_discretize_xgb(
   learn_rate = 0.3,
   num_breaks = 10,
   tree_depth = 1,
+  min_n = 5,
   rules = NULL,
   skip = FALSE,
   id = rand_id("discretize_xgb")
@@ -52,6 +53,9 @@ features. Corresponds to \code{max_bin} in the \pkg{xgboost} package. Defaults t
 \item{tree_depth}{The maximum depth of the tree (i.e. number of splits).
 Corresponds to \code{max_depth} in the \pkg{xgboost} package. Defaults to 1.}
 
+\item{min_n}{The minimum number of instances needed to be in each node.
+Corresponds to \code{min_child_weight} in the \pkg{xgboost} package. Defaults to 5.}
+
 \item{rules}{The splitting rules of the best XgBoost tree to retain for
 each variable.}
 
@@ -87,11 +91,11 @@ The best selection of buckets for each variable is selected using
 an internal early stopping scheme implemented in the \pkg{xgboost}
 package, which makes this discretization method prone to overfitting.
 
-The pre-defined values of the underlying xgboost learns should give good
+The pre-defined values of the underlying xgboost learns good
 and reasonably complex results. However, if one wishes to tune them the
 recommended path would be to first start with changing the value of
 \code{num_breaks} to e.g.: 20 or 30. If that doesn't give satisfactory results
-one could experiment with increasing the \code{tree_depth} parameter.
+one could experiment with modifying the \code{tree_depth} or \code{min_n} parameters.
 
 This step requires the \pkg{xgboost} package. If not installed, the
 step will stop with a note about installing the package.
