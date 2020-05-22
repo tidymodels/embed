@@ -63,7 +63,6 @@
 #' @seealso [recipes::step_dummy()], [recipes::step_zv()]
 #' @examples
 #' \donttest{
-#' library(tidyr)
 #' data(okc, package = "modeldata")
 #' 
 #' # This may take a while: 
@@ -146,19 +145,28 @@ make_hash_vars <- function(x, prefix, num_hash = 2^8) {
   if (!is.character(x)) {
     x <- as.character(x)
   }
+  
+  tmp <- tibble(data = x, ..order = seq_along(x))
+  
+  uni_x <- unique(x)
+  
   column_int <-
     purrr::map_int(
-      x,
+      uni_x,
       keras::text_hashing_trick,
       n = num_hash,
       filters = "",
       split = "dont split characters",
       lower = FALSE
     )
-  column_int[is.na(x)] <- NA
+  column_int[is.na(uni_x)] <- NA
   
   nms <- recipes::names0(num_hash, prefix)
-  make_hash_tbl(column_int, nms)
+  make_hash_tbl(column_int, nms) %>% 
+    dplyr::mutate(data = uni_x) %>% 
+    dplyr::left_join(tmp, by = "data") %>% 
+    dplyr::arrange(..order) %>% 
+    dplyr::select(-data, -..order)
 }
 
 make_row <- function(ind, p) {

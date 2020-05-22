@@ -84,7 +84,6 @@ columns.
 }
 \examples{
 \donttest{
-library(tidyr)
 data(okc, package = "modeldata")
 
 # This may take a while: 
