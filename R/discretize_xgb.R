@@ -285,7 +285,7 @@ xgb_binning <- function(df, outcome, predictor, sample_val, learn_rate, num_brea
     err <- conditionMessage(attr(xgb_mdl, "condition"))
     msg <- 
       paste0("`step_discretize_xgb()` failed to create a tree with error for ",
-             "predictor '", predictor, "', which will not be binned. The error: ", 
+             "predictor '", predictor, "', which was not binned. The error: ", 
              err)
     rlang::warn(msg)
     return(numeric(0))
@@ -307,10 +307,17 @@ xgb_binning <- function(df, outcome, predictor, sample_val, learn_rate, num_brea
   
   if (inherits(xgb_tree, "try-error")) {
     err <- conditionMessage(attr(xgb_tree, "condition"))
-    msg <- 
-      paste0("`step_discretize_xgb()` failed to create a tree with error for ",
-             "predictor '", predictor, "', which will not be binned. The error: ", 
-             err)
+    if (grepl("Non-tree model detected", err)) {
+      msg <- paste0("`step_discretize_xgb()` failed for predictor '", predictor,
+                     "'. This could be because the data have no trend or because ", 
+                    "the learning rate is too low (current value: ",
+                    learn_rate, "). The predictor was not binned.")
+    } else {
+      msg <- paste0("`step_discretize_xgb()` failed to create a tree with error for ",
+                    "predictor '", predictor, "', which was not binned. The error: ", 
+                    err)
+    }
+    
     rlang::warn(msg)
     return(numeric(0))
   }
