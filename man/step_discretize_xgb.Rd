@@ -11,7 +11,7 @@ step_discretize_xgb(
   role = NA,
   trained = FALSE,
   outcome = NULL,
-  prop = 0.8,
+  sample_val = 0.2,
   learn_rate = 0.3,
   num_breaks = 10,
   tree_depth = 1,
@@ -39,8 +39,8 @@ have been estimated.}
 outcome to train XgBoost models in order to discretize explanatory
 variables.}
 
-\item{prop}{The share of data used for training the splits (the rest is used
-as a validation set for early stopping). Defaults to 0.80.}
+\item{sample_val}{Share of data used for validation (with early stopping) of the learned splits
+(the rest is used for training). Defaults to 0.20.}
 
 \item{learn_rate}{The rate at which the boosting algorithm adapts from
 iteration-to-iteration. Corresponds to \code{eta} in the \pkg{xgboost} package.
