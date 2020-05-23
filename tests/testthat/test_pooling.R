@@ -72,6 +72,7 @@ test_that("factor encoded predictor", {
 
 test_that("character encoded predictor", {
   skip_on_cran()
+  skip_on_os("mac")
   expect_warning(
     class_test <- recipe(x2 ~ ., data = ex_dat_ch) %>%
       step_lencode_bayes(x3, outcome = vars(x2), 
