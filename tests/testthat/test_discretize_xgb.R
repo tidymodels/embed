@@ -177,7 +177,7 @@ test_that("xgb_binning for classification", {
     credit_data_train,
     "Status",
     "Seniority",
-    prop = 0.80,
+    sample_val = 0.20,
     learn_rate = 0.3,
     num_breaks = 10,
     tree_depth = 1,
@@ -195,7 +195,7 @@ test_that("xgb_binning for classification", {
       credit_data_small,
       "Status",
       "Seniority",
-      prop = 0.70,
+      sample_val = 0.30,
       learn_rate = 0.3,
       num_breaks = 10,
       tree_depth = 1,
@@ -214,7 +214,7 @@ test_that("xgb_binning for multi-classification", {
     attrition_data_train,
     "EducationField",
     "Age",
-    prop = 0.80,
+    sample_val = 0.20,
     learn_rate = 0.3,
     num_breaks = 10,
     tree_depth = 1,
@@ -232,7 +232,7 @@ test_that("xgb_binning for multi-classification", {
       attrition_data_small,
       "EducationField",
       "Age",
-      prop = 0.70,
+      sample_val = 0.30,
       learn_rate = 0.3,
       num_breaks = 10,
       tree_depth = 1,
@@ -251,7 +251,7 @@ test_that("xgb_binning for regression", {
     okc_data_train,
     "age",
     "height",
-    prop = 0.80,
+    sample_val = 0.20,
     learn_rate = 0.3,
     num_breaks = 10,
     tree_depth = 1,
@@ -270,7 +270,7 @@ test_that("xgb_binning for regression", {
       okc_data_small,
       "age",
       "height",
-      prop = 0.70,
+      sample_val = 0.30,
       learn_rate = 0.3,
       num_breaks = 10,
       tree_depth = 1,
@@ -316,7 +316,7 @@ test_that("step_discretize_xgb for classification", {
  
   # Too few data
   expect_error(
-    recipe(class ~ ., data = sim_tr_cls[1:10, ]) %>%
+    recipe(class ~ ., data = sim_tr_cls[1:9, ]) %>%
       step_discretize_xgb(all_predictors(), outcome = "class") %>% 
       prep(),
     "Too few observations in the early stopping validation set"
@@ -393,7 +393,7 @@ test_that("step_discretize_xgb for multi-classification", {
   
   # Too few data
   expect_error(
-    recipe(class ~ ., data = sim_tr_mcls[1:10, ]) %>%
+    recipe(class ~ ., data = sim_tr_mcls[1:9, ]) %>%
       step_discretize_xgb(all_predictors(), outcome = "class") %>% 
       prep(),
     "Too few observations in the early stopping validation set"

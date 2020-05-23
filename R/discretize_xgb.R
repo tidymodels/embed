@@ -14,8 +14,8 @@
 #' @param outcome A call to `vars` to specify which variable is used as the
 #'  outcome to train XgBoost models in order to discretize explanatory
 #'  variables.
-#' @param prop The share of data used for training the splits (the rest is used
-#'  as a validation set for early stopping). Defaults to 0.80.
+#' @param sample_val Share of data used for validation (with early stopping) of the learned splits 
+#' (the rest is used for training). Defaults to 0.20.
 #' @param learn_rate The rate at which the boosting algorithm adapts from
 #'  iteration-to-iteration. Corresponds to `eta` in the \pkg{xgboost} package.
 #'  Defaults to 0.3.
@@ -91,7 +91,7 @@ step_discretize_xgb <-
            role = NA,
            trained = FALSE,
            outcome = NULL,
-           prop = 0.80,
+           sample_val = 0.20,
            learn_rate = 0.3,
            num_breaks = 10, # I actually think it's a reasonable, minimal default as 
            # the XgBoost uses 256 as default. Furthermore, this parameter is defined as the maximum
@@ -115,7 +115,7 @@ step_discretize_xgb <-
         role = role,
         trained = trained,
         outcome = outcome,
-        prop = prop,
+        sample_val = sample_val,
         learn_rate = learn_rate,
         num_breaks = num_breaks,
         tree_depth = tree_depth,
@@ -128,7 +128,7 @@ step_discretize_xgb <-
   }
 
 step_discretize_xgb_new <-
-  function(terms, role, trained, outcome, prop, learn_rate, num_breaks,
+  function(terms, role, trained, outcome, sample_val, learn_rate, num_breaks,
            tree_depth, min_n, rules, skip, id) {
     step(
       subclass = "discretize_xgb",
@@ -136,7 +136,7 @@ step_discretize_xgb_new <-
       role = role,
       trained = trained,
       outcome = outcome,
-      prop = prop,
+      sample_val = sample_val,
       learn_rate = learn_rate,
       num_breaks = num_breaks,
       tree_depth = tree_depth,
@@ -184,7 +184,7 @@ run_xgboost <- function(.train, .test, .learn_rate, .num_breaks, .tree_depth, .m
   )
 }
 
-xgb_binning <- function(df, outcome, predictor, prop, learn_rate, num_breaks, tree_depth, min_n){
+xgb_binning <- function(df, outcome, predictor, sample_val, learn_rate, num_breaks, tree_depth, min_n){
   
   # Assuring correct types
   if (is.character(df[[outcome]])) {
@@ -207,8 +207,8 @@ xgb_binning <- function(df, outcome, predictor, prop, learn_rate, num_breaks, tr
     df[[outcome]] <- as.integer(df[[outcome]]) - 1
   }
   
-  # Changes: prop now is a parameter with 0.80 as default. If prop is equal 
-  # to 1 then rsample returns it standard error: Error: `prop` must be a number on (0, 1).
+  # Changes: sample_val now is a parameter with 0.20 as default. If sample_val is equal 
+  # to 0 then rsample returns it standard error: Error: `prop` must be a number on (0, 1).
   # If there are less than 2 observations in the test set then an error is given
   
   # Changes: I also realized that results for a single column are not reproducible given a training set
@@ -217,7 +217,7 @@ xgb_binning <- function(df, outcome, predictor, prop, learn_rate, num_breaks, tr
   split <- withr::with_seed(
     sample.int(10^6, 1),
     # suppressing rsample messages regarding stratification (regression)
-    suppressWarnings(rsample::initial_split(df, prop = prop, strata = outcome))
+    suppressWarnings(rsample::initial_split(df, prop = (1 - sample_val), strata = outcome))
   )
 
   train <- rsample::training(split)
@@ -348,12 +348,12 @@ prep.step_discretize_xgb <- function(x, training, info = NULL, ...) {
   
   col_names <- col_names[col_names != y_name]
   
-  test_size <- sum(complete.cases(training)) * (1 - x$prop)
+  test_size <- sum(complete.cases(training)) * x$sample_val
   
   if (floor(test_size) < 2){
     rlang::abort(
       paste("Too few observations in the early stopping validation set.",
-            "Consider decreasing the `prop` parameter.")
+            "Consider increasing the `sample_val` parameter.")
     )
   }
   
@@ -380,7 +380,7 @@ prep.step_discretize_xgb <- function(x, training, info = NULL, ...) {
       training,
       y_name,
       col_names[[i]],
-      x$prop,
+      x$sample_val,
       x$learn_rate,
       x$num_breaks,
       x$tree_depth,
@@ -401,7 +401,7 @@ prep.step_discretize_xgb <- function(x, training, info = NULL, ...) {
     role = x$role,
     trained = TRUE,
     outcome = x$outcome,
-    prop = x$prop,
+    sample_val = x$sample_val,
     learn_rate = x$learn_rate,
     num_breaks = x$num_breaks,
     tree_depth = x$tree_depth,
