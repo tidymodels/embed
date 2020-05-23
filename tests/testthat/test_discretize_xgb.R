@@ -201,7 +201,7 @@ test_that("xgb_binning for classification", {
       tree_depth = 1,
       min_n = 5
     ),
-    "failed to create a tree with error for predictor 'Seniority'"
+    "failed for predictor 'Seniority'"
   )
   
 })
@@ -238,7 +238,7 @@ test_that("xgb_binning for multi-classification", {
       tree_depth = 1,
       min_n = 5
     ),
-    "failed to create a tree with error for predictor 'Age'"
+    "failed for predictor 'Age'"
   )
   
 })
@@ -276,7 +276,7 @@ test_that("xgb_binning for regression", {
       tree_depth = 1,
       min_n = 5
     ),
-    "failed to create a tree with error for predictor 'height'"
+    "failed for predictor 'height'"
   )
   
 })
