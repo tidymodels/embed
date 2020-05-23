@@ -73,7 +73,7 @@ embed_control is a simple wrapper for setting default options." />
       <div class="navbar-brand-container">
         <a class="navbar-brand" href="../index.html">embed</a>
         <div class="info">
-          <span class="partof">part of <a href="https://tidymodels.org">tidymodels</a></span>
+          <span class="partof">part of <a href="https://github.com/tidymodels">tidymodels</a></span>
           <span class="version version-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.0.6.9000</span>
         </div>
       </div>
@@ -272,25 +272,25 @@ any).</p>
 used in the last layer while softmax is used for factor outcomes
 (with any number of levels).</p>
 <p>For example, the <code>keras</code> code for a numeric outcome, one
-categorical predictor, and no hidden units used here would be</p><pre>  keras_model_sequential() \\%&gt;\\% 
+categorical predictor, and no hidden units used here would be</p><pre>  keras_model_sequential() \\%&amp;gt;\\% 
   layer_embedding(
     input_dim = num_factor_levels_x + 1,
     output_dim = num_terms,
     input_length = 1
-  ) \\%&gt;\\%
-  layer_flatten() \\%&gt;\\%
+  ) \\%&amp;gt;\\%
+  layer_flatten() \\%&amp;gt;\\%
   layer_dense(units = 1, activation = 'linear')
 </pre>
 
 <p>If a factor outcome is used and hidden units were requested, the code
-would be</p><pre>  keras_model_sequential() \\%&gt;\\% 
+would be</p><pre>  keras_model_sequential() \\%&amp;gt;\\% 
   layer_embedding(
     input_dim = num_factor_levels_x + 1,
     output_dim = num_terms,
     input_length = 1
-   ) \\%&gt;\\%
-  layer_flatten() \\%&gt;\\%
-  layer_dense(units = hidden_units, activation = "relu") \\%&gt;\\%
+   ) \\%&amp;gt;\\%
+  layer_flatten() \\%&amp;gt;\\%
+  layer_dense(units = hidden_units, activation = "relu") \\%&amp;gt;\\%
   layer_dense(units = num_factor_levels_y, activation = 'softmax')
 </pre>
 
@@ -333,7 +333,7 @@ development?" <a href='https://tinyurl.com/keras-repro'>https://tinyurl.com/kera
 
       <footer>
       <div class="tidyverse">
-  <p>embed is a part of the <strong>tidymodels</strong> ecosystem, a collection of modeling packages designed with common APIs and a shared philosophy.</p>
+  <p><code>embed</code> is a part of the <strong>tidymodels</strong> ecosystem, a collection of modeling packages designed with common APIs and a shared philosophy.</p>
 </div>
 
 <div class="author">
