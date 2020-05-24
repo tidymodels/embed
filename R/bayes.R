@@ -95,7 +95,6 @@
 #' 
 #' # See https://tidymodels.github.io/embed/ for examples
 
-#' @importFrom recipes add_step step terms_select sel2char ellipse_check rand_id
 step_lencode_bayes <-
   function(recipe,
            ...,
@@ -141,7 +140,7 @@ step_lencode_bayes_new <-
     )
   }
 
-#' @importFrom recipes check_type
+
 #' @export
 prep.step_lencode_bayes <- function(x, training, info = NULL, ...) {
   col_names <- terms_select(x$terms, info = info)
@@ -163,8 +162,7 @@ prep.step_lencode_bayes <- function(x, training, info = NULL, ...) {
   )
 }
 
-#' @importFrom stats as.formula glm binomial coef gaussian na.omit
-#' @importFrom dplyr bind_cols as_tibble
+
 glm_coefs <- function(x, y, ...) {
   fam <- if(is.factor(y[[1]])) binomial else gaussian
   form <- as.formula(paste0(names(y), "~ 0 + value"))
@@ -189,11 +187,7 @@ glm_coefs <- function(x, y, ...) {
     ..value = unname(coefs)
   )
 }
-#' @importFrom utils capture.output
-#' @importFrom rstanarm stan_glmer
-#' @importFrom tibble rownames_to_column 
-#' @importFrom rlang set_names
-#' @importFrom dplyr bind_rows
+
 stan_coefs <- function(x, y, options, verbose, ...) {
   if (is.factor(y[[1]])) {
     fam <- binomial()
@@ -238,7 +232,7 @@ stan_coefs <- function(x, y, options, verbose, ...) {
   coefs
 }
 
-#' @importFrom dplyr tibble mutate filter left_join %>% arrange 
+
 map_glm_coef <- function(dat, mapping) {
   new_val <- mapping$..value[mapping$..level == "..new"]
   dat <- 
@@ -254,9 +248,7 @@ map_glm_coef <- function(dat, mapping) {
   dat$..value
 }
 
-#' @import rlang
-#' @importFrom recipes bake prep
-#' @importFrom purrr map
+
 #' @export
 bake.step_lencode_bayes <- function(object, new_data, ...) {
   for (col in names(object$mapping))
@@ -265,7 +257,7 @@ bake.step_lencode_bayes <- function(object, new_data, ...) {
   new_data
 }
 
-#' @importFrom recipes printer
+
 #' @export
 print.step_lencode_bayes <-
   function(x, width = max(20, options()$width - 31), ...) {
@@ -274,8 +266,7 @@ print.step_lencode_bayes <-
     invisible(x)
   }
 
-#' @importFrom dplyr bind_rows
-#' @importFrom recipes is_trained
+
 #' @rdname step_lencode_bayes
 #' @param x A `step_lencode_bayes` object.
 #' @export
@@ -298,6 +289,3 @@ tidy.step_lencode_bayes <- function(x, ...) {
   res$id <- x$id
   res
 }
-
-#' @importFrom utils globalVariables
-utils::globalVariables(c("..level", "..order"))
