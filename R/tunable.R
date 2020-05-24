@@ -53,3 +53,37 @@ tunable.step_woe <- function(x, ...) {
     component_id = x$id
   )
 }
+
+#' @export
+#' @rdname tunable.step_embed
+tunable.step_discretize_xgb <- function(x, ...) {
+  tibble::tibble(
+    name = c("sample_val", "learn_rate", "num_breaks", "tree_depth", "min_n"),
+    call_info = list(
+      list(pkg = "dials", fun = "sample_val", range = c(0.05, 0.7)),
+      list(pkg = "dials", fun = "learn_rate", range = log10(c(0.05, 0.3))),
+      list(pkg = "dials", fun = "num_breaks", range = c(5, 30)),
+      list(pkg = "dials", fun = "tree_depth"),
+      list(pkg = "dials", fun = "min_n")
+    ),
+    source = "recipe",
+    component = "step_discretize_xgb",
+    component_id = x$id
+  )
+}
+
+#' @export
+#' @rdname tunable.step_embed
+tunable.step_discretize_cart <- function(x, ...) {
+  tibble::tibble(
+    name = c("cost_complexity", "tree_depth", "min_n"),
+    call_info = list(
+      list(pkg = "dials", fun = "cost_complexity"), 
+      list(pkg = "dials", fun = "tree_depth"), 
+      list(pkg = "dials", fun = "min_n")
+    ),
+    source = "recipe",
+    component = "step_discretize_cart",
+    component_id = x$id
+  )
+}
