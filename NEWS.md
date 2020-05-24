@@ -1,8 +1,13 @@
-# embed (development version)
+# embed 0.0.7
 
  * Changes for `dplyr` 1.0.0
  
- * Added `step_feature_hash()` for creating dummy variables. 
+ ## New Steps
+ 
+  * `step_discretize_xgb()` and `step_discretize_cart()` can be used to convert numeric predictors to categorical using supervised binning methods based on tree models. Thanks to Konrad Semsch for the contribution. 
+
+ * Added `step_feature_hash()` for creating dummy variables using feature hashing. 
+
 
 # embed 0.0.6
 
