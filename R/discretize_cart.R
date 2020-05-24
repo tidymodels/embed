@@ -60,16 +60,16 @@
 #' credit_data_tr <- training(split)
 #' credit_data_te <- testing(split)
 #'
-#' xgb_rec <- 
+#' cart_rec <- 
 #'   recipe(Status ~ ., data = credit_data_tr) %>%
 #'   step_discretize_cart(all_numeric(), outcome = "Status", id = "cart splits")
 #'
-#' xgb_rec <- prep(xgb_rec, training = credit_data_tr)
+#' cart_rec <- prep(cart_rec, training = credit_data_tr)
 #' 
 #' # The splits: 
-#' tidy(xgb_rec, id = "cart splits")
+#' tidy(cart_rec, id = "cart splits")
 #'
-#' xgb_test_bins <- bake(xgb_rec, credit_data_te)
+#' cart_test_bins <- bake(cart_rec, credit_data_te)
 #' @seealso [recipes::recipe()] [recipes::prep.recipe()] [recipes::bake.recipe()]
 
 step_discretize_cart <-
