@@ -117,7 +117,8 @@ test_that("run_xgboost for classification", {
     .num_breaks = 10,
     .tree_depth = 1,
     .min_n = 5,
-    .objective = "binary:logistic"
+    .objective = "binary:logistic",
+    .num_class = NA
   )
   
   expect_output(print(xgboost))
@@ -158,7 +159,8 @@ test_that("run_xgboost for regression", {
     .num_breaks = 10,
     .tree_depth = 1,
     .min_n = 5,
-    .objective = "reg:squarederror"
+    .objective = "reg:squarederror",
+    .num_class = NA
   )
   
   expect_output(print(xgboost))
@@ -296,15 +298,9 @@ test_that("step_discretize_xgb for classification", {
   
   expect_output(print(xgb_train_bins))
   expect_output(print(xgb_test_bins))
-  expect_equal(
-    levels(xgb_train_bins$x),
-    c("[-Inf,0.2982)", "[0.2982,0.6828)", "[0.6828, Inf]")
-  )
-  expect_equal(
-    levels(xgb_train_bins$z),
-    c("[-Inf,0.3191)", "[0.3191, Inf]")
-  )
-  
+  expect_true(length(levels(xgb_train_bins$x)) == 3)
+  expect_true(length(levels(xgb_train_bins$z)) == 2)
+
   expect_equal(
     levels(xgb_train_bins$x),
     levels(xgb_test_bins$x)
@@ -373,15 +369,9 @@ test_that("step_discretize_xgb for multi-classification", {
   
   expect_output(print(xgb_train_bins))
   expect_output(print(xgb_test_bins))
-  expect_equal(
-    levels(xgb_train_bins$x),
-    c("[-Inf,0.6806)", "[0.6806, Inf]")
-  )
-  expect_equal(
-    levels(xgb_train_bins$z),
-    c("[-Inf,0.3249)", "[0.3249, Inf]")
-  )
-  
+  expect_true(length(levels(xgb_train_bins$x)) == 2)
+  expect_true(length(levels(xgb_train_bins$z)) == 2)
+
   expect_equal(
     levels(xgb_train_bins$x),
     levels(xgb_test_bins$x)
@@ -448,15 +438,10 @@ test_that("step_discretize_xgb for regression", {
   
   expect_output(print(xgb_train_bins))
   expect_output(print(xgb_test_bins))
-  expect_equal(
-    levels(xgb_train_bins$x),
-    c("[-Inf,0.3069)", "[0.3069,0.4281)", "[0.4281,0.558)", "[0.558,0.6828)", "[0.6828, Inf]")
-  )
-  expect_equal(
-    levels(xgb_train_bins$z),
-    c("[-Inf,0.06851)", "[0.06851,0.2019)", "[0.2019,0.3192)", "[0.3192,0.4447)",
-      "[0.4447,0.575)", "[0.575,0.789)", "[0.789,0.9222)", "[0.9222, Inf]")
-  )
+
+  expect_true(length(levels(xgb_train_bins$x)) == 5)
+  expect_true(length(levels(xgb_train_bins$z)) == 8)
+
   expect_equal(
     levels(xgb_train_bins$x),
     levels(xgb_test_bins$x)
