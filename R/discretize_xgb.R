@@ -55,13 +55,15 @@
 #'  package, which makes this discretization method prone to overfitting.
 #'
 #' The pre-defined values of the underlying xgboost learns good
-#'  and reasonably complex results. However, if one wishes to tune them the
-#'  recommended path would be to first start with changing the value of
-#'  `num_breaks` to e.g.: 20 or 30. If that doesn't give satisfactory results
-#'  one could experiment with modifying the `tree_depth` or `min_n` parameters.
+#' and reasonably complex results. However, if one wishes to tune them the
+#' recommended path would be to first start with changing the value of
+#' `num_breaks` to e.g.: 20 or 30. If that doesn't give satisfactory results
+#' one could experiment with modifying the `tree_depth` or `min_n` parameters.
+#' Note that it is not recommended to tune `learn_rate` simultaneously with
+#' other parameters.
 #'
 #' This step requires the \pkg{xgboost} package. If not installed, the
-#'  step will stop with a note about installing the package.
+#' step will stop with a note about installing the package.
 #'
 #' Note that the original data will be replaced with the new bins.
 #'
