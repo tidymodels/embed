@@ -172,6 +172,10 @@ test_that("run_xgboost for regression", {
 })
 
 test_that("xgb_binning for classification", {
+  less_than_3.6 <- function() {
+    utils::compareVersion("3.5.3", as.character(getRversion())) >= 0
+  }
+  skip_if(less_than_3.6())
   
   # Usual case
   set.seed(8497)
@@ -209,6 +213,10 @@ test_that("xgb_binning for classification", {
 })
 
 test_that("xgb_binning for multi-classification", {
+  less_than_3.6 <- function() {
+    utils::compareVersion("3.5.3", as.character(getRversion())) >= 0
+  }
+  skip_if(less_than_3.6())
   
   # Usual case
   set.seed(8497)
@@ -246,6 +254,10 @@ test_that("xgb_binning for multi-classification", {
 })
 
 test_that("xgb_binning for regression", {
+  less_than_3.6 <- function() {
+    utils::compareVersion("3.5.3", as.character(getRversion())) >= 0
+  }
+  skip_if(less_than_3.6())
   
   set.seed(4235)
   # Usual case
