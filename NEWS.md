@@ -1,12 +1,20 @@
-# embed 0.0.7
+# embed 0.1.0
 
  * Changes for `dplyr` 1.0.0
  
- ## New Steps
+## New Steps
  
   * `step_discretize_xgb()` and `step_discretize_cart()` can be used to convert numeric predictors to categorical using supervised binning methods based on tree models. Thanks to Konrad Semsch for the contribution. 
 
  * Added `step_feature_hash()` for creating dummy variables using feature hashing. 
+
+## Breaking Changes
+
+ * `tidy.step_woe()` now has column names consistent with other recipe steps. 
+
+## Bug fixes
+
+ * Fixed a bug in detecting the TF version. 
 
 
 # embed 0.0.6

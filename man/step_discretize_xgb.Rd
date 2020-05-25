@@ -96,6 +96,8 @@ and reasonably complex results. However, if one wishes to tune them the
 recommended path would be to first start with changing the value of
 \code{num_breaks} to e.g.: 20 or 30. If that doesn't give satisfactory results
 one could experiment with modifying the \code{tree_depth} or \code{min_n} parameters.
+Note that it is not recommended to tune \code{learn_rate} simultaneously with
+other parameters.
 
 This step requires the \pkg{xgboost} package. If not installed, the
 step will stop with a note about installing the package.
@@ -122,7 +124,8 @@ xgb_rec <- prep(xgb_rec, training = credit_data_tr)
 xgb_test_bins <- bake(xgb_rec, credit_data_te)
 }
 \seealso{
-\code{\link[recipes:recipe]{recipes::recipe()}} \code{\link[recipes:prep.recipe]{recipes::prep.recipe()}} \code{\link[recipes:bake.recipe]{recipes::bake.recipe()}}
+\code{\link[embed:step_discretize_cart]{embed::step_discretize_cart()}}, \code{\link[recipes:recipe]{recipes::recipe()}},
+\code{\link[recipes:prep.recipe]{recipes::prep.recipe()}}, \code{\link[recipes:bake.recipe]{recipes::bake.recipe()}}
 }
 \concept{discretization}
 \concept{factors}
