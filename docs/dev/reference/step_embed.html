@@ -272,25 +272,25 @@ any).</p>
 used in the last layer while softmax is used for factor outcomes
 (with any number of levels).</p>
 <p>For example, the <code>keras</code> code for a numeric outcome, one
-categorical predictor, and no hidden units used here would be</p><pre>  keras_model_sequential() \\%&amp;gt;\\% 
+categorical predictor, and no hidden units used here would be</p><pre>  keras_model_sequential() \\%&gt;\\% 
   layer_embedding(
     input_dim = num_factor_levels_x + 1,
     output_dim = num_terms,
     input_length = 1
-  ) \\%&amp;gt;\\%
-  layer_flatten() \\%&amp;gt;\\%
+  ) \\%&gt;\\%
+  layer_flatten() \\%&gt;\\%
   layer_dense(units = 1, activation = 'linear')
 </pre>
 
 <p>If a factor outcome is used and hidden units were requested, the code
-would be</p><pre>  keras_model_sequential() \\%&amp;gt;\\% 
+would be</p><pre>  keras_model_sequential() \\%&gt;\\% 
   layer_embedding(
     input_dim = num_factor_levels_x + 1,
     output_dim = num_terms,
     input_length = 1
-   ) \\%&amp;gt;\\%
-  layer_flatten() \\%&amp;gt;\\%
-  layer_dense(units = hidden_units, activation = "relu") \\%&amp;gt;\\%
+   ) \\%&gt;\\%
+  layer_flatten() \\%&gt;\\%
+  layer_dense(units = hidden_units, activation = "relu") \\%&gt;\\%
   layer_dense(units = num_factor_levels_y, activation = 'softmax')
 </pre>
 

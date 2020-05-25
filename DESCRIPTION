@@ -1,10 +1,7 @@
 Package: embed
 Version: 0.0.6.9000
 Title: Extra Recipes for Encoding Categorical Predictors
-Description: Predictors can be converted to one or more alternate representations 
-    using simple generalized linear models <arXiv:1611.09477>, nonlinear 
-    models <arXiv:1604.06737>, or other methods. All encoding methods are 
-    supervised.
+Description: Predictors can be converted to one or more numeric representations using simple generalized linear models <arXiv:1611.09477> or nonlinear models <arXiv:1604.06737>. Most encoding methods are supervised.
 Authors@R: c(
     person(given = "Max", family = "Kuhn", email = "max@rstudio.com", role = c("aut", "cre")),
     person("RStudio", role = "cph"))
