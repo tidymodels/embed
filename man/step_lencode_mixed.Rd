@@ -14,7 +14,7 @@ step_lencode_mixed(
   options = list(verbose = 0),
   mapping = NULL,
   skip = FALSE,
-  id = rand_id("lencode_bayes")
+  id = rand_id("lencode_mixed")
 )
 
 \method{tidy}{step_lencode_mixed}(x, ...)
