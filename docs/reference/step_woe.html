@@ -72,8 +72,8 @@ transformation based on weights of evidence against a binary outcome." />
       <div class="navbar-brand-container">
         <a class="navbar-brand" href="../index.html">embed</a>
         <div class="info">
-          <span class="partof">part of <a href="https://github.com/tidymodels">tidymodels</a></span>
-          <span class="version version-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.6</span>
+          <span class="partof">part of <a href="https://tidymodels.org">tidymodels</a></span>
+          <span class="version version-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
         </div>
       </div>
     </div>
@@ -275,20 +275,20 @@ tweaking an output returned from <code><a href='dictionary.html'>dictionary()</a
 #&gt; 4 freelance   owner
 #&gt; 5   partime parents</div><div class='input'><span class='co'># the details:</span>
 <span class='fu'><a href='https://rdrr.io/pkg/generics/man/tidy.html'>tidy</a></span>(<span class='no'>woe_models</span>, <span class='kw'>number</span> <span class='kw'>=</span> <span class='fl'>1</span>)</div><div class='output co'>#&gt; </span><span style='color: #555555;'># A tibble: 12 x 9</span><span>
-#&gt;    variable predictor n_tot n_bad n_good   p_bad  p_good      woe id       
-#&gt;    </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>    </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>     </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>  </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>   </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>   </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>    </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>    
-#&gt; </span><span style='color: #555555;'> 1</span><span> Job      fixed      </span><span style='text-decoration: underline;'>1</span><span>261   273    988 0.451   0.708     0.451  woe_omZtf
-#&gt; </span><span style='color: #555555;'> 2</span><span> Job      freelance   463   159    304 0.263   0.218    -</span><span style='color: #BB0000;'>0.187</span><span>  woe_omZtf
-#&gt; </span><span style='color: #555555;'> 3</span><span> Job      others       74    39     35 0.064</span><span style='text-decoration: underline;'>5</span><span>  0.025</span><span style='text-decoration: underline;'>1</span><span>   -</span><span style='color: #BB0000;'>0.944</span><span>  woe_omZtf
-#&gt; </span><span style='color: #555555;'> 4</span><span> Job      partime     201   133     68 0.220   0.048</span><span style='text-decoration: underline;'>7</span><span>   -</span><span style='color: #BB0000;'>1.51</span><span>   woe_omZtf
-#&gt; </span><span style='color: #555555;'> 5</span><span> Job      </span><span style='color: #BB0000;'>NA</span><span>            1     1      0 0.001</span><span style='text-decoration: underline;'>65</span><span> 0       -</span><span style='color: #BB0000;'>14.7</span><span>    woe_omZtf
-#&gt; </span><span style='color: #555555;'> 6</span><span> Home     ignore        8     4      4 0.006</span><span style='text-decoration: underline;'>61</span><span> 0.002</span><span style='text-decoration: underline;'>87</span><span>  -</span><span style='color: #BB0000;'>0.835</span><span>  woe_omZtf
-#&gt; </span><span style='color: #555555;'> 7</span><span> Home     other       161    78     83 0.129   0.059</span><span style='text-decoration: underline;'>5</span><span>   -</span><span style='color: #BB0000;'>0.773</span><span>  woe_omZtf
-#&gt; </span><span style='color: #555555;'> 8</span><span> Home     owner       931   192    739 0.317   0.530     0.512  woe_omZtf
-#&gt; </span><span style='color: #555555;'> 9</span><span> Home     parents     336    98    238 0.162   0.171     0.051</span><span style='text-decoration: underline;'>9</span><span> woe_omZtf
-#&gt; </span><span style='color: #555555;'>10</span><span> Home     priv        113    42     71 0.069</span><span style='text-decoration: underline;'>4</span><span>  0.050</span><span style='text-decoration: underline;'>9</span><span>   -</span><span style='color: #BB0000;'>0.310</span><span>  woe_omZtf
-#&gt; </span><span style='color: #555555;'>11</span><span> Home     rent        446   188    258 0.311   0.185    -</span><span style='color: #BB0000;'>0.519</span><span>  woe_omZtf
-#&gt; </span><span style='color: #555555;'>12</span><span> Home     </span><span style='color: #BB0000;'>NA</span><span>            5     3      2 0.004</span><span style='text-decoration: underline;'>96</span><span> 0.001</span><span style='text-decoration: underline;'>43</span><span>  -</span><span style='color: #BB0000;'>1.24</span><span>   woe_omZtf</div><div class='input'>
+#&gt;    terms value     n_tot n_bad n_good   p_bad  p_good      woe id       
+#&gt;    </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>     </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>  </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>   </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>   </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>    </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>    
+#&gt; </span><span style='color: #555555;'> 1</span><span> Job   fixed      </span><span style='text-decoration: underline;'>1</span><span>261   273    988 0.451   0.708     0.451  woe_omZtf
+#&gt; </span><span style='color: #555555;'> 2</span><span> Job   freelance   463   159    304 0.263   0.218    -</span><span style='color: #BB0000;'>0.187</span><span>  woe_omZtf
+#&gt; </span><span style='color: #555555;'> 3</span><span> Job   others       74    39     35 0.064</span><span style='text-decoration: underline;'>5</span><span>  0.025</span><span style='text-decoration: underline;'>1</span><span>   -</span><span style='color: #BB0000;'>0.944</span><span>  woe_omZtf
+#&gt; </span><span style='color: #555555;'> 4</span><span> Job   partime     201   133     68 0.220   0.048</span><span style='text-decoration: underline;'>7</span><span>   -</span><span style='color: #BB0000;'>1.51</span><span>   woe_omZtf
+#&gt; </span><span style='color: #555555;'> 5</span><span> Job   </span><span style='color: #BB0000;'>NA</span><span>            1     1      0 0.001</span><span style='text-decoration: underline;'>65</span><span> 0       -</span><span style='color: #BB0000;'>14.7</span><span>    woe_omZtf
+#&gt; </span><span style='color: #555555;'> 6</span><span> Home  ignore        8     4      4 0.006</span><span style='text-decoration: underline;'>61</span><span> 0.002</span><span style='text-decoration: underline;'>87</span><span>  -</span><span style='color: #BB0000;'>0.835</span><span>  woe_omZtf
+#&gt; </span><span style='color: #555555;'> 7</span><span> Home  other       161    78     83 0.129   0.059</span><span style='text-decoration: underline;'>5</span><span>   -</span><span style='color: #BB0000;'>0.773</span><span>  woe_omZtf
+#&gt; </span><span style='color: #555555;'> 8</span><span> Home  owner       931   192    739 0.317   0.530     0.512  woe_omZtf
+#&gt; </span><span style='color: #555555;'> 9</span><span> Home  parents     336    98    238 0.162   0.171     0.051</span><span style='text-decoration: underline;'>9</span><span> woe_omZtf
+#&gt; </span><span style='color: #555555;'>10</span><span> Home  priv        113    42     71 0.069</span><span style='text-decoration: underline;'>4</span><span>  0.050</span><span style='text-decoration: underline;'>9</span><span>   -</span><span style='color: #BB0000;'>0.310</span><span>  woe_omZtf
+#&gt; </span><span style='color: #555555;'>11</span><span> Home  rent        446   188    258 0.311   0.185    -</span><span style='color: #BB0000;'>0.519</span><span>  woe_omZtf
+#&gt; </span><span style='color: #555555;'>12</span><span> Home  </span><span style='color: #BB0000;'>NA</span><span>            5     3      2 0.004</span><span style='text-decoration: underline;'>96</span><span> 0.001</span><span style='text-decoration: underline;'>43</span><span>  -</span><span style='color: #BB0000;'>1.24</span><span>   woe_omZtf</div><div class='input'>
 <span class='co'># Example of custom dictionary + tweaking</span>
 <span class='co'># custom dictionary</span>
 <span class='no'>woe_dict_custom</span> <span class='kw'>&lt;-</span> <span class='no'>credit_tr</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='dictionary.html'>dictionary</a></span>(<span class='no'>Job</span>, <span class='no'>Home</span>, <span class='kw'>outcome</span> <span class='kw'>=</span> <span class='no'>Status</span>)
@@ -323,7 +323,7 @@ tweaking an output returned from <code><a href='dictionary.html'>dictionary()</a
 
       <footer>
       <div class="tidyverse">
-  <p><code>embed</code> is a part of the <strong>tidymodels</strong> ecosystem, a collection of modeling packages designed with common APIs and a shared philosophy.</p>
+  <p>embed is a part of the <strong>tidymodels</strong> ecosystem, a collection of modeling packages designed with common APIs and a shared philosophy.</p>
 </div>
 
 <div class="author">

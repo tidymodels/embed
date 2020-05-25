@@ -415,11 +415,13 @@ print.step_woe <- function(x, width = max(20, options()$width - 29), ...) {
 #' @export
 tidy.step_woe <- function(x, ...) {
   if (is_trained(x)) {
-    res <- x$dictionary
+    res <- 
+      x$dictionary %>% 
+      dplyr::rename(terms = variable, value = predictor)
   } else {
     term_names <- sel2char(x$terms)
-    res <- tibble(variable = term_names,
-                  predictor = rlang::na_chr,
+    res <- tibble(terms = term_names,
+                  value = rlang::na_chr,
                   ntot = rlang::na_int,
                   n_0 = rlang::na_int,
                   n_1 = rlang::na_int,

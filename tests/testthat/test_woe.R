@@ -150,7 +150,9 @@ test_that("step_woe", {
   expect_equal(bake_woe_output, add_woe_output)
 
   tidy_output <- tidy(woe_models, number = 1)
-  woe_dict_output <- dictionary(credit_tr, Job, Home, outcome = Status)
+  woe_dict_output <- 
+    dictionary(credit_tr, Job, Home, outcome = Status) %>% 
+    dplyr::rename(terms = variable, value = predictor)
 
   #
   expect_equal(tidy_output %>% dplyr::select(-id), woe_dict_output)

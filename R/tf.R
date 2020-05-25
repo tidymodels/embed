@@ -233,6 +233,10 @@ prep.step_embed <- function(x, training, info = NULL, ...) {
   )
 }
 
+is_tf_2 <- function() {
+  compareVersion("2.0", as.character(tensorflow::tf_version())) <= 0
+}
+
 
 tf_coefs2 <- function(x, y, z, opt, num, lab, h, seeds = sample.int(10000, 4), ...) {
   vars <- names(x)
@@ -240,7 +244,7 @@ tf_coefs2 <- function(x, y, z, opt, num, lab, h, seeds = sample.int(10000, 4), .
   
   set.seed(seeds[1])
   
-  if (tensorflow::tf_version() == "2.0") {
+  if (is_tf_2()) {
     tensorflow::tf$random$set_seed(seeds[2])
   } else {
     tensorflow::use_session_with_seed(seeds[2])

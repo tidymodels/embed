@@ -84,8 +84,9 @@
 #'
 #' xgb_rec <- prep(xgb_rec, training = credit_data_tr)
 #'
-#' xgb_test_bins <- bake(xgb_rec, credit_data_te)
-#' @seealso [embed::step_discretize_cart(), recipes::recipe()] [recipes::prep.recipe()] [recipes::bake.recipe()]
+#' bake(xgb_rec, credit_data_te, Price)
+#' @seealso [embed::step_discretize_cart()], [recipes::recipe()], 
+#' [recipes::prep.recipe()], [recipes::bake.recipe()]
 
 step_discretize_xgb <-
   function(recipe,
