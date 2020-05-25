@@ -68,8 +68,8 @@
       <div class="navbar-brand-container">
         <a class="navbar-brand" href="../index.html">embed</a>
         <div class="info">
-          <span class="partof">part of <a href="https://github.com/tidymodels">tidymodels</a></span>
-          <span class="version version-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.6</span>
+          <span class="partof">part of <a href="https://tidymodels.org">tidymodels</a></span>
+          <span class="version version-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
         </div>
       </div>
     </div>
@@ -110,10 +110,36 @@
       <small>Source: <a href='https://github.com/tidymodels/embed/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
-    <div id="embed-development-version" class="section level1">
-<h1 class="page-header" data-toc-text="development version">
-<a href="#embed-development-version" class="anchor"></a>embed (development version)<small> Unreleased </small>
+    <div id="embed-010" class="section level1">
+<h1 class="page-header" data-toc-text="0.1.0">
+<a href="#embed-010" class="anchor"></a>embed 0.1.0<small> Unreleased </small>
 </h1>
+<ul>
+<li>Changes for <code>dplyr</code> 1.0.0</li>
+</ul>
+<div id="new-steps" class="section level2">
+<h2 class="hasAnchor">
+<a href="#new-steps" class="anchor"></a>New Steps</h2>
+<ul>
+<li><p><code><a href="../reference/step_discretize_xgb.html">step_discretize_xgb()</a></code> and <code><a href="../reference/step_discretize_cart.html">step_discretize_cart()</a></code> can be used to convert numeric predictors to categorical using supervised binning methods based on tree models. Thanks to Konrad Semsch for the contribution.</p></li>
+<li><p>Added <code><a href="../reference/step_feature_hash.html">step_feature_hash()</a></code> for creating dummy variables using feature hashing.</p></li>
+</ul>
+</div>
+<div id="breaking-changes" class="section level2">
+<h2 class="hasAnchor">
+<a href="#breaking-changes" class="anchor"></a>Breaking Changes</h2>
+<ul>
+<li>
+<code><a href="../reference/step_woe.html">tidy.step_woe()</a></code> now has column names consistent with other recipe steps.</li>
+</ul>
+</div>
+<div id="bug-fixes" class="section level2">
+<h2 class="hasAnchor">
+<a href="#bug-fixes" class="anchor"></a>Bug fixes</h2>
+<ul>
+<li>Fixed a bug in detecting the TF version.</li>
+</ul>
+</div>
 </div>
     <div id="embed-006" class="section level1">
 <h1 class="page-header" data-toc-text="0.0.6">
@@ -142,9 +168,9 @@
     <div id="embed-003" class="section level1">
 <h1 class="page-header" data-toc-text="0.0.3">
 <a href="#embed-003" class="anchor"></a><small> 2019-07-12 </small><code>embed</code> 0.0.3</h1>
-<div id="new-steps" class="section level2">
+<div id="new-steps-1" class="section level2">
 <h2 class="hasAnchor">
-<a href="#new-steps" class="anchor"></a>New Steps</h2>
+<a href="#new-steps-1" class="anchor"></a>New Steps</h2>
 <ul>
 <li>
 <code><a href="../reference/step_umap.html">step_umap()</a></code> was added for both supervised and unsupervised encodings.</li>
@@ -184,7 +210,7 @@
 
       <footer>
       <div class="tidyverse">
-  <p><code>embed</code> is a part of the <strong>tidymodels</strong> ecosystem, a collection of modeling packages designed with common APIs and a shared philosophy.</p>
+  <p>embed is a part of the <strong>tidymodels</strong> ecosystem, a collection of modeling packages designed with common APIs and a shared philosophy.</p>
 </div>
 
 <div class="author">

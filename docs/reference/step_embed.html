@@ -73,8 +73,8 @@ embed_control is a simple wrapper for setting default options." />
       <div class="navbar-brand-container">
         <a class="navbar-brand" href="../index.html">embed</a>
         <div class="info">
-          <span class="partof">part of <a href="https://github.com/tidymodels">tidymodels</a></span>
-          <span class="version version-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.6</span>
+          <span class="partof">part of <a href="https://tidymodels.org">tidymodels</a></span>
+          <span class="version version-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
         </div>
       </div>
     </div>
@@ -272,27 +272,25 @@ any).</p>
 used in the last layer while softmax is used for factor outcomes
 (with any number of levels).</p>
 <p>For example, the <code>keras</code> code for a numeric outcome, one
-categorical predictor, and no hidden units used here would be</p><pre>  keras_model_sequential() \\%&amp;gt;\\% 
-  layer_embedding(
-    input_dim = num_factor_levels_x + 1,
-    output_dim = num_terms,
-    input_length = 1
-  ) \\%&amp;gt;\\%
-  layer_flatten() \\%&amp;gt;\\%
-  layer_dense(units = 1, activation = 'linear')
-</pre>
+categorical predictor, and no hidden units used here would be</p><pre>  <span class='fu'>keras_model_sequential</span>() <span class='kw'>%&gt;%</span>
+  <span class='fu'>layer_embedding</span>(
+    <span class='kw'>input_dim</span> <span class='kw'>=</span> <span class='no'>num_factor_levels_x</span> + <span class='fl'>1</span>,
+    <span class='kw'>output_dim</span> <span class='kw'>=</span> <span class='no'>num_terms</span>,
+    <span class='kw'>input_length</span> <span class='kw'>=</span> <span class='fl'>1</span>
+  ) <span class='kw'>%&gt;%</span>
+  <span class='fu'>layer_flatten</span>() <span class='kw'>%&gt;%</span>
+  <span class='fu'>layer_dense</span>(<span class='kw'>units</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>activation</span> <span class='kw'>=</span> <span class='st'>'linear'</span>)</pre>
 
 <p>If a factor outcome is used and hidden units were requested, the code
-would be</p><pre>  keras_model_sequential() \\%&amp;gt;\\% 
-  layer_embedding(
-    input_dim = num_factor_levels_x + 1,
-    output_dim = num_terms,
-    input_length = 1
-   ) \\%&amp;gt;\\%
-  layer_flatten() \\%&amp;gt;\\%
-  layer_dense(units = hidden_units, activation = "relu") \\%&amp;gt;\\%
-  layer_dense(units = num_factor_levels_y, activation = 'softmax')
-</pre>
+would be</p><pre>  <span class='fu'>keras_model_sequential</span>() <span class='kw'>%&gt;%</span>
+  <span class='fu'>layer_embedding</span>(
+    <span class='kw'>input_dim</span> <span class='kw'>=</span> <span class='no'>num_factor_levels_x</span> + <span class='fl'>1</span>,
+    <span class='kw'>output_dim</span> <span class='kw'>=</span> <span class='no'>num_terms</span>,
+    <span class='kw'>input_length</span> <span class='kw'>=</span> <span class='fl'>1</span>
+   ) <span class='kw'>%&gt;%</span>
+  <span class='fu'>layer_flatten</span>() <span class='kw'>%&gt;%</span>
+  <span class='fu'>layer_dense</span>(<span class='kw'>units</span> <span class='kw'>=</span> <span class='no'>hidden_units</span>, <span class='kw'>activation</span> <span class='kw'>=</span> <span class='st'>"relu"</span>) <span class='kw'>%&gt;%</span>
+  <span class='fu'>layer_dense</span>(<span class='kw'>units</span> <span class='kw'>=</span> <span class='no'>num_factor_levels_y</span>, <span class='kw'>activation</span> <span class='kw'>=</span> <span class='st'>'softmax'</span>)</pre>
 
 <p>Other variables specified by <code>predictors</code> are added as an
 additional dense layer after <code>layer_flatten</code> and before the
@@ -333,7 +331,7 @@ development?" <a href='https://tinyurl.com/keras-repro'>https://tinyurl.com/kera
 
       <footer>
       <div class="tidyverse">
-  <p><code>embed</code> is a part of the <strong>tidymodels</strong> ecosystem, a collection of modeling packages designed with common APIs and a shared philosophy.</p>
+  <p>embed is a part of the <strong>tidymodels</strong> ecosystem, a collection of modeling packages designed with common APIs and a shared philosophy.</p>
 </div>
 
 <div class="author">

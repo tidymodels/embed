@@ -121,7 +121,7 @@ xgb_rec <-
 
 xgb_rec <- prep(xgb_rec, training = credit_data_tr)
 
-xgb_test_bins <- bake(xgb_rec, credit_data_te)
+bake(xgb_rec, credit_data_te, Price)
 }
 \seealso{
 \code{\link[embed:step_discretize_cart]{embed::step_discretize_cart()}}, \code{\link[recipes:recipe]{recipes::recipe()}},

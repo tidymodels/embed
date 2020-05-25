@@ -86,24 +86,24 @@ Note that the original data will be replaced with the new bins.
 }
 \examples{
 library(modeldata)
-data(credit_data)
+data(ad_data)
 library(rsample)
 
-split <- initial_split(credit_data, strata = "Status")
+split <- initial_split(ad_data, strata = "Class")
 
-credit_data_tr <- training(split)
-credit_data_te <- testing(split)
+ad_data_tr <- training(split)
+ad_data_te <- testing(split)
 
 cart_rec <- 
-  recipe(Status ~ ., data = credit_data_tr) \%>\%
-  step_discretize_cart(all_numeric(), outcome = "Status", id = "cart splits")
+  recipe(Class ~ ., data = ad_data_tr) \%>\%
+  step_discretize_cart(tau, age, p_tau, Ab_42, outcome = "Class", id = "cart splits")
 
-cart_rec <- prep(cart_rec, training = credit_data_tr)
+cart_rec <- prep(cart_rec, training = ad_data_tr)
 
 # The splits: 
 tidy(cart_rec, id = "cart splits")
 
-cart_test_bins <- bake(cart_rec, credit_data_te)
+bake(cart_rec, ad_data_te, tau)
 }
 \seealso{
 \code{\link[embed:step_discretize_xgb]{embed::step_discretize_xgb()}}, \code{\link[recipes:recipe]{recipes::recipe()}},

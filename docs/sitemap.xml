@@ -13,7 +13,16 @@
     <loc>https://embed.tidymodels.org/reference/reexports.html</loc>
   </url>
   <url>
+    <loc>https://embed.tidymodels.org/reference/step_discretize_cart.html</loc>
+  </url>
+  <url>
+    <loc>https://embed.tidymodels.org/reference/step_discretize_xgb.html</loc>
+  </url>
+  <url>
     <loc>https://embed.tidymodels.org/reference/step_embed.html</loc>
+  </url>
+  <url>
+    <loc>https://embed.tidymodels.org/reference/step_feature_hash.html</loc>
   </url>
   <url>
     <loc>https://embed.tidymodels.org/reference/step_lencode_bayes.html</loc>
