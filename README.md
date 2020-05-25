@@ -11,15 +11,20 @@ These steps are contained in a separate package because the package dependencies
 
 The steps for categorical predictors are:
 
-* `step_lencode_glm`, `step_lencode_bayes`, and `step_lencode_mixed` estimate the effect of each of the factor levels on the outcome and these estimates are used as the new encoding. The estimates are estimated by a generalized linear model. This step can be executed without pooling (via `glm`) or with partial pooling (`stan_glm` or `lmer`). Currently implemented for numeric and two-class outcomes. 
+* `step_lencode_glm()`, `step_lencode_bayes()`, and `step_lencode_mixed()` estimate the effect of each of the factor levels on the outcome and these estimates are used as the new encoding. The estimates are estimated by a generalized linear model. This step can be executed without pooling (via `glm`) or with partial pooling (`stan_glm` or `lmer`). Currently implemented for numeric and two-class outcomes. 
 
-* `step_embed` uses `keras::layer_embedding` to translate the original _C_ factor levels into a set of _D_ new variables (< _C_). The model fitting routine optimizes which factor levels are mapped to each of the new variables as well as the corresponding regression coefficients (i.e., neural network weights) that will be used as the new encodings.  
+* `step_embed()` uses `keras::layer_embedding` to translate the original _C_ factor levels into a set of _D_ new variables (< _C_). The model fitting routine optimizes which factor levels are mapped to each of the new variables as well as the corresponding regression coefficients (i.e., neural network weights) that will be used as the new encodings.  
 
-* `step_woe` creates new variables based on weight of evidence encodings. 
+* `step_woe()` creates new variables based on weight of evidence encodings. 
+
+* `step_feature_hash()` can create indicator variables using feature hashing. 
 
 For numeric predictors:
 
- * `step_umap` uses a nonlinear transformation similar to t-SNE but can be used to project the transformation on new data. Both supervised and unsupervised methods can be used. 
+* `step_umap()` uses a nonlinear transformation similar to t-SNE but can be used to project the transformation on new data. Both supervised and unsupervised methods can be used. 
+
+* `step_discretize_xgb()` and `step_discretize_cart()` can make binned versions of numeric predictors using supervised tree-based models. 
+
 
 Some references for these methods are:
 
@@ -42,3 +47,14 @@ install.packages("embed")
 require("devtools")
 install_github("tidymodels/embed")
 ```
+
+
+## Code of Conduct
+  
+Please note that the embed project is released with a [Contributor Code of Conduct](https://embed.tidymodels.org/CODE_OF_CONDUCT.html). By contributing to this project, you agree to abide by its terms.
+  
+## Contributing to embed
+
+This outlines how to propose a change to embed. 
+For more detailed info about contributing to this, and other tidyverse packages, please see the [**development contributing guide**](https://rstd.io/tidy-contrib). 
+ 
