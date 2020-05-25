@@ -70,8 +70,9 @@
 #' tidy(cart_rec, id = "cart splits")
 #'
 #' cart_test_bins <- bake(cart_rec, credit_data_te)
-#' @seealso [embed::step_discretize_xgb(), recipes::recipe()] [recipes::prep.recipe()] [recipes::bake.recipe()]
-
+#' @seealso [embed::step_discretize_xgb()], [recipes::recipe()], 
+#' [recipes::prep.recipe()], [recipes::bake.recipe()]
+#' 
 step_discretize_cart <-
   function(recipe,
            ...,

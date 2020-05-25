@@ -1,6 +1,6 @@
 #' @import recipes 
 #' @import rlang
-#' @importFrom utils globalVariables capture.output packageVersion stack
+#' @importFrom utils globalVariables capture.output packageVersion stack compareVersion
 #' @importFrom uwot umap_transform umap
 #' @importFrom lme4 glmer lmer
 #' @importFrom rstanarm stan_glmer
@@ -25,7 +25,8 @@ utils::globalVariables(
     "training", "col_names", "y_name",
     "n", "p", "predictor", "summary_outcome", "value", "woe", "select", 
     "variable", ".",
-    "type", "loss", "epochs", "..level", "..order"
+    "type", "loss", "epochs", "..level", "..order",
+    "data"
     )
   )
 
