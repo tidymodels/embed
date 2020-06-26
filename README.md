@@ -1,11 +1,16 @@
+# embed
+
+<!-- badges: start -->
 [![R build status](https://github.com/tidymodels/embed/workflows/R-CMD-check/badge.svg)](https://github.com/tidymodels/embed/actions)
 [![Codecov test coverage](https://codecov.io/gh/tidymodels/embed/branch/master/graph/badge.svg)](https://codecov.io/gh/tidymodels/embed?branch=master)
 [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/embed)](http://cran.r-project.org/web/packages/embed)
 [![Downloads](http://cranlogs.r-pkg.org/badges/embed)](http://cran.rstudio.com/package=embed)
 ![](https://img.shields.io/badge/lifecycle-maturing-blue.svg)
+<!-- badges: end -->
 
+## Introduction
 
-`embed` is a package that contains extra steps for the [`recipes`](http://cran.rstudio.com/package=recipes) package for embedding predictors into one or more numeric columns. All of the preprocessing methods are _supervised_. 
+`embed` is a package that contains extra steps for the [`recipes`](https://recipes.tidymodels.org/) package for embedding predictors into one or more numeric columns. All of the preprocessing methods are _supervised_. 
 
 These steps are contained in a separate package because the package dependencies, [`rstanarm`](http://cran.rstudio.com/package=rstanarm), [`lme4`](http://cran.rstudio.com/package=lme4), and [`keras`](http://cran.rstudio.com/package=keras),  are fairly heavy. 
 
@@ -36,7 +41,7 @@ Some references for these methods are:
 * Good, I. J. (1985), "[Weight of evidence: A brief survey](https://scholar.google.com/scholar?hl=en&as_sdt=0%2C5&q=Weight+of+evidence%3A+A+brief+survey&btnG=)", Bayesian Statistics, 2, pp.249-270.
 
 
-
+## Installation
 
 To install the package:
 
@@ -49,12 +54,14 @@ install_github("tidymodels/embed")
 ```
 
 
-## Code of Conduct
-  
-Please note that the embed project is released with a [Contributor Code of Conduct](https://embed.tidymodels.org/CODE_OF_CONDUCT.html). By contributing to this project, you agree to abide by its terms.
-  
-## Contributing to embed
+## Contributing
 
-This outlines how to propose a change to embed. 
-For more detailed info about contributing to this, and other tidyverse packages, please see the [**development contributing guide**](https://rstd.io/tidy-contrib). 
- 
+This project is released with a [Contributor Code of Conduct](https://contributor-covenant.org/version/2/0/CODE_OF_CONDUCT.html). By contributing to this project, you agree to abide by its terms.
+
+- For questions and discussions about tidymodels packages, modeling, and machine learning, [join us on RStudio Community](https://rstd.io/tidymodels-community).
+
+- If you think you have encountered a bug, please [submit an issue](https://github.com/tidymodels/embed/issues).
+
+- Either way, learn how to create and share a [reprex](https://rstd.io/reprex) (a minimal, reproducible example), to clearly communicate about your code.
+
+- Check out further details on [contributing guidelines for tidymodels packages](https://www.tidymodels.org/contribute/) and [how to get help](https://www.tidymodels.org/help/).
