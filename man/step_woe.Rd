@@ -34,7 +34,7 @@ role should they be assigned?. By default, the function assumes
 that the new woe components columns created by the original
 variables will be used as predictors in a model.}
 
-\item{outcome}{The bare name of the binary outcome.}
+\item{outcome}{The bare name of the binary outcome encased in \code{vars()}.}
 
 \item{trained}{A logical to indicate if the quantities for
 preprocessing have been estimated.}
@@ -47,14 +47,14 @@ passed to \code{...}. See \code{\link[=dictionary]{dictionary()}} for details.}
 \item{Laplace}{The Laplace smoothing parameter. A value usually
 applied to avoid -Inf/Inf from predictor category with only one
 outcome class. Set to 0 to allow Inf/-Inf. The default is 1e-6.
-Also kwon as 'pseudocount' parameter of the Laplace smoothing technique.}
+Also known as 'pseudocount' parameter of the Laplace smoothing technique.}
 
 \item{prefix}{A character string that will be the prefix to the
 resulting new variables. See notes below.}
 
 \item{skip}{A logical. Should the step be skipped when the
-recipe is baked by \code{\link[recipes:bake.recipe]{recipes::bake.recipe()}}? While all operations are baked
-when \code{\link[recipes:prep.recipe]{recipes::prep.recipe()}} is run, some operations may not be able to be
+recipe is baked by \code{\link[recipes:bake]{recipes::bake.recipe()}}? While all operations are baked
+when \code{\link[recipes:prep]{recipes::prep.recipe()}} is run, some operations may not be able to be
 conducted on new data (e.g. processing the outcome variable(s)).
 Care should be taken when using \code{skip = TRUE} as it may affect
 the computations for subsequent operations}
@@ -93,7 +93,7 @@ have woe associated later. This can achieved by using \code{\link[=step_discreti
 The argument \code{Laplace} is an small quantity added to the
 proportions of 1's and 0's with the goal to avoid log(p/0) or
 log(0/p) results. The numerical woe versions will have names that
-begin with \code{woe_} followed by the respecttive original name of the
+begin with \code{woe_} followed by the respective original name of the
 variables. See Good (1985).
 
 One can pass a custom \code{dictionary} tibble to \code{step_woe()}.
@@ -116,7 +116,7 @@ credit_tr <- credit_data[ in_training, ]
 credit_te <- credit_data[-in_training, ]
 
 rec <- recipe(Status ~ ., data = credit_tr) \%>\%
-  step_woe(Job, Home, outcome = Status)
+  step_woe(Job, Home, outcome = vars(Status))
 
 woe_models <- prep(rec, training = credit_tr)
 
@@ -129,12 +129,12 @@ tidy(woe_models, number = 1)
 
 # Example of custom dictionary + tweaking
 # custom dictionary
-woe_dict_custom <- credit_tr \%>\% dictionary(Job, Home, outcome = Status)
+woe_dict_custom <- credit_tr \%>\% dictionary(Job, Home, outcome = vars(Status))
 woe_dict_custom[4, "woe"] <- 1.23 #tweak
 
 #passing custom dict to step_woe()
 rec_custom <- recipe(Status ~ ., data = credit_tr) \%>\%
-  step_woe(Job, Home, outcome = Status, dictionary = woe_dict_custom) \%>\%
+  step_woe(Job, Home, outcome = vars(Status), dictionary = woe_dict_custom) \%>\%
   prep
 
 rec_custom_baked <- bake(rec_custom, new_data = credit_te)

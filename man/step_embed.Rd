@@ -71,15 +71,15 @@ below).}
 
 \item{mapping}{A list of tibble results that define the
 encoding. This is \code{NULL} until the step is trained by
-\code{\link[recipes:prep.recipe]{recipes::prep.recipe()}}.}
+\code{\link[recipes:prep]{recipes::prep.recipe()}}.}
 
 \item{history}{A tibble with the convergence statistics for
 each term. This is \code{NULL} until the step is trained by
-\code{\link[recipes:prep.recipe]{recipes::prep.recipe()}}.}
+\code{\link[recipes:prep]{recipes::prep.recipe()}}.}
 
 \item{skip}{A logical. Should the step be skipped when the
-recipe is baked by \code{\link[recipes:bake.recipe]{recipes::bake.recipe()}}? While all
-operations are baked when \code{\link[recipes:prep.recipe]{recipes::prep.recipe()}} is run, some
+recipe is baked by \code{\link[recipes:bake]{recipes::bake.recipe()}}? While all
+operations are baked when \code{\link[recipes:prep]{recipes::prep.recipe()}} is run, some
 operations may not be able to be conducted on new data (e.g.
 processing the outcome variable(s)). Care should be taken when
 using \code{skip = TRUE} as it may affect the computations for
@@ -89,9 +89,9 @@ subsequent operations.}
 
 \item{x}{A \code{step_embed} object.}
 
-\item{optimizer, loss, metrics}{Arguments to pass to \code{\link[keras:compile]{keras::compile()}}}
+\item{optimizer, loss, metrics}{Arguments to pass to \code{\link[keras:reexports]{keras::compile()}}}
 
-\item{epochs, validation_split, batch_size, verbose, callbacks}{Arguments to pass to \code{\link[keras:fit]{keras::fit()}}}
+\item{epochs, validation_split, batch_size, verbose, callbacks}{Arguments to pass to \code{\link[keras:reexports]{keras::fit()}}}
 }
 \value{
 An updated version of \code{recipe} with the new step added

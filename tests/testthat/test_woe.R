@@ -4,7 +4,7 @@ source(testthat::test_path("test_helpers.R"))
 
 # ------------------------------------------------------------------------------
 
-data("credit_data")
+data("credit_data", package = "modeldata")
 
 set.seed(342)
 in_training <- sample(1:nrow(credit_data), 2000)
@@ -133,7 +133,7 @@ test_that("step_woe", {
 
   rec <-
     recipe(Status ~ ., data = credit_tr) %>%
-    step_woe(Job, Home, outcome = Status)
+    step_woe(Job, Home, outcome = vars(Status))
 
   woe_models <- prep(rec, training = credit_tr)
 
@@ -151,27 +151,27 @@ test_that("step_woe", {
 
   tidy_output <- tidy(woe_models, number = 1)
   woe_dict_output <- 
-    dictionary(credit_tr, Job, Home, outcome = Status) %>% 
+    dictionary(credit_tr, Job, Home, outcome = vars(Status)) %>% 
     dplyr::rename(terms = variable, value = predictor)
 
   #
   expect_equal(tidy_output %>% dplyr::select(-id), woe_dict_output)
 
   rec_all_nominal <- recipe(Status ~ ., data = credit_tr) %>%
-    step_woe(all_nominal(), outcome = Status)
+    step_woe(all_nominal(), outcome = vars(Status))
 
   #
   expect_output(prep(rec_all_nominal, training = credit_tr, verbose = TRUE))
 
 
   rec_all_numeric <- recipe(Status ~ ., data = credit_tr) %>%
-    step_woe(all_predictors(), outcome = Status)
+    step_woe(all_predictors(), outcome = vars(Status))
 
   #
   expect_error(prep(rec_all_numeric, training = credit_tr))
 
   rec_discretize <- recipe(Status ~ ., data = credit_tr) %>% step_discretize(Price)
-  rec_discretize_woe <- rec_discretize %>%step_woe(Price, outcome = Status)
+  rec_discretize_woe <- rec_discretize %>%step_woe(Price, outcome = vars(Status))
 
   prep_discretize <- prep(rec_discretize, training = credit_tr)
   prep_discretize_woe <- prep(rec_discretize_woe, training = credit_tr)
@@ -185,7 +185,7 @@ test_that("step_woe", {
 
 test_that("printing", {
   woe_extract <- recipe(Status ~ ., data = credit_tr) %>%
-    step_woe(Job, Home, outcome = Status)
+    step_woe(Job, Home, outcome = vars(Status))
   expect_output(print(woe_extract))
   expect_output(prep(woe_extract, training = credit_tr, verbose = TRUE))
 })
@@ -197,7 +197,7 @@ test_that("2-level factors", {
 
   expect_error(
     recipe(Species ~ ., data = iris3) %>%
-    step_woe(group, outcome = Species) %>%
+    step_woe(group, outcome = vars(Species)) %>%
     prep()
   )
 })
