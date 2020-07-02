@@ -129,7 +129,7 @@ tidy(woe_models, number = 1)
 
 # Example of custom dictionary + tweaking
 # custom dictionary
-woe_dict_custom <- credit_tr \%>\% dictionary(Job, Home, outcome = vars(Status))
+woe_dict_custom <- credit_tr \%>\% dictionary(Job, Home, outcome = "Status")
 woe_dict_custom[4, "woe"] <- 1.23 #tweak
 
 #passing custom dict to step_woe()

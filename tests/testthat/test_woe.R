@@ -71,20 +71,24 @@ test_that("Laplace works", {
 # dictionary
 
 test_that("dictionary returns a proper tibble", {
-  expect_equal(dictionary(df, y) %>% class, c("tbl_df", "tbl", "data.frame"))
-  expect_equal(dictionary(df, y) %>% dim, c(6, 8))
-  expect_identical(dictionary(df, y) %>% names, c("variable", "predictor", "n_tot", "n_A", "n_B", "p_A", "p_B", "woe"))
+  expect_equal(dictionary(df, "y") %>% class, c("tbl_df", "tbl", "data.frame"))
+  expect_equal(dictionary(df, "y") %>% dim, c(6, 9))
+  expect_identical(dictionary(df, "y") %>% names, 
+                   c("variable", "predictor", "n_tot", "n_A", "n_B", 
+                     "p_A", "p_B", "woe", "outcome"))
 })
 
 test_that("dictionary accepts numeric, logical and character predictor variables", {
-  expect_equal(dim(dictionary(mutate(df,
-                                         x3 = rep(c(TRUE, FALSE), 10),
-                                         x4 = rep(c(20, 30), 10)), y)), c(10, 8))
+  tmp <- mutate(df, x3 = rep(c(TRUE, FALSE), 10), x4 = rep(c(20, 30), 10))
+  expect_equal(
+    dim(dictionary(tmp, "y")), 
+    c(10, 9)
+  )
 })
 
 test_that("dictionary returns no messages nor warnings nor errors", {
-  expect_silent(dictionary(df, y, x1))
-  expect_silent(dictionary(df %>% mutate(x3 = rep(c(TRUE, FALSE), 10)), y, x3))
+  expect_silent(dictionary(df, "y", x1))
+  expect_silent(dictionary(df %>% mutate(x3 = rep(c(TRUE, FALSE), 10)), "y", x3))
 })
 
 
@@ -92,9 +96,9 @@ test_that("dictionary returns no messages nor warnings nor errors", {
 # add_woe
 
 test_that("add_woe returns a proper tibble", {
-  expect_equal(add_woe(df, y) %>% class, c("tbl_df", "tbl", "data.frame"))
-  expect_equal(add_woe(df, y) %>% dim, c(20, 5))
-  expect_identical(add_woe(df, y) %>% names, c("x1", "x2", "y", "woe_x1", "woe_x2"))
+  expect_equal(add_woe(df, "y") %>% class(), c("tbl_df", "tbl", "data.frame"))
+  expect_equal(add_woe(df, "y") %>% dim, c(20, 5))
+  expect_identical(add_woe(df, "y") %>% names, c("x1", "x2", "y", "woe_x1", "woe_x2"))
 })
 
 test_that("add_woe accepts only outcome with 2 distinct categories", {
@@ -102,30 +106,31 @@ test_that("add_woe accepts only outcome with 2 distinct categories", {
 })
 
 test_that("add_woe ruturns no messages nor warnings nor errors", {
-  expect_silent(add_woe(df, y, x1))
-  expect_silent(add_woe(df %>% mutate(x3 = rep(c(TRUE, FALSE), 10)), y, x3))
+  expect_silent(add_woe(df, "y", x1))
+  expect_silent(add_woe(df %>% mutate(x3 = rep(c(TRUE, FALSE), 10)), "y", x3))
 })
 
 test_that("add_woe accepts numeric, logical and character predictor variables", {
   expect_equal(add_woe(df %>% mutate(x3 = rep(c(TRUE, FALSE), 10),
-                                     x4 = rep(c(20, 30), 10)), y) %>% dim, c(20, 9))
+                                     x4 = rep(c(20, 30), 10)), "y") %>% dim, c(20, 9))
 })
 
 test_that("add_woe returns woe only for those variables that exists in both data and dictionary", {
-  expect_equal(names(add_woe(df, y, x2, dictionary = dictionary(df, y, x1))), c("x1", "x2", "y"))
-  expect_equal(names(add_woe(df, y, x1, dictionary = dictionary(df, y, x1))), c("x1", "x2", "y", "woe_x1"))
-  expect_equal(names(add_woe(df, y, dictionary = dictionary(df, y, x1))), c("x1", "x2", "y", "woe_x1"))
-  expect_equal(names(add_woe(df, y, x1, x2, dictionary = dictionary(df, y, x1))), c("x1", "x2", "y", "woe_x1"))
+  expect_equal(names(add_woe(df, "y", x2, dictionary = dictionary(df, "y", x1))), c("x1", "x2", "y"))
+  expect_equal(names(add_woe(df, "y", x1, dictionary = dictionary(df, "y", x1))), c("x1", "x2", "y", "woe_x1"))
+  expect_equal(names(add_woe(df, "y", dictionary = dictionary(df, "y", x1))), c("x1", "x2", "y", "woe_x1"))
+  expect_equal(names(add_woe(df, "y", x1, x2, dictionary = dictionary(df, "y", x1))), c("x1", "x2", "y", "woe_x1"))
 })
 
 test_that("add_woe do not accept dictionary with unexpected layout", {
-  expect_error(add_woe(df, outcome = y, x1, dictionary = iris))
-  expect_error(add_woe(df, outcome = y, x1, dictionary = iris %>% mutate(variable = 1)))
+  expect_error(add_woe(df, outcome = "y", x1, dictionary = iris))
+  expect_error(add_woe(df, outcome = "y", x1, dictionary = iris %>% mutate(variable = 1)))
 })
 
 test_that("add_woe warns user if the variable has too many levels", {
-  expect_warning(credit_data %>% add_woe(Status, Expenses))
+  expect_warning(credit_data %>% add_woe("Status", Expenses))
 })
+
 #------------------------------------
 # step_woe
 
@@ -137,13 +142,13 @@ test_that("step_woe", {
 
   woe_models <- prep(rec, training = credit_tr)
 
-  woe_dict <- credit_tr %>% dictionary(Status, Job, Home)
+  woe_dict <- credit_tr %>% dictionary("Status", Job, Home)
   expect_equal(woe_dict, woe_models$steps[[1]]$dictionary)
 
   bake_woe_output <- bake(woe_models, new_data = credit_te)
   add_woe_output <-
     credit_te %>%
-    add_woe(Status, Job, Home, dictionary = woe_dict)  %>%
+    add_woe("Status", Job, Home, dictionary = woe_dict)  %>%
     dplyr::select(one_of(names(bake_woe_output)))
 
   #
@@ -151,7 +156,7 @@ test_that("step_woe", {
 
   tidy_output <- tidy(woe_models, number = 1)
   woe_dict_output <- 
-    dictionary(credit_tr, Job, Home, outcome = vars(Status)) %>% 
+    dictionary(credit_tr, Job, Home, outcome = "Status") %>% 
     dplyr::rename(terms = variable, value = predictor)
 
   #

@@ -34,6 +34,6 @@ returned from it.
 }
 \examples{
 
-mtcars \%>\% add_woe(am, cyl, gear:carb)
+mtcars \%>\% add_woe("am", cyl, gear:carb)
 
 }

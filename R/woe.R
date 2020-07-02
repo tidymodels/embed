@@ -94,7 +94,7 @@
 #'
 #' # Example of custom dictionary + tweaking
 #' # custom dictionary
-#' woe_dict_custom <- credit_tr %>% dictionary(Job, Home, outcome = vars(Status))
+#' woe_dict_custom <- credit_tr %>% dictionary(Job, Home, outcome = "Status")
 #' woe_dict_custom[4, "woe"] <- 1.23 #tweak
 #'
 #' #passing custom dict to step_woe()
@@ -234,7 +234,7 @@ woe_table <- function(predictor, outcome, Laplace = 1e-6) {
 #'
 #' @examples
 #'
-#' mtcars %>% dictionary(am, cyl, gear:carb)
+#' mtcars %>% dictionary("am", cyl, gear:carb)
 #'
 #'
 #' @references Kullback, S. (1959). *Information Theory and Statistics.* Wiley, New York.
@@ -246,12 +246,12 @@ woe_table <- function(predictor, outcome, Laplace = 1e-6) {
 
 #' @export
 dictionary <- function(.data, outcome, ..., Laplace = 1e-6) {
-  outcome <- enquo(outcome)
   outcome_vector <- .data %>% dplyr::pull(!!outcome)
   .data %>%
     dplyr::select(..., -!!outcome) %>%
     purrr::map(woe_table, outcome = outcome_vector, Laplace = Laplace) %>%
-    dplyr::bind_rows(.id = "variable")
+    dplyr::bind_rows(.id = "variable") %>% 
+    mutate(outcome = outcome)
 }
 
 
@@ -277,7 +277,7 @@ dictionary <- function(.data, outcome, ..., Laplace = 1e-6) {
 #'
 #' @examples
 #'
-#' mtcars %>% add_woe(am, cyl, gear:carb)
+#' mtcars %>% add_woe("am", cyl, gear:carb)
 #'
 
 #' @export
@@ -288,10 +288,12 @@ add_woe <- function(.data, outcome, ..., dictionary = NULL, prefix = "woe") {
   if (missing(outcome)) {
     rlang::abort('argument "outcome" is missing, with no default')
   }
-  
-  outcome <- rlang::enquo(outcome)
+  if (!is.character(outcome)) {
+    rlang::abort("'outcome' should be a single character value.")
+  }
+
   if (is.null(dictionary)) {
-    dictionary <- dictionary(.data,!!outcome, ...)
+    dictionary <- dictionary(.data, outcome, ...)
   } else {
     if (is.null(dictionary$variable)) {
       rlang::abort('column "variable" is missing in dictionary.')
@@ -374,7 +376,8 @@ prep.step_woe <- function(x, training, info = NULL, ...) {
     x$dictionary <- dictionary(
       .data = training[, unique(c(outcome_name, col_names))],
       outcome = outcome_name
-    )
+    ) %>% 
+      dplyr::mutate(outcome = outcome_name)
   }
   
   step_woe_new(
@@ -396,7 +399,7 @@ bake.step_woe <- function(object, new_data, ...) {
   woe_vars <- unique(dict$variable)
   new_data <- add_woe(
     .data = new_data,
-    outcome = object$outcome,
+    outcome = dict$outcome[1],
     dictionary = dict,
     prefix = object$prefix
   )
