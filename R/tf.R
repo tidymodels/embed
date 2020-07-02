@@ -125,9 +125,11 @@
 #' library(modeldata)
 #' data(okc)
 #' 
-#' rec <- recipe(Class ~ age + location, data = okc) %>%
-#'   step_embed(location, outcome = vars(Class),
-#'              options = embed_control(epochs = 10))
+#' if (is_tf_available()) {
+#'   rec <- recipe(Class ~ age + location, data = okc) %>%
+#'     step_embed(location, outcome = vars(Class),
+#'                options = embed_control(epochs = 10))
+#' }
 #' 
 #' # See https://tidymodels.github.io/embed/ for examples
 
@@ -148,7 +150,7 @@ step_embed <-
            skip = FALSE,
            id = rand_id("lencode_bayes")) {
     # warm start for tf to avoid a bug in tensorflow
-    tensorflow::tf_version()
+    is_tf_available()
     
     if (is.null(outcome))
       rlang::abort("Please list a variable in `outcome`")
@@ -479,5 +481,24 @@ class2ind <- function (x)  {
   attributes(y)$assign <- NULL
   attributes(y)$contrasts <- NULL
   y
+}
+
+
+#' Test to see if tensorflow is available
+#' 
+#' @return A logical
+#' @examples 
+#' is_tf_available()
+#' @export
+is_tf_available <- function() {
+  capture.output(res <- try(tensorflow::tf_config(), silent = TRUE), file = NULL)
+  if (inherits(res, "try-error") | all(is.null(res))) {
+    return(FALSE)
+  } else {
+    if (!(any(names(res) == "available"))) {
+      return(FALSE)
+    }
+  }
+  res$available
 }
 

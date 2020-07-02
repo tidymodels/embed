@@ -7,7 +7,7 @@ source(testthat::test_path("test_helpers.R"))
 
 test_that("factor encoded predictor", {
   skip_on_cran()
-  skip_if(!tensorflow::tf_config()$available)
+  skip_if(!is_tf_available())
   
   class_test <- recipe(x2 ~ ., data = ex_dat) %>%
     step_embed(x3, outcome = vars(x2), options = embed_control(verbose = 0), id = "id") %>%
@@ -72,7 +72,7 @@ test_that("factor encoded predictor", {
 
 test_that("character encoded predictor", {
   skip_on_cran()
-  skip_if(!tensorflow::tf_config()$available)
+  skip_if(!is_tf_available())
   
   class_test <- recipe(x2 ~ ., data = ex_dat_ch) %>%
     step_embed(x3, outcome = vars(x2), options = embed_control(verbose = 0)) %>%
@@ -138,7 +138,7 @@ context("tensorflow model, regression")
 
 test_that("factor encoded predictor", {
   skip_on_cran()
-  skip_if(!tensorflow::tf_config()$available)
+  skip_if(!is_tf_available())
   
   class_test <- recipe(x1 ~ ., data = ex_dat) %>%
     step_embed(x3, outcome = vars(x1), options = embed_control(verbose = 0)) %>%
@@ -202,7 +202,7 @@ test_that("factor encoded predictor", {
 
 test_that("character encoded predictor", {
   skip_on_cran()
-  skip_if(!tensorflow::tf_config()$available)
+  skip_if(!is_tf_available())
   
   class_test <- recipe(x1 ~ ., data = ex_dat_ch) %>%
     step_embed(x3, outcome = vars(x1), num_terms = 5, options = embed_control(verbose = 0)) %>%
@@ -269,7 +269,7 @@ context("tensorflow model, arguments")
 
 test_that("bad args", {
   skip_on_cran()
-  skip_if(!tensorflow::tf_config()$available)
+  skip_if(!is_tf_available())
   
   three_class <- iris
   three_class$fac <- rep(letters[1:3], 50)
@@ -285,7 +285,7 @@ test_that("bad args", {
 
 test_that('printing', {
   skip_on_cran()
-  skip_if(!tensorflow::tf_config()$available)
+  skip_if(!is_tf_available())
   
   print_test <- recipe(x2 ~ ., data = ex_dat_ch) %>%
     step_embed(x3, outcome = vars(x2)) 

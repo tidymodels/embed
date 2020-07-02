@@ -86,18 +86,20 @@ columns.
 \donttest{
 data(okc, package = "modeldata")
 
-# This may take a while: 
-rec <- 
-  recipe(Class ~ age + location, data = okc) \%>\%
-  step_feature_hash(location, num_hash = 2^6, preserve = TRUE) \%>\% 
-  prep()
+if (is_tf_available()) {
+  # This may take a while: 
+  rec <- 
+    recipe(Class ~ age + location, data = okc) \%>\%
+    step_feature_hash(location, num_hash = 2^6, preserve = TRUE) \%>\% 
+    prep()
 
-# How many of the 135 locations ended up in each hash column?
-results <- 
-  juice(rec, starts_with("location")) \%>\% 
-  distinct() 
+  # How many of the 135 locations ended up in each hash column?
+  results <- 
+    juice(rec, starts_with("location")) \%>\% 
+    distinct() 
 
-apply(results \%>\% select(-location), 2, sum) \%>\% table()
+  apply(results \%>\% select(-location), 2, sum) \%>\% table()
+}
 }
 }
 \references{

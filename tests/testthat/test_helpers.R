@@ -3,4 +3,4 @@ library(dplyr)
 library(testthat)
 library(modeldata)
 
-tensorflow::tf_config()
+is_tf_available()
