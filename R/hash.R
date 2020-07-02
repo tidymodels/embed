@@ -89,6 +89,9 @@ step_feature_hash <-
            columns = NULL,
            skip = FALSE,
            id = rand_id("feature_hash")) {
+    # warm start for tf to avoid a bug in tensorflow
+    tensorflow::tf_version()
+    
     add_step(
       recipe,
       step_feature_hash_new(

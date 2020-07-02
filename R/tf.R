@@ -147,6 +147,9 @@ step_embed <-
            history = NULL,
            skip = FALSE,
            id = rand_id("lencode_bayes")) {
+    # warm start for tf to avoid a bug in tensorflow
+    tensorflow::tf_version()
+    
     if (is.null(outcome))
       rlang::abort("Please list a variable in `outcome`")
     add_step(
