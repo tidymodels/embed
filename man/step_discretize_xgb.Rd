@@ -60,8 +60,8 @@ Corresponds to \code{min_child_weight} in the \pkg{xgboost} package. Defaults to
 each variable.}
 
 \item{skip}{A logical. Should the step be skipped when the
-recipe is baked by \code{\link[recipes:bake.recipe]{recipes::bake.recipe()}}? While all operations are baked
-when \code{\link[recipes:prep.recipe]{recipes::prep.recipe()}} is run, some operations may not be able to be
+recipe is baked by \code{\link[recipes:bake]{recipes::bake.recipe()}}? While all operations are baked
+when \code{\link[recipes:prep]{recipes::prep.recipe()}} is run, some operations may not be able to be
 conducted on new data (e.g. processing the outcome variable(s)).
 Care should be taken when using \code{skip = TRUE} as it may affect
 the computations for subsequent operations}
@@ -124,8 +124,8 @@ xgb_rec <- prep(xgb_rec, training = credit_data_tr)
 bake(xgb_rec, credit_data_te, Price)
 }
 \seealso{
-\code{\link[embed:step_discretize_cart]{embed::step_discretize_cart()}}, \code{\link[recipes:recipe]{recipes::recipe()}},
-\code{\link[recipes:prep.recipe]{recipes::prep.recipe()}}, \code{\link[recipes:bake.recipe]{recipes::bake.recipe()}}
+\code{\link[=step_discretize_cart]{step_discretize_cart()}}, \code{\link[recipes:recipe]{recipes::recipe()}},
+\code{\link[recipes:prep]{recipes::prep.recipe()}}, \code{\link[recipes:bake]{recipes::bake.recipe()}}
 }
 \concept{discretization}
 \concept{factors}
