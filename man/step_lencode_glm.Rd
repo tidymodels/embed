@@ -13,7 +13,7 @@ step_lencode_glm(
   outcome = NULL,
   mapping = NULL,
   skip = FALSE,
-  id = rand_id("lencode_bayes")
+  id = rand_id("lencode_glm")
 )
 
 \method{tidy}{step_lencode_glm}(x, ...)
@@ -86,7 +86,7 @@ data(okc)
 glm_est <- recipe(Class ~ age + location, data = okc) \%>\%
   step_lencode_glm(location, outcome = vars(Class))
 
-# See https://tidymodels.github.io/embed/ for examples
+# See https://embed.tidymodels.org  for examples
 }
 \references{
 Micci-Barreca D (2001) "A preprocessing scheme for

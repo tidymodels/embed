@@ -170,7 +170,7 @@ rec <- recipe(Class ~ age + location, data = okc) \%>\%
   step_embed(location, outcome = vars(Class),
              options = embed_control(epochs = 10))
 
-# See https://tidymodels.github.io/embed/ for examples
+# See https://embed.tidymodels.org  for examples
 }
 \references{
 Francois C and Allaire JJ (2018)

@@ -66,7 +66,7 @@
 #' glm_est <- recipe(Class ~ age + location, data = okc) %>%
 #'   step_lencode_glm(location, outcome = vars(Class))
 #' 
-#' # See https://tidymodels.github.io/embed/ for examples
+#' # See https://embed.tidymodels.org  for examples
 
 
 step_lencode_glm <-
@@ -77,7 +77,7 @@ step_lencode_glm <-
            outcome = NULL,
            mapping = NULL,
            skip = FALSE,
-           id = rand_id("lencode_bayes")) {
+           id = rand_id("lencode_glm")) {
     if (is.null(outcome))
       rlang::abort("Please list a variable in `outcome`")
     add_step(
@@ -213,3 +213,11 @@ tidy.step_lencode_glm <- function(x, ...) {
   res$id <- x$id
   res
 }
+
+
+#' @rdname required_pkgs.embed
+#' @export
+required_pkgs.step_lencode_glm <- function(x, ...) {
+  c("embed")
+}
+

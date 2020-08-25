@@ -236,3 +236,9 @@ tidy.step_feature_hash <- function(x, ...) {
   res$id <- x$id
   res
 }
+
+#' @rdname required_pkgs.embed
+#' @export
+required_pkgs.step_feature_hash <- function(x, ...) {
+  c("keras", "embed")
+}

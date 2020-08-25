@@ -107,7 +107,7 @@ step_discretize_xgb <-
       rlang::abort("`outcome` should select at least one column.")
     }
 
-    recipes::recipes_pkg_check("xgboost")
+    recipes::recipes_pkg_check(required_pkgs.step_discretize_xgb())
     
     add_step(
       recipe,
@@ -465,3 +465,10 @@ tidy.step_discretize_xgb <- function(x, ...) {
   res$id <- x$id
   res
 }
+
+#' @rdname required_pkgs.embed
+#' @export
+required_pkgs.step_discretize_xgb <- function(x, ...) {
+  c("xgboost", "embed")
+}
+

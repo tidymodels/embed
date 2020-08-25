@@ -129,7 +129,7 @@
 #'   step_embed(location, outcome = vars(Class),
 #'              options = embed_control(epochs = 10))
 #' 
-#' # See https://tidymodels.github.io/embed/ for examples
+#' # See https://embed.tidymodels.org  for examples
 
 
 
@@ -478,3 +478,9 @@ class2ind <- function (x)  {
   y
 }
 
+
+#' @rdname required_pkgs.embed
+#' @export
+required_pkgs.step_embed <- function(x, ...) {
+  c("keras", "embed")
+}

@@ -100,7 +100,7 @@ data(okc)
 reencoded <- recipe(Class ~ age + location, data = okc) \%>\%
   step_lencode_mixed(location, outcome = vars(Class))
 
-# See https://tidymodels.github.io/embed/ for examples
+# See https://embed.tidymodels.org  for examples
 }
 \references{
 Micci-Barreca D (2001) "A preprocessing scheme for

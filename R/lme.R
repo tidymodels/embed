@@ -81,7 +81,7 @@
 #' reencoded <- recipe(Class ~ age + location, data = okc) %>%
 #'   step_lencode_mixed(location, outcome = vars(Class))
 #' 
-#' # See https://tidymodels.github.io/embed/ for examples
+#' # See https://embed.tidymodels.org  for examples
 
 
 step_lencode_mixed <-
@@ -246,3 +246,9 @@ tidy.step_lencode_mixed <- function(x, ...) {
   res
 }
 
+
+#' @rdname required_pkgs.embed
+#' @export
+required_pkgs.step_lencode_mixed <- function(x, ...) {
+  c("lme4", "embed")
+}
