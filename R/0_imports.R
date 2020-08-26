@@ -37,10 +37,21 @@ utils::globalVariables(
   # This package has specific methods for the `tunable` generic. That generic
   # is defined in the `tune` package. As of R 4.0, we need to register them.
   embed_exports <- getNamespaceExports(ns = "embed")
+  names <- names(embed_exports)
   tunable_steps <- grep("tunable.step", embed_exports, fixed = TRUE, 
                         value = TRUE)
   for (i in tunable_steps) {
     s3_register("tune::tunable", i)
+  }
+  
+  # ----------------------------------------------------------------------------
+  
+  req_pkgs_names <- grep("^required_pkgs\\.", names, value = TRUE)
+  req_pkgs_classes <- gsub("required_pkgs.", "", req_pkgs_names)
+  
+  for (i in seq_along(req_pkgs_names)) {
+    class <- req_pkgs_classes[[i]]
+    s3_register("tune::required_pkgs", class)
   }
 }
 
