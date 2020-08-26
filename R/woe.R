@@ -14,7 +14,8 @@
 #'  role should they be assigned?. By default, the function assumes
 #'  that the new woe components columns created by the original
 #'  variables will be used as predictors in a model.
-#' @param outcome The bare name of the binary outcome.
+#' @param outcome The bare name of the binary outcome encased in `vars()`.
+#' @param outcome The bare name of the binary outcome encased in `vars()`.
 #' @param dictionary A tbl. A map of levels and woe values. It must
 #' have the same layout than the output returned from [dictionary()].
 #' If `NULL`` the function will build a dictionary with those variables
@@ -22,7 +23,7 @@
 #' @param Laplace The Laplace smoothing parameter. A value usually
 #' applied to avoid -Inf/Inf from predictor category with only one
 #' outcome class. Set to 0 to allow Inf/-Inf. The default is 1e-6.
-#' Also kwon as 'pseudocount' parameter of the Laplace smoothing technique.
+#' Also known as 'pseudocount' parameter of the Laplace smoothing technique.
 #' @param prefix A character string that will be the prefix to the
 #'  resulting new variables. See notes below.
 #' @return An updated version of `recipe` with the new step
@@ -51,7 +52,7 @@
 #' The argument `Laplace` is an small quantity added to the
 #' proportions of 1's and 0's with the goal to avoid log(p/0) or
 #' log(0/p) results. The numerical woe versions will have names that
-#' begin with `woe_` followed by the respecttive original name of the
+#' begin with `woe_` followed by the respective original name of the
 #' variables. See Good (1985).
 #'
 #' One can pass a custom `dictionary` tibble to \code{step_woe()}.
@@ -80,7 +81,7 @@
 #' credit_te <- credit_data[-in_training, ]
 #'
 #' rec <- recipe(Status ~ ., data = credit_tr) %>%
-#'   step_woe(Job, Home, outcome = Status)
+#'   step_woe(Job, Home, outcome = vars(Status))
 #'
 #' woe_models <- prep(rec, training = credit_tr)
 #'
@@ -93,12 +94,12 @@
 #'
 #' # Example of custom dictionary + tweaking
 #' # custom dictionary
-#' woe_dict_custom <- credit_tr %>% dictionary(Job, Home, outcome = Status)
+#' woe_dict_custom <- credit_tr %>% dictionary(Job, Home, outcome = "Status")
 #' woe_dict_custom[4, "woe"] <- 1.23 #tweak
 #'
 #' #passing custom dict to step_woe()
 #' rec_custom <- recipe(Status ~ ., data = credit_tr) %>%
-#'   step_woe(Job, Home, outcome = Status, dictionary = woe_dict_custom) %>%
+#'   step_woe(Job, Home, outcome = vars(Status), dictionary = woe_dict_custom) %>%
 #'   prep
 #'
 #' rec_custom_baked <- bake(rec_custom, new_data = credit_te)
@@ -124,7 +125,7 @@ step_woe <- function(recipe,
       terms = ellipse_check(...),
       role = role,
       trained = trained,
-      outcome = enquo(outcome),
+      outcome = outcome,
       dictionary = dictionary,
       Laplace = Laplace,
       prefix = prefix,
@@ -233,7 +234,7 @@ woe_table <- function(predictor, outcome, Laplace = 1e-6) {
 #'
 #' @examples
 #'
-#' mtcars %>% dictionary(am, cyl, gear:carb)
+#' mtcars %>% dictionary("am", cyl, gear:carb)
 #'
 #'
 #' @references Kullback, S. (1959). *Information Theory and Statistics.* Wiley, New York.
@@ -245,12 +246,12 @@ woe_table <- function(predictor, outcome, Laplace = 1e-6) {
 
 #' @export
 dictionary <- function(.data, outcome, ..., Laplace = 1e-6) {
-  outcome <- enquo(outcome)
   outcome_vector <- .data %>% dplyr::pull(!!outcome)
   .data %>%
     dplyr::select(..., -!!outcome) %>%
     purrr::map(woe_table, outcome = outcome_vector, Laplace = Laplace) %>%
-    dplyr::bind_rows(.id = "variable")
+    dplyr::bind_rows(.id = "variable") %>% 
+    mutate(outcome = outcome)
 }
 
 
@@ -276,7 +277,7 @@ dictionary <- function(.data, outcome, ..., Laplace = 1e-6) {
 #'
 #' @examples
 #'
-#' mtcars %>% add_woe(am, cyl, gear:carb)
+#' mtcars %>% add_woe("am", cyl, gear:carb)
 #'
 
 #' @export
@@ -287,10 +288,12 @@ add_woe <- function(.data, outcome, ..., dictionary = NULL, prefix = "woe") {
   if (missing(outcome)) {
     rlang::abort('argument "outcome" is missing, with no default')
   }
-  
-  outcome <- rlang::enquo(outcome)
+  if (!is.character(outcome)) {
+    rlang::abort("'outcome' should be a single character value.")
+  }
+
   if (is.null(dictionary)) {
-    dictionary <- dictionary(.data,!!outcome, ...)
+    dictionary <- dictionary(.data, outcome, ...)
   } else {
     if (is.null(dictionary$variable)) {
       rlang::abort('column "variable" is missing in dictionary.')
@@ -363,7 +366,7 @@ add_woe <- function(.data, outcome, ..., dictionary = NULL, prefix = "woe") {
 
 #' @export
 prep.step_woe <- function(x, training, info = NULL, ...) {
-  outcome_name <- rlang::quo_text(x$outcome)
+  outcome_name <- terms_select(x$outcome, info = info)
   col_names <- terms_select(x$terms, info = info)
   col_names <- col_names[!(col_names %in% outcome_name)]
   check_type(training[, col_names], quant = FALSE)
@@ -372,8 +375,9 @@ prep.step_woe <- function(x, training, info = NULL, ...) {
   if (is.null(x$dictionary)) {
     x$dictionary <- dictionary(
       .data = training[, unique(c(outcome_name, col_names))],
-      outcome = !!x$outcome
-    )
+      outcome = outcome_name
+    ) %>% 
+      dplyr::mutate(outcome = outcome_name)
   }
   
   step_woe_new(
@@ -395,7 +399,7 @@ bake.step_woe <- function(object, new_data, ...) {
   woe_vars <- unique(dict$variable)
   new_data <- add_woe(
     .data = new_data,
-    outcome = object$outcome,
+    outcome = dict$outcome[1],
     dictionary = dict,
     prefix = object$prefix
   )

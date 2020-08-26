@@ -166,9 +166,11 @@ processing.
 library(modeldata)
 data(okc)
 
-rec <- recipe(Class ~ age + location, data = okc) \%>\%
-  step_embed(location, outcome = vars(Class),
-             options = embed_control(epochs = 10))
+if (is_tf_available()) {
+  rec <- recipe(Class ~ age + location, data = okc) \%>\%
+    step_embed(location, outcome = vars(Class),
+               options = embed_control(epochs = 10))
+}
 
 # See https://embed.tidymodels.org  for examples
 }
