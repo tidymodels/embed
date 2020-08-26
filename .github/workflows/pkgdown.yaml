@@ -36,6 +36,7 @@ jobs:
           remotes::install_github("r-lib/pkgdown")
           remotes::install_github("tidyverse/tidytemplate")
           remotes::install_cran("tidymodels")
+          remotes::install_cran("ggiraph")
         shell: Rscript {0}
         
       - name: Install Miniconda
