@@ -9,6 +9,7 @@ jobs:
     runs-on: macOS-latest
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+      local_vignette_build: TRUE
     steps:
       - uses: actions/checkout@v2
 
