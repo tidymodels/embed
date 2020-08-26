@@ -23,10 +23,10 @@ if (!eval_chunks)
 ```{r setup, include = FALSE, eval = eval_chunks}
 library(tidymodels)
 library(keras)
-library(AmesHousing)
 library(embed)
 library(ggplot2)
 library(ggiraph)
+embed:::is_tf_2()
 options(digits = 2)
 set.seed(24566)
 ```
@@ -41,8 +41,7 @@ As an example, we use the Ames housing data where the sale price of houses are b
 
 ```{r ames, eval = eval_chunks}
 library(tidymodels)
-library(AmesHousing)
-ames <- make_ames()
+data(ames)
 length(levels(ames$Neighborhood))
 ```
 
