@@ -1,5 +1,11 @@
-# embed (development version)
+# embed 0.1.1
 
+ * Changes to tests to get out of archive jail.
+ 
+ * Updated the plumbing behind `step_woe()`. 
+ 
+ * Due to a bug in `tensorflow`, added a "warm start" to instigate a TF session if one does not currently exist. 
+ 
 # embed 0.1.0
 
  * Changes for `dplyr` 1.0.0

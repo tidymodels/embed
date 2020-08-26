@@ -42,11 +42,11 @@ have been estimated.}
 (in addition to the new dummy variables)?}
 
 \item{columns}{A character vector for the selected columns. This is \code{NULL}
-until the step is trained by \code{\link[recipes:prep.recipe]{recipes::prep.recipe()}}.}
+until the step is trained by \code{\link[recipes:prep]{recipes::prep.recipe()}}.}
 
 \item{skip}{A logical. Should the step be skipped when the recipe is baked
-by \code{\link[recipes:bake.recipe]{recipes::bake.recipe()}}? While all operations are baked when
-\code{\link[recipes:prep.recipe]{recipes::prep.recipe()}} is run, some operations may not be able to be
+by \code{\link[recipes:bake]{recipes::bake.recipe()}}? While all operations are baked when
+\code{\link[recipes:prep]{recipes::prep.recipe()}} is run, some operations may not be able to be
 conducted on new data (e.g. processing the outcome variable(s)). Care should
 be taken when using \code{skip = TRUE} as it may affect the computations for
 subsequent operations.}
@@ -86,18 +86,20 @@ columns.
 \donttest{
 data(okc, package = "modeldata")
 
-# This may take a while: 
-rec <- 
-  recipe(Class ~ age + location, data = okc) \%>\%
-  step_feature_hash(location, num_hash = 2^6, preserve = TRUE) \%>\% 
-  prep()
+if (is_tf_available()) {
+  # This may take a while: 
+  rec <- 
+    recipe(Class ~ age + location, data = okc) \%>\%
+    step_feature_hash(location, num_hash = 2^6, preserve = TRUE) \%>\% 
+    prep()
 
-# How many of the 135 locations ended up in each hash column?
-results <- 
-  juice(rec, starts_with("location")) \%>\% 
-  distinct() 
+  # How many of the 135 locations ended up in each hash column?
+  results <- 
+    juice(rec, starts_with("location")) \%>\% 
+    distinct() 
 
-apply(results \%>\% select(-location), 2, sum) \%>\% table()
+  apply(results \%>\% select(-location), 2, sum) \%>\% table()
+}
 }
 }
 \references{

@@ -32,7 +32,7 @@ is by tweaking an output returned from it.
 }
 \examples{
 
-mtcars \%>\% dictionary(am, cyl, gear:carb)
+mtcars \%>\% dictionary("am", cyl, gear:carb)
 
 
 }

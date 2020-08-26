@@ -221,7 +221,7 @@ xgb_binning <- function(df, outcome, predictor, sample_val, learn_rate, num_brea
 
   # Defining the objective function
   if (is.null(levels)) {
-    objective <- "reg:linear"
+    objective <- "reg:squarederror"
     xgb_train <- xgboost::xgb.DMatrix(
       data = as.matrix(train[[predictor]], ncol = 1),
       label = train[[outcome]]

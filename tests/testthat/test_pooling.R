@@ -148,9 +148,8 @@ test_that("factor encoded predictor", {
                          verbose = FALSE,
                          options = opts) %>%
       prep(training = ex_dat, retain = TRUE)
-    },
-    "Bulk Effective Samples Size"
-  )
+    })
+  
   tr_values <- juice(reg_test)$x3
   new_values <- bake(reg_test, new_data = new_dat)
   expect_warning(
@@ -215,9 +214,8 @@ test_that("character encoded predictor", {
                          verbose = FALSE,
                          options = opts) %>%
       prep(training = ex_dat_ch, retain = TRUE)
-  },
-  "Bulk Effective Samples Size"
-  )
+  })
+  
   tr_values <- juice(reg_test)$x3
   new_values <- bake(reg_test, new_data = new_dat_ch)
   new_values_fc <- bake(reg_test, new_data = new_dat)  
