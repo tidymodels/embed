@@ -86,7 +86,7 @@ step_discretize_cart <-
            skip = FALSE,
            id = rand_id("discretize_cart")) {
     
-    recipes::recipes_pkg_check("rpart")
+    recipes::recipes_pkg_check(required_pkgs.step_discretize_cart())
     
     if (is.null(outcome)) {
       rlang::abort("`outcome` should select at least one column.")
@@ -260,3 +260,10 @@ tidy.step_discretize_cart <- function(x, ...) {
   res$id <- x$id
   res
 }
+
+#' @rdname required_pkgs.embed
+#' @export
+required_pkgs.step_discretize_cart <- function(x, ...) {
+  c("rpart", "embed")
+}
+

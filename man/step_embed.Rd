@@ -172,7 +172,7 @@ if (is_tf_available()) {
                options = embed_control(epochs = 10))
 }
 
-# See https://tidymodels.github.io/embed/ for examples
+# See https://embed.tidymodels.org  for examples
 }
 \references{
 Francois C and Allaire JJ (2018)

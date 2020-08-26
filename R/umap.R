@@ -106,7 +106,7 @@ step_umap <-
            skip = FALSE,
            id = rand_id("umap")) {
     
-    recipes::recipes_pkg_check("uwot")
+    recipes::recipes_pkg_check(required_pkgs.step_umap())
     if (is.numeric(seed) & !is.integer(seed)) {
       seed <- as.integer(seed)
     }
@@ -135,8 +135,6 @@ step_umap <-
       )
     )
   }
-
-# TODO sep options for fit and predict, rm tr embeddings, 
 
 step_umap_new <-
   function(terms, role, trained, outcome, neighbors, num_comp, min_dist, 
@@ -257,4 +255,10 @@ tidy.step_umap <- function(x, ...) {
   res
 }
 
+
+#' @rdname required_pkgs.embed
+#' @export
+required_pkgs.step_umap <- function(x, ...) {
+  c("uwot", "embed")
+}
 

@@ -93,7 +93,7 @@
 #' reencoded <- recipe(Class ~ age + location, data = okc) %>%
 #'   step_lencode_bayes(location, outcome = vars(Class))
 #' 
-#' # See https://tidymodels.github.io/embed/ for examples
+#' # See https://embed.tidymodels.org for examples
 
 step_lencode_bayes <-
   function(recipe,
@@ -261,7 +261,7 @@ bake.step_lencode_bayes <- function(object, new_data, ...) {
 #' @export
 print.step_lencode_bayes <-
   function(x, width = max(20, options()$width - 31), ...) {
-    cat("Linear embedding for factors via GLM for ", sep = "")
+    cat("Linear embedding for factors via Bayesian GLM for ", sep = "")
     printer(names(x$mapping), x$terms, x$trained, width = width)
     invisible(x)
   }
@@ -289,3 +289,17 @@ tidy.step_lencode_bayes <- function(x, ...) {
   res$id <- x$id
   res
 }
+
+#' S3 methods for tracking which additional packages are needed for steps.
+#'
+#' Recipe-adjacent packages always list themselves as a required package so that
+#' the steps can function properly within parallel processing schemes. 
+#' @param x A recipe step
+#' @return A character vector
+#' @rdname required_pkgs.embed
+#' @keywords internal
+#' @export
+required_pkgs.step_lencode_bayes <- function(x, ...) {
+  c("rstanarm", "embed")
+} 
+

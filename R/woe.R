@@ -444,3 +444,11 @@ tidyr_new_interface <- function() {
   utils::packageVersion("tidyr") > "0.8.99"
 }
 
+
+
+#' @rdname required_pkgs.embed
+#' @export
+required_pkgs.step_woe <- function(x, ...) {
+  c("embed")
+}
+

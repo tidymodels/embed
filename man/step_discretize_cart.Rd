@@ -106,7 +106,7 @@ tidy(cart_rec, id = "cart splits")
 bake(cart_rec, ad_data_te, tau)
 }
 \seealso{
-\code{\link[embed:step_discretize_xgb]{embed::step_discretize_xgb()}}, \code{\link[recipes:recipe]{recipes::recipe()}},
+\code{\link[=step_discretize_xgb]{step_discretize_xgb()}}, \code{\link[recipes:recipe]{recipes::recipe()}},
 \code{\link[recipes:prep]{recipes::prep.recipe()}}, \code{\link[recipes:bake]{recipes::bake.recipe()}}
 }
 \concept{discretization}

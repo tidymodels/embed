@@ -124,7 +124,7 @@ xgb_rec <- prep(xgb_rec, training = credit_data_tr)
 bake(xgb_rec, credit_data_te, Price)
 }
 \seealso{
-\code{\link[embed:step_discretize_cart]{embed::step_discretize_cart()}}, \code{\link[recipes:recipe]{recipes::recipe()}},
+\code{\link[=step_discretize_cart]{step_discretize_cart()}}, \code{\link[recipes:recipe]{recipes::recipe()}},
 \code{\link[recipes:prep]{recipes::prep.recipe()}}, \code{\link[recipes:bake]{recipes::bake.recipe()}}
 }
 \concept{discretization}

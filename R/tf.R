@@ -131,7 +131,7 @@
 #'                options = embed_control(epochs = 10))
 #' }
 #' 
-#' # See https://tidymodels.github.io/embed/ for examples
+#' # See https://embed.tidymodels.org  for examples
 
 
 
@@ -483,7 +483,6 @@ class2ind <- function (x)  {
   y
 }
 
-
 #' Test to see if tensorflow is available
 #' 
 #' @return A logical
@@ -500,5 +499,11 @@ is_tf_available <- function() {
     }
   }
   res$available
+}
+
+#' @rdname required_pkgs.embed
+#' @export
+required_pkgs.step_embed <- function(x, ...) {
+  c("keras", "embed")
 }
 
