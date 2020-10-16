@@ -46,7 +46,7 @@ utils::globalVariables(
   
   # ----------------------------------------------------------------------------
   
-  if (rlang::is_installed("tune") && utils::packageVersion("tune") > "0.1.1.9000") {
+  if (rlang::is_installed("tune") && utils::packageVersion("tune") >= "0.1.1.9000") {
     
     req_pkgs_names <- grep("^required_pkgs\\.", names, value = TRUE)
     req_pkgs_classes <- gsub("required_pkgs.", "", req_pkgs_names)
