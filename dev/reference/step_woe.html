@@ -145,21 +145,21 @@ recipe step that will transform nominal data into its numerical
 transformation based on weights of evidence against a binary outcome.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>step_woe</span>(
-  <span class='kw'>recipe</span>,
-  <span class='kw'>...</span>,
-  role = <span class='st'>"predictor"</span>,
-  <span class='kw'>outcome</span>,
-  trained = <span class='fl'>FALSE</span>,
-  dictionary = <span class='kw'>NULL</span>,
-  Laplace = <span class='fl'>1e-06</span>,
-  prefix = <span class='st'>"woe"</span>,
-  skip = <span class='fl'>FALSE</span>,
-  id = <span class='fu'><a href='https://recipes.tidymodels.org/reference/rand_id.html'>rand_id</a></span>(<span class='st'>"woe"</span>)
-)
+    <pre class="usage"><span class='fu'>step_woe</span><span class='op'>(</span>
+  <span class='va'>recipe</span>,
+  <span class='va'>...</span>,
+  role <span class='op'>=</span> <span class='st'>"predictor"</span>,
+  <span class='va'>outcome</span>,
+  trained <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  dictionary <span class='op'>=</span> <span class='cn'>NULL</span>,
+  Laplace <span class='op'>=</span> <span class='fl'>1e-06</span>,
+  prefix <span class='op'>=</span> <span class='st'>"woe"</span>,
+  skip <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  id <span class='op'>=</span> <span class='fu'><a href='https://recipes.tidymodels.org/reference/rand_id.html'>rand_id</a></span><span class='op'>(</span><span class='st'>"woe"</span><span class='op'>)</span>
+<span class='op'>)</span>
 
 <span class='co'># S3 method for step_woe</span>
-<span class='fu'><a href='https://rdrr.io/pkg/generics/man/tidy.html'>tidy</a></span>(<span class='kw'>x</span>, <span class='kw'>...</span>)</pre>
+<span class='fu'><a href='https://rdrr.io/pkg/generics/man/tidy.html'>tidy</a></span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -269,22 +269,22 @@ tweaking an output returned from <code><a href='dictionary.html'>dictionary()</a
 <p>Good, I. J. (1985), "Weight of evidence: A brief survey", <em>Bayesian Statistics</em>, 2, pp.249-270.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='kw'><a href='https://modeldata.tidymodels.org'>modeldata</a></span>)
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='st'>"credit_data"</span>)
+    <pre class="examples"><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://modeldata.tidymodels.org'>modeldata</a></span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='st'>"credit_data"</span><span class='op'>)</span>
 
-<span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span>(<span class='fl'>111</span>)
-<span class='kw'>in_training</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/sample.html'>sample</a></span>(<span class='fl'>1</span><span class='op'>:</span><span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span>(<span class='kw'>credit_data</span>), <span class='fl'>2000</span>)
+<span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>111</span><span class='op'>)</span>
+<span class='va'>in_training</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/sample.html'>sample</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span><span class='op'>(</span><span class='va'>credit_data</span><span class='op'>)</span>, <span class='fl'>2000</span><span class='op'>)</span>
 
-<span class='kw'>credit_tr</span> <span class='op'>&lt;-</span> <span class='kw'>credit_data</span>[ <span class='kw'>in_training</span>, ]
-<span class='kw'>credit_te</span> <span class='op'>&lt;-</span> <span class='kw'>credit_data</span>[<span class='op'>-</span><span class='kw'>in_training</span>, ]
+<span class='va'>credit_tr</span> <span class='op'>&lt;-</span> <span class='va'>credit_data</span><span class='op'>[</span> <span class='va'>in_training</span>, <span class='op'>]</span>
+<span class='va'>credit_te</span> <span class='op'>&lt;-</span> <span class='va'>credit_data</span><span class='op'>[</span><span class='op'>-</span><span class='va'>in_training</span>, <span class='op'>]</span>
 
-<span class='kw'>rec</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://recipes.tidymodels.org/reference/recipe.html'>recipe</a></span>(<span class='kw'>Status</span> <span class='op'>~</span> <span class='kw'>.</span>, data = <span class='kw'>credit_tr</span>) <span class='op'>%&gt;%</span>
-  <span class='fu'>step_woe</span>(<span class='kw'>Job</span>, <span class='kw'>Home</span>, outcome = <span class='fu'><a href='https://dplyr.tidyverse.org/reference/vars.html'>vars</a></span>(<span class='kw'>Status</span>))
+<span class='va'>rec</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://recipes.tidymodels.org/reference/recipe.html'>recipe</a></span><span class='op'>(</span><span class='va'>Status</span> <span class='op'>~</span> <span class='va'>.</span>, data <span class='op'>=</span> <span class='va'>credit_tr</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'>step_woe</span><span class='op'>(</span><span class='va'>Job</span>, <span class='va'>Home</span>, outcome <span class='op'>=</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/vars.html'>vars</a></span><span class='op'>(</span><span class='va'>Status</span><span class='op'>)</span><span class='op'>)</span>
 
-<span class='kw'>woe_models</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://recipes.tidymodels.org/reference/prep.html'>prep</a></span>(<span class='kw'>rec</span>, training = <span class='kw'>credit_tr</span>)
+<span class='va'>woe_models</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://recipes.tidymodels.org/reference/prep.html'>prep</a></span><span class='op'>(</span><span class='va'>rec</span>, training <span class='op'>=</span> <span class='va'>credit_tr</span><span class='op'>)</span>
 
 <span class='co'># the encoding:</span>
-<span class='fu'><a href='https://recipes.tidymodels.org/reference/bake.html'>bake</a></span>(<span class='kw'>woe_models</span>, new_data = <span class='kw'>credit_te</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/slice.html'>slice</a></span>(<span class='fl'>1</span><span class='op'>:</span><span class='fl'>5</span>), <span class='fu'><a href='https://tidyselect.r-lib.org/reference/starts_with.html'>starts_with</a></span>(<span class='st'>"woe"</span>))
+<span class='fu'><a href='https://recipes.tidymodels.org/reference/bake.html'>bake</a></span><span class='op'>(</span><span class='va'>woe_models</span>, new_data <span class='op'>=</span> <span class='va'>credit_te</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/slice.html'>slice</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>5</span><span class='op'>)</span>, <span class='fu'><a href='https://tidyselect.r-lib.org/reference/starts_with.html'>starts_with</a></span><span class='op'>(</span><span class='st'>"woe"</span><span class='op'>)</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; <span style='color: #555555;'># A tibble: 5 x 2</span><span>
 #&gt;   woe_Job woe_Home
 #&gt;     </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>    </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>
@@ -293,14 +293,14 @@ tweaking an output returned from <code><a href='dictionary.html'>dictionary()</a
 #&gt; </span><span style='color: #555555;'>3</span><span>   0.451   0.512 
 #&gt; </span><span style='color: #555555;'>4</span><span>  -</span><span style='color: #BB0000;'>0.187</span><span>   0.512 
 #&gt; </span><span style='color: #555555;'>5</span><span>  -</span><span style='color: #BB0000;'>1.51</span><span>    0.051</span><span style='text-decoration: underline;'>9</span><span></div><div class='input'><span class='co'># the original data</span>
-<span class='kw'>credit_te</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/slice.html'>slice</a></span>(<span class='fl'>1</span><span class='op'>:</span><span class='fl'>5</span>) <span class='op'>%&gt;%</span> <span class='kw'>dplyr</span>::<span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span>(<span class='kw'>Job</span>, <span class='kw'>Home</span>)
+<span class='va'>credit_te</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/slice.html'>slice</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>5</span><span class='op'>)</span> <span class='op'>%&gt;%</span> <span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span><span class='va'>Job</span>, <span class='va'>Home</span><span class='op'>)</span>
 </div><div class='output co'>#&gt;         Job    Home
 #&gt; 1     fixed    rent
 #&gt; 2 freelance   owner
 #&gt; 3     fixed   owner
 #&gt; 4 freelance   owner
 #&gt; 5   partime parents</div><div class='input'><span class='co'># the details:</span>
-<span class='fu'><a href='https://rdrr.io/pkg/generics/man/tidy.html'>tidy</a></span>(<span class='kw'>woe_models</span>, number = <span class='fl'>1</span>)
+<span class='fu'><a href='https://rdrr.io/pkg/generics/man/tidy.html'>tidy</a></span><span class='op'>(</span><span class='va'>woe_models</span>, number <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; </span><span style='color: #555555;'># A tibble: 12 x 10</span><span>
 #&gt;    terms value     n_tot n_bad n_good   p_bad  p_good      woe outcome id       
 #&gt;    </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>     </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>  </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>   </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>   </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>    </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>   </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>    
@@ -318,16 +318,16 @@ tweaking an output returned from <code><a href='dictionary.html'>dictionary()</a
 #&gt; </span><span style='color: #555555;'>12</span><span> Home  </span><span style='color: #BB0000;'>NA</span><span>            5     3      2 0.004</span><span style='text-decoration: underline;'>96</span><span> 0.001</span><span style='text-decoration: underline;'>43</span><span>  -</span><span style='color: #BB0000;'>1.24</span><span>   Status  woe_omZtf</div><div class='input'>
 <span class='co'># Example of custom dictionary + tweaking</span>
 <span class='co'># custom dictionary</span>
-<span class='kw'>woe_dict_custom</span> <span class='op'>&lt;-</span> <span class='kw'>credit_tr</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='dictionary.html'>dictionary</a></span>(<span class='kw'>Job</span>, <span class='kw'>Home</span>, outcome = <span class='st'>"Status"</span>)
-<span class='kw'>woe_dict_custom</span>[<span class='fl'>4</span>, <span class='st'>"woe"</span>] <span class='op'>&lt;-</span> <span class='fl'>1.23</span> <span class='co'>#tweak</span>
+<span class='va'>woe_dict_custom</span> <span class='op'>&lt;-</span> <span class='va'>credit_tr</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='dictionary.html'>dictionary</a></span><span class='op'>(</span><span class='va'>Job</span>, <span class='va'>Home</span>, outcome <span class='op'>=</span> <span class='st'>"Status"</span><span class='op'>)</span>
+<span class='va'>woe_dict_custom</span><span class='op'>[</span><span class='fl'>4</span>, <span class='st'>"woe"</span><span class='op'>]</span> <span class='op'>&lt;-</span> <span class='fl'>1.23</span> <span class='co'>#tweak</span>
 
 <span class='co'>#passing custom dict to step_woe()</span>
-<span class='kw'>rec_custom</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://recipes.tidymodels.org/reference/recipe.html'>recipe</a></span>(<span class='kw'>Status</span> <span class='op'>~</span> <span class='kw'>.</span>, data = <span class='kw'>credit_tr</span>) <span class='op'>%&gt;%</span>
-  <span class='fu'>step_woe</span>(<span class='kw'>Job</span>, <span class='kw'>Home</span>, outcome = <span class='fu'><a href='https://dplyr.tidyverse.org/reference/vars.html'>vars</a></span>(<span class='kw'>Status</span>), dictionary = <span class='kw'>woe_dict_custom</span>) <span class='op'>%&gt;%</span>
-  <span class='kw'>prep</span>
+<span class='va'>rec_custom</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://recipes.tidymodels.org/reference/recipe.html'>recipe</a></span><span class='op'>(</span><span class='va'>Status</span> <span class='op'>~</span> <span class='va'>.</span>, data <span class='op'>=</span> <span class='va'>credit_tr</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'>step_woe</span><span class='op'>(</span><span class='va'>Job</span>, <span class='va'>Home</span>, outcome <span class='op'>=</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/vars.html'>vars</a></span><span class='op'>(</span><span class='va'>Status</span><span class='op'>)</span>, dictionary <span class='op'>=</span> <span class='va'>woe_dict_custom</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='va'>prep</span>
 
-<span class='kw'>rec_custom_baked</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://recipes.tidymodels.org/reference/bake.html'>bake</a></span>(<span class='kw'>rec_custom</span>, new_data = <span class='kw'>credit_te</span>)
-<span class='kw'>rec_custom_baked</span> <span class='op'>%&gt;%</span> <span class='kw'>dplyr</span>::<span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span>(<span class='kw'>woe_Job</span> <span class='op'>==</span> <span class='fl'>1.23</span>) <span class='op'>%&gt;%</span> <span class='kw'>head</span>
+<span class='va'>rec_custom_baked</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://recipes.tidymodels.org/reference/bake.html'>bake</a></span><span class='op'>(</span><span class='va'>rec_custom</span>, new_data <span class='op'>=</span> <span class='va'>credit_te</span><span class='op'>)</span>
+<span class='va'>rec_custom_baked</span> <span class='op'>%&gt;%</span> <span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>woe_Job</span> <span class='op'>==</span> <span class='fl'>1.23</span><span class='op'>)</span> <span class='op'>%&gt;%</span> <span class='va'>head</span>
 </div><div class='output co'>#&gt; </span><span style='color: #555555;'># A tibble: 6 x 14</span><span>
 #&gt;   Seniority  Time   Age Marital Records Expenses Income Assets  Debt Amount
 #&gt;       </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;fct&gt;</span><span>   </span><span style='color: #555555;font-style: italic;'>&lt;fct&gt;</span><span>      </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span>  </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span>  </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span>  </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span>

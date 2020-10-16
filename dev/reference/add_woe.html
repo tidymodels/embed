@@ -143,7 +143,7 @@ given binary outcome." />
 given binary outcome.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>add_woe</span>(<span class='kw'>.data</span>, <span class='kw'>outcome</span>, <span class='kw'>...</span>, dictionary = <span class='kw'>NULL</span>, prefix = <span class='st'>"woe"</span>)</pre>
+    <pre class="usage"><span class='fu'>add_woe</span><span class='op'>(</span><span class='va'>.data</span>, <span class='va'>outcome</span>, <span class='va'>...</span>, dictionary <span class='op'>=</span> <span class='cn'>NULL</span>, prefix <span class='op'>=</span> <span class='st'>"woe"</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -184,7 +184,7 @@ returned from it.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
-<span class='kw'>mtcars</span> <span class='op'>%&gt;%</span> <span class='fu'>add_woe</span>(<span class='st'>"am"</span>, <span class='kw'>cyl</span>, <span class='kw'>gear</span><span class='op'>:</span><span class='kw'>carb</span>)
+<span class='va'>mtcars</span> <span class='op'>%&gt;%</span> <span class='fu'>add_woe</span><span class='op'>(</span><span class='st'>"am"</span>, <span class='va'>cyl</span>, <span class='va'>gear</span><span class='op'>:</span><span class='va'>carb</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; <span style='color: #555555;'># A tibble: 32 x 14</span><span>
 #&gt;      mpg   cyl  disp    hp  drat    wt  qsec    vs    am  gear  carb woe_cyl
 #&gt;    </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>   </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>
