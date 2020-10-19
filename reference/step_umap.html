@@ -96,7 +96,7 @@ will project a set of features into a smaller space." />
         <a class="navbar-brand" href="../index.html">embed</a>
         <div class="info hidden-xs hidden-sm">
           <span class="partof">part of <a href="https://tidymodels.org">tidymodels</a></span>
-          <span class="version version-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
+          <span class="version version-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.2</span>
         </div>
       </div>
     </div>
@@ -143,27 +143,27 @@ will project a set of features into a smaller space." />
 will project a set of features into a smaller space.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>step_umap</span>(
-  <span class='kw'>recipe</span>,
-  <span class='kw'>...</span>,
-  role = <span class='st'>"predictor"</span>,
-  trained = <span class='fl'>FALSE</span>,
-  outcome = <span class='kw'>NULL</span>,
-  neighbors = <span class='fl'>15</span>,
-  num_comp = <span class='fl'>2</span>,
-  min_dist = <span class='fl'>0.01</span>,
-  learn_rate = <span class='fl'>1</span>,
-  epochs = <span class='kw'>NULL</span>,
-  options = <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(verbose = <span class='fl'>FALSE</span>, n_threads = <span class='fl'>1</span>),
-  seed = <span class='fu'><a href='https://rdrr.io/r/base/sample.html'>sample</a></span>(<span class='fl'>10</span><span class='op'>^</span><span class='fl'>5</span>, <span class='fl'>2</span>),
-  retain = <span class='fl'>FALSE</span>,
-  object = <span class='kw'>NULL</span>,
-  skip = <span class='fl'>FALSE</span>,
-  id = <span class='fu'><a href='https://recipes.tidymodels.org/reference/rand_id.html'>rand_id</a></span>(<span class='st'>"umap"</span>)
-)
+    <pre class="usage"><span class='fu'>step_umap</span><span class='op'>(</span>
+  <span class='va'>recipe</span>,
+  <span class='va'>...</span>,
+  role <span class='op'>=</span> <span class='st'>"predictor"</span>,
+  trained <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  outcome <span class='op'>=</span> <span class='cn'>NULL</span>,
+  neighbors <span class='op'>=</span> <span class='fl'>15</span>,
+  num_comp <span class='op'>=</span> <span class='fl'>2</span>,
+  min_dist <span class='op'>=</span> <span class='fl'>0.01</span>,
+  learn_rate <span class='op'>=</span> <span class='fl'>1</span>,
+  epochs <span class='op'>=</span> <span class='cn'>NULL</span>,
+  options <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>verbose <span class='op'>=</span> <span class='cn'>FALSE</span>, n_threads <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span>,
+  seed <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/sample.html'>sample</a></span><span class='op'>(</span><span class='fl'>10</span><span class='op'>^</span><span class='fl'>5</span>, <span class='fl'>2</span><span class='op'>)</span>,
+  retain <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  object <span class='op'>=</span> <span class='cn'>NULL</span>,
+  skip <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  id <span class='op'>=</span> <span class='fu'><a href='https://recipes.tidymodels.org/reference/rand_id.html'>rand_id</a></span><span class='op'>(</span><span class='st'>"umap"</span><span class='op'>)</span>
+<span class='op'>)</span>
 
 <span class='co'># S3 method for step_umap</span>
-<span class='fu'><a href='https://rdrr.io/pkg/generics/man/tidy.html'>tidy</a></span>(<span class='kw'>x</span>, <span class='kw'>...</span>)</pre>
+<span class='fu'><a href='https://rdrr.io/pkg/generics/man/tidy.html'>tidy</a></span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -283,27 +283,27 @@ Projection for Dimension Reduction. <a href=' https://arxiv.org/abs/1802.03426'>
 <p>"How UMAP Works" <a href='https://umap-learn.readthedocs.io/en/latest/how_umap_works.html'>https://umap-learn.readthedocs.io/en/latest/how_umap_works.html</a></p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='kw'><a href='https://github.com/tidymodels/recipes'>recipes</a></span>)
-<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='kw'><a href='https://dplyr.tidyverse.org'>dplyr</a></span>)
-<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='kw'><a href='http://ggplot2.tidyverse.org'>ggplot2</a></span>)
+    <pre class="examples"><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/tidymodels/recipes'>recipes</a></span><span class='op'>)</span>
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://dplyr.tidyverse.org'>dplyr</a></span><span class='op'>)</span>
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='http://ggplot2.tidyverse.org'>ggplot2</a></span><span class='op'>)</span>
 
-<span class='kw'>split</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq.int</a></span>(<span class='fl'>1</span>, <span class='fl'>150</span>, by = <span class='fl'>9</span>)
-<span class='kw'>tr</span> <span class='op'>&lt;-</span> <span class='kw'>iris</span>[<span class='op'>-</span><span class='kw'>split</span>, ]
-<span class='kw'>te</span> <span class='op'>&lt;-</span> <span class='kw'>iris</span>[ <span class='kw'>split</span>, ]
+<span class='va'>split</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq.int</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>150</span>, by <span class='op'>=</span> <span class='fl'>9</span><span class='op'>)</span>
+<span class='va'>tr</span> <span class='op'>&lt;-</span> <span class='va'>iris</span><span class='op'>[</span><span class='op'>-</span><span class='va'>split</span>, <span class='op'>]</span>
+<span class='va'>te</span> <span class='op'>&lt;-</span> <span class='va'>iris</span><span class='op'>[</span> <span class='va'>split</span>, <span class='op'>]</span>
 
-<span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span>(<span class='fl'>11</span>)
-<span class='kw'>supervised</span> <span class='op'>&lt;-</span> 
-  <span class='fu'><a href='https://recipes.tidymodels.org/reference/recipe.html'>recipe</a></span>(<span class='kw'>Species</span> <span class='op'>~</span> <span class='kw'>.</span>, data = <span class='kw'>tr</span>) <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='https://recipes.tidymodels.org/reference/step_center.html'>step_center</a></span>(<span class='fu'><a href='https://recipes.tidymodels.org/reference/has_role.html'>all_predictors</a></span>()) <span class='op'>%&gt;%</span> 
-  <span class='fu'><a href='https://recipes.tidymodels.org/reference/step_scale.html'>step_scale</a></span>(<span class='fu'><a href='https://recipes.tidymodels.org/reference/has_role.html'>all_predictors</a></span>()) <span class='op'>%&gt;%</span> 
-  <span class='fu'>step_umap</span>(<span class='fu'><a href='https://recipes.tidymodels.org/reference/has_role.html'>all_predictors</a></span>(), outcome = <span class='fu'><a href='https://dplyr.tidyverse.org/reference/vars.html'>vars</a></span>(<span class='kw'>Species</span>), num_comp = <span class='fl'>2</span>) <span class='op'>%&gt;%</span> 
-  <span class='fu'><a href='https://recipes.tidymodels.org/reference/prep.html'>prep</a></span>(training = <span class='kw'>tr</span>)
+<span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>11</span><span class='op'>)</span>
+<span class='va'>supervised</span> <span class='op'>&lt;-</span> 
+  <span class='fu'><a href='https://recipes.tidymodels.org/reference/recipe.html'>recipe</a></span><span class='op'>(</span><span class='va'>Species</span> <span class='op'>~</span> <span class='va'>.</span>, data <span class='op'>=</span> <span class='va'>tr</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='https://recipes.tidymodels.org/reference/step_center.html'>step_center</a></span><span class='op'>(</span><span class='fu'><a href='https://recipes.tidymodels.org/reference/has_role.html'>all_predictors</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'><a href='https://recipes.tidymodels.org/reference/step_scale.html'>step_scale</a></span><span class='op'>(</span><span class='fu'><a href='https://recipes.tidymodels.org/reference/has_role.html'>all_predictors</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>step_umap</span><span class='op'>(</span><span class='fu'><a href='https://recipes.tidymodels.org/reference/has_role.html'>all_predictors</a></span><span class='op'>(</span><span class='op'>)</span>, outcome <span class='op'>=</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/vars.html'>vars</a></span><span class='op'>(</span><span class='va'>Species</span><span class='op'>)</span>, num_comp <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'><a href='https://recipes.tidymodels.org/reference/prep.html'>prep</a></span><span class='op'>(</span>training <span class='op'>=</span> <span class='va'>tr</span><span class='op'>)</span>
 
-<span class='fu'><a href='https://ggplot2.tidyverse.org/reference/theme_get.html'>theme_set</a></span>(<span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggtheme.html'>theme_bw</a></span>())
+<span class='fu'><a href='https://ggplot2.tidyverse.org/reference/theme_get.html'>theme_set</a></span><span class='op'>(</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggtheme.html'>theme_bw</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span>
 
-<span class='fu'><a href='https://recipes.tidymodels.org/reference/bake.html'>bake</a></span>(<span class='kw'>supervised</span>, new_data = <span class='kw'>te</span>, <span class='kw'>Species</span>, <span class='fu'><a href='https://tidyselect.r-lib.org/reference/starts_with.html'>starts_with</a></span>(<span class='st'>"umap"</span>)) <span class='op'>%&gt;%</span> 
-  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span>(<span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span>(x = <span class='kw'>umap_1</span>, y = <span class='kw'>umap_2</span>, col = <span class='kw'>Species</span>)) <span class='op'>+</span> 
-  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_point.html'>geom_point</a></span>(alpha = <span class='fl'>.5</span>) 
+<span class='fu'><a href='https://recipes.tidymodels.org/reference/bake.html'>bake</a></span><span class='op'>(</span><span class='va'>supervised</span>, new_data <span class='op'>=</span> <span class='va'>te</span>, <span class='va'>Species</span>, <span class='fu'><a href='https://tidyselect.r-lib.org/reference/starts_with.html'>starts_with</a></span><span class='op'>(</span><span class='st'>"umap"</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='op'>(</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>umap_1</span>, y <span class='op'>=</span> <span class='va'>umap_2</span>, col <span class='op'>=</span> <span class='va'>Species</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span> 
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_point.html'>geom_point</a></span><span class='op'>(</span>alpha <span class='op'>=</span> <span class='fl'>.5</span><span class='op'>)</span> 
 </div><div class='img'><img src='step_umap-1.png' alt='' width='768' height='552' /></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
