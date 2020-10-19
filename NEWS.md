@@ -1,3 +1,7 @@
+# embed 0.1.2
+
+ * Changes to enable better parallel processing on windows. 
+
 # embed 0.1.1
 
  * Changes to tests to get out of archive jail.
