@@ -8,15 +8,15 @@
 \alias{tunable.step_discretize_cart}
 \title{tunable methods for embed}
 \usage{
-tunable.step_embed(x, ...)
+\method{tunable}{step_embed}(x, ...)
 
-tunable.step_umap(x, ...)
+\method{tunable}{step_umap}(x, ...)
 
-tunable.step_woe(x, ...)
+\method{tunable}{step_woe}(x, ...)
 
-tunable.step_discretize_xgb(x, ...)
+\method{tunable}{step_discretize_xgb}(x, ...)
 
-tunable.step_discretize_cart(x, ...)
+\method{tunable}{step_discretize_cart}(x, ...)
 }
 \arguments{
 \item{x}{A recipe step object}
