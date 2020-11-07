@@ -13,23 +13,23 @@
 \alias{required_pkgs.step_woe}
 \title{S3 methods for tracking which additional packages are needed for steps.}
 \usage{
-required_pkgs.step_lencode_bayes(x, ...)
+\method{required_pkgs}{step_lencode_bayes}(x, ...)
 
-required_pkgs.step_discretize_cart(x, ...)
+\method{required_pkgs}{step_discretize_cart}(x, ...)
 
-required_pkgs.step_discretize_xgb(x, ...)
+\method{required_pkgs}{step_discretize_xgb}(x, ...)
 
-required_pkgs.step_lencode_glm(x, ...)
+\method{required_pkgs}{step_lencode_glm}(x, ...)
 
-required_pkgs.step_feature_hash(x, ...)
+\method{required_pkgs}{step_feature_hash}(x, ...)
 
-required_pkgs.step_lencode_mixed(x, ...)
+\method{required_pkgs}{step_lencode_mixed}(x, ...)
 
-required_pkgs.step_embed(x, ...)
+\method{required_pkgs}{step_embed}(x, ...)
 
-required_pkgs.step_umap(x, ...)
+\method{required_pkgs}{step_umap}(x, ...)
 
-required_pkgs.step_woe(x, ...)
+\method{required_pkgs}{step_woe}(x, ...)
 }
 \arguments{
 \item{x}{A recipe step}
