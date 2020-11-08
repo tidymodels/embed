@@ -7,7 +7,7 @@ Authors@R: c(
     person("RStudio", role = "cph"))
 Depends: 
     R (>= 3.1),
-    recipes (>= 0.1.8)
+    recipes (>= 0.1.14.9000)
 Imports: 
     rstanarm,
     keras,
@@ -16,7 +16,7 @@ Imports:
     purrr,
     rlang,
     utils,
-    generics,
+    generics (>= 0.1.0),
     tidyr,
     tibble,
     lme4,
