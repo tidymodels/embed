@@ -41,3 +41,6 @@ Roxygen: list(markdown = TRUE)
 ByteCompile: true
 URL: https://embed.tidymodels.org, https://github.com/tidymodels/embed
 BugReports: https://github.com/tidymodels/embed/issues
+Remotes:
+    tidymodels/recipes
+    
