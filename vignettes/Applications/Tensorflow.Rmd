@@ -1,8 +1,8 @@
 ---
-title: "Entity Embeddings of Categorical Variables using Tensorflow"
+title: "Entity Embeddings of Categorical Variables using TensorFlow"
 vignette: >
   %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteIndexEntry{Entity Embeddings of Categorical Variables using Tensorflow}
+  %\VignetteIndexEntry{Entity Embeddings of Categorical Variables using TensorFlow}
 output:
   knitr:::html_vignette:
     toc: yes
@@ -48,10 +48,11 @@ length(levels(ames$Neighborhood))
 The distribution of data in the neighborhood is not uniform:
 
 ```{r ames-xtab}
-ggplot(ames, aes(x = Neighborhood)) + 
-  geom_bar() + 
-  coord_flip() + 
-  xlab("") + 
+ames %>%
+  count(Neighborhood) %>%
+  ggplot(aes(n, reorder(Neighborhood, n))) +
+  geom_col() +
+  labs(y = NULL) +
   theme_bw()
 ```
 
