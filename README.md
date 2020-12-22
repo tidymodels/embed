@@ -7,7 +7,7 @@
 status](https://github.com/tidymodels/embed/workflows/R-CMD-check/badge.svg)](https://github.com/tidymodels/embed/actions)
 [![Codecov test
 coverage](https://codecov.io/gh/tidymodels/embed/branch/master/graph/badge.svg)](https://codecov.io/gh/tidymodels/embed?branch=master)
-[![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/embed)](https://CRAN.r-project.org/package=embed)
+[![CRAN\_Status\_Badge](https://www.r-pkg.org/badges/version/embed)](https://CRAN.r-project.org/package=embed)
 [![Downloads](https://CRANlogs.r-pkg.org/badges/embed)](https://CRAN.r-project.org/package=embed)
 ![](https://img.shields.io/badge/lifecycle-maturing-blue.svg)
 <!-- badges: end -->
@@ -75,16 +75,28 @@ Some references for these methods are:
     survey](https://scholar.google.com/scholar?hl=en&as_sdt=0%2C5&q=Weight+of+evidence%3A+A+brief+survey&btnG=)”,
     Bayesian Statistics, 2, pp.249-270.
 
+## Getting Started
+
+There are two articles that walk through how to use these embedding
+steps, using [generalized linear
+models](https://embed.tidymodels.org/articles/Applications/GLM.html) and
+[neural networks built via
+TensorFlow](https://embed.tidymodels.org/articles/Applications/Tensorflow.html).
+
 ## Installation
 
 To install the package:
 
 ``` r
 install.packages("embed")
+```
 
-## for development version:
-require("devtools")
-install_github("tidymodels/embed")
+To get a bug fix or to use a feature from the development version, you
+can install the development version of this package from GitHub.
+
+``` r
+# install.packages("devtools")
+devtools::install_github("tidymodels/embed")
 ```
 
 ## Contributing
