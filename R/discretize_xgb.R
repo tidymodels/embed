@@ -71,6 +71,7 @@
 #' library(modeldata)
 #' data(credit_data)
 #' library(rsample)
+#' library(recipes)
 #'
 #' split <- initial_split(credit_data, strata = "Status")
 #'
@@ -80,7 +81,7 @@
 #' xgb_rec <- 
 #'   recipe(Status ~ ., data = credit_data_tr) %>%
 #'   step_impute_median(all_numeric()) %>%
-#'   step_discretize_xgb(all_numeric(), outcome = "Status")
+#'   step_medianimpute(all_numeric(), outcome = "Status")
 #'
 #' if (rlang::is_installed("xgboost")) {
 #'   xgb_rec <- prep(xgb_rec, training = credit_data_tr)
