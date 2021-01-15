@@ -9,6 +9,7 @@ opts <- list(seed = 34677, chains = 2, iter = 500)
 
 test_that("factor encoded predictor", {
   skip_on_cran()
+  skip_if_not_installed("rstanarm")
   expect_warning(
     class_test <- recipe(x2 ~ ., data = ex_dat) %>%
       step_lencode_bayes(x3, outcome = vars(x2), 
@@ -73,6 +74,7 @@ test_that("factor encoded predictor", {
 test_that("character encoded predictor", {
   skip_on_cran()
   skip_on_os("mac")
+  skip_if_not_installed("rstanarm")
   expect_warning(
     class_test <- recipe(x2 ~ ., data = ex_dat_ch) %>%
       step_lencode_bayes(x3, outcome = vars(x2), 
@@ -141,6 +143,7 @@ context("glmer model, regression")
 test_that("factor encoded predictor", {
   skip_on_cran()
   skip_on_os("mac")
+  skip_if_not_installed("rstanarm")
   expect_warning({
     set.seed(8283)
     reg_test <- recipe(x1 ~ ., data = ex_dat) %>%
@@ -207,6 +210,7 @@ test_that("factor encoded predictor", {
 test_that("character encoded predictor", {
   skip_on_cran()
   skip_on_os("mac")
+  skip_if_not_installed("rstanarm")
   expect_warning({
     set.seed(8283)
     reg_test <- recipe(x1 ~ ., data = ex_dat_ch) %>%

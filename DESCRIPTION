@@ -8,8 +8,7 @@ Authors@R: c(
 Depends: 
     R (>= 3.1),
     recipes (>= 0.1.15)
-Imports: 
-    rstanarm,
+Imports:
     keras,
     stats,
     dplyr,
@@ -19,12 +18,13 @@ Imports:
     generics (>= 0.1.0),
     tidyr,
     tibble,
-    lme4,
     tensorflow,
     uwot,
     withr,
     rsample
 Suggests: 
+    rstanarm,
+    lme4,
     testthat,
     knitr,
     rmarkdown,
