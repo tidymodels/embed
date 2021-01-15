@@ -2,6 +2,9 @@ library(testthat)
 library(dplyr)
 library(rsample)
 
+skip_on_cran()
+skip_if_not_installed("xgboost")
+
 context("discretize_xgb")
 
 source(test_path("make_binned_data.R"))
@@ -338,7 +341,7 @@ test_that("step_discretize_xgb for classification", {
   xgb_rec <- credit_data_train %>% 
     select(one_of(predictors_non_numeric)) %>% 
     recipe(Status ~ .) %>%
-    step_medianimpute(all_numeric()) %>%
+    step_impute_median(all_numeric()) %>%
     step_discretize_xgb(all_numeric(), outcome = "Status")
   
   expect_error(
@@ -352,7 +355,7 @@ test_that("step_discretize_xgb for classification", {
   # Information about insufficient datapoints for Time predictor
   msg <- capture_warning(
     recipe(Status ~ ., data = credit_data_train) %>%
-      step_medianimpute(all_numeric()) %>%
+      step_impute_median(all_numeric()) %>%
       step_discretize_xgb(all_numeric(), outcome = "Status") %>%
       prep(retain = TRUE)
   )
@@ -414,7 +417,7 @@ test_that("step_discretize_xgb for multi-classification", {
   xgb_rec <- attrition_data_train %>% 
     select(one_of(predictors_non_numeric)) %>% 
     recipe(BusinessTravel ~ .) %>%
-    step_medianimpute(all_numeric()) %>%
+    step_impute_median(all_numeric()) %>%
     step_discretize_xgb(all_numeric(), outcome = "BusinessTravel")
   
   expect_error(
@@ -500,7 +503,7 @@ test_that("step_discretize_xgb for regression", {
   xgb_rec <- okc_data_train %>% 
     select(one_of(predictors_non_numeric)) %>% 
     recipe(age ~ .) %>%
-    step_medianimpute(all_numeric()) %>%
+    step_impute_median(all_numeric()) %>%
     step_discretize_xgb(all_predictors(), outcome = "age")
   
   expect_error(

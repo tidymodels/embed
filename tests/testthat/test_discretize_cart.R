@@ -196,7 +196,7 @@ test_that("tidy method", {
 test_that("printing", {
   cart_rec <-
     recipe(class ~ ., data = sim_tr_cls) %>%
-    step_discretize_xgb(all_predictors(), outcome = "class")
+    step_discretize_cart(all_predictors(), outcome = "class")
   
   expect_output(print(cart_rec))
   expect_output(prep(cart_rec, verbose = TRUE))
