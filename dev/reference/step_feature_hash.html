@@ -97,7 +97,7 @@ binary columns using the levels of the original data." />
         <a class="navbar-brand" href="../index.html">embed</a>
         <div class="info hidden-xs hidden-sm">
           <span class="partof">part of <a href="https://tidymodels.org">tidymodels</a></span>
-          <span class="version version-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.1.3.9000</span>
+          <span class="version version-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.1.4.9000</span>
         </div>
       </div>
     </div>
@@ -154,7 +154,7 @@ binary columns using the levels of the original data.</p>
   preserve <span class='op'>=</span> <span class='cn'>FALSE</span>,
   columns <span class='op'>=</span> <span class='cn'>NULL</span>,
   skip <span class='op'>=</span> <span class='cn'>FALSE</span>,
-  id <span class='op'>=</span> <span class='fu'>rand_id</span><span class='op'>(</span><span class='st'>"feature_hash"</span><span class='op'>)</span>
+  id <span class='op'>=</span> <span class='fu'><a href='https://recipes.tidymodels.org/reference/rand_id.html'>rand_id</a></span><span class='op'>(</span><span class='st'>"feature_hash"</span><span class='op'>)</span>
 <span class='op'>)</span>
 
 <span class='co'># S3 method for step_feature_hash</span>
@@ -171,7 +171,7 @@ operations for this recipe.</p></td>
     <tr>
       <th>...</th>
       <td><p>One or more selector functions to choose which <em>factor</em>
-variables will be used to create the dummy variables. See <code>selections()</code> for
+variables will be used to create the dummy variables. See <code><a href='https://recipes.tidymodels.org/reference/selections.html'>selections()</a></code> for
 more details. The selected variables must be factors. For the <code>tidy</code> method,
 these are not currently used.</p></td>
     </tr>
@@ -259,20 +259,20 @@ Approach for Predictive Models</em>. CRC/Chapman Hall
 <span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='is_tf_available.html'>is_tf_available</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
   <span class='co'># This may take a while: </span>
   <span class='va'>rec</span> <span class='op'>&lt;-</span> 
-    <span class='fu'>recipe</span><span class='op'>(</span><span class='va'>Class</span> <span class='op'>~</span> <span class='va'>age</span> <span class='op'>+</span> <span class='va'>location</span>, data <span class='op'>=</span> <span class='va'>okc</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+    <span class='fu'><a href='https://recipes.tidymodels.org/reference/recipe.html'>recipe</a></span><span class='op'>(</span><span class='va'>Class</span> <span class='op'>~</span> <span class='va'>age</span> <span class='op'>+</span> <span class='va'>location</span>, data <span class='op'>=</span> <span class='va'>okc</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
     <span class='fu'>step_feature_hash</span><span class='op'>(</span><span class='va'>location</span>, num_hash <span class='op'>=</span> <span class='fl'>2</span><span class='op'>^</span><span class='fl'>6</span>, preserve <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
-    <span class='fu'>prep</span><span class='op'>(</span><span class='op'>)</span>
+    <span class='fu'><a href='https://recipes.tidymodels.org/reference/prep.html'>prep</a></span><span class='op'>(</span><span class='op'>)</span>
 
   <span class='co'># How many of the 135 locations ended up in each hash column?</span>
   <span class='va'>results</span> <span class='op'>&lt;-</span> 
-    <span class='fu'>juice</span><span class='op'>(</span><span class='va'>rec</span>, <span class='fu'>starts_with</span><span class='op'>(</span><span class='st'>"location"</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+    <span class='fu'><a href='https://recipes.tidymodels.org/reference/juice.html'>juice</a></span><span class='op'>(</span><span class='va'>rec</span>, <span class='fu'>starts_with</span><span class='op'>(</span><span class='st'>"location"</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
     <span class='fu'>distinct</span><span class='op'>(</span><span class='op'>)</span> 
 
   <span class='fu'><a href='https://rdrr.io/r/base/apply.html'>apply</a></span><span class='op'>(</span><span class='va'>results</span> <span class='op'>%&gt;%</span> <span class='fu'>select</span><span class='op'>(</span><span class='op'>-</span><span class='va'>location</span><span class='op'>)</span>, <span class='fl'>2</span>, <span class='va'>sum</span><span class='op'>)</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='https://rdrr.io/r/base/table.html'>table</a></span><span class='op'>(</span><span class='op'>)</span>
 <span class='op'>}</span>
 </div><div class='output co'>#&gt; .
 #&gt;  0  1  2  3  4  5  6 
-#&gt;  5 22 15 12  4  5  1 </div><div class='input'><span class='co'># }</span>
+#&gt;  6 19 15 15  5  3  1 </div><div class='input'><span class='co'># }</span>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
