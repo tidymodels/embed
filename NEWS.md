@@ -1,4 +1,8 @@
-# embed (development version)
+# embed 0.1.4
+
+ * Minor release with changes to test for cases when CRAN cannot get `xgboost` to work on their Solaris configuration. 
+ 
+ * `lme4` and `rstanarm` are now in the Suggests list so they are not automatically installed with `embed`. A message is written to the console if those packages are missing and their associated steps functions are invoked. 
 
 # embed 0.1.3
 
