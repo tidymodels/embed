@@ -6,6 +6,7 @@ source(testthat::test_path("test_helpers.R"))
 # ------------------------------------------------------------------------------
 
 test_that("factor encoded predictor", {
+  skip_if_not_installed("lme4")
   class_test <- recipe(x2 ~ ., data = ex_dat) %>%
     step_lencode_mixed(x3, outcome = vars(x2), id = "id") %>%
     prep(training = ex_dat, retain = TRUE)
@@ -63,6 +64,7 @@ test_that("factor encoded predictor", {
 })
 
 test_that("character encoded predictor", {
+  skip_if_not_installed("lme4")
   class_test <- recipe(x2 ~ ., data = ex_dat_ch) %>%
     step_lencode_mixed(x3, outcome = vars(x2)) %>%
     prep(training = ex_dat_ch, retain = TRUE)
@@ -122,6 +124,7 @@ test_that("character encoded predictor", {
 context("mixed model, regression")
 
 test_that("factor encoded predictor", {
+  skip_if_not_installed("lme4")
   reg_test <- recipe(x1 ~ ., data = ex_dat) %>%
     step_lencode_mixed(x3, outcome = vars(x1)) %>%
     prep(training = ex_dat, retain = TRUE)
@@ -180,6 +183,7 @@ test_that("factor encoded predictor", {
 })
 
 test_that("character encoded predictor", {
+  skip_if_not_installed("lme4")
   reg_test <- recipe(x1 ~ ., data = ex_dat_ch) %>%
     step_lencode_mixed(x3, outcome = vars(x1)) %>%
     prep(training = ex_dat_ch, retain = TRUE)
@@ -240,6 +244,7 @@ test_that("character encoded predictor", {
 context("mixed model, arguments")
 
 test_that("bad args", {
+  skip_if_not_installed("lme4")
   three_class <- iris
   three_class$fac <- rep(letters[1:3], 50)
   three_class$logical <- rep(c(TRUE, FALSE), 75)
@@ -253,6 +258,7 @@ test_that("bad args", {
 
 
 test_that('printing', {
+  skip_if_not_installed("lme4")
   print_test <- recipe(x2 ~ ., data = ex_dat_ch) %>%
     step_lencode_mixed(x3, outcome = vars(x2)) 
   expect_output(print(print_test))

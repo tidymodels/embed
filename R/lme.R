@@ -157,7 +157,7 @@ prep.step_lencode_mixed <- function(x, training, info = NULL, ...) {
 
 
 lme_coefs <- function(x, y, ...) {
-  
+  rlang::check_installed("lme4")
   args <- list(
     formula = y ~ 1 + (1 | value),
     data = data.frame(value = x, y = y),
@@ -169,11 +169,13 @@ lme_coefs <- function(x, y, ...) {
     args <- c(args, dots[[1]])
   
   if (!is.factor(y[[1]])) {
-    mod <- do.call(lme4::lmer, args)
+    cl <- rlang::call2("lmer", .ns = "lme4", !!!args)
+    mod <- rlang::eval_tidy(cl)
   } else {
     args$data$y <- as.numeric(args$data$y) - 1
     args$family <- stats::binomial
-    mod <- do.call(lme4::glmer, args)
+    cl <- rlang::call2("glmer", .ns = "lme4", !!!args)
+    mod <- rlang::eval_tidy(cl)
   }
   
   coefs <- coef(mod)$value

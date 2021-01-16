@@ -91,12 +91,20 @@ To install the package:
 install.packages("embed")
 ```
 
+Note that, to use some steps, you will also have to load other packages
+such as `rstanarm` and `lme4`. For all of the steps to work, you may
+want to use:
+
+``` r
+install.packages(c("rpart", "xgboost", "rstanarm", "lme4"))
+```
+
 To get a bug fix or to use a feature from the development version, you
 can install the development version of this package from GitHub.
 
 ``` r
-# install.packages("devtools")
-devtools::install_github("tidymodels/embed")
+# install.packages("remotes")
+remotes::install_github("tidymodels/embed")
 ```
 
 ## Contributing
@@ -107,14 +115,15 @@ By contributing to this project, you agree to abide by its terms.
 
   - For questions and discussions about tidymodels packages, modeling,
     and machine learning, please [post on RStudio
-    Community](https://rstd.io/tidymodels-community).
+    Community](https://community.rstudio.com/new-topic?category_id=15&tags=tidymodels,question).
 
   - If you think you have encountered a bug, please [submit an
     issue](https://github.com/tidymodels/embed/issues).
 
   - Either way, learn how to create and share a
-    [reprex](https://rstd.io/reprex) (a minimal, reproducible example),
-    to clearly communicate about your code.
+    [reprex](https://reprex.tidyverse.org/articles/articles/learn-reprex.html)
+    (a minimal, reproducible example), to clearly communicate about your
+    code.
 
   - Check out further details on [contributing guidelines for tidymodels
     packages](https://www.tidymodels.org/contribute/) and [how to get

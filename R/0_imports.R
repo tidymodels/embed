@@ -2,8 +2,6 @@
 #' @import rlang
 #' @importFrom utils globalVariables capture.output packageVersion stack compareVersion
 #' @importFrom uwot umap_transform umap
-#' @importFrom lme4 glmer lmer
-#' @importFrom rstanarm stan_glmer
 #' @importFrom keras keras_model_sequential layer_embedding layer_flatten
 #' @importFrom keras layer_dense compile fit get_layer backend keras_model
 #' @importFrom keras layer_concatenate layer_input

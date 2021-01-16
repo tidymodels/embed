@@ -108,6 +108,7 @@ Note that the original data will be replaced with the new bins.
 library(modeldata)
 data(credit_data)
 library(rsample)
+library(recipes)
 
 split <- initial_split(credit_data, strata = "Status")
 
@@ -119,9 +120,11 @@ xgb_rec <-
   step_medianimpute(all_numeric()) \%>\%
   step_discretize_xgb(all_numeric(), outcome = "Status")
 
-xgb_rec <- prep(xgb_rec, training = credit_data_tr)
+if (rlang::is_installed("xgboost")) {
+  xgb_rec <- prep(xgb_rec, training = credit_data_tr)
 
-bake(xgb_rec, credit_data_te, Price)
+   bake(xgb_rec, credit_data_te, Price)
+}
 }
 \seealso{
 \code{\link[=step_discretize_cart]{step_discretize_cart()}}, \code{\link[recipes:recipe]{recipes::recipe()}},

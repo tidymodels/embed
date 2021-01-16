@@ -189,6 +189,7 @@ glm_coefs <- function(x, y, ...) {
 }
 
 stan_coefs <- function(x, y, options, verbose, ...) {
+  rlang::check_installed("rstanarm")
   if (is.factor(y[[1]])) {
     fam <- binomial()
   } else {
@@ -212,10 +213,13 @@ stan_coefs <- function(x, y, options, verbose, ...) {
   if (length(options) > 0) {
     args <- c(args, options)
   }
+  
+  cl <- rlang::call2("stan_glmer", .ns = "rstanarm", !!!args)
+  
   if (!verbose) {
-    junk <- capture.output(mod <- do.call("stan_glmer", args))
+    junk <- capture.output(mod <- rlang::eval_tidy(cl))
   } else {
-    mod <- do.call("stan_glmer", args)
+    mod <- rlang::eval_tidy(cl)
   }
   
   coefs <- coef(mod)$value

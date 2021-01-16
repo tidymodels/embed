@@ -2,6 +2,9 @@ library(testthat)
 library(dplyr)
 library(rsample)
 
+skip_on_cran()
+skip_if_not_installed("xgboost")
+
 context("discretize_xgb")
 
 source(test_path("make_binned_data.R"))

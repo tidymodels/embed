@@ -1,5 +1,5 @@
 Package: embed
-Version: 0.1.3.9000
+Version: 0.1.4
 Title: Extra Recipes for Encoding Categorical Predictors
 Description: Predictors can be converted to one or more numeric representations using simple generalized linear models <arXiv:1611.09477> or nonlinear models <arXiv:1604.06737>. Most encoding methods are supervised.
 Authors@R: c(
@@ -8,8 +8,7 @@ Authors@R: c(
 Depends: 
     R (>= 3.1),
     recipes (>= 0.1.15)
-Imports: 
-    rstanarm,
+Imports:
     keras,
     stats,
     dplyr,
@@ -19,12 +18,13 @@ Imports:
     generics (>= 0.1.0),
     tidyr,
     tibble,
-    lme4,
     tensorflow,
     uwot,
     withr,
     rsample
 Suggests: 
+    rstanarm,
+    lme4,
     testthat,
     knitr,
     rmarkdown,
