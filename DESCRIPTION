@@ -13,7 +13,7 @@ Imports:
     stats,
     dplyr,
     purrr,
-    rlang,
+    rlang (>= 0.4.10),
     utils,
     generics (>= 0.1.0),
     tidyr,
