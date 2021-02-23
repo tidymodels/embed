@@ -43,3 +43,23 @@ utils::globalVariables(
     )
   )
 
+# from recipes
+is_tune <- function (x)  {
+  if (is.call(x)) {
+    if (rlang::call_name(x) == "tune") {
+      return(TRUE)
+    }
+    else {
+      return(FALSE)
+    }
+  }
+  else {
+    return(FALSE)
+  }
+  FALSE
+}
+
+prop2int <- function (x, p) {
+  cuts <- seq(0, p, length.out = p + 1)
+  as.integer(cut(x * p, breaks = cuts, include.lowest = TRUE))
+}
