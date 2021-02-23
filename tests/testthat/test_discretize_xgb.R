@@ -353,12 +353,12 @@ test_that("step_discretize_xgb for classification", {
   )
   
   # Information about insufficient datapoints for Time predictor
-  msg <- capture_warning(
+  msg <- capture_warning({
+    set.seed(1)
     recipe(Status ~ ., data = credit_data_train) %>%
-      step_medianimpute(all_numeric()) %>%
-      step_discretize_xgb(all_numeric(), outcome = "Status") %>%
+      step_discretize_xgb(Time, outcome = "Status") %>%
       prep(retain = TRUE)
-  )
+  })
   
   expect_true(
     grepl(
