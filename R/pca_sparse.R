@@ -148,7 +148,7 @@ prep.step_pca_sparse <- function(x, training, info = NULL, ...) {
         !!!x$options
       )
     res <- rlang::eval_tidy(cl)
-    rotation <- res$v
+    rotation <- standardize_pca_coefs(res$v)
   } else {
     # fake a rotation matrix so that the resolved names can be used for tidy()
     rotation <- matrix(NA, nrow = length(col_names), ncol = p)
@@ -243,3 +243,16 @@ tunable.step_pca_sparse <- function(x, ...) {
     component_id = x$id
   )
 }
+
+standardize_pca_coefs <- function(x) {
+  apply(x, 2, leading_positive)
+}
+
+leading_positive <- function(x) {
+  if (x[1] < 0) {
+    x <- -x
+  }
+  x
+}
+
+

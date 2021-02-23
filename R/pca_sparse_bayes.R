@@ -15,10 +15,13 @@
 #'  predictors in a model.
 #' @param num_comp The number of PCA components to retain as new predictors.
 #'  If `num_comp` is greater than the number of columns or the number of
-#'  possible components, a smaller value will be used.
-#' @param prior_slab_dispersion The maximum number of original predictors that can have
-#'  non-zero coefficients for each PCA component (via regularization).
-#' @param prior_mixture_threshold 
+#'  possible components, a smaller value will be used. A value of zero indicates
+#'  that PCA will _not_ be used on the data. 
+#' @param prior_slab_dispersion The dispersion (or scale) parameter for the slab
+#' portion of the prior. Smaller values result in an increase in zero 
+#' coefficients. 
+#' @param prior_mixture_threshold The parameter that trades-off the spike and
+#' slab components of the prior. 
 #' @param options A list of options to the default method for `irlba::ssvd()`.
 #' @param res The rotation matrix once this
 #'  preprocessing step has be trained by [prep.recipe()].
@@ -32,6 +35,8 @@
 #' @concept preprocessing
 #' @concept pca
 #' @concept projection_methods
+#' @references Ning, B. (2021). Spike and slab Bayesian sparse principal 
+#' component analysis. arXiv:2102.00305.
 #' @export
 #' @details
 #' A spike-and-slab prior is a mixture of two priors. One (the "spike") has
@@ -151,6 +156,8 @@ prep.step_pca_sparse_bayes <- function(x, training, info = NULL, ...) {
   x$prior_mixture_threshold <- max(x$prior_mixture_threshold, 0.00001)
   x$prior_mixture_threshold <- min(x$prior_mixture_threshold, 1)
 
+  scale_param <- 1/x$prior_slab_dispersion
+  
   if (x$num_comp > 0) {
     cl <-
       rlang:::call2(
@@ -158,12 +165,12 @@ prep.step_pca_sparse_bayes <- function(x, training, info = NULL, ...) {
         .ns = "VBsparsePCA",
         dat = rlang::expr(as.matrix(training[, col_names])),
         r = x$num_comp,
-        lambda = x$prior_slab_dispersion,
+        lambda = scale_param,
         threshold = x$prior_mixture_threshold,
         !!!x$options
       )
     res <- rlang::eval_tidy(cl)
-    rotation <- res$loadings
+    rotation <- standardize_pca_coefs(res$loadings)
   } else {
     # fake a rotation matrix so that the resolved names can be used for tidy()
     rotation <- matrix(NA, nrow = length(col_names), ncol = p)

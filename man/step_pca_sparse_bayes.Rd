@@ -78,6 +78,19 @@ numeric data into one or more principal components that can have some zero
 coefficients.
 }
 \details{
+A spike-and-slab prior is a mixture of two priors. One (the "spike") has
+all of its mass at zero and represents a variable that has no contribution
+to the PCA coefficients. The other prior is a broader distribution that
+reflects the coefficient distribution of variables that do affect the PCA
+analysis. This is the "slab". The narrower the slab, the more likely that a
+coefficient will be zero (or are regularized to be closer to zero). The
+mixture of these two priors is governed by a mixing parameter, which itself
+has a prior distribution and a hyper-parameter prior.
+To encourage the PCA analysis to have additional zero coefficients,
+decrease the \code{prior_slab_dispersion} parameter to be closer to zero (but not
+zero). Also, decreasing the \code{prior_mixture_threshold} to be closer to zero
+will also result in fewer variables that affect the PCA analysis.
+
 The argument \code{num_comp} controls the number of components that
 will be retained (the original variables that are used to derive
 the components are removed from the data). The new components
