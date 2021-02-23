@@ -3,7 +3,7 @@
 \name{step_pca_sparse_bayes}
 \alias{step_pca_sparse_bayes}
 \alias{tidy.step_pca_sparse_bayes}
-\title{PCA Signal Extraction}
+\title{Sparse, Bayesian PCA Signal Extraction}
 \usage{
 step_pca_sparse_bayes(
   recipe,
@@ -40,17 +40,22 @@ preprocessing have been estimated.}
 
 \item{num_comp}{The number of PCA components to retain as new predictors.
 If \code{num_comp} is greater than the number of columns or the number of
-possible components, a smaller value will be used.}
+possible components, a smaller value will be used. A value of zero indicates
+that PCA will \emph{not} be used on the data.}
 
-\item{prior_slab_dispersion}{The maximum number of original predictors that can have
-non-zero coefficients for each PCA component (via regularization).}
+\item{prior_slab_dispersion}{This value is proportional to the dispersion
+(or scale) parameter for the slab portion of the prior. Smaller values result
+in an increase in zero coefficients.}
 
-\item{prior_mixture_threshold}{}
+\item{prior_mixture_threshold}{The parameter that trades-off the spike and
+slab components of the prior. Increasing this parameter increases the number
+if zero coefficients.}
 
-\item{options}{A list of options to the default method for \code{irlba::ssvd()}.}
+\item{options}{A list of options to the default method for
+\code{VBsparsePCA::VBsparsePCA()}.}
 
-\item{res}{The rotation matrix once this
-preprocessing step has be trained by \code{\link[=prep.recipe]{prep.recipe()}}.}
+\item{res}{The rotation matrix once this preprocessing step has be trained
+by \code{\link[=prep.recipe]{prep.recipe()}}.}
 
 \item{prefix}{A character string that will be the prefix to the resulting
 new variables. See notes below.}
@@ -78,6 +83,9 @@ numeric data into one or more principal components that can have some zero
 coefficients.
 }
 \details{
+The \code{VBsparsePCA} is required for this step. If it is not installed, the user
+will be prompted to do so when the step is defined.
+
 A spike-and-slab prior is a mixture of two priors. One (the "spike") has
 all of its mass at zero and represents a variable that has no contribution
 to the PCA coefficients. The other prior is a broader distribution that
@@ -86,10 +94,10 @@ analysis. This is the "slab". The narrower the slab, the more likely that a
 coefficient will be zero (or are regularized to be closer to zero). The
 mixture of these two priors is governed by a mixing parameter, which itself
 has a prior distribution and a hyper-parameter prior.
-To encourage the PCA analysis to have additional zero coefficients,
-decrease the \code{prior_slab_dispersion} parameter to be closer to zero (but not
-zero). Also, decreasing the \code{prior_mixture_threshold} to be closer to zero
-will also result in fewer variables that affect the PCA analysis.
+
+PCA coefficients and their resulting scores are unique only up to sign. This
+step will attempt to make the sign of the components more consistent from
+run-to-run. However, the sparsity constraint may interfere with this goal.
 
 The argument \code{num_comp} controls the number of components that
 will be retained (the original variables that are used to derive
@@ -101,29 +109,33 @@ If \code{num_comp = 101}, the names would be \code{PC001} -
 \code{PC101}.
 }
 \examples{
-rec <- recipe( ~ ., data = USArrests)
-pca_trans <- rec \%>\%
-  step_normalize(all_numeric()) \%>\%
-  step_pca_sparse_bayes(all_numeric(), num_comp = 3)
-pca_estimates <- prep(pca_trans, training = USArrests)
-pca_data <- bake(pca_estimates, USArrests)
+library(recipes)
+library(ggplot2)
 
-rng <- extendrange(c(pca_data$PC1, pca_data$PC2))
-plot(pca_data$PC1, pca_data$PC2,
-     xlim = rng, ylim = rng)
+data(ad_data, package = "modeldata")
 
-with_thresh <- rec \%>\%
-  step_normalize(all_numeric()) \%>\%
-  step_pca_sparse_bayes(all_numeric(), threshold = .99)
-with_thresh <- prep(with_thresh, training = USArrests)
-bake(with_thresh, USArrests)
+ad_rec <- 
+  recipe(Class ~ ., data = ad_data) \%>\% 
+  step_zv(all_predictors()) \%>\% 
+  step_YeoJohnson(all_numeric_predictors()) \%>\% 
+  step_normalize(all_numeric_predictors()) \%>\% 
+  step_pca_sparse_bayes(all_numeric_predictors(), 
+                        prior_mixture_threshold = 0.95,
+                        prior_slab_dispersion = 0.05, 
+                        num_comp = 3, 
+                        id = "sparse bayesian pca") \%>\% 
+  prep()
 
-tidy(pca_trans, number = 2)
-tidy(pca_estimates, number = 2)
+tidy(ad_rec, id = "sparse bayesian pca") \%>\% 
+  mutate(value = ifelse(value == 0, NA, value)) \%>\%
+  ggplot(aes(x = component, y = terms, fill = value)) + 
+  geom_tile() + 
+  scale_fill_gradient2() + 
+  theme(axis.text.y = element_blank())
 }
 \references{
-Jolliffe, I. T. (2010). \emph{Principal Component
-Analysis}. Springer.
+Ning, B. (2021). Spike and slab Bayesian sparse principal
+component analysis. arXiv:2102.00305.
 }
 \concept{pca}
 \concept{preprocessing}

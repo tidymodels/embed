@@ -1,4 +1,4 @@
-#' PCA Signal Extraction
+#' Sparse PCA Signal Extraction
 #'
 #' `step_pca_sparse()` creates a *specification* of a recipe step that will convert
 #'  numeric data into one or more principal components that can have some zero
@@ -33,7 +33,10 @@
 #' @concept projection_methods
 #' @export
 #' @details
-#'
+#' The `irlba` is required for this step. If it is not installed, the user
+#'  will be prompted to do so when the step is defined. The `ssvd()` function is
+#'  used to encourage sparsity; that documentation has details about this method. 
+#'  
 #' The argument `num_comp` controls the number of components that
 #'  will be retained (the original variables that are used to derive
 #'  the components are removed from the data). The new components
@@ -43,48 +46,42 @@
 #'  If `num_comp = 101`, the names would be `PC001` -
 #'  `PC101`.
 #'
-#' @references Jolliffe, I. T. (2010). *Principal Component
-#'  Analysis*. Springer.
-#'
 #' @examples
-#' rec <- recipe( ~ ., data = USArrests)
-#' pca_trans <- rec %>%
-#'   step_normalize(all_numeric()) %>%
-#'   step_pca_sparse(all_numeric(), num_comp = 3)
-#' pca_estimates <- prep(pca_trans, training = USArrests)
-#' pca_data <- bake(pca_estimates, USArrests)
-#'
-#' rng <- extendrange(c(pca_data$PC1, pca_data$PC2))
-#' plot(pca_data$PC1, pca_data$PC2,
-#'      xlim = rng, ylim = rng)
-#'
-#' with_thresh <- rec %>%
-#'   step_normalize(all_numeric()) %>%
-#'   step_pca_sparse(all_numeric(), threshold = .99)
-#' with_thresh <- prep(with_thresh, training = USArrests)
-#' bake(with_thresh, USArrests)
-#'
-#' tidy(pca_trans, number = 2)
-#' tidy(pca_estimates, number = 2)
+#' library(recipes)
+#' library(ggplot2)
+#' 
+#' data(ad_data, package = "modeldata")
+#' 
+#' ad_rec <- 
+#'   recipe(Class ~ ., data = ad_data) %>% 
+#'   step_zv(all_predictors()) %>% 
+#'   step_YeoJohnson(all_numeric_predictors()) %>% 
+#'   step_normalize(all_numeric_predictors()) %>% 
+#'   step_pca_sparse(all_numeric_predictors(), 
+#'                   predictor_prop = 0.75,
+#'                   num_comp = 3, 
+#'                   id = "sparse pca") %>% 
+#'   prep()
+#' 
+#' tidy(ad_rec, id = "sparse pca") %>% 
+#'   mutate(value = ifelse(value == 0, NA, value)) %>%
+#'   ggplot(aes(x = component, y = terms, fill = value)) + 
+#'   geom_tile() + 
+#'   scale_fill_gradient2() + 
+#'   theme(axis.text.y = element_blank())
 step_pca_sparse <- function(recipe,
-                     ...,
-                     role = "predictor",
-                     trained = FALSE,
-                     num_comp  = 5,
-                     predictor_prop = 1.0,
-                     options = list(),
-                     res = NULL,
-                     prefix = "PC",
-                     skip = FALSE,
-                     id = rand_id("pca_sparse")) {
+                            ...,
+                            role = "predictor",
+                            trained = FALSE,
+                            num_comp  = 5,
+                            predictor_prop = 1.0,
+                            options = list(),
+                            res = NULL,
+                            prefix = "PC",
+                            skip = FALSE,
+                            id = rand_id("pca_sparse")) {
   
   rlang:: check_installed("irlba")
-  
-  if (!is_tune(predictor_prop) & !is_varying(predictor_prop)) {
-    if (!is.na(predictor_prop) && (predictor_prop > 1 | predictor_prop <= 0)) {
-      rlang::abort("`predictor_prop` should be on (0, 1].")
-    }
-  }
   
   add_step(
     recipe,
@@ -121,8 +118,6 @@ step_pca_sparse_new <-
     )
   }
 
-# TODO add alpha parameter as `regularization_adjustment`?
-
 #' @export
 prep.step_pca_sparse <- function(x, training, info = NULL, ...) {
   col_names <- recipes:::eval_select_recipes(x$terms, training, info)
@@ -135,11 +130,11 @@ prep.step_pca_sparse <- function(x, training, info = NULL, ...) {
   x$predictor_prop <- max(x$predictor_prop, 0.00001)
   x$predictor_prop <- min(x$predictor_prop, 1)
   num_dense <- prop2int(x$predictor_prop, p)
-
+  
   
   if (x$num_comp > 0) {
     cl <-
-      rlang:::call2(
+      rlang::call2(
         "ssvd",
         .ns = "irlba",
         x = rlang::expr(as.matrix(training[, col_names])),
@@ -243,6 +238,8 @@ tunable.step_pca_sparse <- function(x, ...) {
     component_id = x$id
   )
 }
+
+# ------------------------------------------------------------------------------
 
 standardize_pca_coefs <- function(x) {
   apply(x, 2, leading_positive)

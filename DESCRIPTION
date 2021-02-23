@@ -7,7 +7,7 @@ Authors@R: c(
     person("RStudio", role = "cph"))
 Depends: 
     R (>= 3.1),
-    recipes (>= 0.1.15)
+    recipes (>= 0.1.15.9000)
 Imports:
     keras,
     stats,

@@ -3,7 +3,7 @@
 \name{step_pca_sparse}
 \alias{step_pca_sparse}
 \alias{tidy.step_pca_sparse}
-\title{PCA Signal Extraction}
+\title{Sparse PCA Signal Extraction}
 \usage{
 step_pca_sparse(
   recipe,
@@ -75,6 +75,10 @@ numeric data into one or more principal components that can have some zero
 coefficients.
 }
 \details{
+The \code{irlba} is required for this step. If it is not installed, the user
+will be prompted to do so when the step is defined. The \code{ssvd()} function is
+used to encourage sparsity; that documentation has details about this method.
+
 The argument \code{num_comp} controls the number of components that
 will be retained (the original variables that are used to derive
 the components are removed from the data). The new components
@@ -85,29 +89,28 @@ If \code{num_comp = 101}, the names would be \code{PC001} -
 \code{PC101}.
 }
 \examples{
-rec <- recipe( ~ ., data = USArrests)
-pca_trans <- rec \%>\%
-  step_normalize(all_numeric()) \%>\%
-  step_pca_sparse(all_numeric(), num_comp = 3)
-pca_estimates <- prep(pca_trans, training = USArrests)
-pca_data <- bake(pca_estimates, USArrests)
+library(recipes)
+library(ggplot2)
 
-rng <- extendrange(c(pca_data$PC1, pca_data$PC2))
-plot(pca_data$PC1, pca_data$PC2,
-     xlim = rng, ylim = rng)
+data(ad_data, package = "modeldata")
 
-with_thresh <- rec \%>\%
-  step_normalize(all_numeric()) \%>\%
-  step_pca_sparse(all_numeric(), threshold = .99)
-with_thresh <- prep(with_thresh, training = USArrests)
-bake(with_thresh, USArrests)
+ad_rec <- 
+  recipe(Class ~ ., data = ad_data) \%>\% 
+  step_zv(all_predictors()) \%>\% 
+  step_YeoJohnson(all_numeric_predictors()) \%>\% 
+  step_normalize(all_numeric_predictors()) \%>\% 
+  step_pca_sparse(all_numeric_predictors(), 
+                  predictor_prop = 0.75,
+                  num_comp = 3, 
+                  id = "sparse pca") \%>\% 
+  prep()
 
-tidy(pca_trans, number = 2)
-tidy(pca_estimates, number = 2)
-}
-\references{
-Jolliffe, I. T. (2010). \emph{Principal Component
-Analysis}. Springer.
+tidy(ad_rec, id = "sparse pca") \%>\% 
+  mutate(value = ifelse(value == 0, NA, value)) \%>\%
+  ggplot(aes(x = component, y = terms, fill = value)) + 
+  geom_tile() + 
+  scale_fill_gradient2() + 
+  theme(axis.text.y = element_blank())
 }
 \concept{pca}
 \concept{preprocessing}
