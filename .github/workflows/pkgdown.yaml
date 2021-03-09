@@ -12,6 +12,7 @@ jobs:
     env:
       RSPM: https://packagemanager.rstudio.com/cran/__linux__/bionic/latest
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+      local_vignette_build: TRUE
 
     steps:
       - uses: actions/checkout@v2
