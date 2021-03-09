@@ -10,6 +10,7 @@ coverage](https://codecov.io/gh/tidymodels/embed/branch/master/graph/badge.svg)]
 [![CRAN\_Status\_Badge](https://www.r-pkg.org/badges/version/embed)](https://CRAN.r-project.org/package=embed)
 [![Downloads](https://CRANlogs.r-pkg.org/badges/embed)](https://CRAN.r-project.org/package=embed)
 ![](https://img.shields.io/badge/lifecycle-maturing-blue.svg)
+[![R-CMD-check](https://github.com/tidymodels/embed/workflows/R-CMD-check/badge.svg)](https://github.com/tidymodels/embed/actions)
 <!-- badges: end -->
 
 ## Introduction

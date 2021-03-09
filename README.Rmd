@@ -19,6 +19,7 @@ knitr::opts_chunk$set(
 [![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/embed)](https://CRAN.r-project.org/package=embed)
 [![Downloads](https://CRANlogs.r-pkg.org/badges/embed)](https://CRAN.r-project.org/package=embed)
 ![](https://img.shields.io/badge/lifecycle-maturing-blue.svg)
+[![R-CMD-check](https://github.com/tidymodels/embed/workflows/R-CMD-check/badge.svg)](https://github.com/tidymodels/embed/actions)
 <!-- badges: end -->
 
 ## Introduction
