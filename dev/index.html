@@ -36,8 +36,6 @@
 </script>
 </head>
 <body data-spy="scroll" data-target="#toc">
-    
-
     <div class="container template-home">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -98,12 +96,12 @@
 <div id="introduction" class="section level2">
 <h2 class="hasAnchor">
 <a href="#introduction" class="anchor"></a>Introduction</h2>
-<p><code>embed</code> is a package that contains extra steps for the <a href="https://recipes.tidymodels.org/" class="external-link"><code>recipes</code></a> package for embedding predictors into one or more numeric columns. All of the preprocessing methods are <em>supervised</em>.</p>
-<p>These steps are contained in a separate package because the package dependencies, <a href="https://CRAN.r-project.org/package=rstanarm" class="external-link"><code>rstanarm</code></a>, <a href="https://CRAN.r-project.org/package=lme4" class="external-link"><code>lme4</code></a>, and <a href="https://CRAN.r-project.org/package=keras" class="external-link"><code>keras</code></a>, are fairly heavy.</p>
+<p><code>embed</code> is a package that contains extra steps for the <a href="https://recipes.tidymodels.org/"><code>recipes</code></a> package for embedding predictors into one or more numeric columns. All of the preprocessing methods are <em>supervised</em>.</p>
+<p>These steps are contained in a separate package because the package dependencies, <a href="https://CRAN.r-project.org/package=rstanarm"><code>rstanarm</code></a>, <a href="https://CRAN.r-project.org/package=lme4"><code>lme4</code></a>, and <a href="https://CRAN.r-project.org/package=keras"><code>keras</code></a>, are fairly heavy.</p>
 <p>The steps for categorical predictors are:</p>
 <ul>
 <li><p><code><a href="reference/step_lencode_glm.html">step_lencode_glm()</a></code>, <code><a href="reference/step_lencode_bayes.html">step_lencode_bayes()</a></code>, and <code><a href="reference/step_lencode_mixed.html">step_lencode_mixed()</a></code> estimate the effect of each of the factor levels on the outcome and these estimates are used as the new encoding. The estimates are estimated by a generalized linear model. This step can be executed without pooling (via <code>glm</code>) or with partial pooling (<code>stan_glm</code> or <code>lmer</code>). Currently implemented for numeric and two-class outcomes.</p></li>
-<li><p><code><a href="reference/step_embed.html">step_embed()</a></code> uses <code><a href="https://rdrr.io/pkg/keras/man/layer_embedding.html" class="external-link">keras::layer_embedding</a></code> to translate the original <em>C</em> factor levels into a set of <em>D</em> new variables (&lt; <em>C</em>). The model fitting routine optimizes which factor levels are mapped to each of the new variables as well as the corresponding regression coefficients (i.e., neural network weights) that will be used as the new encodings.</p></li>
+<li><p><code><a href="reference/step_embed.html">step_embed()</a></code> uses <code><a href="https://rdrr.io/pkg/keras/man/layer_embedding.html">keras::layer_embedding</a></code> to translate the original <em>C</em> factor levels into a set of <em>D</em> new variables (&lt; <em>C</em>). The model fitting routine optimizes which factor levels are mapped to each of the new variables as well as the corresponding regression coefficients (i.e., neural network weights) that will be used as the new encodings.</p></li>
 <li><p><code><a href="reference/step_woe.html">step_woe()</a></code> creates new variables based on weight of evidence encodings.</p></li>
 <li><p><code><a href="reference/step_feature_hash.html">step_feature_hash()</a></code> can create indicator variables using feature hashing.</p></li>
 </ul>
@@ -114,13 +112,13 @@
 </ul>
 <p>Some references for these methods are:</p>
 <ul>
-<li>Francois C and Allaire JJ (2018) <a href="https://www.manning.com/books/deep-learning-with-r" class="external-link"><em>Deep Learning with R</em></a>, Manning</li>
-<li>Guo, C and Berkhahn F (2016) “<a href="https://arxiv.org/abs/1604.06737" class="external-link">Entity Embeddings of Categorical Variables</a>”</li>
-<li>Micci-Barreca D (2001) “<a href="https://scholar.google.com/scholar?hl=en&amp;as_sdt=0%2C5&amp;q=A+preprocessing+scheme+for+high-cardinality+categorical+attributes+in+classification+and+prediction+problems&amp;btnG=" class="external-link">A preprocessing scheme for high-cardinality categorical attributes in classification and prediction problems</a>,” ACM SIGKDD Explorations Newsletter, 3(1), 27-32.</li>
-<li>Zumel N and Mount J (2017) “<a href="https://arxiv.org/abs/1611.09477" class="external-link"><code>vtreat</code>: a <code>data.frame</code> Processor for Predictive Modeling</a>”</li>
-<li>McInnes L and Healy J (2018) <a href="https://arxiv.org/abs/1802.03426" class="external-link">UMAP: Uniform Manifold Approximation and Projection for Dimension Reduction</a>
+<li>Francois C and Allaire JJ (2018) <a href="https://www.manning.com/books/deep-learning-with-r"><em>Deep Learning with R</em></a>, Manning</li>
+<li>Guo, C and Berkhahn F (2016) “<a href="https://arxiv.org/abs/1604.06737">Entity Embeddings of Categorical Variables</a>”</li>
+<li>Micci-Barreca D (2001) “<a href="https://scholar.google.com/scholar?hl=en&amp;as_sdt=0%2C5&amp;q=A+preprocessing+scheme+for+high-cardinality+categorical+attributes+in+classification+and+prediction+problems&amp;btnG=">A preprocessing scheme for high-cardinality categorical attributes in classification and prediction problems</a>,” ACM SIGKDD Explorations Newsletter, 3(1), 27-32.</li>
+<li>Zumel N and Mount J (2017) “<a href="https://arxiv.org/abs/1611.09477"><code>vtreat</code>: a <code>data.frame</code> Processor for Predictive Modeling</a>”</li>
+<li>McInnes L and Healy J (2018) <a href="https://arxiv.org/abs/1802.03426">UMAP: Uniform Manifold Approximation and Projection for Dimension Reduction</a>
 </li>
-<li>Good, I. J. (1985), “<a href="https://scholar.google.com/scholar?hl=en&amp;as_sdt=0%2C5&amp;q=Weight+of+evidence%3A+A+brief+survey&amp;btnG=" class="external-link">Weight of evidence: A brief survey</a>”, Bayesian Statistics, 2, pp.249-270.</li>
+<li>Good, I. J. (1985), “<a href="https://scholar.google.com/scholar?hl=en&amp;as_sdt=0%2C5&amp;q=Weight+of+evidence%3A+A+brief+survey&amp;btnG=">Weight of evidence: A brief survey</a>”, Bayesian Statistics, 2, pp.249-270.</li>
 </ul>
 </div>
 <div id="getting-started" class="section level2">
@@ -133,24 +131,24 @@
 <a href="#installation" class="anchor"></a>Installation</h2>
 <p>To install the package:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"embed"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"embed"</span><span class="op">)</span></code></pre></div>
 <p>Note that, to use some steps, you will also have to load other packages such as <code>rstanarm</code> and <code>lme4</code>. For all of the steps to work, you may want to use:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"rpart"</span>, <span class="st">"xgboost"</span>, <span class="st">"rstanarm"</span>, <span class="st">"lme4"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"rpart"</span>, <span class="st">"xgboost"</span>, <span class="st">"rstanarm"</span>, <span class="st">"lme4"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p>To get a bug fix or to use a feature from the development version, you can install the development version of this package from GitHub.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># install.packages("remotes")</span>
-<span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"tidymodels/embed"</span><span class="op">)</span></code></pre></div>
+<span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"tidymodels/embed"</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="contributing" class="section level2">
 <h2 class="hasAnchor">
 <a href="#contributing" class="anchor"></a>Contributing</h2>
-<p>This project is released with a <a href="https://contributor-covenant.org/version/2/0/CODE_OF_CONDUCT.html" class="external-link">Contributor Code of Conduct</a>. By contributing to this project, you agree to abide by its terms.</p>
+<p>This project is released with a <a href="https://contributor-covenant.org/version/2/0/CODE_OF_CONDUCT.html">Contributor Code of Conduct</a>. By contributing to this project, you agree to abide by its terms.</p>
 <ul>
-<li><p>For questions and discussions about tidymodels packages, modeling, and machine learning, please <a href="https://community.rstudio.com/new-topic?category_id=15&amp;tags=tidymodels,question" class="external-link">post on RStudio Community</a>.</p></li>
-<li><p>If you think you have encountered a bug, please <a href="https://github.com/tidymodels/embed/issues" class="external-link">submit an issue</a>.</p></li>
-<li><p>Either way, learn how to create and share a <a href="https://reprex.tidyverse.org/articles/articles/learn-reprex.html" class="external-link">reprex</a> (a minimal, reproducible example), to clearly communicate about your code.</p></li>
-<li><p>Check out further details on <a href="https://www.tidymodels.org/contribute/" class="external-link">contributing guidelines for tidymodels packages</a> and <a href="https://www.tidymodels.org/help/" class="external-link">how to get help</a>.</p></li>
+<li><p>For questions and discussions about tidymodels packages, modeling, and machine learning, please <a href="https://community.rstudio.com/new-topic?category_id=15&amp;tags=tidymodels,question">post on RStudio Community</a>.</p></li>
+<li><p>If you think you have encountered a bug, please <a href="https://github.com/tidymodels/embed/issues">submit an issue</a>.</p></li>
+<li><p>Either way, learn how to create and share a <a href="https://reprex.tidyverse.org/articles/articles/learn-reprex.html">reprex</a> (a minimal, reproducible example), to clearly communicate about your code.</p></li>
+<li><p>Check out further details on <a href="https://www.tidymodels.org/contribute/">contributing guidelines for tidymodels packages</a> and <a href="https://www.tidymodels.org/help/">how to get help</a>.</p></li>
 </ul>
 </div>
 </div>
@@ -158,7 +156,7 @@
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <div class="links">
-<h2 data-toc-skip>Links</h2>
+<h2>Links</h2>
 <ul class="list-unstyled">
 <li>Download from CRAN at <br><a href="https://cloud.r-project.org/package=embed">https://​cloud.r-project.org/​package=embed</a>
 </li>
@@ -168,41 +166,39 @@
 </li>
 </ul>
 </div>
-
 <div class="license">
-<h2 data-toc-skip>License</h2>
+<h2>License</h2>
 <ul class="list-unstyled">
-<li><a href="https://www.r-project.org/Licenses/GPL-2">GPL-2</a></li>
+<li><a href="LICENSE.html">Full license</a></li>
+<li><small><a href="https://opensource.org/licenses/mit-license.php">MIT</a> + file <a href="LICENSE-text.html">LICENSE</a></small></li>
 </ul>
 </div>
-
 <div class="community">
-<h2 data-toc-skip>Community</h2>
+<h2>Community</h2>
 <ul class="list-unstyled">
 <li><a href="CONTRIBUTING.html">Contributing guide</a></li>
 <li><a href="CODE_OF_CONDUCT.html">Code of conduct</a></li>
 </ul>
 </div>
-
 <div class="developers">
-<h2 data-toc-skip>Developers</h2>
+<h2>Developers</h2>
 <ul class="list-unstyled">
 <li>Max Kuhn <br><small class="roles"> Author, maintainer </small>  </li>
-<li><a href="authors.html">More on authors...</a></li>
+<li><a href="authors.html">All authors...</a></li>
 </ul>
 </div>
 
-<div class="dev-status">
-<h2 data-toc-skip>Dev status</h2>
+  <div class="dev-status">
+<h2>Dev status</h2>
 <ul class="list-unstyled">
-<li><a href="https://github.com/tidymodels/embed/actions" class="external-link"><img src="https://github.com/tidymodels/embed/workflows/R-CMD-check/badge.svg" alt="R build status"></a></li>
-<li><a href="https://codecov.io/gh/tidymodels/embed?branch=master" class="external-link"><img src="https://codecov.io/gh/tidymodels/embed/branch/master/graph/badge.svg" alt="Codecov test coverage"></a></li>
-<li><a href="https://CRAN.r-project.org/package=embed" class="external-link"><img src="https://www.r-pkg.org/badges/version/embed" alt="CRAN_Status_Badge"></a></li>
-<li><a href="https://CRAN.r-project.org/package=embed" class="external-link"><img src="https://CRANlogs.r-pkg.org/badges/embed" alt="Downloads"></a></li>
+<li><a href="https://github.com/tidymodels/embed/actions"><img src="https://github.com/tidymodels/embed/workflows/R-CMD-check/badge.svg" alt="R build status"></a></li>
+<li><a href="https://codecov.io/gh/tidymodels/embed?branch=master"><img src="https://codecov.io/gh/tidymodels/embed/branch/master/graph/badge.svg" alt="Codecov test coverage"></a></li>
+<li><a href="https://CRAN.r-project.org/package=embed"><img src="https://www.r-pkg.org/badges/version/embed" alt="CRAN_Status_Badge"></a></li>
+<li><a href="https://CRAN.r-project.org/package=embed"><img src="https://CRANlogs.r-pkg.org/badges/embed" alt="Downloads"></a></li>
+<li><a href="https://github.com/tidymodels/embed/actions"><img src="https://github.com/tidymodels/embed/workflows/R-CMD-check/badge.svg" alt="R-CMD-check"></a></li>
 </ul>
 </div>
-
-  </div>
+</div>
 </div>
 
 
@@ -222,8 +218,6 @@
 
   
 
-
-  
 
   </body>
 </html>
