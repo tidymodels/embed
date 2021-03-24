@@ -1,5 +1,7 @@
 # embed (development version)
 
+* Re-licensed package from GPL-2 to MIT. See [consent from copyright holders here](https://github.com/tidymodels/embed/issues/78).
+
 # embed 0.1.4
 
  * Minor release with changes to test for cases when CRAN cannot get `xgboost` to work on their Solaris configuration. 

@@ -12,3 +12,4 @@ Applications/Tensorflow.Rmd
 ^\.github/workflows/R-CMD-check\.yaml$
 ^\.github$
 ^CODE_OF_CONDUCT\.md$
+^LICENSE\.md$
