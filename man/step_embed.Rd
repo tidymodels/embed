@@ -52,8 +52,7 @@ that the embedding variables created will be used as predictors in a model.}
 preprocessing have been estimated.}
 
 \item{outcome}{A call to \code{vars} to specify which variable is
-used as the outcome in the neural network. Only
-numeric and two-level factors are currently supported.}
+used as the outcome in the neural network.}
 
 \item{predictors}{An optional call to \code{vars} to specify any
 variables to be added as additional predictors in the neural
