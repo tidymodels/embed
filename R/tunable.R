@@ -87,3 +87,35 @@ tunable.step_discretize_cart <- function(x, ...) {
     component_id = x$id
   )
 }
+
+#' @rdname tunable.step
+#' @export
+tunable.step_pca_sparse <- function(x, ...) {
+  tibble::tibble(
+    name = c("num_comp", "predictor_prop"),
+    call_info = list(
+      list(pkg = "dials", fun = "num_comp", range = c(1L, 10L)),
+      list(pkg = "dials", fun = "predictor_prop")
+    ),
+    source = "recipe",
+    component = "step_pca_sparse",
+    component_id = x$id
+  )
+}
+
+#' @rdname tunable.step
+#' @export
+tunable.step_pca_sparse_bayes <- function(x, ...) {
+  tibble::tibble(
+    name = c("num_comp", "prior_slab_dispersion", "prior_mixture_threshold"),
+    call_info = list(
+      list(pkg = "dials", fun = "num_comp", range = c(1L, 10L)),
+      list(pkg = "dials", fun = "prior_slab_dispersion"),
+      list(pkg = "dials", fun = "prior_mixture_threshold")
+    ),
+    source = "recipe",
+    component = "step_pca_sparse_bayes",
+    component_id = x$id
+  )
+}
+
