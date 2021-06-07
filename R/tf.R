@@ -15,8 +15,7 @@
 #'  role should they be assigned?. By default, the function assumes
 #'  that the embedding variables created will be used as predictors in a model.
 #' @param outcome A call to `vars` to specify which variable is
-#'  used as the outcome in the neural network. Only
-#'  numeric and two-level factors are currently supported.
+#'  used as the outcome in the neural network.
 #' @param predictors An optional call to `vars` to specify any
 #'  variables to be added as additional predictors in the neural
 #'  network. These variables should be numeric and perhaps centered
