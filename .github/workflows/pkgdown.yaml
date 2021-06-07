@@ -12,7 +12,6 @@ jobs:
     env:
       RSPM: https://packagemanager.rstudio.com/cran/__linux__/bionic/latest
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
-      local_vignette_build: TRUE
 
     steps:
       - uses: actions/checkout@v2
@@ -31,7 +30,9 @@ jobs:
       - name: Restore R package cache
         uses: actions/cache@v2
         with:
-          path: ${{ env.R_LIBS_USER }}
+          path: |
+            ${{ env.R_LIBS_USER }}/*
+            !${{ env.R_LIBS_USER }}/pak
           key: ubuntu-18.04-${{ steps.install-r.outputs.installed-r-version }}-1-${{ hashFiles('.github/r-depends.rds') }}
           restore-keys: ubuntu-18.04-${{ steps.install-r.outputs.installed-r-version }}-1-
 
@@ -44,7 +45,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pak::local_install_dev_deps(upgrade = TRUE)
+          pak::local_install_dev_deps(upgrade = TRUE, dependencies = c("all", "Config/Needs/website"))
           pak::pkg_install("pkgdown")
           pak::pkg_install("tidyverse/tidytemplate")
           pak::pkg_install("tidymodels")
