@@ -92,6 +92,7 @@ jobs:
         run: |
           reticulate::conda_create('r-reticulate', packages = c('python==3.6.9'))
           tensorflow::install_tensorflow(version='1.14.0')
+        shell: Rscript {0}
           
       - name: Session info
         run: |
