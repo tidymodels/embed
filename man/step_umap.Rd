@@ -47,10 +47,13 @@ have been estimated.}
 \item{outcome}{A call to \code{vars} to specify which variable is
 used as the outcome in the encoding process (if any).}
 
-\item{neighbors}{An integer for the number of nearest neighbors used to construct
-the target simplicial set.}
+\item{neighbors}{An integer for the number of nearest neighbors used to
+construct the target simplicial set. If \code{neighbors} is greater than the
+number of data points, the smaller value is used.}
 
-\item{num_comp}{An integer for the number of UMAP components.}
+\item{num_comp}{An integer for the number of UMAP components. If \code{num_comp}
+is greater than the number of selected columns minus one, the smaller value
+is used.}
 
 \item{min_dist}{The effective minimum distance between embedded points.}
 
@@ -58,7 +61,7 @@ the target simplicial set.}
 process.}
 
 \item{epochs}{Number of iterations for the neighbor optimization. See
-\code{\link[uwot:umap]{uwot::umap()}} for mroe details.}
+\code{\link[uwot:umap]{uwot::umap()}} for more details.}
 
 \item{options}{A list of options to pass to \code{\link[uwot:umap]{uwot::umap()}}. The arguments
 \code{X}, \code{n_neighbors}, \code{n_components}, \code{min_dist}, \code{n_epochs}, \code{ret_model}, and

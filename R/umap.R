@@ -15,11 +15,14 @@
 #'  columns created by the original variables will be used as predictors in a
 #'  model.
 #' @param min_dist The effective minimum distance between embedded points.
-#' @param num_comp An integer for the number of UMAP components. 
-#' @param neighbors An integer for the number of nearest neighbors used to construct 
-#'  the target simplicial set.
+#' @param num_comp An integer for the number of UMAP components. If `num_comp`
+#' is greater than the number of selected columns minus one, the smaller value
+#' is used. 
+#' @param neighbors An integer for the number of nearest neighbors used to
+#'  construct the target simplicial set. If `neighbors` is greater than the
+#'  number of data points, the smaller value is used.
 #' @param epochs Number of iterations for the neighbor optimization. See 
-#'  [uwot::umap()] for mroe details.  
+#'  [uwot::umap()] for more details.  
 #' @param learn_rate Positive number of the learning rate for the optimization
 #'  process. 
 #' @param outcome A call to `vars` to specify which variable is
@@ -186,6 +189,8 @@ prep.step_umap <- function(x, training, info = NULL, ...) {
   } else {
     y_name <- NULL
   }
+  x$neighbors <- min(   nrow(training) - 1, x$neighbors)
+  x$num_comp  <- min(length(col_names) - 1, x$num_comp)
   withr::with_seed(
     x$seed[1],
     res <- rlang::eval_tidy(umap_fit_call(x, y = y_name))

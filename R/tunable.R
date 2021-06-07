@@ -29,8 +29,8 @@ tunable.step_umap <- function(x, ...) {
     name = c("num_comp", "neighbors", "min_dist", "learn_rate", "epochs"),
     call_info = list(
       list(pkg = "dials", fun = "num_comp", range = c(1, 10)),
-      list(pkg = "dials", fun = "neighbors", range = c(5, 25)),
-      list(pkg = "dials", fun = "min_dist", range = c(-4, 0)),
+      list(pkg = "dials", fun = "neighbors", range = c(5, 200)),
+      list(pkg = "dials", fun = "min_dist", range = c(-4, -0.69897)),
       list(pkg = "dials", fun = "learn_rate"),
       list(pkg = "dials", fun = "epochs", range = c(100, 700))
     ),
