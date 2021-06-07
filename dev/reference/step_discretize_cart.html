@@ -265,43 +265,38 @@ step will stop with a note about installing the package.</p>
   <span class='fu'>step_discretize_cart</span><span class='op'>(</span><span class='va'>tau</span>, <span class='va'>age</span>, <span class='va'>p_tau</span>, <span class='va'>Ab_42</span>, outcome <span class='op'>=</span> <span class='st'>"Class"</span>, id <span class='op'>=</span> <span class='st'>"cart splits"</span><span class='op'>)</span>
 
 <span class='va'>cart_rec</span> <span class='op'>&lt;-</span> <span class='fu'>prep</span><span class='op'>(</span><span class='va'>cart_rec</span>, training <span class='op'>=</span> <span class='va'>ad_data_tr</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='warning'>Warning: `step_discretize_cart()` failed to find any meaningful splits for predictor 'age', which will not be binned.</span></div><div class='input'>
+
 <span class='co'># The splits: </span>
 <span class='fu'><a href='https://generics.r-lib.org/reference/tidy.html'>tidy</a></span><span class='op'>(</span><span class='va'>cart_rec</span>, id <span class='op'>=</span> <span class='st'>"cart splits"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 16 x 3</span><span>
+</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 27 x 3</span>
 #&gt;    terms values id         
-#&gt;    </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>  </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>      
-#&gt; </span><span style='color: #BCBCBC;'> 1</span><span> tau     6.15 cart splits
-#&gt; </span><span style='color: #BCBCBC;'> 2</span><span> tau     6.25 cart splits
-#&gt; </span><span style='color: #BCBCBC;'> 3</span><span> tau     6.32 cart splits
-#&gt; </span><span style='color: #BCBCBC;'> 4</span><span> tau     6.42 cart splits
-#&gt; </span><span style='color: #BCBCBC;'> 5</span><span> tau     6.66 cart splits
-#&gt; </span><span style='color: #BCBCBC;'> 6</span><span> p_tau   3.90 cart splits
-#&gt; </span><span style='color: #BCBCBC;'> 7</span><span> p_tau   4.36 cart splits
-#&gt; </span><span style='color: #BCBCBC;'> 8</span><span> p_tau   4.40 cart splits
-#&gt; </span><span style='color: #BCBCBC;'> 9</span><span> p_tau   4.49 cart splits
-#&gt; </span><span style='color: #BCBCBC;'>10</span><span> p_tau   4.54 cart splits
-#&gt; </span><span style='color: #BCBCBC;'>11</span><span> p_tau   4.62 cart splits
-#&gt; </span><span style='color: #BCBCBC;'>12</span><span> Ab_42   9.98 cart splits
-#&gt; </span><span style='color: #BCBCBC;'>13</span><span> Ab_42  10.3  cart splits
-#&gt; </span><span style='color: #BCBCBC;'>14</span><span> Ab_42  11.1  cart splits
-#&gt; </span><span style='color: #BCBCBC;'>15</span><span> Ab_42  11.2  cart splits
-#&gt; </span><span style='color: #BCBCBC;'>16</span><span> Ab_42  11.3  cart splits</div><div class='input'>
+#&gt;    <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>  <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>      
+#&gt; <span style='color: #BCBCBC;'> 1</span> tau    5.89  cart splits
+#&gt; <span style='color: #BCBCBC;'> 2</span> tau    5.96  cart splits
+#&gt; <span style='color: #BCBCBC;'> 3</span> tau    6.03  cart splits
+#&gt; <span style='color: #BCBCBC;'> 4</span> tau    6.20  cart splits
+#&gt; <span style='color: #BCBCBC;'> 5</span> tau    6.31  cart splits
+#&gt; <span style='color: #BCBCBC;'> 6</span> tau    6.37  cart splits
+#&gt; <span style='color: #BCBCBC;'> 7</span> tau    6.54  cart splits
+#&gt; <span style='color: #BCBCBC;'> 8</span> tau    6.72  cart splits
+#&gt; <span style='color: #BCBCBC;'> 9</span> age    0.986 cart splits
+#&gt; <span style='color: #BCBCBC;'>10</span> age    0.986 cart splits
+#&gt; <span style='color: #949494;'># … with 17 more rows</span></div><div class='input'>
 <span class='fu'>bake</span><span class='op'>(</span><span class='va'>cart_rec</span>, <span class='va'>ad_data_te</span>, <span class='va'>tau</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; </span><span style='color: #949494;'># A tibble: 82 x 1</span><span>
+</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 84 x 1</span>
 #&gt;    tau          
-#&gt;    </span><span style='color: #949494;font-style: italic;'>&lt;fct&gt;</span><span>        
-#&gt; </span><span style='color: #BCBCBC;'> 1</span><span> [6.147,6.25) 
-#&gt; </span><span style='color: #BCBCBC;'> 2</span><span> [6.418,6.661)
-#&gt; </span><span style='color: #BCBCBC;'> 3</span><span> [-Inf,6.147) 
-#&gt; </span><span style='color: #BCBCBC;'> 4</span><span> [-Inf,6.147) 
-#&gt; </span><span style='color: #BCBCBC;'> 5</span><span> [6.147,6.25) 
-#&gt; </span><span style='color: #BCBCBC;'> 6</span><span> [-Inf,6.147) 
-#&gt; </span><span style='color: #BCBCBC;'> 7</span><span> [6.25,6.322) 
-#&gt; </span><span style='color: #BCBCBC;'> 8</span><span> [6.661, Inf] 
-#&gt; </span><span style='color: #BCBCBC;'> 9</span><span> [-Inf,6.147) 
-#&gt; </span><span style='color: #BCBCBC;'>10</span><span> [-Inf,6.147) 
-#&gt; </span><span style='color: #949494;'># … with 72 more rows</span><span></div></span></pre>
+#&gt;    <span style='color: #949494; font-style: italic;'>&lt;fct&gt;</span>        
+#&gt; <span style='color: #BCBCBC;'> 1</span> [6.203,6.31) 
+#&gt; <span style='color: #BCBCBC;'> 2</span> [-Inf,5.887) 
+#&gt; <span style='color: #BCBCBC;'> 3</span> [-Inf,5.887) 
+#&gt; <span style='color: #BCBCBC;'> 4</span> [5.887,5.96) 
+#&gt; <span style='color: #BCBCBC;'> 5</span> [-Inf,5.887) 
+#&gt; <span style='color: #BCBCBC;'> 6</span> [5.96,6.032) 
+#&gt; <span style='color: #BCBCBC;'> 7</span> [6.374,6.543)
+#&gt; <span style='color: #BCBCBC;'> 8</span> [6.543,6.721)
+#&gt; <span style='color: #BCBCBC;'> 9</span> [-Inf,5.887) 
+#&gt; <span style='color: #BCBCBC;'>10</span> [-Inf,5.887) 
+#&gt; <span style='color: #949494;'># … with 74 more rows</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
