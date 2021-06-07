@@ -18,6 +18,8 @@
 #'  possible components, a smaller value will be used.
 #' @param predictor_prop The maximum number of original predictors that can have
 #'  non-zero coefficients for each PCA component (via regularization).
+#' @param keep_original_cols A logical to keep the original variables in the
+#'  output. Defaults to `TRUE`.
 #' @param options A list of options to the default method for `irlba::ssvd()`.
 #' @param res The rotation matrix once this
 #'  preprocessing step has be trained by [prep.recipe()].
@@ -78,6 +80,7 @@ step_pca_sparse <- function(recipe,
                             options = list(),
                             res = NULL,
                             prefix = "PC",
+                            keep_original_cols = FALSE,
                             skip = FALSE,
                             id = rand_id("pca_sparse")) {
   
@@ -94,6 +97,7 @@ step_pca_sparse <- function(recipe,
       options = options,
       res = res,
       prefix = prefix,
+      keep_original_cols = keep_original_cols,
       skip = skip,
       id = id
     )
@@ -102,7 +106,7 @@ step_pca_sparse <- function(recipe,
 
 step_pca_sparse_new <-
   function(terms, role, trained, num_comp, predictor_prop, options, res,
-           prefix, skip, id) {
+           prefix, keep_original_cols, skip, id) {
     step(
       subclass = "pca_sparse",
       terms = terms,
@@ -113,6 +117,7 @@ step_pca_sparse_new <-
       options = options,
       res = res,
       prefix = prefix,
+      keep_original_cols = keep_original_cols,
       skip = skip,
       id = id
     )
@@ -160,6 +165,7 @@ prep.step_pca_sparse <- function(x, training, info = NULL, ...) {
     options = x$options,
     res = rotation,
     prefix = x$prefix,
+    keep_original_cols = get_keep_original_cols(x),
     skip = x$skip,
     id = x$id
   )
@@ -173,7 +179,11 @@ bake.step_pca_sparse <- function(object, new_data, ...) {
     comps <- x %*% object$res
     comps <- check_name(comps, new_data, object)
     new_data <- bind_cols(new_data, as_tibble(comps))
-    new_data <- new_data[, !(colnames(new_data) %in% pca_vars), drop = FALSE]
+    keep_original_cols <- get_keep_original_cols(object)
+    
+    if (!keep_original_cols) {
+      new_data <- new_data[, !(colnames(new_data) %in% pca_vars), drop = FALSE]
+    }
   }
   as_tibble(new_data)
 }
@@ -223,20 +233,18 @@ tidy.step_pca_sparse <- function(x, ...) {
 }
 
 
-
-#' @rdname tunable.step
+#' @rdname step_pca_sparse_bayes
+#' @param x A `step_pca_sparse_bayes` object.
 #' @export
-tunable.step_pca_sparse <- function(x, ...) {
-  tibble::tibble(
-    name = c("num_comp", "predictor_prop"),
-    call_info = list(
-      list(pkg = "dials", fun = "num_comp", range = c(1L, 4L)),
-      list(pkg = "dials", fun = "predictor_prop")
-    ),
-    source = "recipe",
-    component = "step_pca_sparse",
-    component_id = x$id
-  )
+tidy.step_pca_sparse_bayes <- function(x, ...) {
+  if (!is_trained(x)) {
+    term_names <- sel2char(x$terms)
+    res <- tibble(terms = term_names, value = na_dbl, component  = na_chr)
+  } else {
+    res <- pca_coefs(x)
+  }
+  res$id <- x$id
+  res
 }
 
 # ------------------------------------------------------------------------------

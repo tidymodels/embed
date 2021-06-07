@@ -23,6 +23,8 @@
 #' @param prior_mixture_threshold The parameter that trades-off the spike and
 #' slab components of the prior. Increasing this parameter increases the number
 #' if zero coefficients. 
+#' @param keep_original_cols A logical to keep the original variables in the
+#'  output. Defaults to `TRUE`.
 #' @param options A list of options to the default method for 
 #' `VBsparsePCA::VBsparsePCA()`.
 #' @param res The rotation matrix once this preprocessing step has be trained 
@@ -100,6 +102,7 @@ step_pca_sparse_bayes <- function(recipe,
                                   options = list(),
                                   res = NULL,
                                   prefix = "PC",
+                                  keep_original_cols = FALSE,
                                   skip = FALSE,
                                   id = rand_id("pca_sparse_bayes")) {
   
@@ -117,6 +120,7 @@ step_pca_sparse_bayes <- function(recipe,
       options = options,
       res = res,
       prefix = prefix,
+      keep_original_cols = keep_original_cols,
       skip = skip,
       id = id
     )
@@ -125,7 +129,8 @@ step_pca_sparse_bayes <- function(recipe,
 
 step_pca_sparse_bayes_new <-
   function(terms, role, trained, num_comp, prior_slab_dispersion, 
-           prior_mixture_threshold, options, res, prefix, skip, id) {
+           prior_mixture_threshold, options, res, prefix, 
+           keep_original_cols, skip, id) {
     step(
       subclass = "pca_sparse_bayes",
       terms = terms,
@@ -137,6 +142,7 @@ step_pca_sparse_bayes_new <-
       options = options,
       res = res,
       prefix = prefix,
+      keep_original_cols = keep_original_cols,
       skip = skip,
       id = id
     )
@@ -186,6 +192,7 @@ prep.step_pca_sparse_bayes <- function(x, training, info = NULL, ...) {
     options = x$options,
     res = rotation,
     prefix = x$prefix,
+    keep_original_cols = get_keep_original_cols(x),
     skip = x$skip,
     id = x$id
   )
@@ -199,7 +206,11 @@ bake.step_pca_sparse_bayes <- function(object, new_data, ...) {
     comps <- x %*% object$res
     comps <- check_name(comps, new_data, object)
     new_data <- bind_cols(new_data, as_tibble(comps))
-    new_data <- new_data[, !(colnames(new_data) %in% pca_vars), drop = FALSE]
+    keep_original_cols <- get_keep_original_cols(object)
+    
+    if (!keep_original_cols) {
+      new_data <- new_data[, !(colnames(new_data) %in% pca_vars), drop = FALSE]
+    }
   }
   as_tibble(new_data)
 }
@@ -229,22 +240,4 @@ tidy.step_pca_sparse_bayes <- function(x, ...) {
   }
   res$id <- x$id
   res
-}
-
-
-
-#' @rdname tunable.step
-#' @export
-tunable.step_pca_sparse_bayes <- function(x, ...) {
-  tibble::tibble(
-    name = c("num_comp", "prior_slab_dispersion", "prior_mixture_threshold"),
-    call_info = list(
-      list(pkg = "dials", fun = "num_comp", range = c(1L, 4L)),
-      list(pkg = "dials", fun = "prior_slab_dispersion"),
-      list(pkg = "dials", fun = "prior_mixture_threshold")
-    ),
-    source = "recipe",
-    component = "step_pca_sparse_bayes",
-    component_id = x$id
-  )
 }

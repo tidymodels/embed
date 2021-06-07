@@ -15,6 +15,7 @@ step_pca_sparse(
   options = list(),
   res = NULL,
   prefix = "PC",
+  keep_original_cols = FALSE,
   skip = FALSE,
   id = rand_id("pca_sparse")
 )
