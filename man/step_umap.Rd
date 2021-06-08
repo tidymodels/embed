@@ -18,7 +18,8 @@ step_umap(
   epochs = NULL,
   options = list(verbose = FALSE, n_threads = 1),
   seed = sample(10^5, 2),
-  retain = FALSE,
+  keep_original_cols = FALSE,
+  retain = !keep_original_cols,
   object = NULL,
   skip = FALSE,
   id = rand_id("umap")
@@ -73,8 +74,12 @@ numerical methods. The default pulls from the main session's stream of
 numbers and will give reproducible results if the seed is set prior to
 calling \code{\link[=prep.recipe]{prep.recipe()}} or \code{\link[=bake.recipe]{bake.recipe()}}.}
 
+\item{keep_original_cols}{A logical to keep the original variables in the
+output. Defaults to \code{TRUE}.}
+
 \item{retain}{A single logical for whether the original predictors should
-be kept (in addition to the new embedding variables).}
+be kept (in addition to the new embedding variables). **This is superseded
+by \code{keep_original_cols} (which is the standard argument name in recipes now).}
 
 \item{object}{An object that defines the encoding. This is
 \code{NULL} until the step is trained by \code{\link[recipes:prep]{recipes::prep.recipe()}}.}

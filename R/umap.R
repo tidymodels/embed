@@ -35,8 +35,11 @@
 #'  numerical methods. The default pulls from the main session's stream of
 #'  numbers and will give reproducible results if the seed is set prior to
 #'  calling [prep.recipe()] or [bake.recipe()].
+#' @param keep_original_cols A logical to keep the original variables in the
+#'  output. Defaults to `TRUE`.
 #' @param retain A single logical for whether the original predictors should
-#'  be kept (in addition to the new embedding variables).
+#'  be kept (in addition to the new embedding variables). **This is superseded
+#'  by `keep_original_cols` (which is the standard argument name in recipes now).
 #' @param object An object that defines the encoding. This is
 #'  `NULL` until the step is trained by [recipes::prep.recipe()].
 #' @param skip A logical. Should the step be skipped when the recipe is baked
@@ -104,7 +107,8 @@ step_umap <-
            epochs = NULL,
            options = list(verbose = FALSE, n_threads = 1),
            seed = sample(10^5, 2),
-           retain = FALSE,
+           keep_original_cols = FALSE,
+           retain = !keep_original_cols,
            object = NULL,
            skip = FALSE,
            id = rand_id("umap")) {
@@ -131,6 +135,7 @@ step_umap <-
         epochs = epochs,
         options = options,
         seed = seed,
+        keep_original_cols = keep_original_cols,
         retain = retain,
         object = object,
         skip = skip,
@@ -141,7 +146,8 @@ step_umap <-
 
 step_umap_new <-
   function(terms, role, trained, outcome, neighbors, num_comp, min_dist, 
-           learn_rate, epochs, options, seed, retain, object, skip, id) {
+           learn_rate, epochs, options, seed, keep_original_cols, 
+           retain, object, skip, id) {
     step(
       subclass = "umap",
       terms = terms,
@@ -155,6 +161,7 @@ step_umap_new <-
       epochs = epochs,
       options = options,
       seed = seed,
+      keep_original_cols = keep_original_cols,
       retain = retain,
       object = object,
       skip = skip,
@@ -209,6 +216,7 @@ prep.step_umap <- function(x, training, info = NULL, ...) {
     epochs = x$epochs,
     options = x$options,
     seed = x$seed,
+    keep_original_cols = get_keep_original_cols(x),
     retain = x$retain,
     object = res,
     skip = x$skip,
@@ -229,11 +237,13 @@ bake.step_umap <- function(object, new_data, ...) {
   
   colnames(res) <- names0(ncol(res), "umap_")
   res <- dplyr::as_tibble(res)
-  
   new_data <- bind_cols(new_data, res)
-  if (!object$retain) {
-    new_data[, object$object$xnames] <- NULL
+
+  keep_original_cols <- get_keep_original_cols(object)
+  if (!keep_original_cols) {
+    new_data <- new_data[, !(colnames(new_data) %in% object$object$xnames), drop = FALSE]
   }
+  
   new_data
 }
 
