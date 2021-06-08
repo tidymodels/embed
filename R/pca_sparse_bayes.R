@@ -26,7 +26,7 @@
 #' @param keep_original_cols A logical to keep the original variables in the
 #'  output. Defaults to `TRUE`.
 #' @param options A list of options to the default method for 
-#' `VBsparsePCA::VBsparsePCA()`.
+#' [VBsparsePCA::VBsparsePCA()].
 #' @param res The rotation matrix once this preprocessing step has be trained 
 #' by [prep.recipe()].
 #' @param prefix A character string that will be the prefix to the resulting
@@ -43,8 +43,8 @@
 #' component analysis. arXiv:2102.00305.
 #' @export
 #' @details
-#' The `VBsparsePCA` is required for this step. If it is not installed, the user
-#'  will be prompted to do so when the step is defined. 
+#' The `VBsparsePCA` package is required for this step. If it is not installed, 
+#' the user will be prompted to do so when the step is defined. 
 #' 
 #' A spike-and-slab prior is a mixture of two priors. One (the "spike") has
 #'  all of its mass at zero and represents a variable that has no contribution

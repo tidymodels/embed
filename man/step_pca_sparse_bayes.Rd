@@ -57,13 +57,16 @@ slab components of the prior. Increasing this parameter increases the number
 if zero coefficients.}
 
 \item{options}{A list of options to the default method for
-\code{VBsparsePCA::VBsparsePCA()}.}
+\code{\link[VBsparsePCA:VBsparsePCA]{VBsparsePCA::VBsparsePCA()}}.}
 
 \item{res}{The rotation matrix once this preprocessing step has be trained
 by \code{\link[=prep.recipe]{prep.recipe()}}.}
 
 \item{prefix}{A character string that will be the prefix to the resulting
 new variables. See notes below.}
+
+\item{keep_original_cols}{A logical to keep the original variables in the
+output. Defaults to \code{TRUE}.}
 
 \item{skip}{A logical. Should the step be skipped when the
 recipe is baked by \code{\link[recipes:bake]{recipes::bake.recipe()}}? While all operations are baked
@@ -86,8 +89,8 @@ numeric data into one or more principal components that can have some zero
 coefficients.
 }
 \details{
-The \code{VBsparsePCA} is required for this step. If it is not installed, the user
-will be prompted to do so when the step is defined.
+The \code{VBsparsePCA} package is required for this step. If it is not installed,
+the user will be prompted to do so when the step is defined.
 
 A spike-and-slab prior is a mixture of two priors. One (the "spike") has
 all of its mass at zero and represents a variable that has no contribution

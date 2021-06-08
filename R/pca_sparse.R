@@ -20,7 +20,7 @@
 #'  non-zero coefficients for each PCA component (via regularization).
 #' @param keep_original_cols A logical to keep the original variables in the
 #'  output. Defaults to `TRUE`.
-#' @param options A list of options to the default method for `irlba::ssvd()`.
+#' @param options A list of options to the default method for [irlba::ssvd()].
 #' @param res The rotation matrix once this
 #'  preprocessing step has be trained by [prep.recipe()].
 #' @param prefix A character string that will be the prefix to the resulting
@@ -36,7 +36,7 @@
 #' @export
 #' @details
 #' The `irlba` is required for this step. If it is not installed, the user
-#'  will be prompted to do so when the step is defined. The `ssvd()` function is
+#'  will be prompted to do so when the step is defined. The [irlba::ssvd()] function is
 #'  used to encourage sparsity; that documentation has details about this method. 
 #'  
 #' The argument `num_comp` controls the number of components that

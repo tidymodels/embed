@@ -45,13 +45,16 @@ possible components, a smaller value will be used.}
 \item{predictor_prop}{The maximum number of original predictors that can have
 non-zero coefficients for each PCA component (via regularization).}
 
-\item{options}{A list of options to the default method for \code{irlba::ssvd()}.}
+\item{options}{A list of options to the default method for \code{\link[irlba:ssvd]{irlba::ssvd()}}.}
 
 \item{res}{The rotation matrix once this
 preprocessing step has be trained by \code{\link[=prep.recipe]{prep.recipe()}}.}
 
 \item{prefix}{A character string that will be the prefix to the resulting
 new variables. See notes below.}
+
+\item{keep_original_cols}{A logical to keep the original variables in the
+output. Defaults to \code{TRUE}.}
 
 \item{skip}{A logical. Should the step be skipped when the
 recipe is baked by \code{\link[recipes:bake]{recipes::bake.recipe()}}? While all operations are baked
@@ -77,7 +80,7 @@ coefficients.
 }
 \details{
 The \code{irlba} is required for this step. If it is not installed, the user
-will be prompted to do so when the step is defined. The \code{ssvd()} function is
+will be prompted to do so when the step is defined. The \code{\link[irlba:ssvd]{irlba::ssvd()}} function is
 used to encourage sparsity; that documentation has details about this method.
 
 The argument \code{num_comp} controls the number of components that
