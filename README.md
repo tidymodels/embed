@@ -10,22 +10,21 @@ coverage](https://codecov.io/gh/tidymodels/embed/branch/master/graph/badge.svg)]
 [![CRAN\_Status\_Badge](https://www.r-pkg.org/badges/version/embed)](https://CRAN.r-project.org/package=embed)
 [![Downloads](https://CRANlogs.r-pkg.org/badges/embed)](https://CRAN.r-project.org/package=embed)
 ![](https://img.shields.io/badge/lifecycle-maturing-blue.svg)
-[![R-CMD-check](https://github.com/tidymodels/embed/workflows/R-CMD-check/badge.svg)](https://github.com/tidymodels/embed/actions)
 <!-- badges: end -->
 
 ## Introduction
 
-`embed` is a package that contains extra steps for the
+`embed` has extra steps for the
 [`recipes`](https://recipes.tidymodels.org/) package for embedding
 predictors into one or more numeric columns. Almost all of the
 preprocessing methods are *supervised*.
 
-These steps are contained in a separate package because the package
+These steps are available here in a separate package because the step
 dependencies, [`rstanarm`](https://CRAN.r-project.org/package=rstanarm),
 [`lme4`](https://CRAN.r-project.org/package=lme4), and
 [`keras`](https://CRAN.r-project.org/package=keras), are fairly heavy.
 
-The steps for categorical predictors are:
+Some steps handle categorical predictors:
 
 -   `step_lencode_glm()`, `step_lencode_bayes()`, and
     `step_lencode_mixed()` estimate the effect of each of the factor
@@ -92,9 +91,9 @@ To install the package:
 install.packages("embed")
 ```
 
-Note that, to use some steps, you will also have to load other packages
-such as `rstanarm` and `lme4`. For all of the steps to work, you may
-want to use:
+Note that to use some steps, you will also have to install other
+packages such as `rstanarm` and `lme4`. For all of the steps to work,
+you may want to use:
 
 ``` r
 install.packages(c("rpart", "xgboost", "rstanarm", "lme4"))
