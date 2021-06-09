@@ -119,7 +119,7 @@ step_umap <-
         "step_umap(retain = )",
         "step_umap(keep_original_cols = )"
       )
-      keep_original_cols <- !retain
+      keep_original_cols <- retain
     }
     
     recipes::recipes_pkg_check(required_pkgs.step_umap())
