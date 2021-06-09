@@ -36,7 +36,7 @@
 #'  numbers and will give reproducible results if the seed is set prior to
 #'  calling [prep.recipe()] or [bake.recipe()].
 #' @param keep_original_cols A logical to keep the original variables in the
-#'  output. Defaults to `TRUE`.
+#'  output. Defaults to `FALSE`.
 #' @param retain Use `keep_original_cols` instead to specify whether the
 #'  original predictors should be retained along with the new embedding 
 #'  variables.
@@ -285,4 +285,3 @@ tidy.step_umap <- function(x, ...) {
 required_pkgs.step_umap <- function(x, ...) {
   c("uwot", "embed")
 }
-
