@@ -19,7 +19,7 @@ step_umap(
   options = list(verbose = FALSE, n_threads = 1),
   seed = sample(10^5, 2),
   keep_original_cols = FALSE,
-  retain = !keep_original_cols,
+  retain = deprecated(),
   object = NULL,
   skip = FALSE,
   id = rand_id("umap")
@@ -77,9 +77,9 @@ calling \code{\link[=prep.recipe]{prep.recipe()}} or \code{\link[=bake.recipe]{b
 \item{keep_original_cols}{A logical to keep the original variables in the
 output. Defaults to \code{TRUE}.}
 
-\item{retain}{A single logical for whether the original predictors should
-be kept (in addition to the new embedding variables). **This is superseded
-by \code{keep_original_cols} (which is the standard argument name in recipes now).}
+\item{retain}{Use \code{keep_original_cols} instead to specify whether the
+original predictors should be retained along with the new embedding
+variables.}
 
 \item{object}{An object that defines the encoding. This is
 \code{NULL} until the step is trained by \code{\link[recipes:prep]{recipes::prep.recipe()}}.}

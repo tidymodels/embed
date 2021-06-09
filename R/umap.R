@@ -37,9 +37,9 @@
 #'  calling [prep.recipe()] or [bake.recipe()].
 #' @param keep_original_cols A logical to keep the original variables in the
 #'  output. Defaults to `TRUE`.
-#' @param retain A single logical for whether the original predictors should
-#'  be kept (in addition to the new embedding variables). **This is superseded
-#'  by `keep_original_cols` (which is the standard argument name in recipes now).
+#' @param retain Use `keep_original_cols` instead to specify whether the
+#'  original predictors should be retained along with the new embedding 
+#'  variables.
 #' @param object An object that defines the encoding. This is
 #'  `NULL` until the step is trained by [recipes::prep.recipe()].
 #' @param skip A logical. Should the step be skipped when the recipe is baked
@@ -108,10 +108,19 @@ step_umap <-
            options = list(verbose = FALSE, n_threads = 1),
            seed = sample(10^5, 2),
            keep_original_cols = FALSE,
-           retain = !keep_original_cols,
+           retain = deprecated(),
            object = NULL,
            skip = FALSE,
            id = rand_id("umap")) {
+    
+    if (lifecycle::is_present(retain)) {
+      lifecycle::deprecate_soft(
+        "0.1.5",
+        "step_umap(retain = )",
+        "step_umap(keep_original_cols = )"
+      )
+      keep_original_cols <- !retain
+    }
     
     recipes::recipes_pkg_check(required_pkgs.step_umap())
     if (is.numeric(seed) & !is.integer(seed)) {
