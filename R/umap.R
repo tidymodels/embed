@@ -15,11 +15,14 @@
 #'  columns created by the original variables will be used as predictors in a
 #'  model.
 #' @param min_dist The effective minimum distance between embedded points.
-#' @param num_comp An integer for the number of UMAP components. 
-#' @param neighbors An integer for the number of nearest neighbors used to construct 
-#'  the target simplicial set.
+#' @param num_comp An integer for the number of UMAP components. If `num_comp`
+#' is greater than the number of selected columns minus one, the smaller value
+#' is used. 
+#' @param neighbors An integer for the number of nearest neighbors used to
+#'  construct the target simplicial set. If `neighbors` is greater than the
+#'  number of data points, the smaller value is used.
 #' @param epochs Number of iterations for the neighbor optimization. See 
-#'  [uwot::umap()] for mroe details.  
+#'  [uwot::umap()] for more details.  
 #' @param learn_rate Positive number of the learning rate for the optimization
 #'  process. 
 #' @param outcome A call to `vars` to specify which variable is
@@ -32,8 +35,11 @@
 #'  numerical methods. The default pulls from the main session's stream of
 #'  numbers and will give reproducible results if the seed is set prior to
 #'  calling [prep.recipe()] or [bake.recipe()].
-#' @param retain A single logical for whether the original predictors should
-#'  be kept (in addition to the new embedding variables).
+#' @param keep_original_cols A logical to keep the original variables in the
+#'  output. Defaults to `FALSE`.
+#' @param retain Use `keep_original_cols` instead to specify whether the
+#'  original predictors should be retained along with the new embedding 
+#'  variables.
 #' @param object An object that defines the encoding. This is
 #'  `NULL` until the step is trained by [recipes::prep.recipe()].
 #' @param skip A logical. Should the step be skipped when the recipe is baked
@@ -101,10 +107,20 @@ step_umap <-
            epochs = NULL,
            options = list(verbose = FALSE, n_threads = 1),
            seed = sample(10^5, 2),
-           retain = FALSE,
+           keep_original_cols = FALSE,
+           retain = deprecated(),
            object = NULL,
            skip = FALSE,
            id = rand_id("umap")) {
+    
+    if (lifecycle::is_present(retain)) {
+      lifecycle::deprecate_soft(
+        "0.1.5",
+        "step_umap(retain = )",
+        "step_umap(keep_original_cols = )"
+      )
+      keep_original_cols <- retain
+    }
     
     recipes::recipes_pkg_check(required_pkgs.step_umap())
     if (is.numeric(seed) & !is.integer(seed)) {
@@ -128,6 +144,7 @@ step_umap <-
         epochs = epochs,
         options = options,
         seed = seed,
+        keep_original_cols = keep_original_cols,
         retain = retain,
         object = object,
         skip = skip,
@@ -138,7 +155,8 @@ step_umap <-
 
 step_umap_new <-
   function(terms, role, trained, outcome, neighbors, num_comp, min_dist, 
-           learn_rate, epochs, options, seed, retain, object, skip, id) {
+           learn_rate, epochs, options, seed, keep_original_cols, 
+           retain, object, skip, id) {
     step(
       subclass = "umap",
       terms = terms,
@@ -152,6 +170,7 @@ step_umap_new <-
       epochs = epochs,
       options = options,
       seed = seed,
+      keep_original_cols = keep_original_cols,
       retain = retain,
       object = object,
       skip = skip,
@@ -186,6 +205,8 @@ prep.step_umap <- function(x, training, info = NULL, ...) {
   } else {
     y_name <- NULL
   }
+  x$neighbors <- min(   nrow(training) - 1, x$neighbors)
+  x$num_comp  <- min(length(col_names) - 1, x$num_comp)
   withr::with_seed(
     x$seed[1],
     res <- rlang::eval_tidy(umap_fit_call(x, y = y_name))
@@ -204,6 +225,7 @@ prep.step_umap <- function(x, training, info = NULL, ...) {
     epochs = x$epochs,
     options = x$options,
     seed = x$seed,
+    keep_original_cols = get_keep_original_cols(x),
     retain = x$retain,
     object = res,
     skip = x$skip,
@@ -224,11 +246,13 @@ bake.step_umap <- function(object, new_data, ...) {
   
   colnames(res) <- names0(ncol(res), "umap_")
   res <- dplyr::as_tibble(res)
-  
   new_data <- bind_cols(new_data, res)
-  if (!object$retain) {
-    new_data[, object$object$xnames] <- NULL
+
+  keep_original_cols <- get_keep_original_cols(object)
+  if (!keep_original_cols) {
+    new_data <- new_data[, !(colnames(new_data) %in% object$object$xnames), drop = FALSE]
   }
+  
   new_data
 }
 
@@ -261,4 +285,3 @@ tidy.step_umap <- function(x, ...) {
 required_pkgs.step_umap <- function(x, ...) {
   c("uwot", "embed")
 }
-

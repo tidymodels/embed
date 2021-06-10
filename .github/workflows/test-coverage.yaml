@@ -32,7 +32,9 @@ jobs:
       - name: Restore R package cache
         uses: actions/cache@v2
         with:
-          path: ${{ env.R_LIBS_USER }}
+          path: |
+            ${{ env.R_LIBS_USER }}/*
+            !${{ env.R_LIBS_USER }}/pak
           key: ubuntu-18.04-${{ steps.install-r.outputs.installed-r-version }}-1-${{ hashFiles('.github/r-depends.rds') }}
           restore-keys: ubuntu-18.04-${{ steps.install-r.outputs.installed-r-version }}-1-
 
@@ -63,7 +65,7 @@ jobs:
           reticulate::conda_create('r-reticulate', packages = c('python==3.6.9'))
           tensorflow::install_tensorflow(version='1.14.0')
         shell: Rscript {0}
-
+        
       - name: Test coverage
         run: covr::codecov()
         shell: Rscript {0}

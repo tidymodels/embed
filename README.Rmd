@@ -19,16 +19,15 @@ knitr::opts_chunk$set(
 [![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/embed)](https://CRAN.r-project.org/package=embed)
 [![Downloads](https://CRANlogs.r-pkg.org/badges/embed)](https://CRAN.r-project.org/package=embed)
 ![](https://img.shields.io/badge/lifecycle-maturing-blue.svg)
-[![R-CMD-check](https://github.com/tidymodels/embed/workflows/R-CMD-check/badge.svg)](https://github.com/tidymodels/embed/actions)
 <!-- badges: end -->
 
 ## Introduction
 
-`embed` is a package that contains extra steps for the [`recipes`](https://recipes.tidymodels.org/) package for embedding predictors into one or more numeric columns. All of the preprocessing methods are _supervised_. 
+`embed` has extra steps for the [`recipes`](https://recipes.tidymodels.org/) package for embedding predictors into one or more numeric columns. Almost all of the preprocessing methods are _supervised_. 
 
-These steps are contained in a separate package because the package dependencies, [`rstanarm`](https://CRAN.r-project.org/package=rstanarm), [`lme4`](https://CRAN.r-project.org/package=lme4), and [`keras`](https://CRAN.r-project.org/package=keras),  are fairly heavy. 
+These steps are available here in a separate package because the step dependencies, [`rstanarm`](https://CRAN.r-project.org/package=rstanarm), [`lme4`](https://CRAN.r-project.org/package=lme4), and [`keras`](https://CRAN.r-project.org/package=keras),  are fairly heavy. 
 
-The steps for categorical predictors are:
+Some steps handle categorical predictors:
 
 * `step_lencode_glm()`, `step_lencode_bayes()`, and `step_lencode_mixed()` estimate the effect of each of the factor levels on the outcome and these estimates are used as the new encoding. The estimates are estimated by a generalized linear model. This step can be executed without pooling (via `glm`) or with partial pooling (`stan_glm` or `lmer`). Currently implemented for numeric and two-class outcomes. 
 
@@ -66,7 +65,7 @@ To install the package:
 install.packages("embed")
 ```
 
-Note that, to use some steps, you will also have to load other packages such as `rstanarm` and `lme4`. For all of the steps to work, you may want to use: 
+Note that to use some steps, you will also have to install other packages such as `rstanarm` and `lme4`. For all of the steps to work, you may want to use: 
 
 ```r
 install.packages(c("rpart", "xgboost", "rstanarm", "lme4"))

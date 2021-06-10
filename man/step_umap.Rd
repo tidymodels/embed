@@ -18,7 +18,8 @@ step_umap(
   epochs = NULL,
   options = list(verbose = FALSE, n_threads = 1),
   seed = sample(10^5, 2),
-  retain = FALSE,
+  keep_original_cols = FALSE,
+  retain = deprecated(),
   object = NULL,
   skip = FALSE,
   id = rand_id("umap")
@@ -47,10 +48,13 @@ have been estimated.}
 \item{outcome}{A call to \code{vars} to specify which variable is
 used as the outcome in the encoding process (if any).}
 
-\item{neighbors}{An integer for the number of nearest neighbors used to construct
-the target simplicial set.}
+\item{neighbors}{An integer for the number of nearest neighbors used to
+construct the target simplicial set. If \code{neighbors} is greater than the
+number of data points, the smaller value is used.}
 
-\item{num_comp}{An integer for the number of UMAP components.}
+\item{num_comp}{An integer for the number of UMAP components. If \code{num_comp}
+is greater than the number of selected columns minus one, the smaller value
+is used.}
 
 \item{min_dist}{The effective minimum distance between embedded points.}
 
@@ -58,7 +62,7 @@ the target simplicial set.}
 process.}
 
 \item{epochs}{Number of iterations for the neighbor optimization. See
-\code{\link[uwot:umap]{uwot::umap()}} for mroe details.}
+\code{\link[uwot:umap]{uwot::umap()}} for more details.}
 
 \item{options}{A list of options to pass to \code{\link[uwot:umap]{uwot::umap()}}. The arguments
 \code{X}, \code{n_neighbors}, \code{n_components}, \code{min_dist}, \code{n_epochs}, \code{ret_model}, and
@@ -70,8 +74,12 @@ numerical methods. The default pulls from the main session's stream of
 numbers and will give reproducible results if the seed is set prior to
 calling \code{\link[=prep.recipe]{prep.recipe()}} or \code{\link[=bake.recipe]{bake.recipe()}}.}
 
-\item{retain}{A single logical for whether the original predictors should
-be kept (in addition to the new embedding variables).}
+\item{keep_original_cols}{A logical to keep the original variables in the
+output. Defaults to \code{TRUE}.}
+
+\item{retain}{Use \code{keep_original_cols} instead to specify whether the
+original predictors should be retained along with the new embedding
+variables.}
 
 \item{object}{An object that defines the encoding. This is
 \code{NULL} until the step is trained by \code{\link[recipes:prep]{recipes::prep.recipe()}}.}
