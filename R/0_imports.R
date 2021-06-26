@@ -5,6 +5,7 @@
 #' @importFrom keras keras_model_sequential layer_embedding layer_flatten
 #' @importFrom keras layer_dense compile fit get_layer backend keras_model
 #' @importFrom keras layer_concatenate layer_input
+#' @importFrom lifecycle deprecated
 #' @importFrom stats as.formula glm binomial coef gaussian na.omit
 #' @importFrom stats setNames model.matrix complete.cases
 #' @importFrom purrr map

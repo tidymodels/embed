@@ -1,5 +1,9 @@
 # embed (development version)
 
+* Re-licensed package from GPL-2 to MIT. See [consent from copyright holders here](https://github.com/tidymodels/embed/issues/78).
+
+* The tunable parameter ranges for `step_umap()` were changed for `neighbors`, `num_comp`, and `min_dist` to prevent `uwot` segmentation faults. The step also check to see if the data dimensions are consistent with the argument values. 
+
 # embed 0.1.4
 
  * Minor release with changes to test for cases when CRAN cannot get `xgboost` to work on their Solaris configuration. 
