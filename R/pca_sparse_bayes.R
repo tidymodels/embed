@@ -174,7 +174,7 @@ prep.step_pca_sparse_bayes <- function(x, training, info = NULL, ...) {
         !!!x$options
       )
     res <- rlang::eval_tidy(cl)
-    rotation <- standardize_pca_coefs(svd(res$loadings)$u)
+    rotation <- svd(res$loadings)$u
   } else {
     # fake a rotation matrix so that the resolved names can be used for tidy()
     rotation <- matrix(NA, nrow = length(col_names), ncol = p)
