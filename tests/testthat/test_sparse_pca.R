@@ -33,7 +33,7 @@ test_that("step_pca_sparse_bayes", {
   vars <- rownames(embed_coef)
   dimnames(embed_coef) <- NULL
 
-  expect_equal(direct_coef, embed_coef, tolerance = 0.1)
+  expect_equal(abs(direct_coef), abs(embed_coef), tolerance = 0.1)
 
   tidy_coef <- tidy(rec, number = 1)
   # test a few values
