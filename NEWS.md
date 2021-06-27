@@ -4,6 +4,8 @@
 
 * The tunable parameter ranges for `step_umap()` were changed for `neighbors`, `num_comp`, and `min_dist` to prevent `uwot` segmentation faults. The step also check to see if the data dimensions are consistent with the argument values. 
 
+* Two new PCA steps were added, each using sparse techniques for estimation: `step_pca_sparse()` and `step_pca_sparse_bayes()`.  
+
 # embed 0.1.4
 
  * Minor release with changes to test for cases when CRAN cannot get `xgboost` to work on their Solaris configuration. 
