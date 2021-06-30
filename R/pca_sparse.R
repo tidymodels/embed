@@ -19,7 +19,7 @@
 #' @param predictor_prop The maximum number of original predictors that can have
 #'  non-zero coefficients for each PCA component (via regularization).
 #' @param keep_original_cols A logical to keep the original variables in the
-#'  output. Defaults to `TRUE`.
+#'  output. Defaults to `FALSE`.
 #' @param options A list of options to the default method for [irlba::ssvd()].
 #' @param res The rotation matrix once this
 #'  preprocessing step has be trained by [prep.recipe()].
@@ -246,4 +246,3 @@ tidy.step_pca_sparse_bayes <- function(x, ...) {
   res$id <- x$id
   res
 }
-
