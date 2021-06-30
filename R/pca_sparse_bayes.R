@@ -1,4 +1,4 @@
-#' Sparse, Bayesian PCA Signal Extraction
+#' Sparse Bayesian PCA Signal Extraction
 #'
 #' `step_pca_sparse_bayes()` creates a *specification* of a recipe step that will convert
 #'  numeric data into one or more principal components that can have some zero
@@ -10,7 +10,7 @@
 #'  used to compute the components. See [selections()] for more details. For the
 #'  `tidy` method, these are not currently used.
 #' @param role For model terms created by this step, what analysis role should
-#'  they be assigned?. By default, the function assumes that the new principal
+#'  they be assigned? By default, the function assumes that the new principal
 #'  component columns created by the original variables will be used as
 #'  predictors in a model.
 #' @param num_comp The number of PCA components to retain as new predictors.
@@ -20,14 +20,14 @@
 #' @param prior_slab_dispersion This value is proportional to the dispersion 
 #' (or scale) parameter for the slab portion of the prior. Smaller values result 
 #' in an increase in zero coefficients.
-#' @param prior_mixture_threshold The parameter that trades-off the spike and
-#' slab components of the prior. Increasing this parameter increases the number
-#' if zero coefficients. 
+#' @param prior_mixture_threshold The parameter that defines the trade-off 
+#' between the spike and slab components of the prior. Increasing this parameter
+#' increases the number of zero coefficients. 
 #' @param keep_original_cols A logical to keep the original variables in the
-#'  output. Defaults to `TRUE`.
+#'  output. Defaults to `FALSE`.
 #' @param options A list of options to the default method for 
 #' [VBsparsePCA::VBsparsePCA()].
-#' @param res The rotation matrix once this preprocessing step has be trained 
+#' @param res The rotation matrix once this preprocessing step has been trained 
 #' by [prep.recipe()].
 #' @param prefix A character string that will be the prefix to the resulting
 #'  new variables. See notes below.
@@ -55,12 +55,12 @@
 #'  mixture of these two priors is governed by a mixing parameter, which itself
 #'  has a prior distribution and a hyper-parameter prior.
 #'  
-#' PCA coefficients and their resulting scores are unique only up to sign. This 
+#' PCA coefficients and their resulting scores are unique only up to the sign. This 
 #' step will attempt to make the sign of the components more consistent from 
 #' run-to-run. However, the sparsity constraint may interfere with this goal.  
 #'   
 #' The argument `num_comp` controls the number of components that
-#'  will be retained (the original variables that are used to derive
+#'  will be retained (per default the original variables that are used to derive
 #'  the components are removed from the data). The new components
 #'  will have names that begin with `prefix` and a sequence of
 #'  numbers. The variable names are padded with zeros. For example,
@@ -68,6 +68,7 @@
 #'  If `num_comp = 101`, the names would be `PC001` -
 #'  `PC101`.
 #'
+#' @seealso [step_pca_sparse()]
 #' @examples
 #' library(recipes)
 #' library(ggplot2)

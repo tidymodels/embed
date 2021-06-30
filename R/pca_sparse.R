@@ -10,7 +10,7 @@
 #'  used to compute the components. See [selections()] for more details. For the
 #'  `tidy` method, these are not currently used.
 #' @param role For model terms created by this step, what analysis role should
-#'  they be assigned?. By default, the function assumes that the new principal
+#'  they be assigned? By default, the function assumes that the new principal
 #'  component columns created by the original variables will be used as
 #'  predictors in a model.
 #' @param num_comp The number of PCA components to retain as new predictors.
@@ -35,12 +35,12 @@
 #' @concept projection_methods
 #' @export
 #' @details
-#' The `irlba` is required for this step. If it is not installed, the user
+#' The `irlba` package is required for this step. If it is not installed, the user
 #'  will be prompted to do so when the step is defined. The [irlba::ssvd()] function is
 #'  used to encourage sparsity; that documentation has details about this method. 
 #'  
 #' The argument `num_comp` controls the number of components that
-#'  will be retained (the original variables that are used to derive
+#'  will be retained (per default the original variables that are used to derive
 #'  the components are removed from the data). The new components
 #'  will have names that begin with `prefix` and a sequence of
 #'  numbers. The variable names are padded with zeros. For example,
@@ -48,6 +48,7 @@
 #'  If `num_comp = 101`, the names would be `PC001` -
 #'  `PC101`.
 #'
+#' @seealso [step_pca_sparse_bayes()]
 #' @examples
 #' library(recipes)
 #' library(ggplot2)
