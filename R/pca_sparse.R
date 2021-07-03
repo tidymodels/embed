@@ -234,8 +234,8 @@ tidy.step_pca_sparse <- function(x, ...) {
 }
 
 
-#' @rdname step_pca_sparse_bayes
-#' @param x A `step_pca_sparse_bayes` object.
+#' @rdname step_pca_sparse
+#' @param x A `step_pca_sparse` object.
 #' @export
 tidy.step_pca_sparse <- function(x, ...) {
   if (!is_trained(x)) {

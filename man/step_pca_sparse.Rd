@@ -21,6 +21,8 @@ step_pca_sparse(
 )
 
 \method{tidy}{step_pca_sparse}(x, ...)
+
+\method{tidy}{step_pca_sparse}(x, ...)
 }
 \arguments{
 \item{recipe}{A recipe object. The step will be added to the
