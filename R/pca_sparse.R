@@ -237,7 +237,7 @@ tidy.step_pca_sparse <- function(x, ...) {
 #' @rdname step_pca_sparse_bayes
 #' @param x A `step_pca_sparse_bayes` object.
 #' @export
-tidy.step_pca_sparse_bayes <- function(x, ...) {
+tidy.step_pca_sparse <- function(x, ...) {
   if (!is_trained(x)) {
     term_names <- sel2char(x$terms)
     res <- tibble(terms = term_names, value = na_dbl, component  = na_chr)
