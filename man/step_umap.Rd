@@ -75,7 +75,7 @@ numbers and will give reproducible results if the seed is set prior to
 calling \code{\link[=prep.recipe]{prep.recipe()}} or \code{\link[=bake.recipe]{bake.recipe()}}.}
 
 \item{keep_original_cols}{A logical to keep the original variables in the
-output. Defaults to \code{TRUE}.}
+output. Defaults to \code{FALSE}.}
 
 \item{retain}{Use \code{keep_original_cols} instead to specify whether the
 original predictors should be retained along with the new embedding

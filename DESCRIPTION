@@ -45,6 +45,8 @@ Suggests:
     rpart,
     rstanarm,
     testthat,
+    VBsparsePCA,
+    irlba,    
     xgboost
 ByteCompile: true
 Encoding: UTF-8
