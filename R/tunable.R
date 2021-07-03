@@ -5,6 +5,7 @@
 #'  be used to generate new parameter values and other characteristics.
 #' @param x A recipe step object
 #' @param ... Not used.
+#' @name tunable_embed
 #' @return A tibble object.
 #' @keywords internal
 #' @export
@@ -23,7 +24,7 @@ tunable.step_embed <- function(x, ...) {
 
 
 #' @export
-#' @rdname tunable.step_embed
+#' @rdname tunable_embed
 tunable.step_umap <- function(x, ...) {
   tibble::tibble(
     name = c("num_comp", "neighbors", "min_dist", "learn_rate", "epochs"),
@@ -41,7 +42,7 @@ tunable.step_umap <- function(x, ...) {
 }
 
 #' @export
-#' @rdname tunable.step_embed
+#' @rdname tunable_embed
 tunable.step_woe <- function(x, ...) {
   tibble::tibble(
     name = "Laplace",
@@ -55,7 +56,7 @@ tunable.step_woe <- function(x, ...) {
 }
 
 #' @export
-#' @rdname tunable.step_embed
+#' @rdname tunable_embed
 tunable.step_discretize_xgb <- function(x, ...) {
   tibble::tibble(
     name = c("sample_val", "learn_rate", "num_breaks", "tree_depth", "min_n"),
@@ -73,7 +74,7 @@ tunable.step_discretize_xgb <- function(x, ...) {
 }
 
 #' @export
-#' @rdname tunable.step_embed
+#' @rdname tunable_embed
 tunable.step_discretize_cart <- function(x, ...) {
   tibble::tibble(
     name = c("cost_complexity", "tree_depth", "min_n"),
@@ -88,7 +89,7 @@ tunable.step_discretize_cart <- function(x, ...) {
   )
 }
 
-#' @rdname tunable.step
+#' @rdname tunable_embed
 #' @export
 tunable.step_pca_sparse <- function(x, ...) {
   tibble::tibble(
@@ -103,7 +104,7 @@ tunable.step_pca_sparse <- function(x, ...) {
   )
 }
 
-#' @rdname tunable.step
+#' @rdname tunable_embed
 #' @export
 tunable.step_pca_sparse_bayes <- function(x, ...) {
   tibble::tibble(

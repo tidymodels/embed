@@ -31,7 +31,7 @@ used to compute the components. See \code{\link[=selections]{selections()}} for 
 \code{tidy} method, these are not currently used.}
 
 \item{role}{For model terms created by this step, what analysis role should
-they be assigned?. By default, the function assumes that the new principal
+they be assigned? By default, the function assumes that the new principal
 component columns created by the original variables will be used as
 predictors in a model.}
 
@@ -54,7 +54,7 @@ preprocessing step has be trained by \code{\link[=prep.recipe]{prep.recipe()}}.}
 new variables. See notes below.}
 
 \item{keep_original_cols}{A logical to keep the original variables in the
-output. Defaults to \code{TRUE}.}
+output. Defaults to \code{FALSE}.}
 
 \item{skip}{A logical. Should the step be skipped when the
 recipe is baked by \code{\link[recipes:bake]{recipes::bake.recipe()}}? While all operations are baked
@@ -79,12 +79,12 @@ numeric data into one or more principal components that can have some zero
 coefficients.
 }
 \details{
-The \code{irlba} is required for this step. If it is not installed, the user
+The \code{irlba} package is required for this step. If it is not installed, the user
 will be prompted to do so when the step is defined. The \code{\link[irlba:ssvd]{irlba::ssvd()}} function is
 used to encourage sparsity; that documentation has details about this method.
 
 The argument \code{num_comp} controls the number of components that
-will be retained (the original variables that are used to derive
+will be retained (per default the original variables that are used to derive
 the components are removed from the data). The new components
 will have names that begin with \code{prefix} and a sequence of
 numbers. The variable names are padded with zeros. For example,
@@ -115,6 +115,9 @@ tidy(ad_rec, id = "sparse pca") \%>\%
   geom_tile() + 
   scale_fill_gradient2() + 
   theme(axis.text.y = element_blank())
+}
+\seealso{
+\code{\link[=step_pca_sparse_bayes]{step_pca_sparse_bayes()}}
 }
 \concept{pca}
 \concept{preprocessing}
