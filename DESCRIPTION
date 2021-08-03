@@ -19,7 +19,7 @@ URL: https://embed.tidymodels.org, https://github.com/tidymodels/embed
 BugReports: https://github.com/tidymodels/embed/issues
 Depends: 
     R (>= 3.1),
-    recipes (>= 0.1.15.9000)
+    recipes (>= 0.1.16.9000)
 Imports:
     dplyr,
     generics (>= 0.1.0),

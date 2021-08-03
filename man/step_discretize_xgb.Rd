@@ -117,7 +117,7 @@ credit_data_te <- testing(split)
 
 xgb_rec <- 
   recipe(Status ~ ., data = credit_data_tr) \%>\%
-  step_medianimpute(all_numeric()) \%>\%
+  step_impute_median(all_numeric()) \%>\%
   step_discretize_xgb(all_numeric(), outcome = "Status")
 
 if (rlang::is_installed("xgboost")) {
