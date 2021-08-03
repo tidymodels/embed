@@ -38,6 +38,7 @@ Imports:
 Suggests: 
     covr,
     ggplot2,
+    irlba,
     knitr,
     lme4,
     modeldata,
@@ -46,8 +47,9 @@ Suggests:
     rstanarm,
     testthat,
     VBsparsePCA,
-    irlba,    
     xgboost
+Remotes:
+    tidymodels/recipes
 ByteCompile: true
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
