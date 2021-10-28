@@ -1,14 +1,11 @@
 Package: embed
 Title: Extra Recipes for Encoding Predictors
 Version: 0.1.4.9000
-Authors@R: 
-    c(person(given = "Max",
-             family = "Kuhn",
-             role = c("aut", "cre"),
-             email = "max@rstudio.com",
-             comment = c(ORCID = "0000-0003-2402-136X")),
-      person(given = "RStudio",
-             role = "cph"))
+Authors@R: c(
+    person("Max", "Kuhn", , "max@rstudio.com", role = c("aut", "cre"),
+           comment = c(ORCID = "0000-0003-2402-136X")),
+    person("RStudio", role = "cph")
+  )
 Description: Predictors can be converted to one or more numeric
     representations using a variety of methods. Effect encodings using
     simple generalized linear models <arXiv:1611.09477> or nonlinear
@@ -38,6 +35,7 @@ Imports:
 Suggests: 
     covr,
     ggplot2,
+    irlba,
     knitr,
     lme4,
     modeldata,
@@ -46,9 +44,12 @@ Suggests:
     rstanarm,
     testthat,
     VBsparsePCA,
-    irlba,    
     xgboost
 ByteCompile: true
+Config/Needs/website: 
+    tidymodels,
+    ggiraph,
+    tidyverse/tidytemplate
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.1.9000
