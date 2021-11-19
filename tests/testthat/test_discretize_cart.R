@@ -199,5 +199,8 @@ test_that("printing", {
     step_discretize_cart(all_predictors(), outcome = "class")
   
   expect_output(print(cart_rec))
-  expect_output(prep(cart_rec, verbose = TRUE))
+  expect_output(
+    expect_warning(prep(cart_rec, verbose = TRUE),
+                   "failed to find any meaningful splits for predictor 'z'")
+  )
 })
