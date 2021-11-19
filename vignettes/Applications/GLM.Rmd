@@ -39,6 +39,7 @@ props <-
     n = length(Class)
   ) %>% 
   mutate(label = paste0(gsub("_", " ", location), " (n=", n, ")"))
+
 props %>%
   select(-label)
 
@@ -140,6 +141,7 @@ all_estimates <-
   dplyr::select(-terms, -id) %>%
   set_names(c("location", "glmer")) %>%
     inner_join(glm_estimates, by = "location")
+
 all_estimates %>% dplyr::select(location, log_odds, glm, glmer)
 ```
 
@@ -155,7 +157,8 @@ pooled_plot <-
   dplyr::filter(is.finite(log_odds)) %>%
   ggplot(aes(x = log_odds, y = glmer)) + 
   geom_abline(col = "red", alpha = .5) + 
-  geom_point_interactive(aes(size = sqrt(n), tooltip = label), alpha = .5) +
+  geom_point_interactive(aes(size = sqrt(n), tooltip = label), 
+                         alpha = .5) +
   xlim(rng) + ylim(rng) 
   
 # Convert the plot to a format that the html file can handle
@@ -188,6 +191,7 @@ all_estimates <-
   dplyr::select(-terms, -id) %>%
   set_names(c("location", "mixed")) %>%
     inner_join(all_estimates, by = "location")
+
 all_estimates %>% 
   dplyr::select(location, log_odds, glm, glmer, mixed)
 ```
@@ -200,7 +204,8 @@ mixed_plot <-
   dplyr::filter(is.finite(log_odds)) %>%
   ggplot(aes(x = log_odds, y = mixed)) + 
   geom_abline(col = "red", alpha = .5) + 
-  geom_point_interactive(aes(size = sqrt(n), tooltip = label), alpha = .5) + 
+  geom_point_interactive(aes(size = sqrt(n), tooltip = label), 
+                         alpha = .5) + 
   xlim(rng) + ylim(rng) 
 
 ggiraph(ggobj = mixed_plot)
