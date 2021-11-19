@@ -23,10 +23,7 @@ jobs:
       matrix:
         config:
           - {os: macOS-latest,   r: 'release'}
-
           - {os: windows-latest, r: 'release'}
-          # Use 3.6 to trigger usage of RTools35
-          - {os: windows-latest, r: '3.6'}
 
           # Use older ubuntu to maximise backward compatibility
           - {os: ubuntu-18.04,   r: 'devel', http-user-agent: 'release'}
@@ -54,8 +51,8 @@ jobs:
 
       - name: Install Miniconda
         run: |
-          Rscript -e "pak::pkg_install('rstudio/reticulate')"
-          Rscript -e "reticulate::install_miniconda()"
+          reticulate::install_miniconda()
+        shell: Rscript {0}
  
       - name: Find Miniconda on macOS
         if: runner.os == 'macOS'
@@ -64,7 +61,7 @@ jobs:
       - name: Install TensorFlow
         run: |
           reticulate::conda_create('r-reticulate', packages = c('python==3.6.9'))
-          tensorflow::install_tensorflow(version='1.14.0')
+          tensorflow::install_tensorflow(version='2.4.0')
         shell: Rscript {0}
           
       - uses: r-lib/actions/check-r-package@v1

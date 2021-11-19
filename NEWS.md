@@ -4,7 +4,9 @@
 
 * The tunable parameter ranges for `step_umap()` were changed for `neighbors`, `num_comp`, and `min_dist` to prevent `uwot` segmentation faults. The step also check to see if the data dimensions are consistent with the argument values. 
 
-* Two new PCA steps were added, each using sparse techniques for estimation: `step_pca_sparse()` and `step_pca_sparse_bayes()`.  
+* Two new PCA steps were added, each using sparse techniques for estimation: `step_pca_sparse()` and `step_pca_sparse_bayes()`.
+
+* Updated to use `recipes_eval_select()` from recipes 0.1.17 (#85).
 
 # embed 0.1.4
 

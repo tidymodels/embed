@@ -126,7 +126,7 @@ step_pca_sparse_new <-
 
 #' @export
 prep.step_pca_sparse <- function(x, training, info = NULL, ...) {
-  col_names <- recipes:::eval_select_recipes(x$terms, training, info)
+  col_names <- recipes::recipes_eval_select(x$terms, training, info)
   check_type(training[, col_names])
   
   p <- length(col_names)
