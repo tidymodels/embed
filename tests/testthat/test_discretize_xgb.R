@@ -122,7 +122,7 @@ test_that("run_xgboost for classification", {
     .num_class = NA
   )
   
-  expect_snapshot(print(xgboost))
+  expect_output(print(xgboost))
   expect_equal(length(xgboost$params), 8)
   expect_equal(xgboost$nfeatures, 13)
   expect_equal(xgboost$params$tree_method, "hist")
@@ -143,7 +143,7 @@ test_that("run_xgboost for multi-classification", {
     .objective = "multi:softprob"
   )
   
-  expect_snapshot(print(xgboost))
+  expect_output(print(xgboost))
   expect_equal(length(xgboost$params), 9)
   expect_equal(xgboost$nfeatures, 30)
   expect_equal(xgboost$params$tree_method, "hist")
@@ -164,7 +164,7 @@ test_that("run_xgboost for regression", {
     .num_class = NA
   )
   
-  expect_snapshot(print(xgboost))
+  expect_output(print(xgboost))
   expect_true(length(xgboost$params) > 1)
   expect_true(xgboost$nfeatures > 1)
   expect_equal(xgboost$params$tree_method, "hist")
