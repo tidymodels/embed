@@ -111,9 +111,9 @@ step_lencode_glm_new <-
 
 #' @export
 prep.step_lencode_glm <- function(x, training, info = NULL, ...) {
-  col_names <- terms_select(x$terms, info = info)
+  col_names <- recipes::recipes_eval_select(x$terms, training, info)
   check_type(training[, col_names], quant = FALSE)
-  y_name <- terms_select(x$outcome, info = info)
+  y_name <- recipes::recipes_eval_select(x$outcome, training, info)
   res <- map(training[, col_names], glm_coefs, y = training[, y_name])
   step_lencode_glm_new(
     terms = x$terms,

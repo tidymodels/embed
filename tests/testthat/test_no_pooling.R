@@ -1,5 +1,3 @@
-context("glm model, classification")
-
 source(testthat::test_path("make_example_data.R"))
 source(testthat::test_path("test_helpers.R"))
 
@@ -120,8 +118,6 @@ test_that("character encoded predictor", {
 
 # ------------------------------------------------------------------------------
 
-context("glm model, regression")
-
 test_that("factor encoded predictor", {
   skip_on_os("mac")
   
@@ -240,8 +236,6 @@ test_that("character encoded predictor", {
 
 # ------------------------------------------------------------------------------
 
-context("glm model, arguments")
-
 test_that("bad args", {
   three_class <- iris
   three_class$fac <- rep(letters[1:3], 50)
@@ -258,8 +252,8 @@ test_that("bad args", {
 test_that('printing', {
   print_test <- recipe(x2 ~ ., data = ex_dat_ch) %>%
     step_lencode_glm(x3, outcome = vars(x2)) 
-  expect_output(print(print_test))
-  expect_output(prep(print_test, training = ex_dat_ch, verbose = TRUE))
+  expect_snapshot(print(print_test))
+  expect_snapshot(prep(print_test, training = ex_dat_ch, verbose = TRUE))
 })
 
 

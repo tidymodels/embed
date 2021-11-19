@@ -1,5 +1,3 @@
-context("glmer model, classification")
-
 source(testthat::test_path("make_example_data.R"))
 source(testthat::test_path("test_helpers.R"))
 
@@ -137,8 +135,6 @@ test_that("character encoded predictor", {
 })
 
 # ------------------------------------------------------------------------------
-
-context("glmer model, regression")
 
 test_that("factor encoded predictor", {
   skip_on_cran()
