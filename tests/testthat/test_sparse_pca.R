@@ -1,5 +1,3 @@
-context("sparse PCA steps")
-
 source(testthat::test_path("test_helpers.R"))
 
 # ------------------------------------------------------------------------------
@@ -47,7 +45,7 @@ test_that("step_pca_sparse_bayes", {
     embed_coef[which(vars == "total_inten_ch_3"), 3]
   )
   
-  expect_output(print(rec), "Sparse PCA extraction")
+  expect_snapshot(print(rec))
   
 })
 
@@ -87,6 +85,6 @@ test_that("step_pca_sparse", {
     embed_coef[which(vars == "total_inten_ch_3"), 3]
   )
   
-  expect_output(print(rec), "Sparse PCA extraction")
+  expect_snapshot(print(rec))
   
 })
