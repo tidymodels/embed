@@ -366,8 +366,8 @@ add_woe <- function(.data, outcome, ..., dictionary = NULL, prefix = "woe") {
 
 #' @export
 prep.step_woe <- function(x, training, info = NULL, ...) {
-  outcome_name <- terms_select(x$outcome, info = info)
-  col_names <- terms_select(x$terms, info = info)
+  outcome_name <- recipes::recipes_eval_select(x$outcome, training, info)
+  col_names <- recipes::recipes_eval_select(x$terms, training, info)
   col_names <- col_names[!(col_names %in% outcome_name)]
   check_type(training[, col_names], quant = FALSE)
   check_type(training[, outcome_name], quant = FALSE)
