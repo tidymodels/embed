@@ -66,8 +66,8 @@ library(embed)
 tf_embed <- 
   recipe(Sale_Price ~ ., data = ames) %>%
   step_log(Sale_Price, base = 10) %>%
-  # Add some other predictors that can be used by the network. We
-  # preprocess them first
+  # Add some other predictors that can be used by the network 
+  # We preprocess them first
   step_YeoJohnson(Lot_Area, Full_Bath, Gr_Liv_Area)  %>%
   step_range(Lot_Area, Full_Bath, Gr_Liv_Area)  %>%
   step_embed(
@@ -97,7 +97,8 @@ hood_coef <-
   dplyr::select(-terms, -id)  %>%
   dplyr::rename(Neighborhood = level) %>%
   # Make names smaller
-  rename_at(vars(contains("emb")), funs(gsub("Neighborhood_", "", ., fixed = TRUE)))
+  rename_at(vars(contains("emb")), 
+            funs(gsub("Neighborhood_", "", ., fixed = TRUE)))
 hood_coef
 
 hood_coef <- 
@@ -114,8 +115,8 @@ tf_plot <-
   hood_coef %>%
   dplyr::select(-lon, -lat) %>%
   gather(variable, value, starts_with("embed")) %>%
-  # Clean up the embedding names and add a new variable as a hover-over/tool tip
-  # aesthetic for the plot
+  # Clean up the embedding names
+  # Add a new variable as a hover-over/tool tip
   mutate(
     label = paste0(gsub("_", " ", Neighborhood), " (n=", n, ")"),
     variable = gsub("_", " ", variable)
@@ -125,10 +126,8 @@ tf_plot <-
   facet_wrap(~variable, scales = "free_x") + 
   theme_bw() + 
   theme(legend.position = "top") + 
-  ylab("Mean (log scale)") + 
-  xlab("Embedding")
+  labs(y = "Mean (log scale)", x = "Embedding")
 
-# Convert the plot to a format that the html file can handle
 ggiraph(ggobj = tf_plot)
 ```
 
