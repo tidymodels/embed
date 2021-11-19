@@ -1,5 +1,3 @@
-context("umap")
-
 source(testthat::test_path("test_helpers.R"))
 
 # ------------------------------------------------------------------------------
@@ -38,7 +36,11 @@ test_that("factor outcome", {
       )
     )
   
-  expect_equal(direct_mod$embedding, supervised$steps[[1]]$object$embedding)
+  expect_equal(
+    direct_mod$embedding, 
+    supervised$steps[[1]]$object$embedding,
+    ignore_attr = TRUE
+  )
   
   # predictions:
   
@@ -50,7 +52,8 @@ test_that("factor outcome", {
   colnames(direct_pred) <- paste0("umap_", 1:2)
   expect_equal(
     direct_pred,
-    bake(supervised, new_data = te, composition = "matrix", all_predictors())
+    bake(supervised, new_data = te, composition = "matrix", all_predictors()),
+    ignore_attr = TRUE
   )
   
 })
@@ -81,7 +84,11 @@ test_that("numeric outcome", {
       )
     )
   
-  expect_equal(direct_mod$embedding, supervised$steps[[1]]$object$embedding)
+  expect_equal(
+    direct_mod$embedding, 
+    supervised$steps[[1]]$object$embedding,
+    ignore_attr = TRUE
+  )
   
   # predictions:
   
@@ -93,7 +100,8 @@ test_that("numeric outcome", {
   colnames(direct_pred) <- paste0("umap_", 1:2)
   expect_equal(
     direct_pred,
-    bake(supervised, new_data = te[, -5], composition = "matrix", all_predictors())
+    bake(supervised, new_data = te[, -5], composition = "matrix", all_predictors()),
+    ignore_attr = TRUE
   )
   
 })
@@ -122,7 +130,11 @@ test_that("no outcome", {
       )
     )
   
-  expect_equal(direct_mod$embedding, unsupervised$steps[[1]]$object$embedding)
+  expect_equal(
+    direct_mod$embedding, 
+    unsupervised$steps[[1]]$object$embedding,
+    ignore_attr = TRUE
+  )
   
   # predictions:
   
@@ -134,7 +146,8 @@ test_that("no outcome", {
   colnames(direct_pred) <- paste0("umap_", 1:3)
   expect_equal(
     direct_pred,
-    bake(unsupervised, new_data = te[, -5], composition = "matrix", all_predictors())
+    bake(unsupervised, new_data = te[, -5], composition = "matrix", all_predictors()),
+    ignore_attr = TRUE
   )
   
 })
