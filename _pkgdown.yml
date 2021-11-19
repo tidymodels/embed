@@ -1,30 +1,15 @@
 url: https://embed.tidymodels.org
 
 template:
+  bootstrap: 5
+  bslib:
+    danger: "#CA225E"
+    primary: "#CA225E"
   package: tidytemplate
-  params:
-    theme: tidymodels
-    part_of: <a href="https://tidymodels.org">tidymodels</a>
-    footer: embed is a part of the <strong>tidymodels</strong> ecosystem, a collection of modeling packages designed with common APIs and a shared philosophy.
 
 figures:
   fig.width: 8
   fig.height: 5.75
 
-
-# https://github.com/tidyverse/tidytemplate for css
-
 development:
   mode: auto
-
-navbar:
-  left:
-  - text: Generalized Linear Models
-    href: articles/Applications/GLM.html  
-  - text: Tensorflow
-    href: articles/Applications/Tensorflow.html  
-  - text: Reference
-    href: reference/index.html 
-  - text: News
-    href: news/index.html           
-

@@ -9,18 +9,7 @@ output:
 ---
 
 
-```{r check-for-build, echo = FALSE, results='asis'}
-eval_chunks <- as.logical(Sys.getenv("local_vignette_build", FALSE))
-# Change this via `Sys.setenv(local_vignette_build = "TRUE")`
-if (!eval_chunks) 
-  cat(
-    "(These documents take a long time to create, so only the code",
-    "is shown here. The full version is at",
-    "[https://tidymodels.github.io/embed](https://tidymodels.github.io/embed).)"
-    )
-```
-
-```{r setup, include = FALSE, eval = eval_chunks}
+```{r setup, include = FALSE}
 library(tidymodels)
 library(keras)
 library(embed)
@@ -39,7 +28,7 @@ To translate this model to a set of embeddings, the coefficients of the original
 
 As an example, we use the Ames housing data where the sale price of houses are being predicted. One predictor, neighborhood, has the most factor levels of the predictors. 
 
-```{r ames, eval = eval_chunks}
+```{r ames}
 library(tidymodels)
 data(ames)
 length(levels(ames$Neighborhood))
@@ -58,7 +47,7 @@ ames %>%
 
 Fo plotting later, we calculate the simple means per neighborhood:
 
-```{r ames-means, eval = eval_chunks}
+```{r ames-means}
 means <- 
   ames %>%
   group_by(Neighborhood) %>%
@@ -72,7 +61,7 @@ means <-
 
 We'll fit a model with 10 hidden units and 3 encoding columns:
 
-```{r ames-linear, eval = eval_chunks}
+```{r ames-linear}
 library(embed)
 tf_embed <- 
   recipe(Sale_Price ~ ., data = ames) %>%
@@ -102,7 +91,7 @@ tf_embed$steps[[4]]$history %>%
 
 The embeddings are obtained using the `tidy` method:
 
-```{r linear-coefs, warning = FALSE, eval = eval_chunks}
+```{r linear-coefs, warning = FALSE}
 hood_coef <- 
   tidy(tf_embed, number = 4) %>%
   dplyr::select(-terms, -id)  %>%
@@ -146,7 +135,7 @@ ggiraph(ggobj = tf_plot)
 
 However, this has induced some between-predictor correlations:
 
-```{r linear-cor, eval = eval_chunks}
+```{r linear-cor}
 hood_coef %>% 
   dplyr::select(contains("emb")) %>% 
   cor() %>%
