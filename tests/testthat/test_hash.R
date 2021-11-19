@@ -1,5 +1,3 @@
-context("tensorflow model, classification")
-
 source(testthat::test_path("make_example_data.R"))
 source(testthat::test_path("test_helpers.R"))
 

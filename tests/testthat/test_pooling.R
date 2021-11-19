@@ -1,5 +1,3 @@
-context("glmer model, classification")
-
 source(testthat::test_path("make_example_data.R"))
 source(testthat::test_path("test_helpers.R"))
 
@@ -11,12 +9,15 @@ test_that("factor encoded predictor", {
   skip_on_cran()
   skip_if_not_installed("rstanarm")
   expect_warning(
-    class_test <- recipe(x2 ~ ., data = ex_dat) %>%
-      step_lencode_bayes(x3, outcome = vars(x2), 
-                         verbose = FALSE,
-                         options = opts) %>%
-      prep(training = ex_dat, retain = TRUE),
-    "Bulk Effective Samples Size"
+    expect_warning(
+      class_test <- recipe(x2 ~ ., data = ex_dat) %>%
+        step_lencode_bayes(x3, outcome = vars(x2), 
+                           verbose = FALSE,
+                           options = opts) %>%
+        prep(training = ex_dat, retain = TRUE),
+      "Bulk Effective Samples Size"
+    ),
+    "Tail Effective Samples Size"
   )
   tr_values <- juice(class_test)$x3
   new_values <- bake(class_test, new_data = new_dat)
@@ -76,14 +77,17 @@ test_that("character encoded predictor", {
   skip_on_os("mac")
   skip_if_not_installed("rstanarm")
   expect_warning(
-    class_test <- recipe(x2 ~ ., data = ex_dat_ch) %>%
-      step_lencode_bayes(x3, outcome = vars(x2), 
-                         verbose = FALSE,
-                         options = opts, 
-                         id = "id") %>%
-      prep(training = ex_dat_ch, retain = TRUE,
-           options = opts),
-    "Bulk Effective Samples Size"
+    expect_warning(
+      class_test <- recipe(x2 ~ ., data = ex_dat_ch) %>%
+        step_lencode_bayes(x3, outcome = vars(x2), 
+                           verbose = FALSE,
+                           options = opts, 
+                           id = "id") %>%
+        prep(training = ex_dat_ch, retain = TRUE,
+             options = opts),
+      "Bulk Effective Samples Size"
+    ),
+    "Tail Effective Samples Size"
   )
   tr_values <- juice(class_test)$x3
   new_values <- bake(class_test, new_data = new_dat_ch)
@@ -138,8 +142,6 @@ test_that("character encoded predictor", {
 
 # ------------------------------------------------------------------------------
 
-context("glmer model, regression")
-
 test_that("factor encoded predictor", {
   skip_on_cran()
   skip_on_os("mac")
@@ -151,7 +153,7 @@ test_that("factor encoded predictor", {
                          verbose = FALSE,
                          options = opts) %>%
       prep(training = ex_dat, retain = TRUE)
-    })
+  })
   
   tr_values <- juice(reg_test)$x3
   new_values <- bake(reg_test, new_data = new_dat)

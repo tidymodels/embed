@@ -131,7 +131,7 @@ passover <- function(cmd) {
 
 #' @export
 prep.step_feature_hash <- function(x, training, info = NULL, ...) {
-  col_names <- terms_select(x$terms, info = info, empty_fun = passover)
+  col_names <- recipes::recipes_eval_select(x$terms, training, info)
   check_type(training[, col_names], quant = FALSE)
   
   step_feature_hash_new(

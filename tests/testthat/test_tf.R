@@ -1,5 +1,3 @@
-context("tensorflow model, classification")
-
 source(testthat::test_path("make_example_data.R"))
 source(testthat::test_path("test_helpers.R"))
 
@@ -33,30 +31,36 @@ test_that("factor encoded predictor", {
   
   expect_true(all(vapply(tr_values, is.numeric, logical(1))))
   
-  expect_equivalent(
+  expect_equal(
     new_values[1,] %>% setNames(letters[1:2]), 
-    key$x3[key$x3$..level == "..new", -3] %>% setNames(letters[1:2])
+    key$x3[key$x3$..level == "..new", -3] %>% setNames(letters[1:2]),
+    ignore_attr = TRUE
   )
-  expect_equivalent(
+  expect_equal(
     new_values[2,] %>% setNames(letters[1:2]), 
-    key$x3[key$x3$..level == levels(ex_dat$x3)[1], -3] %>% setNames(letters[1:2])
+    key$x3[key$x3$..level == levels(ex_dat$x3)[1], -3] %>% setNames(letters[1:2]),
+    ignore_attr = TRUE
   )  
-  expect_equivalent(
+  expect_equal(
     new_values[3,] %>% setNames(letters[1:2]), 
-    key$x3[key$x3$..level == "..new", -3] %>% setNames(letters[1:2])
+    key$x3[key$x3$..level == "..new", -3] %>% setNames(letters[1:2]),
+    ignore_attr = TRUE
   )  
   
-  expect_equivalent(
+  expect_equal(
     new_values_ch[1,] %>% setNames(letters[1:2]), 
-    key$x3[key$x3$..level == "..new", -3] %>% setNames(letters[1:2])
+    key$x3[key$x3$..level == "..new", -3] %>% setNames(letters[1:2]),
+    ignore_attr = TRUE
   )
-  expect_equivalent(
+  expect_equal(
     new_values_ch[2,] %>% setNames(letters[1:2]), 
-    key$x3[key$x3$..level == levels(ex_dat$x3)[1], -3] %>% setNames(letters[1:2])
+    key$x3[key$x3$..level == levels(ex_dat$x3)[1], -3] %>% setNames(letters[1:2]),
+    ignore_attr = TRUE
   )  
-  expect_equivalent(
+  expect_equal(
     new_values_ch[3,] %>% setNames(letters[1:2]), 
-    key$x3[key$x3$..level == "..new", -3] %>% setNames(letters[1:2])
+    key$x3[key$x3$..level == "..new", -3] %>% setNames(letters[1:2]),
+    ignore_attr = TRUE
   )  
   
   expect_equal(
@@ -96,30 +100,36 @@ test_that("character encoded predictor", {
   
   expect_true(all(vapply(tr_values, is.numeric, logical(1))))
   
-  expect_equivalent(
+  expect_equal(
     new_values[1,] %>% setNames(letters[1:2]), 
-    key$x3[key$x3$..level == "..new", -3] %>% setNames(letters[1:2])
+    key$x3[key$x3$..level == "..new", -3] %>% setNames(letters[1:2]),
+    ignore_attr = TRUE
   )
-  expect_equivalent(
+  expect_equal(
     new_values[2,] %>% setNames(letters[1:2]), 
-    key$x3[key$x3$..level == levels(ex_dat$x3)[1], -3] %>% setNames(letters[1:2])
+    key$x3[key$x3$..level == levels(ex_dat$x3)[1], -3] %>% setNames(letters[1:2]),
+    ignore_attr = TRUE
   )  
-  expect_equivalent(
+  expect_equal(
     new_values[3,] %>% setNames(letters[1:2]), 
-    key$x3[key$x3$..level == "..new", -3] %>% setNames(letters[1:2])
+    key$x3[key$x3$..level == "..new", -3] %>% setNames(letters[1:2]),
+    ignore_attr = TRUE
   )  
   
-  expect_equivalent(
+  expect_equal(
     new_values_fc[1,] %>% setNames(letters[1:2]), 
-    key$x3[key$x3$..level == "..new", -3] %>% setNames(letters[1:2])
+    key$x3[key$x3$..level == "..new", -3] %>% setNames(letters[1:2]),
+    ignore_attr = TRUE
   )
-  expect_equivalent(
+  expect_equal(
     new_values_fc[2,] %>% setNames(letters[1:2]), 
-    key$x3[key$x3$..level == levels(ex_dat$x3)[1], -3] %>% setNames(letters[1:2])
+    key$x3[key$x3$..level == levels(ex_dat$x3)[1], -3] %>% setNames(letters[1:2]),
+    ignore_attr = TRUE
   )  
-  expect_equivalent(
+  expect_equal(
     new_values_fc[3,] %>% setNames(letters[1:2]), 
-    key$x3[key$x3$..level == "..new", -3] %>% setNames(letters[1:2])
+    key$x3[key$x3$..level == "..new", -3] %>% setNames(letters[1:2]),
+    ignore_attr = TRUE
   )  
   
   expect_equal(
@@ -133,8 +143,6 @@ test_that("character encoded predictor", {
 })
 
 # ------------------------------------------------------------------------------
-
-context("tensorflow model, regression")
 
 test_that("factor encoded predictor", {
   skip_on_cran()
@@ -163,30 +171,36 @@ test_that("factor encoded predictor", {
   
   expect_true(all(vapply(tr_values, is.numeric, logical(1))))
   
-  expect_equivalent(
+  expect_equal(
     new_values[1,] %>% setNames(letters[1:2]), 
-    key$x3[key$x3$..level == "..new", -3] %>% setNames(letters[1:2])
+    key$x3[key$x3$..level == "..new", -3] %>% setNames(letters[1:2]),
+    ignore_attr = TRUE
   )
-  expect_equivalent(
+  expect_equal(
     new_values[2,] %>% setNames(letters[1:2]), 
-    key$x3[key$x3$..level == levels(ex_dat$x3)[1], -3] %>% setNames(letters[1:2])
+    key$x3[key$x3$..level == levels(ex_dat$x3)[1], -3] %>% setNames(letters[1:2]),
+    ignore_attr = TRUE
   )  
-  expect_equivalent(
+  expect_equal(
     new_values[3,] %>% setNames(letters[1:2]), 
-    key$x3[key$x3$..level == "..new", -3] %>% setNames(letters[1:2])
+    key$x3[key$x3$..level == "..new", -3] %>% setNames(letters[1:2]),
+    ignore_attr = TRUE
   )  
   
-  expect_equivalent(
+  expect_equal(
     new_values_ch[1,] %>% setNames(letters[1:2]), 
-    key$x3[key$x3$..level == "..new", -3] %>% setNames(letters[1:2])
+    key$x3[key$x3$..level == "..new", -3] %>% setNames(letters[1:2]),
+    ignore_attr = TRUE
   )
-  expect_equivalent(
+  expect_equal(
     new_values_ch[2,] %>% setNames(letters[1:2]), 
-    key$x3[key$x3$..level == levels(ex_dat$x3)[1], -3] %>% setNames(letters[1:2])
+    key$x3[key$x3$..level == levels(ex_dat$x3)[1], -3] %>% setNames(letters[1:2]),
+    ignore_attr = TRUE
   )  
-  expect_equivalent(
+  expect_equal(
     new_values_ch[3,] %>% setNames(letters[1:2]), 
-    key$x3[key$x3$..level == "..new", -3] %>% setNames(letters[1:2])
+    key$x3[key$x3$..level == "..new", -3] %>% setNames(letters[1:2]),
+    ignore_attr = TRUE
   )  
   
   expect_equal(
@@ -226,30 +240,36 @@ test_that("character encoded predictor", {
   
   expect_true(all(vapply(tr_values, is.numeric, logical(1))))
   
-  expect_equivalent(
+  expect_equal(
     new_values[1,] %>% setNames(letters[1:5]), 
-    key$x3[key$x3$..level == "..new", -6] %>% setNames(letters[1:5])
+    key$x3[key$x3$..level == "..new", -6] %>% setNames(letters[1:5]),
+    ignore_attr = TRUE
   )
-  expect_equivalent(
+  expect_equal(
     new_values[2,] %>% setNames(letters[1:5]), 
-    key$x3[key$x3$..level == levels(ex_dat$x3)[1], -6] %>% setNames(letters[1:5])
+    key$x3[key$x3$..level == levels(ex_dat$x3)[1], -6] %>% setNames(letters[1:5]),
+    ignore_attr = TRUE
   )  
-  expect_equivalent(
+  expect_equal(
     new_values[3,] %>% setNames(letters[1:5]), 
-    key$x3[key$x3$..level == "..new", -6] %>% setNames(letters[1:5])
+    key$x3[key$x3$..level == "..new", -6] %>% setNames(letters[1:5]),
+    ignore_attr = TRUE
   )  
   
-  expect_equivalent(
+  expect_equal(
     new_values_fc[1,] %>% setNames(letters[1:5]), 
-    key$x3[key$x3$..level == "..new", -6] %>% setNames(letters[1:5])
+    key$x3[key$x3$..level == "..new", -6] %>% setNames(letters[1:5]),
+    ignore_attr = TRUE
   )
-  expect_equivalent(
+  expect_equal(
     new_values_fc[2,] %>% setNames(letters[1:5]), 
-    key$x3[key$x3$..level == levels(ex_dat$x3)[1], -6] %>% setNames(letters[1:5])
+    key$x3[key$x3$..level == levels(ex_dat$x3)[1], -6] %>% setNames(letters[1:5]),
+    ignore_attr = TRUE
   )  
-  expect_equivalent(
+  expect_equal(
     new_values_fc[3,] %>% setNames(letters[1:5]), 
-    key$x3[key$x3$..level == "..new", -6] %>% setNames(letters[1:5])
+    key$x3[key$x3$..level == "..new", -6] %>% setNames(letters[1:5]),
+    ignore_attr = TRUE
   )  
   
   expect_equal(
@@ -264,8 +284,6 @@ test_that("character encoded predictor", {
 
 
 # ------------------------------------------------------------------------------
-
-context("tensorflow model, arguments")
 
 test_that("bad args", {
   skip_on_cran()
@@ -289,8 +307,8 @@ test_that('printing', {
   
   print_test <- recipe(x2 ~ ., data = ex_dat_ch) %>%
     step_embed(x3, outcome = vars(x2)) 
-  expect_output(print(print_test))
-  expect_output(prep(print_test, training = ex_dat_ch, verbose = TRUE))
+  expect_snapshot(print(print_test))
+  expect_snapshot(prep(print_test, training = ex_dat_ch, verbose = TRUE))
 })
 
 

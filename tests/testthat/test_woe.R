@@ -1,5 +1,3 @@
-context("woe")
-
 source(testthat::test_path("test_helpers.R"))
 
 # ------------------------------------------------------------------------------
@@ -143,7 +141,7 @@ test_that("step_woe", {
   woe_models <- prep(rec, training = credit_tr)
 
   woe_dict <- credit_tr %>% dictionary("Status", Job, Home)
-  expect_equal(woe_dict, woe_models$steps[[1]]$dictionary)
+  expect_equal(woe_dict, woe_models$steps[[1]]$dictionary, ignore_attr = TRUE)
 
   bake_woe_output <- bake(woe_models, new_data = credit_te)
   add_woe_output <-
@@ -160,7 +158,7 @@ test_that("step_woe", {
     dplyr::rename(terms = variable, value = predictor)
 
   #
-  expect_equal(tidy_output %>% dplyr::select(-id), woe_dict_output)
+  expect_equal(tidy_output %>% dplyr::select(-id), woe_dict_output, ignore_attr = TRUE)
 
   rec_all_nominal <- recipe(Status ~ ., data = credit_tr) %>%
     step_woe(all_nominal(), outcome = vars(Status))
@@ -191,8 +189,8 @@ test_that("step_woe", {
 test_that("printing", {
   woe_extract <- recipe(Status ~ ., data = credit_tr) %>%
     step_woe(Job, Home, outcome = vars(Status))
-  expect_output(print(woe_extract))
-  expect_output(prep(woe_extract, training = credit_tr, verbose = TRUE))
+  expect_snapshot(print(woe_extract))
+  expect_snapshot(prep(woe_extract, training = credit_tr, verbose = TRUE))
 })
 
 

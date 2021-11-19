@@ -199,9 +199,9 @@ umap_fit_call <- function(obj, y = NULL) {
 
 #' @export
 prep.step_umap <- function(x, training, info = NULL, ...) {
-  col_names <- terms_select(x$terms, info = info)
+  col_names <- recipes::recipes_eval_select(x$terms, training, info)
   if (length(x$outcome) > 0) {
-    y_name <- terms_select(x$outcome, info = info)
+    y_name <- recipes::recipes_eval_select(x$outcome, training, info)
   } else {
     y_name <- NULL
   }

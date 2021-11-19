@@ -347,10 +347,10 @@ xgb_binning <- function(df, outcome, predictor, sample_val, learn_rate, num_brea
 #' @export
 prep.step_discretize_xgb <- function(x, training, info = NULL, ...) {
   
-  col_names <- recipes::terms_select(terms = x$terms, info = info)
+  col_names <- recipes::recipes_eval_select(x$terms, training, info)
   check_type(training[, col_names])
   
-  y_name <- recipes::terms_select(terms = x$outcome, info = info)
+  y_name <- recipes::recipes_eval_select(x$outcome, training, info)
   
   col_names <- col_names[col_names != y_name]
   

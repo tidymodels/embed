@@ -5,8 +5,6 @@ library(rsample)
 skip_on_cran()
 skip_if_not_installed("xgboost")
 
-context("discretize_xgb")
-
 source(test_path("make_binned_data.R"))
 
 data("credit_data", package = "modeldata")
@@ -193,7 +191,7 @@ test_that("xgb_binning for classification", {
     min_n = 5
   )
   
-  expect_output(print(xgb_binning))
+  expect_snapshot(print(xgb_binning))
   expect_true(length(xgb_binning) > 1)
   expect_type(xgb_binning, "double")
   
@@ -234,7 +232,7 @@ test_that("xgb_binning for multi-classification", {
     min_n = 5
   )
   
-  expect_output(print(xgb_binning))
+  expect_snapshot(print(xgb_binning))
   expect_true(length(xgb_binning) > 1)
   expect_type(xgb_binning, "double")
   
@@ -275,7 +273,7 @@ test_that("xgb_binning for regression", {
     min_n = 5
   )
   
-  expect_output(print(xgb_binning))
+  expect_snapshot(print(xgb_binning))
   expect_true(length(xgb_binning) > 1)
   expect_type(xgb_binning, "double")
   
@@ -311,8 +309,8 @@ test_that("step_discretize_xgb for classification", {
   xgb_train_bins <- bake(xgb_rec, sim_tr_cls)
   xgb_test_bins <- bake(xgb_rec, sim_te_cls)
   
-  expect_output(print(xgb_train_bins))
-  expect_output(print(xgb_test_bins))
+  expect_snapshot(print(xgb_train_bins))
+  expect_snapshot(print(xgb_test_bins))
   expect_true(length(levels(xgb_train_bins$x)) > 1)
   expect_true(length(levels(xgb_train_bins$z)) > 1)
 
@@ -344,14 +342,6 @@ test_that("step_discretize_xgb for classification", {
     step_impute_median(all_numeric()) %>%
     step_discretize_xgb(all_numeric(), outcome = "Status")
   
-  expect_error(
-    prep(xgb_rec, 
-         credit_data_train %>% 
-           select(one_of(predictors_non_numeric)))
-    ,
-    "No variables or terms were selected."
-  )
-  
   # Information about insufficient datapoints for Time predictor
   msg <- capture_warning({
     set.seed(1)
@@ -382,8 +372,8 @@ test_that("step_discretize_xgb for multi-classification", {
   xgb_train_bins <- bake(xgb_rec, sim_tr_mcls)
   xgb_test_bins <- bake(xgb_rec, sim_te_mcls)
   
-  expect_output(print(xgb_train_bins))
-  expect_output(print(xgb_test_bins))
+  expect_snapshot(print(xgb_train_bins))
+  expect_snapshot(print(xgb_test_bins))
   expect_true(length(levels(xgb_train_bins$x)) > 0)
   expect_true(length(levels(xgb_train_bins$z)) > 0)
 
@@ -419,15 +409,7 @@ test_that("step_discretize_xgb for multi-classification", {
     recipe(BusinessTravel ~ .) %>%
     step_impute_median(all_numeric()) %>%
     step_discretize_xgb(all_numeric(), outcome = "BusinessTravel")
-  
-  expect_error(
-    prep(xgb_rec, 
-         attrition_data_train %>% 
-           select(one_of(predictors_non_numeric)))
-    ,
-    "No variables or terms were selected."
-  )
-  
+
 })
 
 test_that("step_discretize_xgb for regression", {
@@ -452,8 +434,8 @@ test_that("step_discretize_xgb for regression", {
   xgb_train_bins <- bake(xgb_rec, sim_tr_reg)
   xgb_test_bins <- bake(xgb_rec, sim_te_reg)
   
-  expect_output(print(xgb_train_bins))
-  expect_output(print(xgb_test_bins))
+  expect_snapshot(print(xgb_train_bins))
+  expect_snapshot(print(xgb_test_bins))
 
   expect_true(length(levels(xgb_train_bins$x)) > 0)
   expect_true(length(levels(xgb_train_bins$z)) > 0)
@@ -506,14 +488,7 @@ test_that("step_discretize_xgb for regression", {
     recipe(age ~ .) %>%
     step_medianimpute(all_numeric()) %>%
     step_discretize_xgb(all_predictors(), outcome = "age")
-  
-  expect_error(
-    prep(xgb_rec, 
-         okc_data_train %>% 
-           select(one_of(predictors_non_numeric))),
-    "All columns selected for the step should be numeric"
-  )
-  
+
 })
 
 test_that("printing", {
@@ -521,6 +496,7 @@ test_that("printing", {
     recipe(class ~ ., data = sim_tr_cls) %>%
     step_discretize_xgb(all_predictors(), outcome = "class")
   
-  expect_output(print(xgb_rec))
+  expect_snapshot(print(xgb_rec))
+  ## can't use snapshot because of xgboost output here:
   expect_output(prep(xgb_rec, verbose = TRUE))
 })

@@ -42,7 +42,7 @@ Suggests:
     rmarkdown,
     rpart,
     rstanarm,
-    testthat,
+    testthat (>= 3.0.0),
     VBsparsePCA,
     xgboost
 ByteCompile: true
@@ -52,4 +52,5 @@ Config/Needs/website:
     tidyverse/tidytemplate
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.1.1.9000
+RoxygenNote: 7.1.2
+Config/testthat/edition: 3

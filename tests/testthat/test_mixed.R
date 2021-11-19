@@ -1,5 +1,3 @@
-context("mixed model, classification")
-
 source(testthat::test_path("make_example_data.R"))
 source(testthat::test_path("test_helpers.R"))
 
@@ -121,8 +119,6 @@ test_that("character encoded predictor", {
 
 ###################################################################
 
-context("mixed model, regression")
-
 test_that("factor encoded predictor", {
   skip_if_not_installed("lme4")
   reg_test <- recipe(x1 ~ ., data = ex_dat) %>%
@@ -241,8 +237,6 @@ test_that("character encoded predictor", {
 
 ###################################################################
 
-context("mixed model, arguments")
-
 test_that("bad args", {
   skip_if_not_installed("lme4")
   three_class <- iris
@@ -261,8 +255,8 @@ test_that('printing', {
   skip_if_not_installed("lme4")
   print_test <- recipe(x2 ~ ., data = ex_dat_ch) %>%
     step_lencode_mixed(x3, outcome = vars(x2)) 
-  expect_output(print(print_test))
-  expect_output(prep(print_test, training = ex_dat_ch, verbose = TRUE))
+  expect_snapshot(print(print_test))
+  expect_snapshot(prep(print_test, training = ex_dat_ch, verbose = TRUE))
 })
 
 

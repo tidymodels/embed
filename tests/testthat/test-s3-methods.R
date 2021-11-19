@@ -1,7 +1,3 @@
-context("S3 methods")
-
-# ------------------------------------------------------------------------------
-
 r1 <- recipe(mpg ~ ., data = mtcars) 
 r2 <- r1 %>% step_lencode_bayes(wt, outcome = vars(mpg))
 r3 <- r1 %>% step_discretize_cart(disp, outcome = vars(mpg))
