@@ -51,8 +51,8 @@ jobs:
 
       - name: Install Miniconda
         run: |
-          Rscript -e "pak::pkg_install('rstudio/reticulate')"
-          Rscript -e "reticulate::install_miniconda()"
+          reticulate::install_miniconda()
+        shell: Rscript {0}
  
       - name: Find Miniconda on macOS
         if: runner.os == 'macOS'
