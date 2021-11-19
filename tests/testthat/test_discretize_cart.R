@@ -2,8 +2,6 @@ library(testthat)
 library(dplyr)
 library(rpart)
 
-context("discretize_cart")
-
 source(test_path("make_binned_data.R"))
 
 # ------------------------------------------------------------------------------
@@ -198,8 +196,8 @@ test_that("printing", {
     recipe(class ~ ., data = sim_tr_cls) %>%
     step_discretize_cart(all_predictors(), outcome = "class")
   
-  expect_output(print(cart_rec))
-  expect_output(
+  expect_snapshot(print(cart_rec))
+  expect_snapshot(
     expect_warning(prep(cart_rec, verbose = TRUE),
                    "failed to find any meaningful splits for predictor 'z'")
   )
