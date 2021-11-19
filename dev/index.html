@@ -4,104 +4,101 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Extra Recipes for Encoding Categorical Predictors • embed</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="description" content="Predictors can be converted to one or more numeric
+    representations using a variety of methods. Effect encodings using
+    simple generalized linear models &lt;arXiv:1611.09477&gt; or nonlinear
+    models &lt;arXiv:1604.06737&gt; can be used.  There are also functions for
+    dimension reduction and other approaches.">
+<title>Extra Recipes for Encoding Predictors • embed</title>
 <!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
 <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
 <link rel="apple-touch-icon" type="image/png" sizes="180x180" href="apple-touch-icon.png">
 <link rel="apple-touch-icon" type="image/png" sizes="120x120" href="apple-touch-icon-120x120.png">
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="apple-touch-icon-76x76.png">
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="apple-touch-icon-60x60.png">
-<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link href="tidyverse.css" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="bootstrap-toc.css">
-<script src="bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
+<script src="deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link href="deps/bootstrap-5.1.0/bootstrap.min.css" rel="stylesheet">
+<script src="deps/bootstrap-5.1.0/bootstrap.bundle.min.js"></script><link href="deps/_Source%20Sans%20Pro-0.4.0/font.css" rel="stylesheet">
+<link href="deps/_Source%20Code%20Pro-0.4.0/font.css" rel="stylesheet">
+<!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
-<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
-<script src="pkgdown.js"></script><link href="tidyverse-2.css" rel="stylesheet">
-<!--optional theme--><link href="tidymodels.css" rel="stylesheet">
-<meta property="og:title" content="Extra Recipes for Encoding Categorical Predictors">
-<meta property="og:description" content="Predictors can be converted to one or more numeric representations using simple generalized linear models &lt;arXiv:1611.09477&gt; or nonlinear models &lt;arXiv:1604.06737&gt;. Most encoding methods are supervised.">
+<!-- bootstrap-toc --><script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="Extra Recipes for Encoding Predictors">
+<meta property="og:description" content="Predictors can be converted to one or more numeric
+    representations using a variety of methods. Effect encodings using
+    simple generalized linear models &lt;arXiv:1611.09477&gt; or nonlinear
+    models &lt;arXiv:1604.06737&gt; can be used.  There are also functions for
+    dimension reduction and other approaches.">
 <meta property="og:image" content="https://embed.tidymodels.org/logo.png">
-<meta name="twitter:card" content="summary">
 <meta name="robots" content="noindex">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-<![endif]--><!-- Global site tag (gtag.js) - Google Analytics --><script async src="https://www.googletagmanager.com/gtag/js?id=UA-115082821-1"></script><script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'UA-115082821-1');
-</script>
+<![endif]-->
 </head>
-<body data-spy="scroll" data-target="#toc">
-    <div class="container template-home">
-      <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
-  <div class="container">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
+<body>
+    <a href="#container" class="visually-hidden-focusable">Skip to content</a>
+    
 
-      <div class="navbar-brand-container">
-        <a class="navbar-brand" href="index.html">embed</a>
-        <div class="info hidden-xs hidden-sm">
-          <span class="partof">part of <a href="https://tidymodels.org">tidymodels</a></span>
-          <span class="version version-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.1.4.9000</span>
-        </div>
-      </div>
-    </div>
-    <div id="navbar" class="navbar-collapse collapse">
-      <ul class="nav navbar-nav navbar-right">
-<li>
-  <a href="articles/Applications/GLM.html">Generalized Linear Models</a>
+    <nav class="navbar fixed-top navbar-light navbar-expand-lg bg-none"><div class="container">
+    <a class="navbar-brand me-2" href="index.html">embed</a>
+
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.1.4.9000</small>
+
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div id="navbar" class="collapse navbar-collapse ms-2">
+      <ul class="navbar-nav me-auto">
+<li class="nav-item">
+  <a class="nav-link" href="reference/index.html">Reference</a>
 </li>
-<li>
-  <a href="articles/Applications/Tensorflow.html">Tensorflow</a>
+<li class="nav-item dropdown">
+  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
+  <div class="dropdown-menu" aria-labelledby="dropdown-articles">
+    <a class="dropdown-item" href="articles/Applications/GLM.html">Using Generalized Linear Models</a>
+    <a class="dropdown-item" href="articles/Applications/Tensorflow.html">Entity Embeddings of Categorical Variables using TensorFlow</a>
+  </div>
 </li>
-<li>
-  <a href="reference/index.html">Reference</a>
+<li class="nav-item">
+  <a class="nav-link" href="news/index.html">Changelog</a>
 </li>
-<li>
-  <a href="news/index.html">News</a>
-</li>
-        <li>
-  <a href="https://github.com/tidymodels/embed/">
-    <span class="fab fa-github fa-lg"></span>
+      </ul>
+<form class="form-inline my-2 my-lg-0" role="search">
+        <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="search.json" id="search-input" placeholder="Search for" autocomplete="off">
+</form>
+
+      <ul class="navbar-nav">
+<li class="nav-item">
+  <a class="external-link nav-link" href="https://github.com/tidymodels/embed/" aria-label="github">
+    <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
 </li>
       </ul>
 </div>
-<!--/.nav-collapse -->
   </div>
-<!--/.container -->
-</div>
-<!--/.navbar -->
-
-      
-
-      </header><div class="row">
+</nav><div class="container template-home" id="container">
+<div class="row">
   <div class="contents col-md-9">
-<div id="embed-" class="section level1">
-<div class="page-header"><h1 class="hasAnchor">
-<a href="#embed-" class="anchor"></a>embed <a href="https://embed.tidymodels.org"><img src="reference/figures/logo.png" align="right" height="139"></a>
-</h1></div>
+<div class="section level1">
+<div class="page-header">
+<img src="logo.png" class="logo" alt=""><h1 id="embed-">embed 
+<a class="anchor" aria-label="anchor" href="#embed-"></a>
+</h1>
+</div>
 <!-- badges: start -->
 
-<div id="introduction" class="section level2">
-<h2 class="hasAnchor">
-<a href="#introduction" class="anchor"></a>Introduction</h2>
-<p><code>embed</code> is a package that contains extra steps for the <a href="https://recipes.tidymodels.org/"><code>recipes</code></a> package for embedding predictors into one or more numeric columns. All of the preprocessing methods are <em>supervised</em>.</p>
-<p>These steps are contained in a separate package because the package dependencies, <a href="https://CRAN.r-project.org/package=rstanarm"><code>rstanarm</code></a>, <a href="https://CRAN.r-project.org/package=lme4"><code>lme4</code></a>, and <a href="https://CRAN.r-project.org/package=keras"><code>keras</code></a>, are fairly heavy.</p>
-<p>The steps for categorical predictors are:</p>
+<div class="section level2">
+<h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
+</h2>
+<p><code>embed</code> has extra steps for the <a href="https://recipes.tidymodels.org/" class="external-link"><code>recipes</code></a> package for embedding predictors into one or more numeric columns. Almost all of the preprocessing methods are <em>supervised</em>.</p>
+<p>These steps are available here in a separate package because the step dependencies, <a href="https://CRAN.r-project.org/package=rstanarm" class="external-link"><code>rstanarm</code></a>, <a href="https://CRAN.r-project.org/package=lme4" class="external-link"><code>lme4</code></a>, and <a href="https://CRAN.r-project.org/package=keras" class="external-link"><code>keras</code></a>, are fairly heavy.</p>
+<p>Some steps handle categorical predictors:</p>
 <ul>
 <li><p><code><a href="reference/step_lencode_glm.html">step_lencode_glm()</a></code>, <code><a href="reference/step_lencode_bayes.html">step_lencode_bayes()</a></code>, and <code><a href="reference/step_lencode_mixed.html">step_lencode_mixed()</a></code> estimate the effect of each of the factor levels on the outcome and these estimates are used as the new encoding. The estimates are estimated by a generalized linear model. This step can be executed without pooling (via <code>glm</code>) or with partial pooling (<code>stan_glm</code> or <code>lmer</code>). Currently implemented for numeric and two-class outcomes.</p></li>
-<li><p><code><a href="reference/step_embed.html">step_embed()</a></code> uses <code><a href="https://rdrr.io/pkg/keras/man/layer_embedding.html">keras::layer_embedding</a></code> to translate the original <em>C</em> factor levels into a set of <em>D</em> new variables (&lt; <em>C</em>). The model fitting routine optimizes which factor levels are mapped to each of the new variables as well as the corresponding regression coefficients (i.e., neural network weights) that will be used as the new encodings.</p></li>
+<li><p><code><a href="reference/step_embed.html">step_embed()</a></code> uses <code><a href="https://keras.rstudio.com/reference/layer_embedding.html" class="external-link">keras::layer_embedding</a></code> to translate the original <em>C</em> factor levels into a set of <em>D</em> new variables (&lt; <em>C</em>). The model fitting routine optimizes which factor levels are mapped to each of the new variables as well as the corresponding regression coefficients (i.e., neural network weights) that will be used as the new encodings.</p></li>
 <li><p><code><a href="reference/step_woe.html">step_woe()</a></code> creates new variables based on weight of evidence encodings.</p></li>
 <li><p><code><a href="reference/step_feature_hash.html">step_feature_hash()</a></code> can create indicator variables using feature hashing.</p></li>
 </ul>
@@ -112,112 +109,109 @@
 </ul>
 <p>Some references for these methods are:</p>
 <ul>
-<li>Francois C and Allaire JJ (2018) <a href="https://www.manning.com/books/deep-learning-with-r"><em>Deep Learning with R</em></a>, Manning</li>
-<li>Guo, C and Berkhahn F (2016) “<a href="https://arxiv.org/abs/1604.06737">Entity Embeddings of Categorical Variables</a>”</li>
-<li>Micci-Barreca D (2001) “<a href="https://scholar.google.com/scholar?hl=en&amp;as_sdt=0%2C5&amp;q=A+preprocessing+scheme+for+high-cardinality+categorical+attributes+in+classification+and+prediction+problems&amp;btnG=">A preprocessing scheme for high-cardinality categorical attributes in classification and prediction problems</a>,” ACM SIGKDD Explorations Newsletter, 3(1), 27-32.</li>
-<li>Zumel N and Mount J (2017) “<a href="https://arxiv.org/abs/1611.09477"><code>vtreat</code>: a <code>data.frame</code> Processor for Predictive Modeling</a>”</li>
-<li>McInnes L and Healy J (2018) <a href="https://arxiv.org/abs/1802.03426">UMAP: Uniform Manifold Approximation and Projection for Dimension Reduction</a>
+<li>Francois C and Allaire JJ (2018) <a href="https://www.manning.com/books/deep-learning-with-r" class="external-link"><em>Deep Learning with R</em></a>, Manning</li>
+<li>Guo, C and Berkhahn F (2016) “<a href="https://arxiv.org/abs/1604.06737" class="external-link">Entity Embeddings of Categorical Variables</a>”</li>
+<li>Micci-Barreca D (2001) “<a href="https://scholar.google.com/scholar?hl=en&amp;as_sdt=0%2C5&amp;q=A+preprocessing+scheme+for+high-cardinality+categorical+attributes+in+classification+and+prediction+problems&amp;btnG=" class="external-link">A preprocessing scheme for high-cardinality categorical attributes in classification and prediction problems</a>,” ACM SIGKDD Explorations Newsletter, 3(1), 27-32.</li>
+<li>Zumel N and Mount J (2017) “<a href="https://arxiv.org/abs/1611.09477" class="external-link"><code>vtreat</code>: a <code>data.frame</code> Processor for Predictive Modeling</a>”</li>
+<li>McInnes L and Healy J (2018) <a href="https://arxiv.org/abs/1802.03426" class="external-link">UMAP: Uniform Manifold Approximation and Projection for Dimension Reduction</a>
 </li>
-<li>Good, I. J. (1985), “<a href="https://scholar.google.com/scholar?hl=en&amp;as_sdt=0%2C5&amp;q=Weight+of+evidence%3A+A+brief+survey&amp;btnG=">Weight of evidence: A brief survey</a>”, Bayesian Statistics, 2, pp.249-270.</li>
+<li>Good, I. J. (1985), “<a href="https://scholar.google.com/scholar?hl=en&amp;as_sdt=0%2C5&amp;q=Weight+of+evidence%3A+A+brief+survey&amp;btnG=" class="external-link">Weight of evidence: A brief survey</a>”, Bayesian Statistics, 2, pp.249-270.</li>
 </ul>
 </div>
-<div id="getting-started" class="section level2">
-<h2 class="hasAnchor">
-<a href="#getting-started" class="anchor"></a>Getting Started</h2>
+<div class="section level2">
+<h2 id="getting-started">Getting Started<a class="anchor" aria-label="anchor" href="#getting-started"></a>
+</h2>
 <p>There are two articles that walk through how to use these embedding steps, using <a href="https://embed.tidymodels.org/articles/Applications/GLM.html">generalized linear models</a> and <a href="https://embed.tidymodels.org/articles/Applications/Tensorflow.html">neural networks built via TensorFlow</a>.</p>
 </div>
-<div id="installation" class="section level2">
-<h2 class="hasAnchor">
-<a href="#installation" class="anchor"></a>Installation</h2>
+<div class="section level2">
+<h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
+</h2>
 <p>To install the package:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"embed"</span><span class="op">)</span></code></pre></div>
-<p>Note that, to use some steps, you will also have to load other packages such as <code>rstanarm</code> and <code>lme4</code>. For all of the steps to work, you may want to use:</p>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"embed"</span><span class="op">)</span></code></pre></div>
+<p>Note that to use some steps, you will also have to install other packages such as <code>rstanarm</code> and <code>lme4</code>. For all of the steps to work, you may want to use:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"rpart"</span>, <span class="st">"xgboost"</span>, <span class="st">"rstanarm"</span>, <span class="st">"lme4"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"rpart"</span>, <span class="st">"xgboost"</span>, <span class="st">"rstanarm"</span>, <span class="st">"lme4"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p>To get a bug fix or to use a feature from the development version, you can install the development version of this package from GitHub.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># install.packages("remotes")</span>
 <span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"tidymodels/embed"</span><span class="op">)</span></code></pre></div>
 </div>
-<div id="contributing" class="section level2">
-<h2 class="hasAnchor">
-<a href="#contributing" class="anchor"></a>Contributing</h2>
-<p>This project is released with a <a href="https://contributor-covenant.org/version/2/0/CODE_OF_CONDUCT.html">Contributor Code of Conduct</a>. By contributing to this project, you agree to abide by its terms.</p>
+<div class="section level2">
+<h2 id="contributing">Contributing<a class="anchor" aria-label="anchor" href="#contributing"></a>
+</h2>
+<p>This project is released with a <a href="https://contributor-covenant.org/version/2/0/CODE_OF_CONDUCT.html" class="external-link">Contributor Code of Conduct</a>. By contributing to this project, you agree to abide by its terms.</p>
 <ul>
-<li><p>For questions and discussions about tidymodels packages, modeling, and machine learning, please <a href="https://community.rstudio.com/new-topic?category_id=15&amp;tags=tidymodels,question">post on RStudio Community</a>.</p></li>
-<li><p>If you think you have encountered a bug, please <a href="https://github.com/tidymodels/embed/issues">submit an issue</a>.</p></li>
-<li><p>Either way, learn how to create and share a <a href="https://reprex.tidyverse.org/articles/articles/learn-reprex.html">reprex</a> (a minimal, reproducible example), to clearly communicate about your code.</p></li>
-<li><p>Check out further details on <a href="https://www.tidymodels.org/contribute/">contributing guidelines for tidymodels packages</a> and <a href="https://www.tidymodels.org/help/">how to get help</a>.</p></li>
+<li><p>For questions and discussions about tidymodels packages, modeling, and machine learning, please <a href="https://community.rstudio.com/new-topic?category_id=15&amp;tags=tidymodels,question" class="external-link">post on RStudio Community</a>.</p></li>
+<li><p>If you think you have encountered a bug, please <a href="https://github.com/tidymodels/embed/issues" class="external-link">submit an issue</a>.</p></li>
+<li><p>Either way, learn how to create and share a <a href="https://reprex.tidyverse.org/articles/articles/learn-reprex.html" class="external-link">reprex</a> (a minimal, reproducible example), to clearly communicate about your code.</p></li>
+<li><p>Check out further details on <a href="https://www.tidymodels.org/contribute/" class="external-link">contributing guidelines for tidymodels packages</a> and <a href="https://www.tidymodels.org/help/" class="external-link">how to get help</a>.</p></li>
 </ul>
 </div>
 </div>
   </div>
 
-  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
-    <div class="links">
-<h2>Links</h2>
+  <div class="col-md-3" id="pkgdown-sidebar">
+<div class="links">
+<h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
-<li>Download from CRAN at <br><a href="https://cloud.r-project.org/package=embed">https://​cloud.r-project.org/​package=embed</a>
-</li>
-<li>Browse source code at <br><a href="https://github.com/tidymodels/embed/">https://​github.com/​tidymodels/​embed/​</a>
-</li>
-<li>Report a bug at <br><a href="https://github.com/tidymodels/embed/issues">https://​github.com/​tidymodels/​embed/​issues</a>
-</li>
+<li><a href="https://cloud.r-project.org/package=embed" class="external-link">View on CRAN</a></li>
+<li><a href="https://github.com/tidymodels/embed/" class="external-link">Browse source code</a></li>
+<li><a href="https://github.com/tidymodels/embed/issues" class="external-link">Report a bug</a></li>
 </ul>
 </div>
+
 <div class="license">
-<h2>License</h2>
+<h2 data-toc-skip>License</h2>
 <ul class="list-unstyled">
 <li><a href="LICENSE.html">Full license</a></li>
-<li><small><a href="https://opensource.org/licenses/mit-license.php">MIT</a> + file <a href="LICENSE-text.html">LICENSE</a></small></li>
+<li><small><a href="https://opensource.org/licenses/mit-license.php" class="external-link">MIT</a> + file <a href="LICENSE-text.html">LICENSE</a></small></li>
 </ul>
 </div>
+
 <div class="community">
-<h2>Community</h2>
+<h2 data-toc-skip>Community</h2>
 <ul class="list-unstyled">
 <li><a href="CONTRIBUTING.html">Contributing guide</a></li>
 <li><a href="CODE_OF_CONDUCT.html">Code of conduct</a></li>
 </ul>
 </div>
+
 <div class="developers">
-<h2>Developers</h2>
+<h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
-<li>Max Kuhn <br><small class="roles"> Author, maintainer </small>  </li>
-<li><a href="authors.html">All authors...</a></li>
+<li>
+<a href="http://github.com/topepo" class="external-link">Max Kuhn</a> <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0003-2402-136X" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
+<li><a href="authors.html">More about authors...</a></li>
 </ul>
 </div>
 
-  <div class="dev-status">
-<h2>Dev status</h2>
+<div class="dev-status">
+<h2 data-toc-skip>Dev status</h2>
 <ul class="list-unstyled">
-<li><a href="https://github.com/tidymodels/embed/actions"><img src="https://github.com/tidymodels/embed/workflows/R-CMD-check/badge.svg" alt="R build status"></a></li>
-<li><a href="https://codecov.io/gh/tidymodels/embed?branch=master"><img src="https://codecov.io/gh/tidymodels/embed/branch/master/graph/badge.svg" alt="Codecov test coverage"></a></li>
-<li><a href="https://CRAN.r-project.org/package=embed"><img src="https://www.r-pkg.org/badges/version/embed" alt="CRAN_Status_Badge"></a></li>
-<li><a href="https://CRAN.r-project.org/package=embed"><img src="https://CRANlogs.r-pkg.org/badges/embed" alt="Downloads"></a></li>
-<li><a href="https://github.com/tidymodels/embed/actions"><img src="https://github.com/tidymodels/embed/workflows/R-CMD-check/badge.svg" alt="R-CMD-check"></a></li>
+<li><a href="https://github.com/tidymodels/embed/actions" class="external-link"><img src="https://github.com/tidymodels/embed/workflows/R-CMD-check/badge.svg" alt="R build status"></a></li>
+<li><a href="https://codecov.io/gh/tidymodels/embed?branch=main" class="external-link"><img src="https://codecov.io/gh/tidymodels/embed/branch/main/graph/badge.svg" alt="Codecov test coverage"></a></li>
+<li><a href="https://CRAN.r-project.org/package=embed" class="external-link"><img src="https://www.r-pkg.org/badges/version/embed" alt="CRAN_Status_Badge"></a></li>
+<li><a href="https://CRAN.r-project.org/package=embed" class="external-link"><img src="https://CRANlogs.r-pkg.org/badges/embed" alt="Downloads"></a></li>
 </ul>
 </div>
-</div>
-</div>
 
-
-      <footer><div class="tidyverse">
-  <p>embed is a part of the <strong>tidymodels</strong> ecosystem, a collection of modeling packages designed with common APIs and a shared philosophy.</p>
+  </div>
 </div>
 
-<div class="author">
-  <p>
-    Developed by Max Kuhn.
-    Site built by <a href="https://pkgdown.r-lib.org">pkgdown</a>.
-  </p>
+
+   </div>
+  <footer><div class="container">
+  <div class="pkgdown-footer-left">
+  <p></p>
+<p>Developed by <a href="http://github.com/topepo" class="external-link">Max Kuhn</a>.</p>
 </div>
 
-      </footer>
+<div class="pkgdown-footer-right">
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 1.9000.9000.9000.</p>
 </div>
 
-  
-
-
-  </body>
+  </div></footer>
+</body>
 </html>
