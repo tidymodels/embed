@@ -166,7 +166,7 @@ test_that('keep_original_cols works', {
   expect_equal(
     colnames(umap_pred),
     c("Sepal.Length", "Sepal.Width", "Petal.Length", "Petal.Width",
-      "umap_1", "umap_2", "umap_3")
+      "UMAP1", "UMAP2", "UMAP3")
   )
 })
 

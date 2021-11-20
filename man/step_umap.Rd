@@ -18,6 +18,7 @@ step_umap(
   epochs = NULL,
   options = list(verbose = FALSE, n_threads = 1),
   seed = sample(10^5, 2),
+  prefix = "UMAP",
   keep_original_cols = FALSE,
   retain = deprecated(),
   object = NULL,
@@ -70,6 +71,9 @@ numerical methods. The default pulls from the main session's stream of
 numbers and will give reproducible results if the seed is set prior to
 calling \code{\link[=prep.recipe]{prep.recipe()}} or \code{\link[=bake.recipe]{bake.recipe()}}.}
 
+\item{prefix}{A character string for the prefix of the resulting new
+variables. See notes below.}
+
 \item{keep_original_cols}{A logical to keep the original variables in the
 output. Defaults to \code{FALSE}.}
 
@@ -104,6 +108,11 @@ UMAP, short for Uniform Manifold Approximation and Projection, is a nonlinear
 dimension reduction technique that finds local, low-dimensional
 representations of the data. It can be run unsupervised or supervised with
 different types of outcome data (e.g. numeric, factor, etc).
+
+The new components will have names that begin with \code{prefix} and a sequence
+of numbers. The variable names are padded with zeros. For example, if
+\code{num_comp < 10}, their names will be \code{UMAP1} - \code{UMAP9}. If \code{num_comp = 101},
+the names would be \code{UMAP001} - \code{UMAP101}.
 }
 \examples{
 library(recipes)

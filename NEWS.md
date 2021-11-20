@@ -8,6 +8,8 @@
 
 * Updated to use `recipes_eval_select()` from recipes 0.1.17 (#85).
 
+* Added `prefix` argument to `step_umap()` to harmonize with other recipes steps.
+
 # embed 0.1.4
 
  * Minor release with changes to test for cases when CRAN cannot get `xgboost` to work on their Solaris configuration. 
