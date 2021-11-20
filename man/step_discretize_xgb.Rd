@@ -72,7 +72,7 @@ the computations for subsequent operations}
 }
 \value{
 An updated version of \code{recipe} with the new step added to the
-sequence of existing steps (if any).
+sequence of any existing operations.
 }
 \description{
 \code{step_discretize_xgb} creates a \emph{specification} of a recipe step that will
@@ -130,8 +130,3 @@ if (rlang::is_installed("xgboost")) {
 \code{\link[=step_discretize_cart]{step_discretize_cart()}}, \code{\link[recipes:recipe]{recipes::recipe()}},
 \code{\link[recipes:prep]{recipes::prep.recipe()}}, \code{\link[recipes:bake]{recipes::bake.recipe()}}
 }
-\concept{discretization}
-\concept{factors}
-\concept{preprocessing}
-\concept{xgboost}
-\keyword{binning}

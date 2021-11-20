@@ -11,8 +11,9 @@ step_feature_hash(
   role = "predictor",
   trained = FALSE,
   num_hash = 2^6,
-  preserve = FALSE,
+  preserve = deprecated(),
   columns = NULL,
+  keep_original_cols = FALSE,
   skip = FALSE,
   id = rand_id("feature_hash")
 )
@@ -20,36 +21,36 @@ step_feature_hash(
 \method{tidy}{step_feature_hash}(x, ...)
 }
 \arguments{
-\item{recipe}{A recipe object. The step will be added to the sequence of
-operations for this recipe.}
+\item{recipe}{A recipe object. The step will be added to the
+sequence of operations for this recipe.}
 
-\item{...}{One or more selector functions to choose which \emph{factor}
-variables will be used to create the dummy variables. See \code{\link[=selections]{selections()}} for
-more details. The selected variables must be factors. For the \code{tidy} method,
-these are not currently used.}
+\item{...}{One or more selector functions to choose variables
+for this step. See \code{\link[recipes:selections]{selections()}} for more details.}
 
 \item{role}{For model terms created by this step, what analysis role should
-they be assigned?. By default, the function assumes that the binary dummy
-variable columns created by the original variables will be used as
-predictors in a model.}
+they be assigned? By default, the new columns created by this step from
+the original variables will be used as \emph{predictors} in a model.}
 
-\item{trained}{A logical to indicate if the quantities for preprocessing
-have been estimated.}
+\item{trained}{A logical to indicate if the quantities for
+preprocessing have been estimated.}
 
 \item{num_hash}{The number of resulting dummy variable columns.}
 
-\item{preserve}{A single logical; should the selected column(s) be retained
-(in addition to the new dummy variables)?}
+\item{preserve}{Use \code{keep_original_cols} instead to specify whether the
+selected column(s) should be retained in addition to the new dummy variables.}
 
 \item{columns}{A character vector for the selected columns. This is \code{NULL}
 until the step is trained by \code{\link[recipes:prep]{recipes::prep.recipe()}}.}
 
-\item{skip}{A logical. Should the step be skipped when the recipe is baked
-by \code{\link[recipes:bake]{recipes::bake.recipe()}}? While all operations are baked when
-\code{\link[recipes:prep]{recipes::prep.recipe()}} is run, some operations may not be able to be
-conducted on new data (e.g. processing the outcome variable(s)). Care should
-be taken when using \code{skip = TRUE} as it may affect the computations for
-subsequent operations.}
+\item{keep_original_cols}{A logical to keep the original variables in the
+output. Defaults to \code{FALSE}.}
+
+\item{skip}{A logical. Should the step be skipped when the
+recipe is baked by \code{\link[recipes:bake]{bake.recipe()}}? While all operations are baked
+when \code{\link[recipes:prep]{prep.recipe()}} is run, some operations may not be able to be
+conducted on new data (e.g. processing the outcome variable(s)).
+Care should be taken when using \code{skip = TRUE} as it may affect
+the computations for subsequent operations.}
 
 \item{id}{A character string that is unique to this step to identify it.}
 
@@ -57,8 +58,7 @@ subsequent operations.}
 }
 \value{
 An updated version of \code{recipe} with the new step added to the
-sequence of existing steps (if any). For the \code{tidy} method, a tibble with
-columns \code{terms} (the selectors or original variables selected).
+sequence of any existing operations.
 }
 \description{
 \code{step_feature_hash} creates a a \emph{specification} of a recipe step that will
@@ -114,8 +114,3 @@ Approach for Predictive Models}. CRC/Chapman Hall
 \seealso{
 \code{\link[recipes:step_dummy]{recipes::step_dummy()}}, \code{\link[recipes:step_zv]{recipes::step_zv()}}
 }
-\concept{dummy_variables}
-\concept{model_specification}
-\concept{preprocessing}
-\concept{variable_encodings}
-\keyword{datagen}

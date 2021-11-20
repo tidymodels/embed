@@ -13,3 +13,4 @@ Applications/Tensorflow.Rmd
 ^\.github$
 ^CODE_OF_CONDUCT\.md$
 ^LICENSE\.md$
+^man-roxygen$
