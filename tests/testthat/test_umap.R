@@ -152,4 +152,40 @@ test_that("no outcome", {
   
 })
 
+test_that('keep_original_cols works', {
+  set.seed(11)
+  unsupervised <- 
+    recipe( ~ ., data = tr[, -5]) %>%
+    step_umap(all_predictors(), num_comp = 3, min_dist = .2, learn_rate = .2, 
+              keep_original_cols = TRUE) %>% 
+    prep(training = tr[, -5])
 
+  
+  umap_pred <- bake(unsupervised, new_data = te[, -5], composition = "matrix", all_predictors())
+  
+  expect_equal(
+    colnames(umap_pred),
+    c("Sepal.Length", "Sepal.Width", "Petal.Length", "Petal.Width",
+      "umap_1", "umap_2", "umap_3")
+  )
+})
+
+test_that('can prep recipes with no keep_original_cols', {
+  set.seed(11)
+  unsupervised <- 
+    recipe( ~ ., data = tr[, -5]) %>%
+    step_umap(all_predictors(), num_comp = 3, min_dist = .2, learn_rate = .2)
+  
+  unsupervised$steps[[1]]$keep_original_cols <- NULL
+  
+  expect_warning(
+    umap_pred <- prep(unsupervised, training = tr[, -5], verbose = FALSE),
+    "'keep_original_cols' was added to"
+  )
+  
+  expect_error(
+    umap_pred <- bake(umap_pred, new_data = te[, -5], all_predictors()),
+    NA
+  )
+  
+})

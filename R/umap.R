@@ -3,17 +3,7 @@
 #' `step_umap` creates a *specification* of a recipe step that
 #'  will project a set of features into a smaller space. 
 #'
-#' @param recipe A recipe object. The step will be added to the
-#'  sequence of operations for this recipe.
-#' @param ... One or more selector functions to choose variables. For
-#'  `step_umap`, this indicates the variables to be encoded into a numeric
-#'  format. Numeric and factor variables can be used. See
-#'  [recipes::selections()] for more details. For the `tidy` method, these are
-#'  not currently used.
-#' @param role For model terms created by this step, what analysis role should
-#'  they be assigned?. By default, the function assumes that the new embedding
-#'  columns created by the original variables will be used as predictors in a
-#'  model.
+#' @inheritParams recipes::step_pca
 #' @param min_dist The effective minimum distance between embedded points.
 #' @param num_comp An integer for the number of UMAP components. If `num_comp`
 #' is greater than the number of selected columns minus one, the smaller value
@@ -35,28 +25,12 @@
 #'  numerical methods. The default pulls from the main session's stream of
 #'  numbers and will give reproducible results if the seed is set prior to
 #'  calling [prep.recipe()] or [bake.recipe()].
-#' @param keep_original_cols A logical to keep the original variables in the
-#'  output. Defaults to `FALSE`.
 #' @param retain Use `keep_original_cols` instead to specify whether the
 #'  original predictors should be retained along with the new embedding 
 #'  variables.
 #' @param object An object that defines the encoding. This is
 #'  `NULL` until the step is trained by [recipes::prep.recipe()].
-#' @param skip A logical. Should the step be skipped when the recipe is baked
-#'  by [recipes::bake.recipe()]? While all operations are baked when
-#'  [recipes::prep.recipe()] is run, some operations may not be able to be
-#'  conducted on new data (e.g. processing the outcome variable(s)). Care should
-#'  be taken when using `skip = TRUE` as it may affect the computations for
-#'  subsequent operations
-#' @param trained A logical to indicate if the quantities for preprocessing
-#'  have been estimated.
-#' @param id A character string that is unique to this step to identify it.
-#' @return An updated version of `recipe` with the new step added to the
-#'  sequence of existing steps (if any). For the `tidy` method, a tibble with a
-#'  column called `terms` (the selectors or variables for embedding) is
-#'  returned.
-#' @keywords datagen 
-#' @concept preprocessing encoding
+#' @template step-return
 #' @export
 #' @details 
 #' UMAP, short for Uniform Manifold Approximation and Projection, is a nonlinear 
@@ -248,7 +222,7 @@ bake.step_umap <- function(object, new_data, ...) {
   res <- dplyr::as_tibble(res)
   new_data <- bind_cols(new_data, res)
 
-  keep_original_cols <- get_keep_original_cols(object)
+  keep_original_cols <- recipes::get_keep_original_cols(object)
   if (!keep_original_cols) {
     new_data <- new_data[, !(colnames(new_data) %in% object$object$xnames), drop = FALSE]
   }
