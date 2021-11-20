@@ -37,6 +37,11 @@
 #'  dimension reduction technique that finds local, low-dimensional 
 #'  representations of the data. It can be run unsupervised or supervised with 
 #'  different types of outcome data (e.g. numeric, factor, etc).
+#'  
+#' The new components will have names that begin with `prefix` and a sequence 
+#'  of numbers. The variable names are padded with zeros. For example, if 
+#'  `num_comp < 10`, their names will be `UMAP1` - `UMAP9`. If `num_comp = 101`, 
+#'  the names would be `UMAP001` - `UMAP101`.
 #' 
 #' @references 
 #' McInnes, L., & Healy, J. (2018). UMAP: Uniform Manifold Approximation and 
@@ -47,7 +52,6 @@
 #' 
 #' @examples
 #' library(recipes)
-#' library(dplyr)
 #' library(ggplot2)
 #' 
 #' split <- seq.int(1, 150, by = 9)
@@ -65,7 +69,7 @@
 #' theme_set(theme_bw())
 #' 
 #' bake(supervised, new_data = te, Species, starts_with("umap")) %>% 
-#'   ggplot(aes(x = umap_1, y = umap_2, col = Species)) + 
+#'   ggplot(aes(x = UMAP1, y = UMAP2, col = Species)) + 
 #'   geom_point(alpha = .5) 
 
 step_umap <-
@@ -81,6 +85,7 @@ step_umap <-
            epochs = NULL,
            options = list(verbose = FALSE, n_threads = 1),
            seed = sample(10^5, 2),
+           prefix = "UMAP",
            keep_original_cols = FALSE,
            retain = deprecated(),
            object = NULL,
@@ -118,6 +123,7 @@ step_umap <-
         epochs = epochs,
         options = options,
         seed = seed,
+        prefix = prefix,
         keep_original_cols = keep_original_cols,
         retain = retain,
         object = object,
@@ -129,7 +135,7 @@ step_umap <-
 
 step_umap_new <-
   function(terms, role, trained, outcome, neighbors, num_comp, min_dist, 
-           learn_rate, epochs, options, seed, keep_original_cols, 
+           learn_rate, epochs, options, seed, prefix, keep_original_cols, 
            retain, object, skip, id) {
     step(
       subclass = "umap",
@@ -144,6 +150,7 @@ step_umap_new <-
       epochs = epochs,
       options = options,
       seed = seed,
+      prefix = prefix,
       keep_original_cols = keep_original_cols,
       retain = retain,
       object = object,
@@ -199,6 +206,7 @@ prep.step_umap <- function(x, training, info = NULL, ...) {
     epochs = x$epochs,
     options = x$options,
     seed = x$seed,
+    prefix = x$prefix,
     keep_original_cols = get_keep_original_cols(x),
     retain = x$retain,
     object = res,
@@ -218,9 +226,10 @@ bake.step_umap <- function(object, new_data, ...) {
       )
   )
   
-  colnames(res) <- names0(ncol(res), "umap_")
-  res <- dplyr::as_tibble(res)
-  new_data <- bind_cols(new_data, res)
+  if (is.null(object$prefix)) object$prefix <- "UMAP"
+  
+  res <- recipes::check_name(res, new_data, object)
+  new_data <- bind_cols(new_data, as_tibble(res))
 
   keep_original_cols <- recipes::get_keep_original_cols(object)
   if (!keep_original_cols) {
