@@ -52,7 +52,6 @@
 #' 
 #' @examples
 #' library(recipes)
-#' library(dplyr)
 #' library(ggplot2)
 #' 
 #' split <- seq.int(1, 150, by = 9)
@@ -70,7 +69,7 @@
 #' theme_set(theme_bw())
 #' 
 #' bake(supervised, new_data = te, Species, starts_with("umap")) %>% 
-#'   ggplot(aes(x = umap_1, y = umap_2, col = Species)) + 
+#'   ggplot(aes(x = UMAP1, y = UMAP2, col = Species)) + 
 #'   geom_point(alpha = .5) 
 
 step_umap <-

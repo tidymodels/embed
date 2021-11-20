@@ -8,7 +8,7 @@
 
 * Updated to use `recipes_eval_select()` from recipes 0.1.17 (#85).
 
-* Added `prefix` argument to `step_umap()` to harmonize with other recipes steps.
+* Added `prefix` argument to `step_umap()` to harmonize with other recipes steps (#93).
 
 # embed 0.1.4
 
