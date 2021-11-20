@@ -54,6 +54,7 @@
 <li><p>The tunable parameter ranges for <code><a href="../reference/step_umap.html">step_umap()</a></code> were changed for <code>neighbors</code>, <code>num_comp</code>, and <code>min_dist</code> to prevent <code>uwot</code> segmentation faults. The step also check to see if the data dimensions are consistent with the argument values.</p></li>
 <li><p>Two new PCA steps were added, each using sparse techniques for estimation: <code><a href="../reference/step_pca_sparse.html">step_pca_sparse()</a></code> and <code><a href="../reference/step_pca_sparse_bayes.html">step_pca_sparse_bayes()</a></code>.</p></li>
 <li><p>Updated to use <code><a href="https://recipes.tidymodels.org/reference/recipes_eval_select.html" class="external-link">recipes_eval_select()</a></code> from recipes 0.1.17 (<a href="https://github.com/tidymodels/embed/issues/85" class="external-link">#85</a>).</p></li>
+<li><p>Added <code>prefix</code> argument to <code><a href="../reference/step_umap.html">step_umap()</a></code> to harmonize with other recipes steps (<a href="https://github.com/tidymodels/embed/issues/93" class="external-link">#93</a>).</p></li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.4" id="embed-014">embed 0.1.4<a class="anchor" aria-label="anchor" href="#embed-014"></a></h2><p class="text-muted">CRAN release: 2021-01-16</p>
