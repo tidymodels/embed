@@ -89,19 +89,15 @@ will project a set of features into a smaller space.</p>
 <dd><p>A recipe object. The step will be added to the
 sequence of operations for this recipe.</p></dd>
 <dt>...</dt>
-<dd><p>One or more selector functions to choose variables. For
-<code>step_umap</code>, this indicates the variables to be encoded into a numeric
-format. Numeric and factor variables can be used. See
-<code><a href="https://recipes.tidymodels.org/reference/selections.html" class="external-link">recipes::selections()</a></code> for more details. For the <code>tidy</code> method, these are
-not currently used.</p></dd>
+<dd><p>One or more selector functions to choose variables
+for this step. See <code><a href="https://recipes.tidymodels.org/reference/selections.html" class="external-link">selections()</a></code> for more details.</p></dd>
 <dt>role</dt>
 <dd><p>For model terms created by this step, what analysis role should
-they be assigned?. By default, the function assumes that the new embedding
-columns created by the original variables will be used as predictors in a
-model.</p></dd>
+they be assigned? By default, the new columns created by this step from
+the original variables will be used as <em>predictors</em> in a model.</p></dd>
 <dt>trained</dt>
-<dd><p>A logical to indicate if the quantities for preprocessing
-have been estimated.</p></dd>
+<dd><p>A logical to indicate if the quantities for
+preprocessing have been estimated.</p></dd>
 <dt>outcome</dt>
 <dd><p>A call to <code>vars</code> to specify which variable is
 used as the outcome in the encoding process (if any).</p></dd>
@@ -142,12 +138,12 @@ variables.</p></dd>
 <dd><p>An object that defines the encoding. This is
 <code>NULL</code> until the step is trained by <code><a href="https://recipes.tidymodels.org/reference/prep.html" class="external-link">recipes::prep.recipe()</a></code>.</p></dd>
 <dt>skip</dt>
-<dd><p>A logical. Should the step be skipped when the recipe is baked
-by <code><a href="https://recipes.tidymodels.org/reference/bake.html" class="external-link">recipes::bake.recipe()</a></code>? While all operations are baked when
-<code><a href="https://recipes.tidymodels.org/reference/prep.html" class="external-link">recipes::prep.recipe()</a></code> is run, some operations may not be able to be
-conducted on new data (e.g. processing the outcome variable(s)). Care should
-be taken when using <code>skip = TRUE</code> as it may affect the computations for
-subsequent operations</p></dd>
+<dd><p>A logical. Should the step be skipped when the
+recipe is baked by <code><a href="https://recipes.tidymodels.org/reference/bake.html" class="external-link">bake.recipe()</a></code>? While all operations are baked
+when <code><a href="https://recipes.tidymodels.org/reference/prep.html" class="external-link">prep.recipe()</a></code> is run, some operations may not be able to be
+conducted on new data (e.g. processing the outcome variable(s)).
+Care should be taken when using <code>skip = TRUE</code> as it may affect
+the computations for subsequent operations.</p></dd>
 <dt>id</dt>
 <dd><p>A character string that is unique to this step to identify it.</p></dd>
 <dt>x</dt>
@@ -156,9 +152,7 @@ subsequent operations</p></dd>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p>An updated version of <code>recipe</code> with the new step added to the
-sequence of existing steps (if any). For the <code>tidy</code> method, a tibble with a
-column called <code>terms</code> (the selectors or variables for embedding) is
-returned.</p>
+sequence of any existing operations.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
