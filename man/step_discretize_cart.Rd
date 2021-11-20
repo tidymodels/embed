@@ -63,7 +63,7 @@ the computations for subsequent operations}
 }
 \value{
 An updated version of \code{recipe} with the new step added to the
-sequence of existing steps (if any).
+sequence of any existing operations.
 }
 \description{
 \code{step_discretize_cart} creates a \emph{specification} of a recipe step that will
@@ -109,7 +109,3 @@ bake(cart_rec, ad_data_te, tau)
 \code{\link[=step_discretize_xgb]{step_discretize_xgb()}}, \code{\link[recipes:recipe]{recipes::recipe()}},
 \code{\link[recipes:prep]{recipes::prep.recipe()}}, \code{\link[recipes:bake]{recipes::bake.recipe()}}
 }
-\concept{discretization}
-\concept{factors}
-\concept{preprocessing}
-\keyword{binning}

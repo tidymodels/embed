@@ -30,12 +30,7 @@
 #'  conducted on new data (e.g. processing the outcome variable(s)).
 #'  Care should be taken when using `skip = TRUE` as it may affect
 #'  the computations for subsequent operations
-#' @return An updated version of `recipe` with the new step added to the
-#'  sequence of existing steps (if any).
-#' @keywords binning
-#' @concept preprocessing
-#' @concept discretization
-#' @concept factors
+#' @template step-return
 #' @export
 #' @details `step_discretize_cart()` creates non-uniform bins from numerical
 #'  variables by utilizing the information about the outcome variable and
