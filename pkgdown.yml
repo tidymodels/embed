@@ -1,10 +1,10 @@
 pandoc: 2.7.3
-pkgdown: 1.6.1
-pkgdown_sha: ~
+pkgdown: 1.9000.9000.9000
+pkgdown_sha: 4c1668a04209e82db5367a420c894ff946379ca6
 articles:
-  Applications/GLM: GLM.html
-  Applications/Tensorflow: Tensorflow.html
-last_built: 2021-03-09T00:27Z
+  GLM: Applications/GLM.html
+  Tensorflow: Applications/Tensorflow.html
+last_built: 2021-11-24T18:34Z
 urls:
   reference: https://embed.tidymodels.org/reference
   article: https://embed.tidymodels.org/articles
