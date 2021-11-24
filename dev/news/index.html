@@ -56,6 +56,7 @@
 <li><p>Updated to use <code><a href="https://recipes.tidymodels.org/reference/recipes_eval_select.html" class="external-link">recipes_eval_select()</a></code> from recipes 0.1.17 (<a href="https://github.com/tidymodels/embed/issues/85" class="external-link">#85</a>).</p></li>
 <li><p>Added <code>prefix</code> argument to <code><a href="../reference/step_umap.html">step_umap()</a></code> to harmonize with other recipes steps (<a href="https://github.com/tidymodels/embed/issues/93" class="external-link">#93</a>).</p></li>
 <li><p>All embed recipe steps now officially support empty selections to be more aligned with recipes, dplyr and other packages that use tidyselect.</p></li>
+<li><p><code><a href="../reference/step_woe.html">step_woe()</a></code> no longer warns about high-cardinality predictors when the recipe is estimated. Instead it warns when categories have fewer than 10 data points in the training set. (<a href="https://github.com/tidymodels/embed/issues/74" class="external-link">#74</a>)</p></li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.4" id="embed-014">embed 0.1.4<a class="anchor" aria-label="anchor" href="#embed-014"></a></h2><p class="text-muted">CRAN release: 2021-01-16</p>
