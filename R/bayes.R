@@ -147,11 +147,16 @@ step_lencode_bayes_new <-
 #' @export
 prep.step_lencode_bayes <- function(x, training, info = NULL, ...) {
   col_names <- recipes::recipes_eval_select(x$terms, training, info)
-  check_type(training[, col_names], quant = FALSE)
-  y_name <- recipes::recipes_eval_select(x$outcome, training, info)
-  res <-
-    map(training[, col_names], stan_coefs, y = training[, y_name],
-        x$options, x$verbose)
+  if (length(col_names) > 0) {
+    check_type(training[, col_names], quant = FALSE)
+    y_name <- recipes::recipes_eval_select(x$outcome, training, info)
+    res <-
+      map(training[, col_names], stan_coefs, y = training[, y_name],
+          x$options, x$verbose)
+  } else {
+    res <- list()
+  }
+  
   step_lencode_bayes_new(
     terms = x$terms,
     role = x$role,

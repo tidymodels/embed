@@ -127,35 +127,40 @@ step_pca_sparse_new <-
 #' @export
 prep.step_pca_sparse <- function(x, training, info = NULL, ...) {
   col_names <- recipes::recipes_eval_select(x$terms, training, info)
-  check_type(training[, col_names])
   
-  p <- length(col_names)
-  x$num_comp <- min(x$num_comp, p)
-  
-  # Convert proportion to number of terms
-  x$predictor_prop <- max(x$predictor_prop, 0.00001)
-  x$predictor_prop <- min(x$predictor_prop, 1)
-  num_dense <- prop2int(x$predictor_prop, p)
-  
-  
-  if (x$num_comp > 0) {
-    cl <-
-      rlang::call2(
-        "ssvd",
-        .ns = "irlba",
-        x = rlang::expr(as.matrix(training[, col_names])),
-        k = x$num_comp,
-        n = num_dense,
-        !!!x$options
-      )
-    res <- rlang::eval_tidy(cl)
-    rotation <- res$v
+  if (length(col_names) > 0) {
+    check_type(training[, col_names])
+    
+    p <- length(col_names)
+    x$num_comp <- min(x$num_comp, p)
+    
+    # Convert proportion to number of terms
+    x$predictor_prop <- max(x$predictor_prop, 0.00001)
+    x$predictor_prop <- min(x$predictor_prop, 1)
+    num_dense <- prop2int(x$predictor_prop, p)
+    
+    
+    if (x$num_comp > 0) {
+      cl <-
+        rlang::call2(
+          "ssvd",
+          .ns = "irlba",
+          x = rlang::expr(as.matrix(training[, col_names])),
+          k = x$num_comp,
+          n = num_dense,
+          !!!x$options
+        )
+      res <- rlang::eval_tidy(cl)
+      rotation <- res$v
+    } else {
+      # fake a rotation matrix so that the resolved names can be used for tidy()
+      rotation <- matrix(NA, nrow = length(col_names), ncol = p)
+    }
+    rownames(rotation) <- col_names
+    colnames(rotation) <- names0(x$num_comp, prefix = x$prefix)
   } else {
-    # fake a rotation matrix so that the resolved names can be used for tidy()
-    rotation <- matrix(NA, nrow = length(col_names), ncol = p)
+    rotation <- NA
   }
-  rownames(rotation) <- col_names
-  colnames(rotation) <- names0(x$num_comp, prefix = x$prefix)
   
   step_pca_sparse_new(
     terms = x$terms,
