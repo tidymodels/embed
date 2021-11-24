@@ -117,7 +117,10 @@ step_feature_hash_new <-
 #' @export
 prep.step_feature_hash <- function(x, training, info = NULL, ...) {
   col_names <- recipes::recipes_eval_select(x$terms, training, info)
-  check_type(training[, col_names], quant = FALSE)
+  
+  if (length(col_names) > 0) {
+    check_type(training[, col_names], quant = FALSE)
+  }
   
   step_feature_hash_new(
     terms = x$terms,

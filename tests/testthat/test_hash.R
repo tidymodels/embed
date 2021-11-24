@@ -134,3 +134,21 @@ test_that('can prep recipes with no keep_original_cols', {
   )
   
 })
+
+
+# ------------------------------------------------------------------------------
+
+test_that("empty selections", {
+  data(ad_data, package = "modeldata")
+  expect_error(
+    rec <-
+      recipe(Class ~ Genotype + tau, data = ad_data) %>%
+      step_feature_hash(starts_with("potato")) %>% 
+      prep(),
+    regexp = NA
+  )
+  expect_equal(
+    bake(rec, new_data = NULL),
+    ad_data %>% select(Genotype, tau, Class)
+  )
+})

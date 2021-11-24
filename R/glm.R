@@ -114,9 +114,13 @@ step_lencode_glm_new <-
 #' @export
 prep.step_lencode_glm <- function(x, training, info = NULL, ...) {
   col_names <- recipes::recipes_eval_select(x$terms, training, info)
-  check_type(training[, col_names], quant = FALSE)
-  y_name <- recipes::recipes_eval_select(x$outcome, training, info)
-  res <- map(training[, col_names], glm_coefs, y = training[, y_name])
+  if (length(col_names) > 0) {
+    check_type(training[, col_names], quant = FALSE)
+    y_name <- recipes::recipes_eval_select(x$outcome, training, info)
+    res <- map(training[, col_names], glm_coefs, y = training[, y_name])
+  } else {
+    res <- list()
+  }
   step_lencode_glm_new(
     terms = x$terms,
     role = x$role,
@@ -180,7 +184,7 @@ map_glm_coef <- function(dat, mapping) {
 bake.step_lencode_glm <- function(object, new_data, ...) {
   for (col in names(object$mapping))
     new_data[, col] <- map_glm_coef(new_data[, col], object$mapping[[col]])
-
+  
   new_data
 }
 
@@ -203,7 +207,7 @@ tidy.step_lencode_glm <- function(x, ...) {
       x$mapping[[i]]$terms <- names(x$mapping)[i]
     res <- bind_rows(x$mapping)
     names(res) <- gsub("^\\.\\.", "", names(res))
-
+    
   } else {
     term_names <- sel2char(x$terms)
     res <- tibble(

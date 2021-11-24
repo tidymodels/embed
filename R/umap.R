@@ -181,18 +181,25 @@ umap_fit_call <- function(obj, y = NULL) {
 #' @export
 prep.step_umap <- function(x, training, info = NULL, ...) {
   col_names <- recipes::recipes_eval_select(x$terms, training, info)
-  if (length(x$outcome) > 0) {
-    y_name <- recipes::recipes_eval_select(x$outcome, training, info)
+  
+  if (length(col_names) > 0) {
+    
+    if (length(x$outcome) > 0) {
+      y_name <- recipes::recipes_eval_select(x$outcome, training, info)
+    } else {
+      y_name <- NULL
+    }
+    x$neighbors <- min(   nrow(training) - 1, x$neighbors)
+    x$num_comp  <- min(length(col_names) - 1, x$num_comp)
+    withr::with_seed(
+      x$seed[1],
+      res <- rlang::eval_tidy(umap_fit_call(x, y = y_name))
+    )
+    res$xnames <- col_names
   } else {
-    y_name <- NULL
+    res <- list()
+    y_name <- character(0)
   }
-  x$neighbors <- min(   nrow(training) - 1, x$neighbors)
-  x$num_comp  <- min(length(col_names) - 1, x$num_comp)
-  withr::with_seed(
-    x$seed[1],
-    res <- rlang::eval_tidy(umap_fit_call(x, y = y_name))
-  )
-  res$xnames <- col_names
   
   step_umap_new(
     terms = x$terms,
@@ -217,6 +224,11 @@ prep.step_umap <- function(x, training, info = NULL, ...) {
 
 #' @export
 bake.step_umap <- function(object, new_data, ...) {
+  
+  if (length(object$object) == 0) {
+   return(new_data) 
+  }
+  
   withr::with_seed(
     object$seed[2],
     res <-

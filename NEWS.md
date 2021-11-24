@@ -10,6 +10,8 @@
 
 * Added `prefix` argument to `step_umap()` to harmonize with other recipes steps (#93).
 
+* All embed recipe steps now officially support empty selections to be more aligned with dplyr and other packages that use tidyselect.
+
 # embed 0.1.4
 
  * Minor release with changes to test for cases when CRAN cannot get `xgboost` to work on their Solaris configuration. 

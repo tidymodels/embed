@@ -366,18 +366,24 @@ add_woe <- function(.data, outcome, ..., dictionary = NULL, prefix = "woe") {
 
 #' @export
 prep.step_woe <- function(x, training, info = NULL, ...) {
-  outcome_name <- recipes::recipes_eval_select(x$outcome, training, info)
   col_names <- recipes::recipes_eval_select(x$terms, training, info)
-  col_names <- col_names[!(col_names %in% outcome_name)]
-  check_type(training[, col_names], quant = FALSE)
-  check_type(training[, outcome_name], quant = FALSE)
   
-  if (is.null(x$dictionary)) {
-    x$dictionary <- dictionary(
-      .data = training[, unique(c(outcome_name, col_names))],
-      outcome = outcome_name
-    ) %>% 
-      dplyr::mutate(outcome = outcome_name)
+  if (length(col_names) > 0) {
+    outcome_name <- recipes::recipes_eval_select(x$outcome, training, info)
+    
+    col_names <- col_names[!(col_names %in% outcome_name)]
+    check_type(training[, col_names], quant = FALSE)
+    check_type(training[, outcome_name], quant = FALSE)
+    
+    if (is.null(x$dictionary)) {
+      x$dictionary <- dictionary(
+        .data = training[, unique(c(outcome_name, col_names))],
+        outcome = outcome_name
+      ) %>% 
+        dplyr::mutate(outcome = outcome_name)
+    }
+  } else {
+    x$dictionary <- tibble::tibble()
   }
   
   step_woe_new(
@@ -395,6 +401,9 @@ prep.step_woe <- function(x, training, info = NULL, ...) {
 
 #' @export
 bake.step_woe <- function(object, new_data, ...) {
+  if (nrow(object$dictionary) == 0) {
+    return(new_data)
+  }
   dict <- object$dictionary
   woe_vars <- unique(dict$variable)
   new_data <- add_woe(
