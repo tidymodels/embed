@@ -501,3 +501,21 @@ test_that("printing", {
   ## can't use snapshot because of xgboost output here:
   expect_output(prep(xgb_rec, verbose = TRUE))
 })
+
+# ------------------------------------------------------------------------------
+
+test_that("empty selections", {
+  data(ad_data, package = "modeldata")
+  expect_error(
+    rec <-
+      recipe(Class ~ Genotype + tau, data = ad_data) %>%
+      step_discretize_xgb(starts_with("potato"), outcome = "Class") %>% 
+      prep(),
+    regexp = NA
+  )
+  expect_equal(
+    bake(rec, new_data = NULL),
+    ad_data %>% select(Genotype, tau, Class)
+  )
+})
+

@@ -166,30 +166,36 @@ cart_binning <- function(predictor, term, outcome, cost_complexity, tree_depth, 
 prep.step_discretize_cart <- function(x, training, info = NULL, ...) {
   
   col_names <- recipes::recipes_eval_select(x$terms, training, info)
-  check_type(training[, col_names])
   
-  y_name <- recipes::recipes_eval_select(x$outcome, training, info)
-  
-  col_names <- col_names[col_names != y_name]
-  
-  rules <-
-    purrr::map2(
-      training[, col_names],
-      col_names,
-      cart_binning,
-      outcome = training[[y_name]],
-      cost_complexity = x$cost_complexity,
-      tree_depth = x$tree_depth,
-      min_n = x$min_n
-    )
-
-  has_splits <- purrr::map_lgl(rules, ~ length(.x) >  0)
-  
-  rules <- rules[has_splits]
-  col_names <- col_names[has_splits]
   if (length(col_names) > 0) {
-    names(rules) <- col_names
+    check_type(training[, col_names])
+    
+    y_name <- recipes::recipes_eval_select(x$outcome, training, info)
+    
+    col_names <- col_names[col_names != y_name]
+    
+    rules <-
+      purrr::map2(
+        training[, col_names],
+        col_names,
+        cart_binning,
+        outcome = training[[y_name]],
+        cost_complexity = x$cost_complexity,
+        tree_depth = x$tree_depth,
+        min_n = x$min_n
+      )
+    
+    has_splits <- purrr::map_lgl(rules, ~ length(.x) >  0)
+    
+    rules <- rules[has_splits]
+    col_names <- col_names[has_splits]
+    if (length(col_names) > 0) {
+      names(rules) <- col_names
+    }
+  } else {
+    rules <- list()
   }
+  
   
   step_discretize_cart_new(
     terms = x$terms,

@@ -342,58 +342,64 @@ xgb_binning <- function(df, outcome, predictor, sample_val, learn_rate, num_brea
 prep.step_discretize_xgb <- function(x, training, info = NULL, ...) {
   
   col_names <- recipes::recipes_eval_select(x$terms, training, info)
-  check_type(training[, col_names])
   
-  y_name <- recipes::recipes_eval_select(x$outcome, training, info)
-  
-  col_names <- col_names[col_names != y_name]
-  
-  test_size <- sum(complete.cases(training)) * x$sample_val
-  
-  if (floor(test_size) < 2){
-    rlang::abort(
-      paste("Too few observations in the early stopping validation set.",
-            "Consider increasing the `sample_val` parameter.")
-    )
-  }
-  
-  # Changes: check for the minimum number of unique data points in the column
-  # in order to run the step. Otherwise, take it out of col_names. I think that 
-  # num_unique = 20 is probably a good default
-  num_unique <- purrr::map_int(training[, col_names], ~ length(unique(.x)))
-  too_few <- num_unique < 20
-  if (any(too_few)) {
-    rlang::warn(
-      paste0(
-        "More than 20 unique training set values are required. ",
-        "Predictors ", paste0("'", col_names[too_few], "'", collapse = ", "),
-        " were not processed; their original values will be used."
-      )
-    )
-    col_names <- col_names[!too_few]
-  }
-  
-  rules <- vector("list", length(col_names))
-  
-  for (i in seq_along(col_names)) {
-    rules[[i]] <- xgb_binning(
-      training,
-      y_name,
-      col_names[[i]],
-      x$sample_val,
-      x$learn_rate,
-      x$num_breaks,
-      x$tree_depth,
-      x$min_n
-      )
-  }
-  
-  has_splits <- purrr::map_lgl(rules, ~ length(.x) >  0)
-  
-  rules <- rules[has_splits]
-  col_names <- col_names[has_splits]
   if (length(col_names) > 0) {
-    names(rules) <- col_names
+    
+    check_type(training[, col_names])
+    
+    y_name <- recipes::recipes_eval_select(x$outcome, training, info)
+    
+    col_names <- col_names[col_names != y_name]
+    
+    test_size <- sum(complete.cases(training)) * x$sample_val
+    
+    if (floor(test_size) < 2){
+      rlang::abort(
+        paste("Too few observations in the early stopping validation set.",
+              "Consider increasing the `sample_val` parameter.")
+      )
+    }
+    
+    # Changes: check for the minimum number of unique data points in the column
+    # in order to run the step. Otherwise, take it out of col_names. I think that 
+    # num_unique = 20 is probably a good default
+    num_unique <- purrr::map_int(training[, col_names], ~ length(unique(.x)))
+    too_few <- num_unique < 20
+    if (any(too_few)) {
+      rlang::warn(
+        paste0(
+          "More than 20 unique training set values are required. ",
+          "Predictors ", paste0("'", col_names[too_few], "'", collapse = ", "),
+          " were not processed; their original values will be used."
+        )
+      )
+      col_names <- col_names[!too_few]
+    }
+    
+    rules <- vector("list", length(col_names))
+    
+    for (i in seq_along(col_names)) {
+      rules[[i]] <- xgb_binning(
+        training,
+        y_name,
+        col_names[[i]],
+        x$sample_val,
+        x$learn_rate,
+        x$num_breaks,
+        x$tree_depth,
+        x$min_n
+      )
+    }
+    
+    has_splits <- purrr::map_lgl(rules, ~ length(.x) >  0)
+    
+    rules <- rules[has_splits]
+    col_names <- col_names[has_splits]
+    if (length(col_names) > 0) {
+      names(rules) <- col_names
+    }
+  } else {
+    rules <- list()
   }
   
   step_discretize_xgb_new(

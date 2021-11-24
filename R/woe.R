@@ -351,21 +351,23 @@ add_woe <- function(.data, outcome, ..., dictionary = NULL, prefix = "woe") {
 
 #' @export
 prep.step_woe <- function(x, training, info = NULL, ...) {
-  outcome_name <- recipes::recipes_eval_select(x$outcome, training, info)
   col_names <- recipes::recipes_eval_select(x$terms, training, info)
-  col_names <- col_names[!(col_names %in% outcome_name)]
-  check_type(training[, col_names], quant = FALSE)
-  check_type(training[, outcome_name], quant = FALSE)
   
-  if (is.null(x$dictionary)) {
-    x$dictionary <- dictionary(
-      .data = training[, unique(c(outcome_name, col_names))],
-      outcome = outcome_name
-    ) %>% 
-      dplyr::mutate(outcome = outcome_name)
+  if (length(col_names) > 0) {
+    outcome_name <- recipes::recipes_eval_select(x$outcome, training, info)
     
-    # warns if there is variable with more than 50 levels
-    level_counts <- table(x$dictionary$variable)
+    col_names <- col_names[!(col_names %in% outcome_name)]
+    check_type(training[, col_names], quant = FALSE)
+    check_type(training[, outcome_name], quant = FALSE)
+    
+    if (is.null(x$dictionary)) {
+      x$dictionary <- dictionary(
+        .data = training[, unique(c(outcome_name, col_names))],
+        outcome = outcome_name
+      ) %>% 
+        dplyr::mutate(outcome = outcome_name)
+    }
+    
     n_count <- 
       x$dictionary %>% 
       dplyr::group_by(variable) %>% 
@@ -378,6 +380,9 @@ prep.step_woe <- function(x, training, info = NULL, ...) {
                     "less than 10 values: ", flagged)
       rlang::warn(msg)
     }
+    
+  } else {
+    x$dictionary <- tibble::tibble()
   }
   
   step_woe_new(
@@ -395,6 +400,9 @@ prep.step_woe <- function(x, training, info = NULL, ...) {
 
 #' @export
 bake.step_woe <- function(object, new_data, ...) {
+  if (nrow(object$dictionary) == 0) {
+    return(new_data)
+  }
   dict <- object$dictionary
   woe_vars <- unique(dict$variable)
   new_data <- add_woe(

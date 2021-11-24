@@ -190,7 +190,6 @@ test_that("tidy method", {
 
 # ------------------------------------------------------------------------------
 
-
 test_that("printing", {
   cart_rec <-
     recipe(class ~ ., data = sim_tr_cls) %>%
@@ -202,3 +201,23 @@ test_that("printing", {
                    "failed to find any meaningful splits for predictor 'z'")
   )
 })
+
+
+# ------------------------------------------------------------------------------
+
+test_that("empty selections", {
+  data(ad_data, package = "modeldata")
+  expect_error(
+    rec <-
+      recipe(Class ~ Genotype + tau, data = ad_data) %>%
+      step_discretize_cart(starts_with("potato"), outcome = "Class") %>% 
+      prep(),
+    regexp = NA
+  )
+  expect_equal(
+    bake(rec, new_data = NULL),
+    ad_data %>% select(Genotype, tau, Class)
+  )
+})
+
+

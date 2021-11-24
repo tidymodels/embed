@@ -152,36 +152,42 @@ step_pca_sparse_bayes_new <-
 #' @export
 prep.step_pca_sparse_bayes <- function(x, training, info = NULL, ...) {
   col_names <- recipes::recipes_eval_select(x$terms, training, info)
-  check_type(training[, col_names])
   
-  p <- length(col_names)
-  x$num_comp <- min(x$num_comp, p)
-  
-  # Check range again
-  x$prior_mixture_threshold <- max(x$prior_mixture_threshold, 0.00001)
-  x$prior_mixture_threshold <- min(x$prior_mixture_threshold, 1)
-  
-  scale_param <- 1/x$prior_slab_dispersion
-  
-  if (x$num_comp > 0) {
-    cl <-
-      rlang::call2(
-        "VBsparsePCA",
-        .ns = "VBsparsePCA",
-        dat = rlang::expr(as.matrix(training[, col_names])),
-        r = x$num_comp,
-        lambda = scale_param,
-        threshold = x$prior_mixture_threshold,
-        !!!x$options
-      )
-    res <- rlang::eval_tidy(cl)
-    rotation <- svd(res$loadings)$u
+  if (length(col_names) > 0) {
+    
+    check_type(training[, col_names])
+    
+    p <- length(col_names)
+    x$num_comp <- min(x$num_comp, p)
+    
+    # Check range again
+    x$prior_mixture_threshold <- max(x$prior_mixture_threshold, 0.00001)
+    x$prior_mixture_threshold <- min(x$prior_mixture_threshold, 1)
+    
+    scale_param <- 1/x$prior_slab_dispersion
+    
+    if (x$num_comp > 0) {
+      cl <-
+        rlang::call2(
+          "VBsparsePCA",
+          .ns = "VBsparsePCA",
+          dat = rlang::expr(as.matrix(training[, col_names])),
+          r = x$num_comp,
+          lambda = scale_param,
+          threshold = x$prior_mixture_threshold,
+          !!!x$options
+        )
+      res <- rlang::eval_tidy(cl)
+      rotation <- svd(res$loadings)$u
+    } else {
+      # fake a rotation matrix so that the resolved names can be used for tidy()
+      rotation <- matrix(NA, nrow = length(col_names), ncol = p)
+    }
+    rownames(rotation) <- col_names
+    colnames(rotation) <- names0(x$num_comp, prefix = x$prefix)
   } else {
-    # fake a rotation matrix so that the resolved names can be used for tidy()
-    rotation <- matrix(NA, nrow = length(col_names), ncol = p)
+    rotation <- NA
   }
-  rownames(rotation) <- col_names
-  colnames(rotation) <- names0(x$num_comp, prefix = x$prefix)
   
   step_pca_sparse_bayes_new(
     terms = x$terms,
