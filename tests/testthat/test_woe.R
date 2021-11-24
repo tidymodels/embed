@@ -208,4 +208,3 @@ test_that("2-level factors", {
   )
 })
 
-
