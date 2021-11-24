@@ -114,5 +114,5 @@
       
       Operations:
       
-      Discretizing variables using XgBoost all_predictors()
+      Discretizing variables using xgboost all_predictors()
 

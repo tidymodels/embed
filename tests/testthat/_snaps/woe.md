@@ -13,8 +13,7 @@
       
       Operations:
       
-      WoE version against outcome structure(list(~Status), .Names = "", class = c("quosures", "list"
-      )) for Job, Home
+      WoE version against outcome Status for Job, Home
 
 ---
 
@@ -36,6 +35,5 @@
       
       Operations:
       
-      WoE version against outcome structure(list(~Status), .Names = "", class = c("quosures", "list"
-      )) for Job, Home [trained]
+      WoE version against outcome Status for Job, Home [trained]
 
