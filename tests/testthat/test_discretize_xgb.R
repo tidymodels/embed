@@ -8,7 +8,7 @@ skip_if_not_installed("xgboost")
 source(test_path("make_binned_data.R"))
 
 data("credit_data", package = "modeldata")
-data("okc", package = "modeldata")
+data("ames", package = "modeldata")
 data("attrition", package = "modeldata")
 
 # ------------------------------------------------------------------------------
@@ -68,29 +68,30 @@ xgb_attrition_test <- xgboost::xgb.DMatrix(
 
 # ------------------------------------------------------------------------------
 
+ames$Sale_Price <- log10(ames$Sale_Price)
 # Data for regression problem testing (naive)
 set.seed(1773)
-okc_data_split <- initial_split(okc, strata = "age")
-okc_data_train <- training(okc_data_split)
-okc_data_test <- testing(okc_data_split)
+ames_data_split <- initial_split(ames, strata = "Sale_Price")
+ames_data_train <- training(ames_data_split)
+ames_data_test <- testing(ames_data_split)
 
 set.seed(8134)
-okc_data_small <- dplyr::sample_n(okc_data_train, 10)
+ames_data_small <- dplyr::sample_n(ames_data_train, 10)
 
-rec_okc <- okc_data_train %>% 
-  select(-age) %>% 
+ames_rec <- ames_data_train %>% 
+  select(-Sale_Price) %>% 
   recipe(~ .) %>% 
   step_integer(all_predictors()) %>% 
   prep(retain = TRUE)
 
-xgb_okc_train <- xgboost::xgb.DMatrix(
-  data = as.matrix(juice(rec_okc)),
-  label = okc_data_train[["age"]]
+xgb_ames_train <- xgboost::xgb.DMatrix(
+  data = as.matrix(juice(ames_rec)),
+  label = ames_data_train[["Sale_Price"]]
 )
 
-xgb_okc_test <- xgboost::xgb.DMatrix(
-  data = as.matrix(bake(rec_okc, new_data = okc_data_test)),
-  label = okc_data_test[["age"]]
+xgb_ames_test <- xgboost::xgb.DMatrix(
+  data = as.matrix(bake(ames_rec, new_data = ames_data_test)),
+  label = ames_data_test[["Sale_Price"]]
 )
 
 # ------------------------------------------------------------------------------
@@ -154,8 +155,8 @@ test_that("run_xgboost for multi-classification", {
 test_that("run_xgboost for regression", {
   
   xgboost <- embed:::run_xgboost(
-    xgb_okc_train,
-    xgb_okc_test,
+    xgb_ames_train,
+    xgb_ames_test,
     .learn_rate = 0.3,
     .num_breaks = 10,
     .tree_depth = 1,
@@ -263,9 +264,9 @@ test_that("xgb_binning for regression", {
   set.seed(4235)
   # Usual case
   xgb_binning <- embed:::xgb_binning(
-    okc_data_train,
-    "age",
-    "height",
+    ames_data_train,
+    "Sale_Price",
+    "Latitude",
     sample_val = 0.20,
     learn_rate = 0.3,
     num_breaks = 10,
@@ -282,16 +283,16 @@ test_that("xgb_binning for regression", {
 
   expect_warning(
     embed:::xgb_binning(
-      okc_data_small,
-      "age",
-      "height",
+      ames_data_small,
+      "Sale_Price",
+      "Latitude",
       sample_val = 0.30,
       learn_rate = 0.3,
       num_breaks = 10,
       tree_depth = 1,
       min_n = 5
     ),
-    "failed for predictor 'height'"
+    "failed for predictor 'Latitude'"
   )
   
 })
@@ -480,14 +481,14 @@ test_that("step_discretize_xgb for regression", {
   
   # No numeric variables present
   predictors_non_numeric <- c(
-    "age", "diet", "location"
+    "Neighborhood"
   )
   
-  xgb_rec <- okc_data_train %>% 
-    select(one_of(predictors_non_numeric)) %>% 
-    recipe(age ~ .) %>%
+  xgb_rec <- ames_data_train %>% 
+    select(Sale_Price, one_of(predictors_non_numeric)) %>% 
+    recipe(Sale_Price ~ .) %>%
     step_medianimpute(all_numeric()) %>%
-    step_discretize_xgb(all_predictors(), outcome = "age")
+    step_discretize_xgb(all_predictors(), outcome = "Sale_Price")
 
 })
 

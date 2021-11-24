@@ -100,12 +100,15 @@ library(recipes)
 library(dplyr)
 library(modeldata)
 
-data(okc)
+data(grants)
 
-reencoded <- recipe(Class ~ age + location, data = okc) \%>\%
-  step_lencode_bayes(location, outcome = vars(Class))
+set.seed(1)
+grants_other <- sample_n(grants_other, 500)
 
-# See https://embed.tidymodels.org for examples
+\donttest{
+reencoded <- recipe(class ~ sponsor_code, data = grants_other) \%>\%
+  step_lencode_bayes(sponsor_code, outcome = vars(class))
+}
 }
 \references{
 Micci-Barreca D (2001) "A preprocessing scheme for

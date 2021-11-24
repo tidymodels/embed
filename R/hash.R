@@ -38,23 +38,24 @@
 #' @seealso [recipes::step_dummy()], [recipes::step_zv()]
 #' @examples
 #' \donttest{
-#' data(okc, package = "modeldata")
+#' data(grants, package = "modeldata")
 #' 
 #' if (is_tf_available()) {
 #'   # This may take a while: 
-#'   rec <- 
-#'     recipe(Class ~ age + location, data = okc) %>%
-#'     step_feature_hash(location, num_hash = 2^6, preserve = TRUE) %>% 
+#'   rec <-
+#'     recipe(class ~ sponsor_code, data = grants_other) %>%
+#'     step_feature_hash(sponsor_code, num_hash = 2^6, keep_original_cols = TRUE) %>%
 #'     prep()
 #' 
-#'   # How many of the 135 locations ended up in each hash column?
-#'   results <- 
-#'     juice(rec, starts_with("location")) %>% 
-#'     distinct() 
+#'   # How many of the 298 locations ended up in each hash column?
+#'   results <-
+#'     bake(rec, new_data = NULL, starts_with("sponsor_code")) %>%
+#'     distinct()
 #' 
-#'   apply(results %>% select(-location), 2, sum) %>% table()
+#'   apply(results %>% select(-sponsor_code), 2, sum) %>% table()
 #' }
 #' }
+
 
 step_feature_hash <-
   function(recipe,
