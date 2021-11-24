@@ -14,3 +14,4 @@ Applications/Tensorflow.Rmd
 ^CODE_OF_CONDUCT\.md$
 ^LICENSE\.md$
 ^man-roxygen$
+^revdep$
