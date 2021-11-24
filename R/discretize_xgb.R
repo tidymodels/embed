@@ -444,7 +444,7 @@ bake.step_discretize_xgb <- function(object, new_data, ...) {
 
 #' @export
 print.step_discretize_xgb <- function(x, width = max(20, options()$width - 30), ...) {
-    cat("Discretizing variables using XgBoost ")
+    cat("Discretizing variables using xgboost ")
     recipes::printer(names(x$rules), x$terms, x$trained, width = width)
     invisible(x)
   }
