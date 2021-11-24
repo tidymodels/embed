@@ -4,7 +4,7 @@ pkgdown_sha: e72fc30f333dc4f50f3f9d1f274fc29d67e34974
 articles:
   GLM: Applications/GLM.html
   Tensorflow: Applications/Tensorflow.html
-last_built: 2021-11-24T03:51Z
+last_built: 2021-11-24T14:55Z
 urls:
   reference: https://embed.tidymodels.org/reference
   article: https://embed.tidymodels.org/articles
