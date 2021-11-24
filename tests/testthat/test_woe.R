@@ -125,9 +125,9 @@ test_that("add_woe do not accept dictionary with unexpected layout", {
   expect_error(add_woe(df, outcome = "y", x1, dictionary = iris %>% mutate(variable = 1)))
 })
 
-test_that("add_woe warns user if the variable has too many levels", {
-  expect_warning(credit_data %>% add_woe("Status", Expenses))
-})
+# test_that("add_woe warns user if the variable has too many levels", {
+#   expect_warning(credit_data %>% add_woe("Status", Expenses))
+# })
 
 #------------------------------------
 # step_woe
@@ -138,7 +138,10 @@ test_that("step_woe", {
     recipe(Status ~ ., data = credit_tr) %>%
     step_woe(Job, Home, outcome = vars(Status))
 
-  woe_models <- prep(rec, training = credit_tr)
+  expect_warning(
+    woe_models <- prep(rec, training = credit_tr),
+    "less than 10 values"
+  )
 
   woe_dict <- credit_tr %>% dictionary("Status", Job, Home)
   expect_equal(woe_dict, woe_models$steps[[1]]$dictionary, ignore_attr = TRUE)
@@ -164,7 +167,7 @@ test_that("step_woe", {
     step_woe(all_nominal(), outcome = vars(Status))
 
   #
-  expect_output(prep(rec_all_nominal, training = credit_tr, verbose = TRUE))
+  expect_snapshot(prep(rec_all_nominal, training = credit_tr, verbose = TRUE))
 
 
   rec_all_numeric <- recipe(Status ~ ., data = credit_tr) %>%

@@ -12,6 +12,9 @@
 
 * All embed recipe steps now officially support empty selections to be more aligned with recipes, dplyr and other packages that use tidyselect.
 
+* `step_woe()` no longer warns about high-cardinality predictors when the recipe is estimated. Instead it warns when categories have fewer than 10 data points in the training set.  (#74)
+
+
 # embed 0.1.4
 
  * Minor release with changes to test for cases when CRAN cannot get `xgboost` to work on their Solaris configuration. 
