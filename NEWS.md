@@ -10,7 +10,7 @@
 
 * Added `prefix` argument to `step_umap()` to harmonize with other recipes steps (#93).
 
-* All embed recipe steps now officially support empty selections to be more aligned with dplyr and other packages that use tidyselect.
+* All embed recipe steps now officially support empty selections to be more aligned with recipes, dplyr and other packages that use tidyselect.
 
 # embed 0.1.4
 
