@@ -6,7 +6,7 @@
 [![R build
 status](https://github.com/tidymodels/embed/workflows/R-CMD-check/badge.svg)](https://github.com/tidymodels/embed/actions)
 [![Codecov test
-coverage](https://codecov.io/gh/tidymodels/embed/branch/main/graph/badge.svg)](https://codecov.io/gh/tidymodels/embed?branch=main)
+coverage](https://codecov.io/gh/tidymodels/embed/branch/main/graph/badge.svg)](https://app.codecov.io/gh/tidymodels/embed?branch=main)
 [![CRAN\_Status\_Badge](https://www.r-pkg.org/badges/version/embed)](https://CRAN.r-project.org/package=embed)
 [![Downloads](https://CRANlogs.r-pkg.org/badges/embed)](https://CRAN.r-project.org/package=embed)
 ![](https://img.shields.io/badge/lifecycle-maturing-blue.svg)
@@ -55,6 +55,9 @@ For numeric predictors:
 
 -   `step_discretize_xgb()` and `step_discretize_cart()` can make binned
     versions of numeric predictors using supervised tree-based models.
+
+-   `step_pca_sparse()` and `step_pca_sparse_bayes()` conduct feature
+    extraction with sparsity of the component loadings.
 
 Some references for these methods are:
 

@@ -1,4 +1,4 @@
-# embed (development version)
+# embed 0.1.5
 
 * Re-licensed package from GPL-2 to MIT. See [consent from copyright holders here](https://github.com/tidymodels/embed/issues/78).
 

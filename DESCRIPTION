@@ -1,6 +1,6 @@
 Package: embed
 Title: Extra Recipes for Encoding Predictors
-Version: 0.1.4.9000
+Version: 0.1.5
 Authors@R: c(
     person("Max", "Kuhn", , "max@rstudio.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0003-2402-136X")),
