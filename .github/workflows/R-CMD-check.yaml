@@ -49,6 +49,11 @@ jobs:
         with:
           extra-packages: rcmdcheck
 
+      - name: install nlopt, glpk, and libxml2 on Windows
+        if: runner.os == 'windows'
+        run: pacman -Sy --noconfirm mingw-w64-{i686,x86_64}-{nlopt,glpk,libxml2}
+        shell: c:\rtools40\usr\bin\bash.exe --login {0}
+
       - name: Install Miniconda
         run: |
           reticulate::install_miniconda()
