@@ -61,13 +61,15 @@
 #' library(dplyr)
 #' library(modeldata)
 #' 
-#' data(okc)
+#' data(grants)
 #' 
-#' glm_est <- recipe(Class ~ age + location, data = okc) %>%
-#'   step_lencode_glm(location, outcome = vars(Class))
+#' set.seed(1)
+#' grants_other <- sample_n(grants_other, 500)
 #' 
-#' # See https://embed.tidymodels.org  for examples
-
+#' \donttest{
+#' reencoded <- recipe(class ~ sponsor_code, data = grants_other) %>%
+#'   step_lencode_glm(sponsor_code, outcome = vars(class))
+#' }
 
 step_lencode_glm <-
   function(recipe,

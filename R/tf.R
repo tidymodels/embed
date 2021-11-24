@@ -122,17 +122,18 @@
 #' 
 #' @examples
 #' library(modeldata)
-#' data(okc)
+#'
+#' data(grants)
+#' 
+#' set.seed(1)
+#' grants_other <- sample_n(grants_other, 500)
 #' 
 #' if (is_tf_available()) {
-#'   rec <- recipe(Class ~ age + location, data = okc) %>%
-#'     step_embed(location, outcome = vars(Class),
+#'   rec <- recipe(class ~ num_ci + sponsor_code, data = grants_other) %>%
+#'     step_embed(location, outcome = vars(class),
 #'                options = embed_control(epochs = 10))
 #' }
 #' 
-#' # See https://embed.tidymodels.org  for examples
-
-
 
 step_embed <-
   function(recipe,
