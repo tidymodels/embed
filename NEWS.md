@@ -10,6 +10,8 @@
 
 * Added `prefix` argument to `step_umap()` to harmonize with other recipes steps (#93).
 
+* `step_woe()` no longer warns about high-cardinality predictors when the recipe is estimated. Instead it warns when categories have fewer than 10 data points in the training set.  (#74)
+
 # embed 0.1.4
 
  * Minor release with changes to test for cases when CRAN cannot get `xgboost` to work on their Solaris configuration. 

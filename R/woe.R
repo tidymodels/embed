@@ -305,22 +305,7 @@ add_woe <- function(.data, outcome, ..., dictionary = NULL, prefix = "woe") {
       rlang::abort('column "woe" is missing in dictionary.')
     }
   }
-  
-  # warns if there is variable with more than 50 levels
-  level_counts <- table(dictionary$variable)
-  purrr::walk2(
-    level_counts,
-    names(level_counts),
-    ~ if(.x > 50)
-      rlang::warn(
-        paste0(
-          "Variable ", .y, " has ", .x,
-          " unique values. Is this expected? In case of numeric variable, ",
-          "see ?step_discretize().")
-        )
-  )
-  
-  
+
   if (missing(...)) {
     dots_vars <- names(.data)
   } else {
@@ -378,6 +363,21 @@ prep.step_woe <- function(x, training, info = NULL, ...) {
       outcome = outcome_name
     ) %>% 
       dplyr::mutate(outcome = outcome_name)
+    
+    # warns if there is variable with more than 50 levels
+    level_counts <- table(x$dictionary$variable)
+    n_count <- 
+      x$dictionary %>% 
+      dplyr::group_by(variable) %>% 
+      dplyr::summarize(low_n = sum(n_tot < 10))
+    
+    if (any(n_count$low_n > 0)) {
+      flagged <- n_count$variable[n_count$low_n > 0]
+      flagged <- paste0("'", unique(flagged), "'", collapse = ", ")
+      msg <- paste0("Some columns used by `step_woe()` have categories with ",
+                    "less than 10 values: ", flagged)
+      rlang::warn(msg)
+    }
   }
   
   step_woe_new(
