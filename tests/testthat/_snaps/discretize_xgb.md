@@ -17,7 +17,7 @@
     Code
       print(xgb_binning)
     Output
-      [1] 63 65 67 68 70 71
+      [1] 42.01972 42.02510 42.03122 42.03462 42.03840 42.04638 42.05236 42.05917
 
 # step_discretize_xgb for classification
 
