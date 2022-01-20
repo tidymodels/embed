@@ -148,7 +148,7 @@ step_embed <-
            mapping = NULL,
            history = NULL,
            skip = FALSE,
-           id = rand_id("lencode_bayes")) {
+           id = rand_id("embed")) {
     # warm start for tf to avoid a bug in tensorflow
     is_tf_available()
     
