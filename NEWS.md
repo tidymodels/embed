@@ -1,5 +1,7 @@
 # embed (development version)
 
+* `step_embed()` now correctly defaults to have a random id with the word "embed". (#102)
+
 # embed 0.1.5
 
 * Re-licensed package from GPL-2 to MIT. See [consent from copyright holders here](https://github.com/tidymodels/embed/issues/78).
