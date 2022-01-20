@@ -19,7 +19,7 @@ step_embed(
   mapping = NULL,
   history = NULL,
   skip = FALSE,
-  id = rand_id("lencode_bayes")
+  id = rand_id("embed")
 )
 
 \method{tidy}{step_embed}(x, ...)
