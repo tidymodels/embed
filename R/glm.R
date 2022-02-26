@@ -191,8 +191,8 @@ bake.step_lencode_glm <- function(object, new_data, ...) {
 #' @export
 print.step_lencode_glm <-
   function(x, width = max(20, options()$width - 31), ...) {
-    cat("Linear embedding for factors via GLM for ", sep = "")
-    printer(names(x$mapping), x$terms, x$trained, width = width)
+    title <- "Linear embedding for factors via GLM for "
+    print_step(names(x$mapping), x$terms, x$trained, title, width)
     invisible(x)
   }
 

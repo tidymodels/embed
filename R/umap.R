@@ -254,8 +254,8 @@ bake.step_umap <- function(object, new_data, ...) {
 #' @export
 print.step_umap <-
   function(x, width = max(20, options()$width - 31), ...) {
-    cat("UMAP embedding for ", sep = "")
-    printer(x$object$xnames, x$terms, x$trained, width = width)
+    title <- "UMAP embedding for "
+    print_step(x$object$xnames, x$terms, x$trained, title, width)
     invisible(x)
   }
 
