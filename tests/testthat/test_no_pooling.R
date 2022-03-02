@@ -10,7 +10,7 @@ test_that("factor encoded predictor", {
     prep(training = ex_dat, retain = TRUE)
   tr_values <- juice(class_test)$x3
   new_values <- bake(class_test, new_data = new_dat)
-  expect_warning(
+  expect_snapshot(
     new_values_ch <- bake(class_test, new_data = new_dat_ch)
   )
   key <- class_test$steps[[1]]$mapping
@@ -126,7 +126,7 @@ test_that("factor encoded predictor", {
     prep(training = ex_dat, retain = TRUE)
   tr_values <- juice(reg_test)$x3
   new_values <- bake(reg_test, new_data = new_dat)
-  expect_warning(
+  expect_snapshot(
     new_values_ch <- bake(reg_test, new_data = new_dat_ch)
   )
   td_obj <- tidy(reg_test, number = 1)
@@ -241,7 +241,7 @@ test_that("bad args", {
   three_class$fac <- rep(letters[1:3], 50)
   three_class$logical <- rep(c(TRUE, FALSE), 75)
 
-  expect_error(
+  expect_snapshot(error = TRUE,
     recipe(Species ~ ., data = three_class) %>%
       step_lencode_glm(Sepal.Length, outcome = vars(Species)) %>%
       prep(training = three_class, retain = TRUE)
@@ -252,7 +252,7 @@ test_that("bad args", {
 test_that("printing", {
   print_test <- recipe(x2 ~ ., data = ex_dat_ch) %>%
     step_lencode_glm(x3, outcome = vars(x2))
-  expect_snapshot(print(print_test))
+  expect_snapshot(print_test)
   expect_snapshot(prep(print_test, training = ex_dat_ch, verbose = TRUE))
 })
 
