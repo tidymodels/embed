@@ -122,7 +122,7 @@ test_that("run_xgboost for classification", {
     .num_class = NA
   )
 
-  expect_output(print(xgboost))
+  expect_snapshot(xgboost)
   expect_equal(length(xgboost$params), 8)
   expect_equal(xgboost$nfeatures, 13)
   expect_equal(xgboost$params$tree_method, "hist")
@@ -141,7 +141,7 @@ test_that("run_xgboost for multi-classification", {
     .objective = "multi:softprob"
   )
 
-  expect_output(print(xgboost))
+  expect_snapshot(xgboost)
   expect_equal(length(xgboost$params), 9)
   expect_equal(xgboost$nfeatures, 30)
   expect_equal(xgboost$params$tree_method, "hist")
@@ -160,7 +160,7 @@ test_that("run_xgboost for regression", {
     .num_class = NA
   )
 
-  expect_output(print(xgboost))
+  expect_snapshot(xgboost)
   expect_true(length(xgboost$params) > 1)
   expect_true(xgboost$nfeatures > 1)
   expect_equal(xgboost$params$tree_method, "hist")
@@ -186,13 +186,13 @@ test_that("xgb_binning for classification", {
     min_n = 5
   )
 
-  expect_snapshot(print(xgb_binning))
+  expect_snapshot(xgb_binning)
   expect_true(length(xgb_binning) > 1)
   expect_type(xgb_binning, "double")
 
   # Algorithm runs on a too small training set/ insufficient variation in data
 
-  expect_warning(
+  expect_snapshot_warning(
     embed:::xgb_binning(
       credit_data_small,
       "Status",
@@ -202,8 +202,7 @@ test_that("xgb_binning for classification", {
       num_breaks = 10,
       tree_depth = 1,
       min_n = 5
-    ),
-    "failed for predictor 'Seniority'"
+    )
   )
 })
 
@@ -226,13 +225,13 @@ test_that("xgb_binning for multi-classification", {
     min_n = 5
   )
 
-  expect_snapshot(print(xgb_binning))
+  expect_snapshot(xgb_binning)
   expect_true(length(xgb_binning) > 1)
   expect_type(xgb_binning, "double")
 
   # Algorithm runs on a too small training set/ insufficient variation in data
 
-  expect_warning(
+  expect_snapshot(
     embed:::xgb_binning(
       attrition_data_small,
       "EducationField",
@@ -242,8 +241,7 @@ test_that("xgb_binning for multi-classification", {
       num_breaks = 10,
       tree_depth = 1,
       min_n = 5
-    ),
-    "failed for predictor 'Age'"
+    )
   )
 })
 
@@ -266,14 +264,14 @@ test_that("xgb_binning for regression", {
     min_n = 5
   )
 
-  expect_snapshot(print(xgb_binning))
+  expect_snapshot(xgb_binning)
   expect_true(length(xgb_binning) > 1)
   expect_type(xgb_binning, "double")
 
 
   # Algorithm runs on a too small training set/ insufficient variation in data
 
-  expect_warning(
+  expect_snapshot(
     embed:::xgb_binning(
       ames_data_small,
       "Sale_Price",
@@ -283,8 +281,7 @@ test_that("xgb_binning for regression", {
       num_breaks = 10,
       tree_depth = 1,
       min_n = 5
-    ),
-    "failed for predictor 'Latitude'"
+    )
   )
 })
 
@@ -301,8 +298,8 @@ test_that("step_discretize_xgb for classification", {
   xgb_train_bins <- bake(xgb_rec, sim_tr_cls)
   xgb_test_bins <- bake(xgb_rec, sim_te_cls)
 
-  expect_snapshot(print(xgb_train_bins))
-  expect_snapshot(print(xgb_test_bins))
+  expect_snapshot(xgb_train_bins)
+  expect_snapshot(xgb_test_bins)
   expect_true(length(levels(xgb_train_bins$x)) > 1)
   expect_true(length(levels(xgb_train_bins$z)) > 1)
 
@@ -316,12 +313,11 @@ test_that("step_discretize_xgb for classification", {
   )
 
   # Too few data
-  expect_error(
+  expect_snapshot(error = TRUE, {
     recipe(class ~ ., data = sim_tr_cls[1:9, ]) %>%
       step_discretize_xgb(all_predictors(), outcome = "class") %>%
-      prep(),
-    "Too few observations in the early stopping validation set"
-  )
+      prep()
+  })
 
   # No numeric variables present
   predictors_non_numeric <- c(
@@ -335,19 +331,13 @@ test_that("step_discretize_xgb for classification", {
     step_discretize_xgb(all_numeric(), outcome = "Status")
 
   # Information about insufficient datapoints for Time predictor
-  msg <- capture_warning({
+  expect_snapshot({
     set.seed(1)
     recipe(Status ~ ., data = credit_data_train) %>%
       step_discretize_xgb(Time, outcome = "Status") %>%
       prep(retain = TRUE)
   })
 
-  expect_true(
-    grepl(
-      "More than 20 unique training set values are required. Predictors 'Time' were not processed; their original values will be used.",
-      msg
-    )
-  )
 })
 
 test_that("step_discretize_xgb for multi-classification", {
@@ -363,8 +353,8 @@ test_that("step_discretize_xgb for multi-classification", {
   xgb_train_bins <- bake(xgb_rec, sim_tr_mcls)
   xgb_test_bins <- bake(xgb_rec, sim_te_mcls)
 
-  expect_snapshot(print(xgb_train_bins))
-  expect_snapshot(print(xgb_test_bins))
+  expect_snapshot(xgb_train_bins)
+  expect_snapshot(xgb_test_bins)
   expect_true(length(levels(xgb_train_bins$x)) > 0)
   expect_true(length(levels(xgb_train_bins$z)) > 0)
 
@@ -378,11 +368,10 @@ test_that("step_discretize_xgb for multi-classification", {
   )
 
   # Too few data
-  expect_error(
+  expect_snapshot(error = TRUE,
     recipe(class ~ ., data = sim_tr_mcls[1:9, ]) %>%
       step_discretize_xgb(all_predictors(), outcome = "class") %>%
-      prep(),
-    "Too few observations in the early stopping validation set"
+      prep()
   )
 
 
@@ -424,8 +413,8 @@ test_that("step_discretize_xgb for regression", {
   xgb_train_bins <- bake(xgb_rec, sim_tr_reg)
   xgb_test_bins <- bake(xgb_rec, sim_te_reg)
 
-  expect_snapshot(print(xgb_train_bins))
-  expect_snapshot(print(xgb_test_bins))
+  expect_snapshot(xgb_train_bins)
+  expect_snapshot(xgb_test_bins)
 
   expect_true(length(levels(xgb_train_bins$x)) > 0)
   expect_true(length(levels(xgb_train_bins$z)) > 0)
@@ -460,13 +449,12 @@ test_that("step_discretize_xgb for regression", {
 
   # one bad predictor
   sim_tr_reg$x <- round(sim_tr_reg$x, 1)
-  expect_warning(
+  expect_snapshot({
     xgb_rec <-
       recipe(y ~ ., data = sim_tr_reg[1:100, ]) %>%
       step_discretize_xgb(all_predictors(), outcome = "y") %>%
-      prep(),
-    "Predictors 'x' were not processed"
-  )
+      prep()
+  })
 
   # No numeric variables present
   predictors_non_numeric <- c(
@@ -485,7 +473,7 @@ test_that("printing", {
     recipe(class ~ ., data = sim_tr_cls) %>%
     step_discretize_xgb(all_predictors(), outcome = "class")
 
-  expect_snapshot(print(xgb_rec))
+  expect_snapshot(xgb_rec)
   ## can't use snapshot because of xgboost output here:
   expect_output(prep(xgb_rec, verbose = TRUE))
 })
