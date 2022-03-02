@@ -1,4 +1,4 @@
-# Workflow derived from https://github.com/r-lib/actions/tree/master/examples
+# Workflow derived from https://github.com/r-lib/actions/tree/v2/examples
 # Need help debugging build failures? Start at https://github.com/r-lib/actions#where-to-find-help
 #
 # NOTE: This workflow is overkill for most R packages and
@@ -23,6 +23,7 @@ jobs:
       matrix:
         config:
           - {os: macOS-latest,   r: 'release'}
+
           - {os: windows-latest, r: 'release'}
 
           # Use older ubuntu to maximise backward compatibility
@@ -37,22 +38,18 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - uses: r-lib/actions/setup-pandoc@v1
+      - uses: r-lib/actions/setup-pandoc@v2
 
-      - name: install nlopt, glpk, and libxml2 on Windows
-        if: runner.os == 'windows'
-        run: pacman -Sy --noconfirm mingw-w64-{i686,x86_64}-{nlopt,glpk,libxml2}
-        shell: c:\rtools40\usr\bin\bash.exe --login {0}
-
-      - uses: r-lib/actions/setup-r@v1
+      - uses: r-lib/actions/setup-r@v2
         with:
           r-version: ${{ matrix.config.r }}
           http-user-agent: ${{ matrix.config.http-user-agent }}
           use-public-rspm: true
 
-      - uses: r-lib/actions/setup-r-dependencies@v1
+      - uses: r-lib/actions/setup-r-dependencies@v2
         with:
-          extra-packages: rcmdcheck
+          extra-packages: any::rcmdcheck
+          needs: check
 
       - name: Install Miniconda
         run: |
@@ -68,17 +65,7 @@ jobs:
           reticulate::conda_create('r-reticulate', packages = c('python==3.6.9'))
           tensorflow::install_tensorflow(version='2.4.0')
         shell: Rscript {0}
-          
-      - uses: r-lib/actions/check-r-package@v1
-
-      - name: Show testthat output
-        if: always()
-        run: find check -name 'testthat.Rout*' -exec cat '{}' \; || true
-        shell: bash
-
-      - name: Upload check results
-        if: failure()
-        uses: actions/upload-artifact@main
+        
+      - uses: r-lib/actions/check-r-package@v2
         with:
-          name: ${{ runner.os }}-r${{ matrix.config.r }}-results
-          path: check
+          upload-snapshots: true
