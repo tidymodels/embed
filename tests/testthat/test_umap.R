@@ -176,9 +176,8 @@ test_that("can prep recipes with no keep_original_cols", {
 
   unsupervised$steps[[1]]$keep_original_cols <- NULL
 
-  expect_warning(
-    umap_pred <- prep(unsupervised, training = tr[, -5], verbose = FALSE),
-    "'keep_original_cols' was added to"
+  expect_snapshot(
+    umap_pred <- prep(unsupervised, training = tr[, -5], verbose = FALSE)
   )
 
   expect_error(
