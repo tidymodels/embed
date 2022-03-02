@@ -45,7 +45,7 @@ test_that("step_pca_sparse_bayes", {
     embed_coef[which(vars == "total_inten_ch_3"), 3]
   )
 
-  expect_snapshot(print(rec))
+  expect_snapshot(rec)
 })
 
 
@@ -84,7 +84,7 @@ test_that("step_pca_sparse", {
     embed_coef[which(vars == "total_inten_ch_3"), 3]
   )
 
-  expect_snapshot(print(rec))
+  expect_snapshot(rec)
 })
 
 

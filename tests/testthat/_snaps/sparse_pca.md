@@ -1,7 +1,7 @@
 # step_pca_sparse_bayes
 
     Code
-      print(rec)
+      rec
     Output
       Recipe
       
@@ -19,7 +19,7 @@
 # step_pca_sparse
 
     Code
-      print(rec)
+      rec
     Output
       Recipe
       
