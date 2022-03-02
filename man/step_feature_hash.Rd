@@ -46,8 +46,8 @@ until the step is trained by \code{\link[recipes:prep]{recipes::prep.recipe()}}.
 output. Defaults to \code{FALSE}.}
 
 \item{skip}{A logical. Should the step be skipped when the
-recipe is baked by \code{\link[recipes:bake]{bake.recipe()}}? While all operations are baked
-when \code{\link[recipes:prep]{prep.recipe()}} is run, some operations may not be able to be
+recipe is baked by \code{\link[recipes:bake]{bake()}}? While all operations are baked
+when \code{\link[recipes:prep]{prep()}} is run, some operations may not be able to be
 conducted on new data (e.g. processing the outcome variable(s)).
 Care should be taken when using \code{skip = TRUE} as it may affect
 the computations for subsequent operations.}
@@ -87,7 +87,7 @@ columns.
 data(grants, package = "modeldata")
 
 if (is_tf_available()) {
-  # This may take a while: 
+  # This may take a while:
   rec <-
     recipe(class ~ sponsor_code, data = grants_other) \%>\%
     step_feature_hash(sponsor_code, num_hash = 2^6, keep_original_cols = TRUE) \%>\%

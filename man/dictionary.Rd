@@ -33,8 +33,6 @@ is by tweaking an output returned from it.
 \examples{
 
 mtcars \%>\% dictionary("am", cyl, gear:carb)
-
-
 }
 \references{
 Kullback, S. (1959). \emph{Information Theory and Statistics.} Wiley, New York.

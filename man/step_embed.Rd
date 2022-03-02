@@ -126,7 +126,7 @@ used in the last layer while softmax is used for factor outcomes
 (with any number of levels).
 
 For example, the \code{keras} code for a numeric outcome, one
-categorical predictor, and no hidden units used here would be\preformatted{  keras_model_sequential() \%>\% 
+categorical predictor, and no hidden units used here would be\preformatted{  keras_model_sequential() \%>\%
   layer_embedding(
     input_dim = num_factor_levels_x + 1,
     output_dim = num_terms,
@@ -137,7 +137,7 @@ categorical predictor, and no hidden units used here would be\preformatted{  ker
 }
 
 If a factor outcome is used and hidden units were requested, the code
-would be\preformatted{  keras_model_sequential() \%>\% 
+would be\preformatted{  keras_model_sequential() \%>\%
   layer_embedding(
     input_dim = num_factor_levels_x + 1,
     output_dim = num_terms,
@@ -171,10 +171,11 @@ grants_other <- sample_n(grants_other, 500)
 
 if (is_tf_available()) {
   rec <- recipe(class ~ num_ci + sponsor_code, data = grants_other) \%>\%
-    step_embed(sponsor_code, outcome = vars(class),
-               options = embed_control(epochs = 10))
+    step_embed(sponsor_code,
+      outcome = vars(class),
+      options = embed_control(epochs = 10)
+    )
 }
-
 }
 \references{
 Francois C and Allaire JJ (2018)

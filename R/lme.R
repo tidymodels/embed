@@ -2,7 +2,7 @@
 #'
 #' `step_lencode_mixed` creates a *specification* of a recipe step that
 #'  will convert a nominal (i.e. factor) predictor into a single set of
-#'  scores derived from a generalized linear mixed model. 
+#'  scores derived from a generalized linear mixed model.
 #'
 #' @param recipe A recipe object. The step will be added to the
 #'  sequence of operations for this recipe.
@@ -34,7 +34,7 @@
 #'  method, a tibble with columns `terms` (the selectors or
 #'  variables for encoding), `level` (the factor levels), and
 #'  `value` (the encodings).
-#' @keywords datagen 
+#' @keywords datagen
 #' @concept preprocessing encoding
 #' @export
 #' @details For each factor predictor, a generalized linear model
@@ -45,47 +45,45 @@
 #'  two factor outcomes are used, the log-odds reflect the event of
 #'  interest being the _first_ level of the factor.
 #'
-#' For novel levels, a slightly timmed average of the coefficients 
+#' For novel levels, a slightly timmed average of the coefficients
 #'  is returned.
-#' 
-#' A hierarchical generalized linear model is fit using 
+#'
+#' A hierarchical generalized linear model is fit using
 #'  [lme4::lmer()] or [lme4::glmer()], depending
 #'  on the nature of the outcome, and no intercept via
-#'  
+#'
 #' ```
 #'   lmer(outcome ~ 1 + (1 | predictor), data = data, ...)
 #' ```
-#' 
+#'
 #' where the `...` include the `family` argument (automatically
 #'  set by the step) as well as any arguments given to the `options`
 #'  argument to the step. Relevant options include `control` and
-#'  others.  
-#' 
-#' 
-#' @references 
-#' Micci-Barreca D (2001) "A preprocessing scheme for 
-#'  high-cardinality categorical attributes in classification and 
+#'  others.
+#'
+#'
+#' @references
+#' Micci-Barreca D (2001) "A preprocessing scheme for
+#'  high-cardinality categorical attributes in classification and
 #'  prediction problems," ACM SIGKDD Explorations Newsletter, 3(1),
 #'  27-32.
-#'  
-#' Zumel N and Mount J (2017) "vtreat: a data.frame Processor for 
+#'
+#' Zumel N and Mount J (2017) "vtreat: a data.frame Processor for
 #'  Predictive Modeling," arXiv:1611.09477
-#' 
+#'
 #' @examples
 #' library(recipes)
 #' library(dplyr)
 #' library(modeldata)
-#' 
+#'
 #' data(grants)
-#' 
+#'
 #' set.seed(1)
 #' grants_other <- sample_n(grants_other, 500)
-#' 
 #' \donttest{
 #' reencoded <- recipe(class ~ sponsor_code, data = grants_other) %>%
 #'   step_lencode_mixed(sponsor_code, outcome = vars(class))
 #' }
-
 step_lencode_mixed <-
   function(recipe,
            ...,
@@ -96,8 +94,9 @@ step_lencode_mixed <-
            mapping = NULL,
            skip = FALSE,
            id = rand_id("lencode_mixed")) {
-    if (is.null(outcome))
+    if (is.null(outcome)) {
       rlang::abort("Please list a variable in `outcome`")
+    }
     add_step(
       recipe,
       step_lencode_mixed_new(
@@ -139,13 +138,14 @@ prep.step_lencode_mixed <- function(x, training, info = NULL, ...) {
         rlang::abort(paste0(
           "Mixed effects methods here are only implemented for ",
           "two-class problems."
-        )
-        )
+        ))
       }
     }
     res <-
-      map(training[, col_names], lme_coefs, y = training[[y_name]],
-          x$options)
+      map(training[, col_names], lme_coefs,
+        y = training[[y_name]],
+        x$options
+      )
   } else {
     res <- list()
   }
@@ -158,7 +158,7 @@ prep.step_lencode_mixed <- function(x, training, info = NULL, ...) {
     mapping = res,
     skip = x$skip,
     id = x$id
-  ) 
+  )
 }
 
 
@@ -169,11 +169,12 @@ lme_coefs <- function(x, y, ...) {
     data = data.frame(value = x, y = y),
     na.action = na.omit
   )
-  
+
   dots <- list(...)
-  if (length(dots) > 0)
+  if (length(dots) > 0) {
     args <- c(args, dots[[1]])
-  
+  }
+
   if (!is.factor(y[[1]])) {
     cl <- rlang::call2("lmer", .ns = "lme4", !!!args)
     mod <- rlang::eval_tidy(cl)
@@ -183,16 +184,17 @@ lme_coefs <- function(x, y, ...) {
     cl <- rlang::call2("glmer", .ns = "lme4", !!!args)
     mod <- rlang::eval_tidy(cl)
   }
-  
+
   coefs <- coef(mod)$value
   ..levels <- rownames(coefs)
-  coefs <- coefs[,1]
+  coefs <- coefs[, 1]
   names(coefs) <- ..levels
   mean_coef <- mean(coefs, na.rm = TRUE, trim = .1)
   coefs[is.na(coefs)] <- mean_coef
   coefs <- c(coefs, ..new = mean_coef)
-  if(is.factor(y[[1]]))
+  if (is.factor(y[[1]])) {
     coefs <- -coefs
+  }
   tibble(
     ..level = names(coefs),
     ..value = unname(coefs)
@@ -202,7 +204,7 @@ lme_coefs <- function(x, y, ...) {
 
 map_lme_coef <- function(dat, mapping) {
   new_val <- mapping$..value[mapping$..level == "..new"]
-  dat <- dat %>% 
+  dat <- dat %>%
     mutate(..order = 1:nrow(dat)) %>%
     set_names(c("..level", "..order")) %>%
     mutate(..level = as.character(..level))
@@ -216,9 +218,10 @@ map_lme_coef <- function(dat, mapping) {
 
 #' @export
 bake.step_lencode_mixed <- function(object, new_data, ...) {
-  for (col in names(object$mapping))
+  for (col in names(object$mapping)) {
     new_data[, col] <- map_lme_coef(new_data[, col], object$mapping[[col]])
-  
+  }
+
   new_data
 }
 
@@ -237,11 +240,11 @@ print.step_lencode_mixed <-
 #' @export tidy.step_lencode_mixed
 tidy.step_lencode_mixed <- function(x, ...) {
   if (is_trained(x)) {
-    for(i in seq_along(x$mapping))
+    for (i in seq_along(x$mapping)) {
       x$mapping[[i]]$terms <- names(x$mapping)[i]
+    }
     res <- bind_rows(x$mapping)
     names(res) <- gsub("^\\.\\.", "", names(res))
-    
   } else {
     term_names <- sel2char(x$terms)
     res <- tibble(

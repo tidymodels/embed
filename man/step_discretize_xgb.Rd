@@ -115,7 +115,7 @@ split <- initial_split(credit_data, strata = "Status")
 credit_data_tr <- training(split)
 credit_data_te <- testing(split)
 
-xgb_rec <- 
+xgb_rec <-
   recipe(Status ~ ., data = credit_data_tr) \%>\%
   step_impute_median(all_numeric()) \%>\%
   step_discretize_xgb(all_numeric(), outcome = "Status")
@@ -123,7 +123,7 @@ xgb_rec <-
 if (rlang::is_installed("xgboost")) {
   xgb_rec <- prep(xgb_rec, training = credit_data_tr)
 
-   bake(xgb_rec, credit_data_te, Price)
+  bake(xgb_rec, credit_data_te, Price)
 }
 }
 \seealso{
