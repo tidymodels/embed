@@ -379,9 +379,9 @@ prep.step_woe <- function(x, training, info = NULL, ...) {
     if (any(n_count$low_n > 0)) {
       flagged <- n_count$variable[n_count$low_n > 0]
       flagged <- paste0("'", unique(flagged), "'", collapse = ", ")
-      msg <- paste0(
+      msg <- glue(
         "Some columns used by `step_woe()` have categories with ",
-        "less than 10 values: ", flagged
+        "less than 10 values: {flagged}"
       )
       rlang::warn(msg)
     }

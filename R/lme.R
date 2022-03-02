@@ -135,7 +135,7 @@ prep.step_lencode_mixed <- function(x, training, info = NULL, ...) {
     y_name <- recipes::recipes_eval_select(x$outcome, training, info)
     if (is.factor(training[[y_name]])) {
       if (length(levels(training[[y_name]])) > 2) {
-        rlang::abort(paste0(
+        rlang::abort(glue(
           "Mixed effects methods here are only implemented for ",
           "two-class problems."
         ))

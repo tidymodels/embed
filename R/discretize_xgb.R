@@ -279,10 +279,9 @@ xgb_binning <- function(df, outcome, predictor, sample_val, learn_rate, num_brea
   if (inherits(xgb_mdl, "try-error")) {
     err <- conditionMessage(attr(xgb_mdl, "condition"))
     msg <-
-      paste0(
+      glue(
         "`step_discretize_xgb()` failed to create a tree with error for ",
-        "predictor '", predictor, "', which was not binned. The error: ",
-        err
+        "predictor '{predictor}', which was not binned. The error: {err}"
       )
     rlang::warn(msg)
     return(numeric(0))
@@ -305,17 +304,16 @@ xgb_binning <- function(df, outcome, predictor, sample_val, learn_rate, num_brea
   if (inherits(xgb_tree, "try-error")) {
     err <- conditionMessage(attr(xgb_tree, "condition"))
     if (grepl("Non-tree model detected", err)) {
-      msg <- paste0(
-        "`step_discretize_xgb()` failed for predictor '", predictor,
-        "'. This could be because the data have no trend or because ",
-        "the learning rate is too low (current value: ",
-        learn_rate, "). The predictor was not binned."
+      msg <- glue(
+        "`step_discretize_xgb()` failed for predictor '{predictor}'. ",
+        "This could be because the data have no trend or because ",
+        "the learning rate is too low (current value: {learn_rate}). ",
+        "The predictor was not binned."
       )
     } else {
-      msg <- paste0(
+      msg <- glue(
         "`step_discretize_xgb()` failed to create a tree with error for ",
-        "predictor '", predictor, "', which was not binned. The error: ",
-        err
+        "predictor '{predictor}', which was not binned. The error: {err}"
       )
     }
 
@@ -354,7 +352,7 @@ prep.step_discretize_xgb <- function(x, training, info = NULL, ...) {
 
     if (floor(test_size) < 2) {
       rlang::abort(
-        paste(
+        glue(
           "Too few observations in the early stopping validation set.",
           "Consider increasing the `sample_val` parameter."
         )
@@ -367,11 +365,12 @@ prep.step_discretize_xgb <- function(x, training, info = NULL, ...) {
     num_unique <- purrr::map_int(training[, col_names], ~ length(unique(.x)))
     too_few <- num_unique < 20
     if (any(too_few)) {
+      predictors <- paste0("'", col_names[too_few], "'", collapse = ", ")
       rlang::warn(
-        paste0(
+        glue(
           "More than 20 unique training set values are required. ",
-          "Predictors ", paste0("'", col_names[too_few], "'", collapse = ", "),
-          " were not processed; their original values will be used."
+          "Predictors {predictors} were not processed; ",
+          "their original values will be used."
         )
       )
       col_names <- col_names[!too_few]

@@ -141,10 +141,9 @@ cart_binning <- function(predictor, term, outcome, cost_complexity, tree_depth, 
   if (inherits(cart_mdl, "try-error")) {
     err <- conditionMessage(attr(cart_mdl, "condition"))
     msg <-
-      paste0(
+      glue(
         "`step_discretize_cart()` failed to create a tree with error for ",
-        "predictor '", term, "', which will not be binned. The error: ",
-        err
+        "predictor '{term}', which will not be binned. The error: {err}"
       )
     rlang::warn(msg)
     return(numeric(0))
@@ -154,9 +153,9 @@ cart_binning <- function(predictor, term, outcome, cost_complexity, tree_depth, 
     cart_split <- sort(unique(cart_mdl$splits[, "index"]))
   } else {
     msg <-
-      paste0(
+      glue(
         "`step_discretize_cart()` failed to find any meaningful splits for ",
-        "predictor '", term, "', which will not be binned."
+        "predictor '{term}', which will not be binned."
       )
     rlang::warn(msg)
     cart_split <- numeric(0)
