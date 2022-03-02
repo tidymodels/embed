@@ -39,7 +39,7 @@ test_that("basic usage", {
     )
   te_dat <- tibble(x1 = 1.1, x3 = "bridge 4")
 
-  expect_warning(
+  expect_snapshot(
     res_te <- bake(rec_tr, te_dat, dplyr::starts_with("x3"))
   )
 
@@ -125,9 +125,8 @@ test_that("can prep recipes with no keep_original_cols", {
 
   rec$steps[[1]]$keep_original_cols <- NULL
 
-  expect_warning(
-    rec_trained <- prep(rec, training = ex_dat, verbose = FALSE),
-    "'keep_original_cols' was added to"
+  expect_snapshot(
+    rec_trained <- prep(rec, training = ex_dat, verbose = FALSE)
   )
 
   expect_error(
