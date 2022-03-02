@@ -36,7 +36,7 @@ test_that("low-level binning for classification", {
   expect_equal(splits, best_split)
 
   set.seed(283834)
-  expect_warning(
+  expect_snapshot({
     splits <-
       embed:::cart_binning(
         sample(sim_tr_cls$x),
@@ -45,9 +45,8 @@ test_that("low-level binning for classification", {
         cost_complexity = 0.01,
         tree_depth = 5,
         min_n = 10
-      ),
-    regexp = "failed to find any meaningful splits for predictor 'x'"
-  )
+      )
+  })
   expect_equal(splits, numeric(0))
 })
 
@@ -67,7 +66,7 @@ test_that("low-level binning for regression", {
   expect_equal(splits, best_split)
 
   set.seed(283834)
-  expect_warning(
+  expect_snapshot({
     splits <-
       embed:::cart_binning(
         sample(sim_tr_reg$x),
@@ -76,22 +75,20 @@ test_that("low-level binning for regression", {
         cost_complexity = 0.01,
         tree_depth = 5,
         min_n = 10
-      ),
-    regexp = "failed to find any meaningful splits for predictor 'potato'"
-  )
+      )
+  })
   expect_equal(splits, numeric(0))
 })
 
 # ------------------------------------------------------------------------------
 
 test_that("step function for classification", {
-  expect_warning(
+  expect_snapshot({
     cart_rec <-
       recipe(class ~ ., data = sim_tr_cls) %>%
       step_discretize_cart(all_predictors(), outcome = "class") %>%
-      prep(),
-    regexp = "failed to find any meaningful splits for predictor 'z'"
-  )
+      prep()
+  })
 
   expect_equal(names(cart_rec$steps[[1]]$rules), "x")
   expect_equal(cart_rec$steps[[1]]$rules$x, best_split)
@@ -108,13 +105,12 @@ test_that("step function for classification", {
 
 
 test_that("step function for regression", {
-  expect_warning(
+  expect_snapshot({
     cart_rec <-
       recipe(y ~ ., data = sim_tr_reg) %>%
       step_discretize_cart(all_predictors(), outcome = "y") %>%
-      prep(),
-    regexp = "failed to find any meaningful splits for predictor 'z'"
-  )
+      prep()
+  })
 
   expect_equal(names(cart_rec$steps[[1]]$rules), "x")
   expect_equal(cart_rec$steps[[1]]$rules$x, best_split)
@@ -135,13 +131,12 @@ test_that("bad args", {
   tmp <- sim_tr_reg
   tmp$w <- sample(letters[1:4], nrow(tmp), replace = TRUE)
 
-  expect_error(
+  expect_snapshot(error = TRUE, {
     cart_rec <-
       recipe(y ~ ., data = tmp) %>%
       step_discretize_cart(all_predictors(), outcome = "y") %>%
-      prep(),
-    regexp = "All columns selected for the step should be numeric"
-  )
+      prep()
+  })
 })
 
 # ------------------------------------------------------------------------------
@@ -161,10 +156,9 @@ test_that("tidy method", {
     NA_character_
   )
 
-  expect_warning(
-    cart_rec <- prep(cart_rec),
-    "failed to find any meaningful splits for predictor 'z'"
-  )
+  expect_snapshot({
+    cart_rec <- prep(cart_rec)
+  })
 
   res <- tidy(cart_rec, number = 1)
   expect_equal(
@@ -185,13 +179,8 @@ test_that("printing", {
     recipe(class ~ ., data = sim_tr_cls) %>%
     step_discretize_cart(all_predictors(), outcome = "class")
 
-  expect_snapshot(print(cart_rec))
-  expect_snapshot(
-    expect_warning(
-      prep(cart_rec, verbose = TRUE),
-      "failed to find any meaningful splits for predictor 'z'"
-    )
-  )
+  expect_snapshot(cart_rec)
+  expect_snapshot(prep(cart_rec, verbose = TRUE))
 })
 
 
