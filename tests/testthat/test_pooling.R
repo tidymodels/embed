@@ -8,22 +8,18 @@ opts <- list(seed = 34677, chains = 2, iter = 500)
 test_that("factor encoded predictor", {
   skip_on_cran()
   skip_if_not_installed("rstanarm")
-  expect_warning(
-    expect_warning(
-      class_test <- recipe(x2 ~ ., data = ex_dat) %>%
-        step_lencode_bayes(x3,
-          outcome = vars(x2),
-          verbose = FALSE,
-          options = opts
-        ) %>%
-        prep(training = ex_dat, retain = TRUE),
-      "Bulk Effective Samples Size"
-    ),
-    "Tail Effective Samples Size"
+  expect_snapshot(
+    class_test <- recipe(x2 ~ ., data = ex_dat) %>%
+      step_lencode_bayes(x3,
+                         outcome = vars(x2),
+                         verbose = FALSE,
+                         options = opts
+      ) %>%
+      prep(training = ex_dat, retain = TRUE)
   )
   tr_values <- juice(class_test)$x3
   new_values <- bake(class_test, new_data = new_dat)
-  expect_warning(
+  expect_snapshot(
     new_values_ch <- bake(class_test, new_data = new_dat_ch)
   )
   key <- class_test$steps[[1]]$mapping
