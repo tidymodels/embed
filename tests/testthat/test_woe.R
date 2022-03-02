@@ -24,13 +24,25 @@ df <- data.frame(
 # woe_table
 
 test_that("woe_table do not accept different length inputs", {
-  expect_error(embed:::woe_table(rep(c(0, 1), 20), rep(letters[1:4], 5)))
+  expect_snapshot(
+    error = TRUE,
+    embed:::woe_table(rep(c(0, 1), 20), rep(letters[1:4], 5))
+  )
 })
 
 test_that("woe_table accepts only outcome with 2 distinct categories", {
-  expect_error(embed:::woe_table(rep(letters[1:3], 10), rep(c(0, 1, 2), 10)))
-  expect_error(embed:::woe_table(rep(letters[1:3], 10), rep(c(0), 30)))
-  expect_error(embed:::woe_table(df$x2, df$x1))
+  expect_snapshot(
+    error = TRUE,
+    embed:::woe_table(rep(letters[1:3], 10), rep(c(0, 1, 2), 10))
+  )
+  expect_snapshot(
+    error = TRUE,
+    embed:::woe_table(rep(letters[1:3], 10), rep(c(0), 30))
+  )
+  expect_snapshot(
+    error = TRUE,
+    embed:::woe_table(df$x2, df$x1)
+  )
 })
 
 test_that("woe_table returns a proper tibble", {
@@ -132,8 +144,14 @@ test_that("add_woe returns woe only for those variables that exists in both data
 })
 
 test_that("add_woe do not accept dictionary with unexpected layout", {
-  expect_error(add_woe(df, outcome = "y", x1, dictionary = iris))
-  expect_error(add_woe(df, outcome = "y", x1, dictionary = iris %>% mutate(variable = 1)))
+  expect_snapshot(
+    error = TRUE,
+    add_woe(df, outcome = "y", x1, dictionary = iris)
+  )
+  expect_snapshot(
+    error = TRUE,
+    add_woe(df, outcome = "y", x1, dictionary = iris %>% mutate(variable = 1))
+  )
 })
 
 # test_that("add_woe warns user if the variable has too many levels", {
@@ -148,9 +166,8 @@ test_that("step_woe", {
     recipe(Status ~ ., data = credit_tr) %>%
     step_woe(Job, Home, outcome = vars(Status))
 
-  expect_warning(
-    woe_models <- prep(rec, training = credit_tr),
-    "less than 10 values"
+  expect_snapshot(
+    woe_models <- prep(rec, training = credit_tr)
   )
 
   woe_dict <- credit_tr %>% dictionary("Status", Job, Home)
@@ -184,7 +201,10 @@ test_that("step_woe", {
     step_woe(all_predictors(), outcome = vars(Status))
 
   #
-  expect_error(prep(rec_all_numeric, training = credit_tr))
+  expect_snapshot(
+    error = TRUE,
+    prep(rec_all_numeric, training = credit_tr)
+  )
 
   rec_discretize <- recipe(Status ~ ., data = credit_tr) %>% step_discretize(Price)
   rec_discretize_woe <- rec_discretize %>% step_woe(Price, outcome = vars(Status))
@@ -204,7 +224,7 @@ test_that("step_woe", {
 test_that("printing", {
   woe_extract <- recipe(Status ~ ., data = credit_tr) %>%
     step_woe(Job, Home, outcome = vars(Status))
-  expect_snapshot(print(woe_extract))
+  expect_snapshot(woe_extract)
   expect_snapshot(prep(woe_extract, training = credit_tr, verbose = TRUE))
 })
 
@@ -213,7 +233,7 @@ test_that("2-level factors", {
   iris3 <- iris
   iris3$group <- factor(rep(letters[1:5], each = 30))
 
-  expect_error(
+  expect_snapshot(error = TRUE,
     recipe(Species ~ ., data = iris3) %>%
       step_woe(group, outcome = vars(Species)) %>%
       prep()
