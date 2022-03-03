@@ -4,9 +4,6 @@
       class_test <- recipe(x2 ~ ., data = ex_dat) %>% step_lencode_bayes(x3, outcome = vars(
         x2), verbose = FALSE, options = opts) %>% prep(training = ex_dat, retain = TRUE)
     Warning <simpleWarning>
-      The largest R-hat is 1.05, indicating chains have not mixed.
-      Running the chains for more iterations may help. See
-      https://mc-stan.org/misc/warnings.html#r-hat
       Bulk Effective Samples Size (ESS) is too low, indicating posterior means and medians may be unreliable.
       Running the chains for more iterations may help. See
       https://mc-stan.org/misc/warnings.html#bulk-ess

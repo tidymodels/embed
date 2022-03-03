@@ -8,7 +8,14 @@ opts <- list(seed = 34677, chains = 2, iter = 500)
 test_that("factor encoded predictor", {
   skip_on_cran()
   skip_if_not_installed("rstanarm")
-  expect_snapshot(
+  
+  scrub_rhat_warning <- function(x) {
+    if (grepl("^The largest R-hat is", x[1])) {
+      return(character())
+    }
+    x
+  }
+  expect_snapshot(transform = scrub_rhat_warning, {
     class_test <- recipe(x2 ~ ., data = ex_dat) %>%
       step_lencode_bayes(x3,
                          outcome = vars(x2),
@@ -16,6 +23,7 @@ test_that("factor encoded predictor", {
                          options = opts
       ) %>%
       prep(training = ex_dat, retain = TRUE)
+  }
   )
   tr_values <- juice(class_test)$x3
   new_values <- bake(class_test, new_data = new_dat)
