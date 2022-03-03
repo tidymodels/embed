@@ -121,7 +121,7 @@ test_that("add_woe returns a proper tibble", {
 })
 
 test_that("add_woe accepts only outcome with 2 distinct categories", {
-  expect_snapshot(error = TRUE, dictionary(df %>% filter(y %in% "B"), y))
+  expect_snapshot(error = TRUE, dictionary(df %>% filter(y %in% "B"), "y"))
 })
 
 test_that("add_woe ruturns no messages nor warnings nor errors", {

@@ -29,11 +29,9 @@
 # add_woe accepts only outcome with 2 distinct categories
 
     Code
-      dictionary(df %>% filter(y %in% "B"), y)
+      dictionary(df %>% filter(y %in% "B"), "y")
     Error <rlang_error>
-      object 'y' not found
-      Caused by error in `enquo()`:
-      ! object 'y' not found
+      'outcome' must have exactly 2 categories (has 1)
 
 # add_woe do not accept dictionary with unexpected layout
 
