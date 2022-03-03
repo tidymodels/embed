@@ -85,8 +85,8 @@ variables.}
 \code{NULL} until the step is trained by \code{\link[recipes:prep]{recipes::prep.recipe()}}.}
 
 \item{skip}{A logical. Should the step be skipped when the
-recipe is baked by \code{\link[recipes:bake]{bake.recipe()}}? While all operations are baked
-when \code{\link[recipes:prep]{prep.recipe()}} is run, some operations may not be able to be
+recipe is baked by \code{\link[recipes:bake]{bake()}}? While all operations are baked
+when \code{\link[recipes:prep]{prep()}} is run, some operations may not be able to be
 conducted on new data (e.g. processing the outcome variable(s)).
 Care should be taken when using \code{skip = TRUE} as it may affect
 the computations for subsequent operations.}
@@ -120,21 +120,21 @@ library(ggplot2)
 
 split <- seq.int(1, 150, by = 9)
 tr <- iris[-split, ]
-te <- iris[ split, ]
+te <- iris[split, ]
 
 set.seed(11)
-supervised <- 
+supervised <-
   recipe(Species ~ ., data = tr) \%>\%
-  step_center(all_predictors()) \%>\% 
-  step_scale(all_predictors()) \%>\% 
-  step_umap(all_predictors(), outcome = vars(Species), num_comp = 2) \%>\% 
+  step_center(all_predictors()) \%>\%
+  step_scale(all_predictors()) \%>\%
+  step_umap(all_predictors(), outcome = vars(Species), num_comp = 2) \%>\%
   prep(training = tr)
 
 theme_set(theme_bw())
 
-bake(supervised, new_data = te, Species, starts_with("umap")) \%>\% 
-  ggplot(aes(x = UMAP1, y = UMAP2, col = Species)) + 
-  geom_point(alpha = .5) 
+bake(supervised, new_data = te, Species, starts_with("umap")) \%>\%
+  ggplot(aes(x = UMAP1, y = UMAP2, col = Species)) +
+  geom_point(alpha = .5)
 }
 \references{
 McInnes, L., & Healy, J. (2018). UMAP: Uniform Manifold Approximation and

@@ -32,7 +32,7 @@
 #'  method, a tibble with columns `terms` (the selectors or
 #'  variables for encoding), `level` (the factor levels), and
 #'  `value` (the encodings).
-#' @keywords datagen 
+#' @keywords datagen
 #' @concept preprocessing encoding
 #' @export
 #' @details For each factor predictor, a generalized linear model
@@ -44,33 +44,31 @@
 #'  interest being the _first_ level of the factor.
 
 #'
-#' For novel levels, a slightly timmed average of the coefficients 
+#' For novel levels, a slightly timmed average of the coefficients
 #'  is returned.
-#' 
-#' @references 
-#' Micci-Barreca D (2001) "A preprocessing scheme for 
-#'  high-cardinality categorical attributes in classification and 
-#'  prediction problems," ACM SIGKDD Explorations Newsletter, 3(1), 
+#'
+#' @references
+#' Micci-Barreca D (2001) "A preprocessing scheme for
+#'  high-cardinality categorical attributes in classification and
+#'  prediction problems," ACM SIGKDD Explorations Newsletter, 3(1),
 #'  27-32.
-#'  
-#' Zumel N and Mount J (2017) "vtreat: a data.frame Processor for 
+#'
+#' Zumel N and Mount J (2017) "vtreat: a data.frame Processor for
 #'  Predictive Modeling," arXiv:1611.09477
-#' 
+#'
 #' @examples
 #' library(recipes)
 #' library(dplyr)
 #' library(modeldata)
-#' 
+#'
 #' data(grants)
-#' 
+#'
 #' set.seed(1)
 #' grants_other <- sample_n(grants_other, 500)
-#' 
 #' \donttest{
 #' reencoded <- recipe(class ~ sponsor_code, data = grants_other) %>%
 #'   step_lencode_glm(sponsor_code, outcome = vars(class))
 #' }
-
 step_lencode_glm <-
   function(recipe,
            ...,
@@ -80,8 +78,9 @@ step_lencode_glm <-
            mapping = NULL,
            skip = FALSE,
            id = rand_id("lencode_glm")) {
-    if (is.null(outcome))
+    if (is.null(outcome)) {
       rlang::abort("Please list a variable in `outcome`")
+    }
     add_step(
       recipe,
       step_lencode_glm_new(
@@ -128,20 +127,21 @@ prep.step_lencode_glm <- function(x, training, info = NULL, ...) {
     outcome = x$outcome,
     mapping = res,
     skip = x$skip,
-    id = x$id)
+    id = x$id
+  )
 }
 
 
 glm_coefs <- function(x, y, ...) {
   fam <- if (is.factor(y[[1]])) binomial else gaussian
   form <- as.formula(paste0(names(y), "~ 0 + value"))
-  
+
   if (is.vector(x) | is.factor(x)) {
     x <- tibble(value = x)
   } else {
     x <- as_tibble(x)
   }
-  
+
   mod <-
     glm(
       form,
@@ -150,14 +150,15 @@ glm_coefs <- function(x, y, ...) {
       na.action = na.omit,
       ...
     )
-  
+
   coefs <- coef(mod)
   names(coefs) <- gsub("^value", "", names(coefs))
   mean_coef <- mean(coefs, na.rm = TRUE, trim = .1)
   coefs[is.na(coefs)] <- mean_coef
   coefs <- c(coefs, ..new = mean_coef)
-  if(is.factor(y[[1]]))
+  if (is.factor(y[[1]])) {
     coefs <- -coefs
+  }
   tibble(
     ..level = names(coefs),
     ..value = unname(coefs)
@@ -168,7 +169,7 @@ glm_coefs <- function(x, y, ...) {
 
 map_glm_coef <- function(dat, mapping) {
   new_val <- mapping$..value[mapping$..level == "..new"]
-  dat <- dat %>% 
+  dat <- dat %>%
     mutate(..order = 1:nrow(dat)) %>%
     set_names(c("..level", "..order")) %>%
     mutate(..level = as.character(..level))
@@ -182,9 +183,10 @@ map_glm_coef <- function(dat, mapping) {
 
 #' @export
 bake.step_lencode_glm <- function(object, new_data, ...) {
-  for (col in names(object$mapping))
+  for (col in names(object$mapping)) {
     new_data[, col] <- map_glm_coef(new_data[, col], object$mapping[[col]])
-  
+  }
+
   new_data
 }
 
@@ -203,11 +205,11 @@ print.step_lencode_glm <-
 #' @export tidy.step_lencode_glm
 tidy.step_lencode_glm <- function(x, ...) {
   if (is_trained(x)) {
-    for(i in seq_along(x$mapping))
+    for (i in seq_along(x$mapping)) {
       x$mapping[[i]]$terms <- names(x$mapping)[i]
+    }
     res <- bind_rows(x$mapping)
     names(res) <- gsub("^\\.\\.", "", names(res))
-    
   } else {
     term_names <- sel2char(x$terms)
     res <- tibble(
@@ -226,4 +228,3 @@ tidy.step_lencode_glm <- function(x, ...) {
 required_pkgs.step_lencode_glm <- function(x, ...) {
   c("embed")
 }
-

@@ -3,7 +3,7 @@ rand_strings <- function(n_terms, samples) {
   strings <- vapply(
     strings,
     function(x) {
-      x <- sample(letters, rpois(1, lambda = 5)+ 3, replace = TRUE)
+      x <- sample(letters, rpois(1, lambda = 5) + 3, replace = TRUE)
       paste0(x, collapse = "")
     },
     character(1)

@@ -1,4 +1,4 @@
-#' @import recipes 
+#' @import recipes
 #' @import rlang
 #' @importFrom utils globalVariables capture.output packageVersion stack compareVersion
 #' @importFrom uwot umap_transform umap
@@ -10,9 +10,9 @@
 #' @importFrom stats setNames model.matrix complete.cases
 #' @importFrom purrr map
 #' @importFrom tibble rownames_to_column as_tibble tibble
-#' @importFrom dplyr bind_cols bind_rows mutate filter left_join %>% arrange 
+#' @importFrom dplyr bind_cols bind_rows mutate filter left_join %>% arrange
 #' @importFrom dplyr ends_with contains one_of
-#' @importFrom dplyr tibble mutate filter left_join %>% arrange 
+#' @importFrom dplyr tibble mutate filter left_join %>% arrange
 #' @importFrom tidyr gather
 #' @importFrom withr with_seed
 
@@ -37,30 +37,28 @@ utils::globalVariables(
   c(
     "Feature", "Missing", "No", "Node", "Split", "Yes",
     "training", "col_names", "y_name",
-    "n", "p", "predictor", "summary_outcome", "value", "woe", "select", 
+    "n", "p", "predictor", "summary_outcome", "value", "woe", "select",
     "variable", ".",
     "type", "loss", "epochs", "..level", "..order",
     "data", "n_tot"
-    )
   )
+)
 
 # from recipes
-is_tune <- function (x)  {
+is_tune <- function(x) {
   if (is.call(x)) {
     if (rlang::call_name(x) == "tune") {
       return(TRUE)
-    }
-    else {
+    } else {
       return(FALSE)
     }
-  }
-  else {
+  } else {
     return(FALSE)
   }
   FALSE
 }
 
-prop2int <- function (x, p) {
+prop2int <- function(x, p) {
   cuts <- seq(0, p, length.out = p + 1)
   as.integer(cut(x * p, breaks = cuts, include.lowest = TRUE))
 }
