@@ -80,7 +80,6 @@ test_that("factor encoded predictor", {
 
 test_that("character encoded predictor", {
   skip_on_cran()
-  skip_on_os("mac")
   skip_if_not_installed("rstanarm")
   expect_warning(
     expect_warning(
@@ -154,7 +153,6 @@ test_that("character encoded predictor", {
 
 test_that("factor encoded predictor", {
   skip_on_cran()
-  skip_on_os("mac")
   skip_if_not_installed("rstanarm")
   expect_warning({
     set.seed(8283)
@@ -223,7 +221,6 @@ test_that("factor encoded predictor", {
 
 test_that("character encoded predictor", {
   skip_on_cran()
-  skip_on_os("mac")
   skip_if_not_installed("rstanarm")
   expect_warning({
     set.seed(8283)

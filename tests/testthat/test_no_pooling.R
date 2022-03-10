@@ -119,7 +119,6 @@ test_that("character encoded predictor", {
 # ------------------------------------------------------------------------------
 
 test_that("factor encoded predictor", {
-  skip_on_os("mac")
 
   reg_test <- recipe(x1 ~ ., data = ex_dat) %>%
     step_lencode_glm(x3, outcome = vars(x1)) %>%
