@@ -3,6 +3,15 @@ source(testthat::test_path("test_helpers.R"))
 
 opts <- list(seed = 34677, chains = 2, iter = 500)
 
+omit_warning <- function(pattern) {
+  function(x) {
+    if (grepl(pattern, x[1])) {
+      return(NULL)
+    }
+    x
+  }
+}
+
 # ------------------------------------------------------------------------------
 
 test_that("factor encoded predictor", {
@@ -82,6 +91,7 @@ test_that("character encoded predictor", {
   skip_on_cran()
   skip_if_not_installed("rstanarm")
   expect_snapshot(
+    transform = omit_warning("^The largest R-hat is 1.05"),
     class_test <- recipe(x2 ~ ., data = ex_dat_ch) %>%
       step_lencode_bayes(x3,
         outcome = vars(x2),
@@ -150,7 +160,9 @@ test_that("character encoded predictor", {
 test_that("factor encoded predictor", {
   skip_on_cran()
   skip_if_not_installed("rstanarm")
-  expect_snapshot({
+  expect_snapshot(
+    transform = omit_warning("^Bulk Effective Samples Size"),
+    {
     set.seed(8283)
     reg_test <- recipe(x1 ~ ., data = ex_dat) %>%
       step_lencode_bayes(x3,
@@ -218,7 +230,9 @@ test_that("factor encoded predictor", {
 test_that("character encoded predictor", {
   skip_on_cran()
   skip_if_not_installed("rstanarm")
-  expect_snapshot({
+  expect_snapshot(
+    transform = omit_warning("^Bulk Effective Samples Size"),
+    {
     set.seed(8283)
     reg_test <- recipe(x1 ~ ., data = ex_dat_ch) %>%
       step_lencode_bayes(x3,
