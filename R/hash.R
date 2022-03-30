@@ -206,6 +206,7 @@ bake.step_feature_hash <- function(object, new_data, ...) {
   new_data
 }
 
+#' @export
 print.step_feature_hash <-
   function(x, width = max(20, options()$width - 31), ...) {
     cat("Feature hashed dummy variables for ", sep = "")
