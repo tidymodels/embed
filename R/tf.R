@@ -247,6 +247,14 @@ prep.step_embed <- function(x, training, info = NULL, ...) {
 }
 
 is_tf_2 <- function() {
+  if (!is_tf_available()) {
+    rlang::abort(
+      c(
+        "tensorflow could now be found.", 
+        "PLease run `tensorflow::install_tensorflow()` to install."
+      )
+    )
+  }
   compareVersion("2.0", as.character(tensorflow::tf_version())) <= 0
 }
 
