@@ -2,7 +2,6 @@
 % Please edit documentation in R/umap.R
 \name{step_umap}
 \alias{step_umap}
-\alias{tidy.step_umap}
 \title{Supervised and unsupervised uniform manifold approximation and projection (UMAP)}
 \usage{
 step_umap(
@@ -25,8 +24,6 @@ step_umap(
   skip = FALSE,
   id = rand_id("umap")
 )
-
-\method{tidy}{step_umap}(x, ...)
 }
 \arguments{
 \item{recipe}{A recipe object. The step will be added to the
@@ -92,8 +89,6 @@ Care should be taken when using \code{skip = TRUE} as it may affect
 the computations for subsequent operations.}
 
 \item{id}{A character string that is unique to this step to identify it.}
-
-\item{x}{A \code{step_umap} object.}
 }
 \value{
 An updated version of \code{recipe} with the new step added to the

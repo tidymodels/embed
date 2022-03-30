@@ -235,7 +235,7 @@ print.step_pca_sparse_bayes <-
     invisible(x)
   }
 
-#' @rdname step_pca_sparse_bayes
+#' @rdname tidy.recipe
 #' @param x A `step_pca_sparse_bayes` object.
 #' @export
 tidy.step_pca_sparse_bayes <- function(x, ...) {

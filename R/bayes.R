@@ -283,10 +283,9 @@ print.step_lencode_bayes <-
   }
 
 
-#' @rdname step_lencode_bayes
+#' @rdname tidy.recipe
 #' @param x A `step_lencode_bayes` object.
 #' @export
-#' @export tidy.step_lencode_bayes
 tidy.step_lencode_bayes <- function(x, ...) {
   if (is_trained(x)) {
     for (i in seq_along(x$mapping)) {

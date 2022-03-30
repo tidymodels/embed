@@ -2,7 +2,6 @@
 % Please edit documentation in R/discretize_cart.R
 \name{step_discretize_cart}
 \alias{step_discretize_cart}
-\alias{tidy.step_discretize_cart}
 \title{Discretize numeric variables with CART}
 \usage{
 step_discretize_cart(
@@ -18,8 +17,6 @@ step_discretize_cart(
   skip = FALSE,
   id = rand_id("discretize_cart")
 )
-
-\method{tidy}{step_discretize_cart}(x, ...)
 }
 \arguments{
 \item{recipe}{A recipe object. The step will be added to the sequence of
@@ -58,8 +55,6 @@ Care should be taken when using \code{skip = TRUE} as it may affect
 the computations for subsequent operations}
 
 \item{id}{A character string that is unique to this step to identify it.}
-
-\item{x}{A \code{step_discretize_cart} object.}
 }
 \value{
 An updated version of \code{recipe} with the new step added to the
