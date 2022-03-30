@@ -18,13 +18,9 @@ test_that("factor encoded predictor", {
   skip_on_cran()
   skip_if_not_installed("rstanarm")
   
-  scrub_rhat_warning <- function(x) {
-    if (grepl("^The largest R-hat is", x[1])) {
-      return(character())
-    }
-    x
-  }
-  expect_snapshot(transform = scrub_rhat_warning, {
+  expect_snapshot(
+    transform = omit_warning("^The largest R-hat is"),
+    {
     class_test <- recipe(x2 ~ ., data = ex_dat) %>%
       step_lencode_bayes(x3,
                          outcome = vars(x2),
