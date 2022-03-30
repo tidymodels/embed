@@ -61,9 +61,12 @@ An updated version of \code{recipe} with the new step added to the
 sequence of any existing operations.
 }
 \description{
-\code{step_feature_hash} creates a a \emph{specification} of a recipe step that will
-convert nominal data (e.g. character or factors) into one or more numeric
-binary columns using the levels of the original data.
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#soft-deprecated}{\figure{lifecycle-soft-deprecated.svg}{options: alt='[Soft-deprecated]'}}}{\strong{[Soft-deprecated]}}
+
+\code{step_feature_hash} is being deprecated in favor of
+\code{\link[textrecipes:step_dummy_hash]{textrecipes::step_dummy_hash()}}. This function creates a \emph{specification} of
+a recipe step that will convert nominal data (e.g. character or factors) into
+one or more numeric binary columns using the levels of the original data.
 }
 \details{
 \code{step_feature_hash()} will create a set of binary dummy variables

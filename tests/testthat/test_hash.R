@@ -5,6 +5,7 @@ source(testthat::test_path("test_helpers.R"))
 
 test_that("basic usage", {
   skip_on_cran()
+  rlang::local_options(lifecycle_verbosity = "quiet")
 
   rec <- recipe(x1 ~ x3, data = ex_dat) %>%
     step_feature_hash(x3)
@@ -55,6 +56,7 @@ test_that("basic usage", {
 
 test_that("basic usage - character strings", {
   skip_on_cran()
+  rlang::local_options(lifecycle_verbosity = "quiet")
 
   ex_dat$x3 <- as.character(ex_dat$x3)
 
@@ -104,6 +106,7 @@ test_that("basic usage - character strings", {
 
 test_that("keep_original_cols works", {
   skip_on_cran()
+  rlang::local_options(lifecycle_verbosity = "quiet")
 
   rec <- recipe(x1 ~ x3, data = ex_dat) %>%
     step_feature_hash(x3, num_hash = 9, keep_original_cols = TRUE)
@@ -119,6 +122,7 @@ test_that("keep_original_cols works", {
 
 test_that("can prep recipes with no keep_original_cols", {
   skip_on_cran()
+  rlang::local_options(lifecycle_verbosity = "quiet")
 
   rec <- recipe(x1 ~ x3, data = ex_dat) %>%
     step_feature_hash(x3, num_hash = 9, keep_original_cols = TRUE)
@@ -139,6 +143,7 @@ test_that("can prep recipes with no keep_original_cols", {
 # ------------------------------------------------------------------------------
 
 test_that("empty selections", {
+  rlang::local_options(lifecycle_verbosity = "quiet")
   data(ad_data, package = "modeldata")
   expect_error(
     rec <-

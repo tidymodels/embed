@@ -1,8 +1,12 @@
 #' Dummy Variables Creation via Feature Hashing
 #'
-#' `step_feature_hash` creates a a *specification* of a recipe step that will
-#'  convert nominal data (e.g. character or factors) into one or more numeric
-#'  binary columns using the levels of the original data.
+#' @description
+#' `r lifecycle::badge("soft-deprecated")`
+#' 
+#' `step_feature_hash` is being deprecated in favor of
+#' [textrecipes::step_dummy_hash()]. This function creates a *specification* of
+#' a recipe step that will convert nominal data (e.g. character or factors) into
+#' one or more numeric binary columns using the levels of the original data.
 #'
 #' @inheritParams recipes::step_pca
 #' @param num_hash The number of resulting dummy variable columns.
@@ -66,6 +70,13 @@ step_feature_hash <-
            keep_original_cols = FALSE,
            skip = FALSE,
            id = rand_id("feature_hash")) {
+    
+    lifecycle::deprecate_soft(
+      "0.2.0",
+      "embed::step_feature_hash()",
+      "textrecipes::step_dummy_hash()"
+    )
+    
     if (lifecycle::is_present(preserve)) {
       lifecycle::deprecate_soft(
         "0.1.5",
