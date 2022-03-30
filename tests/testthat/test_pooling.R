@@ -161,7 +161,7 @@ test_that("factor encoded predictor", {
   skip_on_cran()
   skip_if_not_installed("rstanarm")
   expect_snapshot(
-    transform = omit_warning("^Bulk Effective Samples Size"),
+    transform = omit_warning("^(Bulk Effective|Tail Effective)"),
     {
     set.seed(8283)
     reg_test <- recipe(x1 ~ ., data = ex_dat) %>%
@@ -231,7 +231,7 @@ test_that("character encoded predictor", {
   skip_on_cran()
   skip_if_not_installed("rstanarm")
   expect_snapshot(
-    transform = omit_warning("^Bulk Effective Samples Size"),
+    transform = omit_warning("^(Bulk Effective|Tail Effective)"),
     {
     set.seed(8283)
     reg_test <- recipe(x1 ~ ., data = ex_dat_ch) %>%
