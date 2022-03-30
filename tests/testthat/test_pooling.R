@@ -91,7 +91,7 @@ test_that("character encoded predictor", {
   skip_on_cran()
   skip_if_not_installed("rstanarm")
   expect_snapshot(
-    transform = omit_warning("^The largest R-hat is 1.05"),
+    transform = omit_warning("^The largest R-hat is"),
     class_test <- recipe(x2 ~ ., data = ex_dat_ch) %>%
       step_lencode_bayes(x3,
         outcome = vars(x2),
