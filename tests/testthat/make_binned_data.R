@@ -8,10 +8,12 @@ sim_data_2class <- function(n = 300) {
       TRUE ~ "a"
     )
   }
-  
-  dat <- tibble(x = runif(n), z = runif(n)) %>% 
-    mutate(class = purrr::map_chr(x, xf),
-           class = factor(class, levels = letters[1:2]))
+
+  dat <- tibble(x = runif(n), z = runif(n)) %>%
+    mutate(
+      class = purrr::map_chr(x, xf),
+      class = factor(class, levels = letters[1:2])
+    )
   dat
 }
 
@@ -23,10 +25,12 @@ sim_data_3class <- function(n = 300) {
       TRUE ~ "c"
     )
   }
-  
-  dat <- tibble(x = runif(n), z = runif(n)) %>% 
-    mutate(class = purrr::map_chr(x, xf),
-           class = factor(class, levels = letters[1:3]))
+
+  dat <- tibble(x = runif(n), z = runif(n)) %>%
+    mutate(
+      class = purrr::map_chr(x, xf),
+      class = factor(class, levels = letters[1:3])
+    )
   dat
 }
 
@@ -39,11 +43,11 @@ sim_data_reg <- function(n = 300) {
       TRUE ~ 5
     )
   }
-  
-  dat <- tibble(x = runif(n), z = runif(n)) %>% 
-    mutate(y = purrr::map_dbl(x, xf),
-           y = y + rnorm(n, sd = .1))
+
+  dat <- tibble(x = runif(n), z = runif(n)) %>%
+    mutate(
+      y = purrr::map_dbl(x, xf),
+      y = y + rnorm(n, sd = .1)
+    )
   dat
 }
-
-

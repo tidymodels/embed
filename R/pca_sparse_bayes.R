@@ -16,18 +16,18 @@
 #' @param num_comp The number of PCA components to retain as new predictors.
 #'  If `num_comp` is greater than the number of columns or the number of
 #'  possible components, a smaller value will be used. A value of zero indicates
-#'  that PCA will _not_ be used on the data. 
-#' @param prior_slab_dispersion This value is proportional to the dispersion 
-#' (or scale) parameter for the slab portion of the prior. Smaller values result 
+#'  that PCA will _not_ be used on the data.
+#' @param prior_slab_dispersion This value is proportional to the dispersion
+#' (or scale) parameter for the slab portion of the prior. Smaller values result
 #' in an increase in zero coefficients.
-#' @param prior_mixture_threshold The parameter that defines the trade-off 
+#' @param prior_mixture_threshold The parameter that defines the trade-off
 #' between the spike and slab components of the prior. Increasing this parameter
-#' increases the number of zero coefficients. 
+#' increases the number of zero coefficients.
 #' @param keep_original_cols A logical to keep the original variables in the
 #'  output. Defaults to `FALSE`.
-#' @param options A list of options to the default method for 
+#' @param options A list of options to the default method for
 #' [VBsparsePCA::VBsparsePCA()].
-#' @param res The rotation matrix once this preprocessing step has been trained 
+#' @param res The rotation matrix once this preprocessing step has been trained
 #' by [prep.recipe()].
 #' @param prefix A character string that will be the prefix to the resulting
 #'  new variables. See notes below.
@@ -39,13 +39,13 @@
 #' @concept preprocessing
 #' @concept pca
 #' @concept projection_methods
-#' @references Ning, B. (2021). Spike and slab Bayesian sparse principal 
+#' @references Ning, B. (2021). Spike and slab Bayesian sparse principal
 #' component analysis. arXiv:2102.00305.
 #' @export
 #' @details
-#' The `VBsparsePCA` package is required for this step. If it is not installed, 
-#' the user will be prompted to do so when the step is defined. 
-#' 
+#' The `VBsparsePCA` package is required for this step. If it is not installed,
+#' the user will be prompted to do so when the step is defined.
+#'
 #' A spike-and-slab prior is a mixture of two priors. One (the "spike") has
 #'  all of its mass at zero and represents a variable that has no contribution
 #'  to the PCA coefficients. The other prior is a broader distribution that
@@ -54,11 +54,11 @@
 #'  coefficient will be zero (or are regularized to be closer to zero). The
 #'  mixture of these two priors is governed by a mixing parameter, which itself
 #'  has a prior distribution and a hyper-parameter prior.
-#'  
-#' PCA coefficients and their resulting scores are unique only up to the sign. This 
-#' step will attempt to make the sign of the components more consistent from 
-#' run-to-run. However, the sparsity constraint may interfere with this goal.  
-#'   
+#'
+#' PCA coefficients and their resulting scores are unique only up to the sign. This
+#' step will attempt to make the sign of the components more consistent from
+#' run-to-run. However, the sparsity constraint may interfere with this goal.
+#'
 #' The argument `num_comp` controls the number of components that
 #'  will be retained (per default the original variables that are used to derive
 #'  the components are removed from the data). The new components
@@ -72,32 +72,34 @@
 #' @examples
 #' library(recipes)
 #' library(ggplot2)
-#' 
+#'
 #' data(ad_data, package = "modeldata")
-#' 
-#' ad_rec <- 
-#'   recipe(Class ~ ., data = ad_data) %>% 
-#'   step_zv(all_predictors()) %>% 
-#'   step_YeoJohnson(all_numeric_predictors()) %>% 
-#'   step_normalize(all_numeric_predictors()) %>% 
-#'   step_pca_sparse_bayes(all_numeric_predictors(), 
-#'                         prior_mixture_threshold = 0.95,
-#'                         prior_slab_dispersion = 0.05, 
-#'                         num_comp = 3, 
-#'                         id = "sparse bayesian pca") %>% 
+#'
+#' ad_rec <-
+#'   recipe(Class ~ ., data = ad_data) %>%
+#'   step_zv(all_predictors()) %>%
+#'   step_YeoJohnson(all_numeric_predictors()) %>%
+#'   step_normalize(all_numeric_predictors()) %>%
+#'   step_pca_sparse_bayes(
+#'     all_numeric_predictors(),
+#'     prior_mixture_threshold = 0.95,
+#'     prior_slab_dispersion = 0.05,
+#'     num_comp = 3,
+#'     id = "sparse bayesian pca"
+#'   ) %>%
 #'   prep()
-#' 
-#' tidy(ad_rec, id = "sparse bayesian pca") %>% 
+#'
+#' tidy(ad_rec, id = "sparse bayesian pca") %>%
 #'   mutate(value = ifelse(value == 0, NA, value)) %>%
-#'   ggplot(aes(x = component, y = terms, fill = value)) + 
-#'   geom_tile() + 
-#'   scale_fill_gradient2() + 
+#'   ggplot(aes(x = component, y = terms, fill = value)) +
+#'   geom_tile() +
+#'   scale_fill_gradient2() +
 #'   theme(axis.text.y = element_blank())
 step_pca_sparse_bayes <- function(recipe,
                                   ...,
                                   role = "predictor",
                                   trained = FALSE,
-                                  num_comp  = 5,
+                                  num_comp = 5,
                                   prior_slab_dispersion = 1.0,
                                   prior_mixture_threshold = 0.1,
                                   options = list(),
@@ -106,9 +108,8 @@ step_pca_sparse_bayes <- function(recipe,
                                   keep_original_cols = FALSE,
                                   skip = FALSE,
                                   id = rand_id("pca_sparse_bayes")) {
-  
-  rlang:: check_installed("VBsparsePCA")
-  
+  rlang::check_installed("VBsparsePCA")
+
   add_step(
     recipe,
     step_pca_sparse_bayes_new(
@@ -129,8 +130,8 @@ step_pca_sparse_bayes <- function(recipe,
 }
 
 step_pca_sparse_bayes_new <-
-  function(terms, role, trained, num_comp, prior_slab_dispersion, 
-           prior_mixture_threshold, options, res, prefix, 
+  function(terms, role, trained, num_comp, prior_slab_dispersion,
+           prior_mixture_threshold, options, res, prefix,
            keep_original_cols, skip, id) {
     step(
       subclass = "pca_sparse_bayes",
@@ -152,20 +153,19 @@ step_pca_sparse_bayes_new <-
 #' @export
 prep.step_pca_sparse_bayes <- function(x, training, info = NULL, ...) {
   col_names <- recipes::recipes_eval_select(x$terms, training, info)
-  
+
   if (length(col_names) > 0) {
-    
     check_type(training[, col_names])
-    
+
     p <- length(col_names)
     x$num_comp <- min(x$num_comp, p)
-    
+
     # Check range again
     x$prior_mixture_threshold <- max(x$prior_mixture_threshold, 0.00001)
     x$prior_mixture_threshold <- min(x$prior_mixture_threshold, 1)
-    
-    scale_param <- 1/x$prior_slab_dispersion
-    
+
+    scale_param <- 1 / x$prior_slab_dispersion
+
     if (x$num_comp > 0) {
       cl <-
         rlang::call2(
@@ -188,7 +188,7 @@ prep.step_pca_sparse_bayes <- function(x, training, info = NULL, ...) {
   } else {
     rotation <- NA
   }
-  
+
   step_pca_sparse_bayes_new(
     terms = x$terms,
     role = x$role,
@@ -214,7 +214,7 @@ bake.step_pca_sparse_bayes <- function(object, new_data, ...) {
     comps <- check_name(comps, new_data, object)
     new_data <- bind_cols(new_data, as_tibble(comps))
     keep_original_cols <- get_keep_original_cols(object)
-    
+
     if (!keep_original_cols) {
       new_data <- new_data[, !(colnames(new_data) %in% pca_vars), drop = FALSE]
     }
@@ -240,7 +240,7 @@ print.step_pca_sparse_bayes <-
 tidy.step_pca_sparse_bayes <- function(x, ...) {
   if (!is_trained(x)) {
     term_names <- sel2char(x$terms)
-    res <- tibble(terms = term_names, value = na_dbl, component  = na_chr)
+    res <- tibble(terms = term_names, value = na_dbl, component = na_chr)
   } else {
     res <- pca_coefs(x)
   }

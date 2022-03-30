@@ -1,20 +1,20 @@
-#' Supervised and unsupervised uniform manifold approximation and projection (UMAP) 
+#' Supervised and unsupervised uniform manifold approximation and projection (UMAP)
 #'
 #' `step_umap` creates a *specification* of a recipe step that
-#'  will project a set of features into a smaller space. 
+#'  will project a set of features into a smaller space.
 #'
 #' @inheritParams recipes::step_pca
 #' @param min_dist The effective minimum distance between embedded points.
 #' @param num_comp An integer for the number of UMAP components. If `num_comp`
 #' is greater than the number of selected columns minus one, the smaller value
-#' is used. 
+#' is used.
 #' @param neighbors An integer for the number of nearest neighbors used to
 #'  construct the target simplicial set. If `neighbors` is greater than the
 #'  number of data points, the smaller value is used.
-#' @param epochs Number of iterations for the neighbor optimization. See 
-#'  [uwot::umap()] for more details.  
+#' @param epochs Number of iterations for the neighbor optimization. See
+#'  [uwot::umap()] for more details.
 #' @param learn_rate Positive number of the learning rate for the optimization
-#'  process. 
+#'  process.
 #' @param outcome A call to `vars` to specify which variable is
 #'  used as the outcome in the encoding process (if any).
 #' @param options A list of options to pass to [uwot::umap()]. The arguments
@@ -26,52 +26,51 @@
 #'  numbers and will give reproducible results if the seed is set prior to
 #'  calling [prep.recipe()] or [bake.recipe()].
 #' @param retain Use `keep_original_cols` instead to specify whether the
-#'  original predictors should be retained along with the new embedding 
+#'  original predictors should be retained along with the new embedding
 #'  variables.
 #' @param object An object that defines the encoding. This is
 #'  `NULL` until the step is trained by [recipes::prep.recipe()].
 #' @template step-return
 #' @export
-#' @details 
-#' UMAP, short for Uniform Manifold Approximation and Projection, is a nonlinear 
-#'  dimension reduction technique that finds local, low-dimensional 
-#'  representations of the data. It can be run unsupervised or supervised with 
+#' @details
+#' UMAP, short for Uniform Manifold Approximation and Projection, is a nonlinear
+#'  dimension reduction technique that finds local, low-dimensional
+#'  representations of the data. It can be run unsupervised or supervised with
 #'  different types of outcome data (e.g. numeric, factor, etc).
-#'  
-#' The new components will have names that begin with `prefix` and a sequence 
-#'  of numbers. The variable names are padded with zeros. For example, if 
-#'  `num_comp < 10`, their names will be `UMAP1` - `UMAP9`. If `num_comp = 101`, 
+#'
+#' The new components will have names that begin with `prefix` and a sequence
+#'  of numbers. The variable names are padded with zeros. For example, if
+#'  `num_comp < 10`, their names will be `UMAP1` - `UMAP9`. If `num_comp = 101`,
 #'  the names would be `UMAP001` - `UMAP101`.
-#' 
-#' @references 
-#' McInnes, L., & Healy, J. (2018). UMAP: Uniform Manifold Approximation and 
+#'
+#' @references
+#' McInnes, L., & Healy, J. (2018). UMAP: Uniform Manifold Approximation and
 #'  Projection for Dimension Reduction. \url{ https://arxiv.org/abs/1802.03426}.
-#'  
-#' "How UMAP Works" \url{https://umap-learn.readthedocs.io/en/latest/how_umap_works.html}  
-#'  
-#' 
+#'
+#' "How UMAP Works" \url{https://umap-learn.readthedocs.io/en/latest/how_umap_works.html}
+#'
+#'
 #' @examples
 #' library(recipes)
 #' library(ggplot2)
-#' 
+#'
 #' split <- seq.int(1, 150, by = 9)
 #' tr <- iris[-split, ]
-#' te <- iris[ split, ]
-#' 
+#' te <- iris[split, ]
+#'
 #' set.seed(11)
-#' supervised <- 
+#' supervised <-
 #'   recipe(Species ~ ., data = tr) %>%
-#'   step_center(all_predictors()) %>% 
-#'   step_scale(all_predictors()) %>% 
-#'   step_umap(all_predictors(), outcome = vars(Species), num_comp = 2) %>% 
+#'   step_center(all_predictors()) %>%
+#'   step_scale(all_predictors()) %>%
+#'   step_umap(all_predictors(), outcome = vars(Species), num_comp = 2) %>%
 #'   prep(training = tr)
-#' 
+#'
 #' theme_set(theme_bw())
-#' 
-#' bake(supervised, new_data = te, Species, starts_with("umap")) %>% 
-#'   ggplot(aes(x = UMAP1, y = UMAP2, col = Species)) + 
-#'   geom_point(alpha = .5) 
-
+#'
+#' bake(supervised, new_data = te, Species, starts_with("umap")) %>%
+#'   ggplot(aes(x = UMAP1, y = UMAP2, col = Species)) +
+#'   geom_point(alpha = .5)
 step_umap <-
   function(recipe,
            ...,
@@ -91,7 +90,6 @@ step_umap <-
            object = NULL,
            skip = FALSE,
            id = rand_id("umap")) {
-    
     if (lifecycle::is_present(retain)) {
       lifecycle::deprecate_soft(
         "0.1.5",
@@ -100,7 +98,7 @@ step_umap <-
       )
       keep_original_cols <- retain
     }
-    
+
     recipes::recipes_pkg_check(required_pkgs.step_umap())
     if (is.numeric(seed) & !is.integer(seed)) {
       seed <- as.integer(seed)
@@ -134,8 +132,8 @@ step_umap <-
   }
 
 step_umap_new <-
-  function(terms, role, trained, outcome, neighbors, num_comp, min_dist, 
-           learn_rate, epochs, options, seed, prefix, keep_original_cols, 
+  function(terms, role, trained, outcome, neighbors, num_comp, min_dist,
+           learn_rate, epochs, options, seed, prefix, keep_original_cols,
            retain, object, skip, id) {
     step(
       subclass = "umap",
@@ -181,16 +179,15 @@ umap_fit_call <- function(obj, y = NULL) {
 #' @export
 prep.step_umap <- function(x, training, info = NULL, ...) {
   col_names <- recipes::recipes_eval_select(x$terms, training, info)
-  
+
   if (length(col_names) > 0) {
-    
     if (length(x$outcome) > 0) {
       y_name <- recipes::recipes_eval_select(x$outcome, training, info)
     } else {
       y_name <- NULL
     }
-    x$neighbors <- min(   nrow(training) - 1, x$neighbors)
-    x$num_comp  <- min(length(col_names) - 1, x$num_comp)
+    x$neighbors <- min(nrow(training) - 1, x$neighbors)
+    x$num_comp <- min(length(col_names) - 1, x$num_comp)
     withr::with_seed(
       x$seed[1],
       res <- rlang::eval_tidy(umap_fit_call(x, y = y_name))
@@ -200,7 +197,7 @@ prep.step_umap <- function(x, training, info = NULL, ...) {
     res <- list()
     y_name <- character(0)
   }
-  
+
   step_umap_new(
     terms = x$terms,
     role = x$role,
@@ -224,22 +221,21 @@ prep.step_umap <- function(x, training, info = NULL, ...) {
 
 #' @export
 bake.step_umap <- function(object, new_data, ...) {
-  
   if (length(object$object) == 0) {
-   return(new_data) 
+    return(new_data)
   }
-  
+
   withr::with_seed(
     object$seed[2],
     res <-
       uwot::umap_transform(
-        model = object$object, 
+        model = object$object,
         X = new_data[, object$object$xnames]
       )
   )
-  
+
   if (is.null(object$prefix)) object$prefix <- "UMAP"
-  
+
   res <- recipes::check_name(res, new_data, object)
   new_data <- bind_cols(new_data, as_tibble(res))
 
@@ -247,7 +243,7 @@ bake.step_umap <- function(object, new_data, ...) {
   if (!keep_original_cols) {
     new_data <- new_data[, !(colnames(new_data) %in% object$object$xnames), drop = FALSE]
   }
-  
+
   new_data
 }
 

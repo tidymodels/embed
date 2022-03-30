@@ -10,17 +10,17 @@
 #'  sub-structure, 16 count descriptors (such as the number of bonds or the
 #'  number of Bromine atoms) and 4 continuous descriptors (such as molecular
 #'  weight or surface area).
-#' 
+#'
 #' @name solubility
 #' @aliases solubility
 #' @docType data
 #' @return \item{solubility}{a data frame}
 #'
-#' @source 
+#' @source
 #'   Tetko, I., Tanchuk, V., Kasheva, T., and Villa, A. (2001). Estimation of
 #'  aqueous solubility of chemical compounds using E-state indices. _Journal of
 #'  Chemical Information and Computer Sciences_, 41(6), 1488-1493.
-#' 
+#'
 #'   Huuskonen, J. (2000). Estimation of aqueous solubility for a diverse set of
 #'  organic compounds based on molecular topology. _Journal of Chemical
 #'  Information and Computer Sciences_, 40(3), 773-777.

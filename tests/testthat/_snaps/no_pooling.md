@@ -1,7 +1,24 @@
+# factor encoded predictor
+
+    Code
+      new_values_ch <- bake(class_test, new_data = new_dat_ch)
+    Warning <rlang_warning>
+       There was 1 column that was a factor when the recipe was prepped:
+       'x3'.
+       This may cause errors when processing new data.
+
+# bad args
+
+    Code
+      recipe(Species ~ ., data = three_class) %>% step_lencode_glm(Sepal.Length,
+        outcome = vars(Species)) %>% prep(training = three_class, retain = TRUE)
+    Error <rlang_error>
+      All columns selected for the step should be factor or character
+
 # printing
 
     Code
-      print(print_test)
+      print_test
     Output
       Recipe
       

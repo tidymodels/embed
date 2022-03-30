@@ -14,7 +14,7 @@ knitr::opts_chunk$set(
 
 
 <!-- badges: start -->
-[![R build status](https://github.com/tidymodels/embed/workflows/R-CMD-check/badge.svg)](https://github.com/tidymodels/embed/actions)
+[![R-CMD-check](https://github.com/tidymodels/embed/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/tidymodels/embed/actions/workflows/R-CMD-check.yaml)
 [![Codecov test coverage](https://codecov.io/gh/tidymodels/embed/branch/main/graph/badge.svg)](https://app.codecov.io/gh/tidymodels/embed?branch=main)
 [![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/embed)](https://CRAN.r-project.org/package=embed)
 [![Downloads](https://CRANlogs.r-pkg.org/badges/embed)](https://CRAN.r-project.org/package=embed)

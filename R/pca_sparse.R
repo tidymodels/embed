@@ -37,8 +37,8 @@
 #' @details
 #' The `irlba` package is required for this step. If it is not installed, the user
 #'  will be prompted to do so when the step is defined. The [irlba::ssvd()] function is
-#'  used to encourage sparsity; that documentation has details about this method. 
-#'  
+#'  used to encourage sparsity; that documentation has details about this method.
+#'
 #' The argument `num_comp` controls the number of components that
 #'  will be retained (per default the original variables that are used to derive
 #'  the components are removed from the data). The new components
@@ -52,31 +52,33 @@
 #' @examples
 #' library(recipes)
 #' library(ggplot2)
-#' 
+#'
 #' data(ad_data, package = "modeldata")
-#' 
-#' ad_rec <- 
-#'   recipe(Class ~ ., data = ad_data) %>% 
-#'   step_zv(all_predictors()) %>% 
-#'   step_YeoJohnson(all_numeric_predictors()) %>% 
-#'   step_normalize(all_numeric_predictors()) %>% 
-#'   step_pca_sparse(all_numeric_predictors(), 
-#'                   predictor_prop = 0.75,
-#'                   num_comp = 3, 
-#'                   id = "sparse pca") %>% 
+#'
+#' ad_rec <-
+#'   recipe(Class ~ ., data = ad_data) %>%
+#'   step_zv(all_predictors()) %>%
+#'   step_YeoJohnson(all_numeric_predictors()) %>%
+#'   step_normalize(all_numeric_predictors()) %>%
+#'   step_pca_sparse(
+#'     all_numeric_predictors(),
+#'     predictor_prop = 0.75,
+#'     num_comp = 3,
+#'     id = "sparse pca"
+#'   ) %>%
 #'   prep()
-#' 
-#' tidy(ad_rec, id = "sparse pca") %>% 
+#'
+#' tidy(ad_rec, id = "sparse pca") %>%
 #'   mutate(value = ifelse(value == 0, NA, value)) %>%
-#'   ggplot(aes(x = component, y = terms, fill = value)) + 
-#'   geom_tile() + 
-#'   scale_fill_gradient2() + 
+#'   ggplot(aes(x = component, y = terms, fill = value)) +
+#'   geom_tile() +
+#'   scale_fill_gradient2() +
 #'   theme(axis.text.y = element_blank())
 step_pca_sparse <- function(recipe,
                             ...,
                             role = "predictor",
                             trained = FALSE,
-                            num_comp  = 5,
+                            num_comp = 5,
                             predictor_prop = 1.0,
                             options = list(),
                             res = NULL,
@@ -84,9 +86,8 @@ step_pca_sparse <- function(recipe,
                             keep_original_cols = FALSE,
                             skip = FALSE,
                             id = rand_id("pca_sparse")) {
-  
-  rlang:: check_installed("irlba")
-  
+  rlang::check_installed("irlba")
+
   add_step(
     recipe,
     step_pca_sparse_new(
@@ -127,19 +128,19 @@ step_pca_sparse_new <-
 #' @export
 prep.step_pca_sparse <- function(x, training, info = NULL, ...) {
   col_names <- recipes::recipes_eval_select(x$terms, training, info)
-  
+
   if (length(col_names) > 0) {
     check_type(training[, col_names])
-    
+
     p <- length(col_names)
     x$num_comp <- min(x$num_comp, p)
-    
+
     # Convert proportion to number of terms
     x$predictor_prop <- max(x$predictor_prop, 0.00001)
     x$predictor_prop <- min(x$predictor_prop, 1)
     num_dense <- prop2int(x$predictor_prop, p)
-    
-    
+
+
     if (x$num_comp > 0) {
       cl <-
         rlang::call2(
@@ -161,7 +162,7 @@ prep.step_pca_sparse <- function(x, training, info = NULL, ...) {
   } else {
     rotation <- NA
   }
-  
+
   step_pca_sparse_new(
     terms = x$terms,
     role = x$role,
@@ -186,7 +187,7 @@ bake.step_pca_sparse <- function(object, new_data, ...) {
     comps <- check_name(comps, new_data, object)
     new_data <- bind_cols(new_data, as_tibble(comps))
     keep_original_cols <- get_keep_original_cols(object)
-    
+
     if (!keep_original_cols) {
       new_data <- new_data[, !(colnames(new_data) %in% pca_vars), drop = FALSE]
     }
@@ -217,8 +218,10 @@ pca_coefs <- function(x) {
     res$terms <- rep(vars, npc)
     res <- as_tibble(res)[, c("terms", "value", "component")]
   } else {
-    res <- tibble::tibble(terms = vars, value = rlang::na_dbl,
-                          component = rlang::na_chr)
+    res <- tibble::tibble(
+      terms = vars, value = rlang::na_dbl,
+      component = rlang::na_chr
+    )
   }
   res
 }
@@ -229,7 +232,7 @@ pca_coefs <- function(x) {
 tidy.step_pca_sparse <- function(x, ...) {
   if (!is_trained(x)) {
     term_names <- sel2char(x$terms)
-    res <- tibble(terms = term_names, value = na_dbl, component  = na_chr)
+    res <- tibble(terms = term_names, value = na_dbl, component = na_chr)
   } else {
     res <- pca_coefs(x)
   }
@@ -244,7 +247,7 @@ tidy.step_pca_sparse <- function(x, ...) {
 tidy.step_pca_sparse <- function(x, ...) {
   if (!is_trained(x)) {
     term_names <- sel2char(x$terms)
-    res <- tibble(terms = term_names, value = na_dbl, component  = na_chr)
+    res <- tibble(terms = term_names, value = na_dbl, component = na_chr)
   } else {
     res <- pca_coefs(x)
   }

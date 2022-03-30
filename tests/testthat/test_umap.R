@@ -8,18 +8,17 @@ iris_dat[, 1:4] <- scale(iris_dat[, 1:4])
 
 split <- seq.int(1, 150, by = 9)
 tr <- iris_dat[-split, ]
-te <- iris_dat[ split, ]
+te <- iris_dat[split, ]
 
 # ------------------------------------------------------------------------------
 
 test_that("factor outcome", {
-  
   set.seed(11)
-  supervised <- 
+  supervised <-
     recipe(Species ~ ., data = tr) %>%
-    step_umap(all_predictors(), outcome = vars(Species), num_comp = 2) %>% 
+    step_umap(all_predictors(), outcome = vars(Species), num_comp = 2) %>%
     prep(training = tr)
-  
+
   direct_mod <-
     withr::with_seed(
       supervised$steps[[1]]$seed[1],
@@ -35,16 +34,16 @@ test_that("factor outcome", {
         ret_model = TRUE
       )
     )
-  
+
   expect_equal(
-    direct_mod$embedding, 
+    direct_mod$embedding,
     supervised$steps[[1]]$object$embedding,
     ignore_attr = TRUE
   )
-  
+
   # predictions:
-  
-  direct_pred <- 
+
+  direct_pred <-
     withr::with_seed(
       supervised$steps[[1]]$seed[2],
       uwot::umap_transform(model = direct_mod, X = te[, 1:4])
@@ -55,19 +54,17 @@ test_that("factor outcome", {
     bake(supervised, new_data = te, composition = "matrix", all_predictors()),
     ignore_attr = TRUE
   )
-  
 })
 
 
 
 test_that("numeric outcome", {
-  
   set.seed(11)
-  supervised <- 
+  supervised <-
     recipe(Sepal.Length ~ ., data = tr[, -5]) %>%
-    step_umap(all_predictors(), outcome = vars(Sepal.Length), num_comp = 2) %>% 
+    step_umap(all_predictors(), outcome = vars(Sepal.Length), num_comp = 2) %>%
     prep(training = tr[, -5])
-  
+
   direct_mod <-
     withr::with_seed(
       supervised$steps[[1]]$seed[1],
@@ -83,16 +80,16 @@ test_that("numeric outcome", {
         ret_model = TRUE
       )
     )
-  
+
   expect_equal(
-    direct_mod$embedding, 
+    direct_mod$embedding,
     supervised$steps[[1]]$object$embedding,
     ignore_attr = TRUE
   )
-  
+
   # predictions:
-  
-  direct_pred <- 
+
+  direct_pred <-
     withr::with_seed(
       supervised$steps[[1]]$seed[2],
       uwot::umap_transform(model = direct_mod, X = te[, 2:4])
@@ -103,23 +100,21 @@ test_that("numeric outcome", {
     bake(supervised, new_data = te[, -5], composition = "matrix", all_predictors()),
     ignore_attr = TRUE
   )
-  
 })
 
 
 test_that("no outcome", {
-  
   set.seed(11)
-  unsupervised <- 
-    recipe( ~ ., data = tr[, -5]) %>%
-    step_umap(all_predictors(), num_comp = 3, min_dist = .2, learn_rate = .2) %>% 
+  unsupervised <-
+    recipe(~., data = tr[, -5]) %>%
+    step_umap(all_predictors(), num_comp = 3, min_dist = .2, learn_rate = .2) %>%
     prep(training = tr[, -5])
-  
+
   direct_mod <-
     withr::with_seed(
       unsupervised$steps[[1]]$seed[1],
       uwot::umap(
-        X = tr[,-5],
+        X = tr[, -5],
         n_neighbors = 15,
         n_components = 3,
         learning_rate = .2,
@@ -129,16 +124,16 @@ test_that("no outcome", {
         ret_model = TRUE
       )
     )
-  
+
   expect_equal(
-    direct_mod$embedding, 
+    direct_mod$embedding,
     unsupervised$steps[[1]]$object$embedding,
     ignore_attr = TRUE
   )
-  
+
   # predictions:
-  
-  direct_pred <- 
+
+  direct_pred <-
     withr::with_seed(
       unsupervised$steps[[1]]$seed[2],
       uwot::umap_transform(model = direct_mod, X = te[, -5])
@@ -149,45 +144,46 @@ test_that("no outcome", {
     bake(unsupervised, new_data = te[, -5], composition = "matrix", all_predictors()),
     ignore_attr = TRUE
   )
-  
 })
 
-test_that('keep_original_cols works', {
+test_that("keep_original_cols works", {
   set.seed(11)
-  unsupervised <- 
-    recipe( ~ ., data = tr[, -5]) %>%
-    step_umap(all_predictors(), num_comp = 3, min_dist = .2, learn_rate = .2, 
-              keep_original_cols = TRUE) %>% 
+  unsupervised <-
+    recipe(~., data = tr[, -5]) %>%
+    step_umap(all_predictors(),
+      num_comp = 3, min_dist = .2, learn_rate = .2,
+      keep_original_cols = TRUE
+    ) %>%
     prep(training = tr[, -5])
 
-  
+
   umap_pred <- bake(unsupervised, new_data = te[, -5], composition = "matrix", all_predictors())
-  
+
   expect_equal(
     colnames(umap_pred),
-    c("Sepal.Length", "Sepal.Width", "Petal.Length", "Petal.Width",
-      "UMAP1", "UMAP2", "UMAP3")
+    c(
+      "Sepal.Length", "Sepal.Width", "Petal.Length", "Petal.Width",
+      "UMAP1", "UMAP2", "UMAP3"
+    )
   )
 })
 
-test_that('can prep recipes with no keep_original_cols', {
+test_that("can prep recipes with no keep_original_cols", {
   set.seed(11)
-  unsupervised <- 
-    recipe( ~ ., data = tr[, -5]) %>%
+  unsupervised <-
+    recipe(~., data = tr[, -5]) %>%
     step_umap(all_predictors(), num_comp = 3, min_dist = .2, learn_rate = .2)
-  
+
   unsupervised$steps[[1]]$keep_original_cols <- NULL
-  
-  expect_warning(
-    umap_pred <- prep(unsupervised, training = tr[, -5], verbose = FALSE),
-    "'keep_original_cols' was added to"
+
+  expect_snapshot(
+    umap_pred <- prep(unsupervised, training = tr[, -5], verbose = FALSE)
   )
-  
+
   expect_error(
     umap_pred <- bake(umap_pred, new_data = te[, -5], all_predictors()),
     NA
   )
-  
 })
 
 
@@ -198,7 +194,7 @@ test_that("empty selections", {
   expect_error(
     rec <-
       recipe(Class ~ Genotype + tau, data = ad_data) %>%
-      step_umap(starts_with("potato"), outcome = vars(Class)) %>% 
+      step_umap(starts_with("potato"), outcome = vars(Class)) %>%
       prep(),
     regexp = NA
   )
@@ -207,4 +203,3 @@ test_that("empty selections", {
     ad_data %>% select(Genotype, tau, Class)
   )
 })
-

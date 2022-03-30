@@ -32,13 +32,18 @@ jobs:
         with:
           extra-packages: any::pkgdown, local::.
           needs: website
-          
+
+      - name: Install Miniconda
+        run: |
+          reticulate::install_miniconda()
+        shell: Rscript {0}
+ 
       - name: Install TensorFlow
         run: |
           reticulate::conda_create('r-reticulate', packages = c('python==3.6.9'))
           tensorflow::install_tensorflow(version='2.4.0')
         shell: Rscript {0}
-
+        
       - name: Build site
         run: pkgdown::build_site_github_pages(new_process = FALSE, install = FALSE)
         shell: Rscript {0}

@@ -3,7 +3,7 @@
 #' `step_embed` creates a *specification* of a recipe step that
 #'  will convert a nominal (i.e. factor) predictor into a set of
 #'  scores derived from a tensorflow model via a word-embedding model.
-#'  `embed_control` is a simple wrapper for setting default options. 
+#'  `embed_control` is a simple wrapper for setting default options.
 #'
 #' @param recipe A recipe object. The step will be added to the
 #'  sequence of operations for this recipe.
@@ -62,18 +62,18 @@
 #'
 #' One model is created for each call to `step_embed`. All terms
 #'  given to the step are estimated and encoded in the same model
-#'  which would also contain predictors give in `predictors` (if 
-#'  any). 
-#' 
+#'  which would also contain predictors give in `predictors` (if
+#'  any).
+#'
 #' When the outcome is numeric, a linear activation function is
 #'  used in the last layer while softmax is used for factor outcomes
 #'  (with any number of levels).
-#'  
+#'
 #' For example, the `keras` code for a numeric outcome, one
 #'  categorical predictor, and no hidden units used here would be
-#' 
+#'
 #' ```
-#'   keras_model_sequential() %>% 
+#'   keras_model_sequential() %>%
 #'   layer_embedding(
 #'     input_dim = num_factor_levels_x + 1,
 #'     output_dim = num_terms,
@@ -83,11 +83,11 @@
 #'   layer_dense(units = 1, activation = 'linear')
 #' ```
 #'
-#' If a factor outcome is used and hidden units were requested, the code 
+#' If a factor outcome is used and hidden units were requested, the code
 #' would be
 #'
 #' ```
-#'   keras_model_sequential() %>% 
+#'   keras_model_sequential() %>%
 #'   layer_embedding(
 #'     input_dim = num_factor_levels_x + 1,
 #'     output_dim = num_terms,
@@ -97,7 +97,7 @@
 #'   layer_dense(units = hidden_units, activation = "relu") %>%
 #'   layer_dense(units = num_factor_levels_y, activation = 'softmax')
 #' ```
-#' 
+#'
 #' Other variables specified by `predictors` are added as an
 #'  additional dense layer after `layer_flatten` and before the
 #'  hidden layer.
@@ -105,36 +105,36 @@
 #' Also note that it may be difficult to obtain reproducible
 #'  results using this step due to the nature of Tensorflow (see
 #'  link in References).
-#' 
+#'
 #' tensorflow models cannot be run in parallel within the same
 #'  session (via `foreach` or `futures`) or the `parallel` package.
 #'  If using a recipes with this step with `caret`, avoid parallel
 #'  processing.
-#' 
-#' @references Francois C and Allaire JJ (2018) 
+#'
+#' @references Francois C and Allaire JJ (2018)
 #' _Deep Learning with R_, Manning
-#' 
-#' "How can I obtain reproducible results using Keras during 
+#'
+#' "How can I obtain reproducible results using Keras during
 #' development?" \url{https://tinyurl.com/keras-repro}
-#' 
-#' "Concatenate Embeddings for Categorical Variables with Keras" 
+#'
+#' "Concatenate Embeddings for Categorical Variables with Keras"
 #'  \url{https://flovv.github.io/Embeddings_with_keras_part2/}
-#' 
+#'
 #' @examples
 #' library(modeldata)
 #'
 #' data(grants)
-#' 
+#'
 #' set.seed(1)
 #' grants_other <- sample_n(grants_other, 500)
-#' 
+#'
 #' if (is_tf_available()) {
 #'   rec <- recipe(class ~ num_ci + sponsor_code, data = grants_other) %>%
-#'     step_embed(sponsor_code, outcome = vars(class),
-#'                options = embed_control(epochs = 10))
+#'     step_embed(sponsor_code,
+#'       outcome = vars(class),
+#'       options = embed_control(epochs = 10)
+#'     )
 #' }
-#' 
-
 step_embed <-
   function(recipe,
            ...,
@@ -151,9 +151,10 @@ step_embed <-
            id = rand_id("embed")) {
     # warm start for tf to avoid a bug in tensorflow
     is_tf_available()
-    
-    if (is.null(outcome))
+
+    if (is.null(outcome)) {
       rlang::abort("Please list a variable in `outcome`")
+    }
     add_step(
       recipe,
       step_embed_new(
@@ -196,9 +197,8 @@ step_embed_new <-
 #' @export
 prep.step_embed <- function(x, training, info = NULL, ...) {
   col_names <- recipes::recipes_eval_select(x$terms, training, info)
-  
+
   if (length(col_names) > 0) {
-    
     check_type(training[, col_names], quant = FALSE)
     y_name <- recipes::recipes_eval_select(x$outcome, training, info)
     if (length(x$predictors) > 0) {
@@ -207,30 +207,29 @@ prep.step_embed <- function(x, training, info = NULL, ...) {
     } else {
       pred_names <- NULL
     }
-    
+
     x$options <- tf_options_check(x$options)
     res <-
       tf_coefs2(
-        x = training[, col_names], 
-        y = training[, y_name], 
-        z = if(is.null(pred_names)) NULL else training[, pred_names],
+        x = training[, col_names],
+        y = training[, y_name],
+        z = if (is.null(pred_names)) NULL else training[, pred_names],
         opt = x$options,
         num = x$num_terms,
         h = x$hidden_units
       )
-    
+
     # compute epochs actually trained for
     epochs <- min(res$history$params$epochs, length(res$history$metrics[[1]]))
     .hist <- # TODO convert to pivot and get signature for below
       as_tibble(res$history$metrics) %>%
       mutate(epochs = 1:epochs) %>%
       tidyr::pivot_longer(c(-epochs), names_to = "type", values_to = "loss")
-
   } else {
     res <- NULL
     .hist <- tibble::tibble(epochs = integer(0), type = character(0), loss = numeric(0))
   }
-  
+
   step_embed_new(
     terms = x$terms,
     role = x$role,
@@ -255,9 +254,9 @@ is_tf_2 <- function() {
 tf_coefs2 <- function(x, y, z, opt, num, lab, h, seeds = sample.int(10000, 4), ...) {
   vars <- names(x)
   p <- length(vars)
-  
+
   set.seed(seeds[1])
-  
+
   if (is_tf_2()) {
     tensorflow::tf$random$set_seed(seeds[2])
   } else {
@@ -265,84 +264,94 @@ tf_coefs2 <- function(x, y, z, opt, num, lab, h, seeds = sample.int(10000, 4), .
   }
 
   on.exit(keras::backend()$clear_session())
-  
+
   lvl <- lapply(x, levels)
-  
-  # convert levels to integers; zero signifies a new level 
+
+  # convert levels to integers; zero signifies a new level
   mats <- lapply(x, function(x) matrix(as.numeric(x), ncol = 1))
-  
+
   y <- y[[1]]
   if (is.character(y)) {
     y <- as.factor(y)
   }
   factor_y <- is.factor(y)
-  
-  if (factor_y)
+
+  if (factor_y) {
     y <- class2ind(y)
-  else
+  } else {
     y <- matrix(y, ncol = 1)
-  
+  }
+
   inputs <- vector(mode = "list", length = p)
   # For each categorical predictor, make an input layer
   for (i in 1:p) {
     inputs[[i]] <- layer_input(shape = 1, name = paste0("input_", vars[i]))
   }
-  
+
   layers <- vector(mode = "list", length = p)
   # Now add embedding to each layer and then flatten
   for (i in 1:p) {
-    layers[[i]] <- 
+    layers[[i]] <-
       inputs[[i]] %>%
       layer_embedding(
         input_dim = length(lvl[[i]]) + 1,
         output_dim = num,
         input_length = 1,
         name = paste0("layer_", vars[i])
-      ) %>%  
+      ) %>%
       layer_flatten()
-  } 
-  
+  }
+
   if (is.null(z)) {
-    if (p > 1)
+    if (p > 1) {
       all_layers <- layer_concatenate(layers)
-    else
+    } else {
       all_layers <- layers[[1]]
+    }
   } else {
     mats$z <- as.matrix(z)
-    pred_layer <- layer_input(shape = ncol(z), name = 'other_pred')
+    pred_layer <- layer_input(shape = ncol(z), name = "other_pred")
     all_layers <- layer_concatenate(c(layers, pred_layer))
     inputs <- c(inputs, pred_layer)
   }
-  
-  if (h > 0)
-    all_layers <- 
-    all_layers %>%
-    layer_dense(units = h, activation = "relu", name = "hidden_layer",
-                kernel_initializer = keras::initializer_glorot_uniform(seed = seeds[3]))
-  
-  if (factor_y)
-    all_layers <- 
-    all_layers %>%
-    layer_dense(units = ncol(y), activation = 'softmax', name = "output_layer",
-                kernel_initializer = keras::initializer_glorot_uniform(seed = seeds[4]))
-  else
-    all_layers <- 
-    all_layers %>%
-    layer_dense(units = 1, activation = 'linear', name = "output_layer",
-                kernel_initializer = keras::initializer_glorot_uniform(seed = seeds[4]))
-  
+
+  if (h > 0) {
+    all_layers <-
+      all_layers %>%
+      layer_dense(
+        units = h, activation = "relu", name = "hidden_layer",
+        kernel_initializer = keras::initializer_glorot_uniform(seed = seeds[3])
+      )
+  }
+
+  if (factor_y) {
+    all_layers <-
+      all_layers %>%
+      layer_dense(
+        units = ncol(y), activation = "softmax", name = "output_layer",
+        kernel_initializer = keras::initializer_glorot_uniform(seed = seeds[4])
+      )
+  } else {
+    all_layers <-
+      all_layers %>%
+      layer_dense(
+        units = 1, activation = "linear", name = "output_layer",
+        kernel_initializer = keras::initializer_glorot_uniform(seed = seeds[4])
+      )
+  }
+
   model <-
-    keras::keras_model(inputs = inputs, outputs = all_layers)  
-  
+    keras::keras_model(inputs = inputs, outputs = all_layers)
+
   model %>%
     compile(
       loss = opt$loss,
       metrics = opt$metrics,
       optimizer = opt$optimizer
     )
-  
-  history <- 
-    model %>% 
+
+  history <-
+    model %>%
     fit(
       x = unname(mats),
       y = y,
@@ -354,7 +363,7 @@ tf_coefs2 <- function(x, y, z, opt, num, lab, h, seeds = sample.int(10000, 4), .
     )
 
   layer_values <- vector(mode = "list", length = p)
-  
+
   for (i in 1:p) {
     layer_values[[i]] <-
       get_layer(model, paste0("layer_", vars[i]))$get_weights() %>%
@@ -364,7 +373,7 @@ tf_coefs2 <- function(x, y, z, opt, num, lab, h, seeds = sample.int(10000, 4), .
       mutate(..level = c("..new", lvl[[i]]))
   }
   names(layer_values) <- vars
-  
+
   list(layer_values = layer_values, history = history)
 }
 
@@ -373,18 +382,17 @@ map_tf_coef2 <- function(dat, mapping, prefix) {
   new_val <- mapping %>%
     dplyr::filter(..level == "..new") %>%
     dplyr::select(-..level)
-  dat <- dat %>% 
+  dat <- dat %>%
     mutate(..order = 1:nrow(dat)) %>%
     set_names(c("..level", "..order")) %>%
     mutate(..level = as.character(..level))
   mapping <- mapping %>% dplyr::filter(..level != "..new")
   dat <- left_join(dat, mapping, by = "..level") %>%
     arrange(..order)
-  
+
   dat <- dat %>% dplyr::select(contains("_embed"))
-  dat[!complete.cases(dat),] <- new_val
+  dat[!complete.cases(dat), ] <- new_val
   dat
-  
 }
 
 
@@ -396,7 +404,7 @@ bake.step_embed <- function(object, new_data, ...) {
     rm(tmp)
   }
   new_data <- new_data[, !(names(new_data) %in% names(object$mapping))]
-  
+
   new_data
 }
 
@@ -407,11 +415,11 @@ bake.step_embed <- function(object, new_data, ...) {
 #' @export tidy.step_embed
 tidy.step_embed <- function(x, ...) {
   if (is_trained(x)) {
-    for(i in seq_along(x$mapping))
+    for (i in seq_along(x$mapping)) {
       x$mapping[[i]]$terms <- names(x$mapping)[i]
+    }
     res <- bind_rows(x$mapping)
     names(res) <- gsub("^\\.\\.", "", names(res))
-    
   } else {
     term_names <- sel2char(x$terms)
     res <- tibble(
@@ -439,53 +447,59 @@ print.step_embed <-
 #' @rdname step_embed
 #' @param optimizer,loss,metrics Arguments to pass to [keras::compile()]
 #' @param epochs,validation_split,batch_size,verbose,callbacks Arguments to pass to [keras::fit()]
-embed_control <- function(
-  loss = "mse",
-  metrics = NULL,
-  optimizer = "sgd",
-  epochs = 20,
-  validation_split = 0,
-  batch_size = 32,
-  verbose = 0,
-  callbacks = NULL
-) {
-  if(batch_size < 1)
+embed_control <- function(loss = "mse",
+                          metrics = NULL,
+                          optimizer = "sgd",
+                          epochs = 20,
+                          validation_split = 0,
+                          batch_size = 32,
+                          verbose = 0,
+                          callbacks = NULL) {
+  if (batch_size < 1) {
     rlang::abort("`batch_size` should be a positive integer")
-  if(epochs < 1)
-    rlang::abort("`epochs` should be a positive integer")  
-  if(validation_split < 0 | validation_split > 1)
+  }
+  if (epochs < 1) {
+    rlang::abort("`epochs` should be a positive integer")
+  }
+  if (validation_split < 0 | validation_split > 1) {
     rlang::abort("`validation_split` should be on [0, 1)")
+  }
   list(
-    loss = loss, metrics = metrics, optimizer = optimizer, epochs = epochs, 
+    loss = loss, metrics = metrics, optimizer = optimizer, epochs = epochs,
     validation_split = validation_split, batch_size = batch_size,
-    verbose = verbose, callbacks = callbacks)
+    verbose = verbose, callbacks = callbacks
+  )
 }
 
 tf_options_check <- function(opt) {
-  exp_names <- c('loss',
-                 'metrics',
-                 'optimizer',
-                 'epochs',
-                 'validation_split',
-                 'batch_size',
-                 'verbose')
-  
-  if (length(setdiff(exp_names, names(opt))) > 0)
+  exp_names <- c(
+    "loss",
+    "metrics",
+    "optimizer",
+    "epochs",
+    "validation_split",
+    "batch_size",
+    "verbose"
+  )
+
+  if (length(setdiff(exp_names, names(opt))) > 0) {
     rlang::abort(
       paste0(
         "The following options are missing from the `options`: ",
         paste0(setdiff(exp_names, names(opt)), collapse = ",")
       )
     )
+  }
   opt
 }
 
 
 
-class2ind <- function (x)  {
-  if (!is.factor(x)) 
+class2ind <- function(x) {
+  if (!is.factor(x)) {
     rlang::abort("'x' should be a factor")
-  y <- model.matrix(~x - 1)
+  }
+  y <- model.matrix(~ x - 1)
   colnames(y) <- gsub("^x", "", colnames(y))
   attributes(y)$assign <- NULL
   attributes(y)$contrasts <- NULL
@@ -493,9 +507,9 @@ class2ind <- function (x)  {
 }
 
 #' Test to see if tensorflow is available
-#' 
+#'
 #' @return A logical
-#' @examples 
+#' @examples
 #' is_tf_available()
 #' @export
 is_tf_available <- function() {
@@ -515,4 +529,3 @@ is_tf_available <- function() {
 required_pkgs.step_embed <- function(x, ...) {
   c("keras", "embed")
 }
-

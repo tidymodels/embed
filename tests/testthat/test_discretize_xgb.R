@@ -23,9 +23,9 @@ set.seed(2393)
 credit_data_small <- dplyr::sample_n(credit_data_train, 20)
 
 rec_credit <- credit_data_train %>%
-  select(-Status) %>% 
-  recipe(~ .) %>% 
-  step_integer(all_predictors()) %>% 
+  select(-Status) %>%
+  recipe(~.) %>%
+  step_integer(all_predictors()) %>%
   prep(retain = TRUE)
 
 xgb_credit_train <- xgboost::xgb.DMatrix(
@@ -51,9 +51,9 @@ set.seed(2393)
 attrition_data_small <- dplyr::sample_n(attrition_data_train, 10)
 
 rec_attrition <- attrition_data_train %>%
-  select(-EducationField) %>% 
-  recipe(~ .) %>% 
-  step_integer(all_predictors()) %>% 
+  select(-EducationField) %>%
+  recipe(~.) %>%
+  step_integer(all_predictors()) %>%
   prep(retain = TRUE)
 
 xgb_attrition_train <- xgboost::xgb.DMatrix(
@@ -78,10 +78,10 @@ ames_data_test <- testing(ames_data_split)
 set.seed(8134)
 ames_data_small <- dplyr::sample_n(ames_data_train, 10)
 
-ames_rec <- ames_data_train %>% 
-  select(-Sale_Price) %>% 
-  recipe(~ .) %>% 
-  step_integer(all_predictors()) %>% 
+ames_rec <- ames_data_train %>%
+  select(-Sale_Price) %>%
+  recipe(~.) %>%
+  step_integer(all_predictors()) %>%
   prep(retain = TRUE)
 
 xgb_ames_train <- xgboost::xgb.DMatrix(
@@ -111,7 +111,6 @@ sim_te_reg <- sim_data_reg(100)
 # ------------------------------------------------------------------------------
 
 test_that("run_xgboost for classification", {
-  
   xgboost <- embed:::run_xgboost(
     xgb_credit_train,
     xgb_credit_test,
@@ -122,17 +121,15 @@ test_that("run_xgboost for classification", {
     .objective = "binary:logistic",
     .num_class = NA
   )
-  
-  expect_output(print(xgboost))
+
+  expect_snapshot(xgboost)
   expect_equal(length(xgboost$params), 8)
   expect_equal(xgboost$nfeatures, 13)
   expect_equal(xgboost$params$tree_method, "hist")
   expect_equal(xgboost$params$objective, "binary:logistic")
-  
 })
 
 test_that("run_xgboost for multi-classification", {
-  
   xgboost <- embed:::run_xgboost(
     xgb_attrition_train,
     xgb_attrition_test,
@@ -143,17 +140,15 @@ test_that("run_xgboost for multi-classification", {
     .num_class = 6, # label must be in [0, num_class)
     .objective = "multi:softprob"
   )
-  
-  expect_output(print(xgboost))
+
+  expect_snapshot(xgboost)
   expect_equal(length(xgboost$params), 9)
   expect_equal(xgboost$nfeatures, 30)
   expect_equal(xgboost$params$tree_method, "hist")
   expect_equal(xgboost$params$objective, "multi:softprob")
-  
 })
 
 test_that("run_xgboost for regression", {
-  
   xgboost <- embed:::run_xgboost(
     xgb_ames_train,
     xgb_ames_test,
@@ -164,13 +159,12 @@ test_that("run_xgboost for regression", {
     .objective = "reg:squarederror",
     .num_class = NA
   )
-  
-  expect_output(print(xgboost))
+
+  expect_snapshot(xgboost)
   expect_true(length(xgboost$params) > 1)
   expect_true(xgboost$nfeatures > 1)
   expect_equal(xgboost$params$tree_method, "hist")
   expect_equal(xgboost$params$objective, "reg:squarederror")
-  
 })
 
 test_that("xgb_binning for classification", {
@@ -178,7 +172,7 @@ test_that("xgb_binning for classification", {
     utils::compareVersion("3.5.3", as.character(getRversion())) >= 0
   }
   skip_if(less_than_3.6())
-  
+
   # Usual case
   set.seed(8497)
   xgb_binning <- embed:::xgb_binning(
@@ -191,14 +185,14 @@ test_that("xgb_binning for classification", {
     tree_depth = 1,
     min_n = 5
   )
-  
-  expect_snapshot(print(xgb_binning))
+
+  expect_snapshot(xgb_binning)
   expect_true(length(xgb_binning) > 1)
   expect_type(xgb_binning, "double")
-  
+
   # Algorithm runs on a too small training set/ insufficient variation in data
 
-  expect_warning(
+  expect_snapshot_warning(
     embed:::xgb_binning(
       credit_data_small,
       "Status",
@@ -208,10 +202,8 @@ test_that("xgb_binning for classification", {
       num_breaks = 10,
       tree_depth = 1,
       min_n = 5
-    ),
-    "failed for predictor 'Seniority'"
+    )
   )
-  
 })
 
 test_that("xgb_binning for multi-classification", {
@@ -219,7 +211,7 @@ test_that("xgb_binning for multi-classification", {
     utils::compareVersion("3.5.3", as.character(getRversion())) >= 0
   }
   skip_if(less_than_3.6())
-  
+
   # Usual case
   set.seed(8497)
   xgb_binning <- embed:::xgb_binning(
@@ -232,14 +224,14 @@ test_that("xgb_binning for multi-classification", {
     tree_depth = 1,
     min_n = 5
   )
-  
-  expect_snapshot(print(xgb_binning))
+
+  expect_snapshot(xgb_binning)
   expect_true(length(xgb_binning) > 1)
   expect_type(xgb_binning, "double")
-  
+
   # Algorithm runs on a too small training set/ insufficient variation in data
-  
-  expect_warning(
+
+  expect_snapshot(
     embed:::xgb_binning(
       attrition_data_small,
       "EducationField",
@@ -249,10 +241,8 @@ test_that("xgb_binning for multi-classification", {
       num_breaks = 10,
       tree_depth = 1,
       min_n = 5
-    ),
-    "failed for predictor 'Age'"
+    )
   )
-  
 })
 
 test_that("xgb_binning for regression", {
@@ -260,7 +250,7 @@ test_that("xgb_binning for regression", {
     utils::compareVersion("3.5.3", as.character(getRversion())) >= 0
   }
   skip_if(less_than_3.6())
-  
+
   set.seed(4235)
   # Usual case
   xgb_binning <- embed:::xgb_binning(
@@ -273,15 +263,15 @@ test_that("xgb_binning for regression", {
     tree_depth = 1,
     min_n = 5
   )
-  
-  expect_snapshot(print(xgb_binning))
+
+  expect_snapshot(xgb_binning)
   expect_true(length(xgb_binning) > 1)
   expect_type(xgb_binning, "double")
-  
+
 
   # Algorithm runs on a too small training set/ insufficient variation in data
 
-  expect_warning(
+  expect_snapshot(
     embed:::xgb_binning(
       ames_data_small,
       "Sale_Price",
@@ -291,10 +281,8 @@ test_that("xgb_binning for regression", {
       num_breaks = 10,
       tree_depth = 1,
       min_n = 5
-    ),
-    "failed for predictor 'Latitude'"
+    )
   )
-  
 })
 
 test_that("step_discretize_xgb for classification", {
@@ -303,15 +291,15 @@ test_that("step_discretize_xgb for classification", {
   xgb_rec <-
     recipe(class ~ ., data = sim_tr_cls) %>%
     step_discretize_xgb(all_predictors(), outcome = "class")
-  
+
   set.seed(28)
   xgb_rec <- prep(xgb_rec, training = sim_tr_cls)
-  
+
   xgb_train_bins <- bake(xgb_rec, sim_tr_cls)
   xgb_test_bins <- bake(xgb_rec, sim_te_cls)
-  
-  expect_snapshot(print(xgb_train_bins))
-  expect_snapshot(print(xgb_test_bins))
+
+  expect_snapshot(xgb_train_bins)
+  expect_snapshot(xgb_test_bins)
   expect_true(length(levels(xgb_train_bins$x)) > 1)
   expect_true(length(levels(xgb_train_bins$z)) > 1)
 
@@ -323,41 +311,33 @@ test_that("step_discretize_xgb for classification", {
     levels(xgb_train_bins$z),
     levels(xgb_test_bins$z)
   )
- 
+
   # Too few data
-  expect_error(
+  expect_snapshot(error = TRUE, {
     recipe(class ~ ., data = sim_tr_cls[1:9, ]) %>%
-      step_discretize_xgb(all_predictors(), outcome = "class") %>% 
-      prep(),
-    "Too few observations in the early stopping validation set"
-  )
-  
+      step_discretize_xgb(all_predictors(), outcome = "class") %>%
+      prep()
+  })
+
   # No numeric variables present
   predictors_non_numeric <- c(
     "Status", "Home", "Marital"
   )
-  
-  xgb_rec <- credit_data_train %>% 
-    select(one_of(predictors_non_numeric)) %>% 
+
+  xgb_rec <- credit_data_train %>%
+    select(one_of(predictors_non_numeric)) %>%
     recipe(Status ~ .) %>%
     step_impute_median(all_numeric()) %>%
     step_discretize_xgb(all_numeric(), outcome = "Status")
-  
+
   # Information about insufficient datapoints for Time predictor
-  msg <- capture_warning({
+  expect_snapshot({
     set.seed(1)
     recipe(Status ~ ., data = credit_data_train) %>%
       step_discretize_xgb(Time, outcome = "Status") %>%
       prep(retain = TRUE)
   })
-  
-  expect_true(
-    grepl(
-      "More than 20 unique training set values are required. Predictors 'Time' were not processed; their original values will be used.",
-      msg
-    )
-  )
-  
+
 })
 
 test_that("step_discretize_xgb for multi-classification", {
@@ -366,15 +346,15 @@ test_that("step_discretize_xgb for multi-classification", {
   xgb_rec <-
     recipe(class ~ ., data = sim_tr_mcls) %>%
     step_discretize_xgb(all_predictors(), outcome = "class")
-  
+
   set.seed(28)
   xgb_rec <- prep(xgb_rec, training = sim_tr_mcls)
-  
+
   xgb_train_bins <- bake(xgb_rec, sim_tr_mcls)
   xgb_test_bins <- bake(xgb_rec, sim_te_mcls)
-  
-  expect_snapshot(print(xgb_train_bins))
-  expect_snapshot(print(xgb_test_bins))
+
+  expect_snapshot(xgb_train_bins)
+  expect_snapshot(xgb_test_bins)
   expect_true(length(levels(xgb_train_bins$x)) > 0)
   expect_true(length(levels(xgb_train_bins$z)) > 0)
 
@@ -386,16 +366,15 @@ test_that("step_discretize_xgb for multi-classification", {
     levels(xgb_train_bins$z),
     levels(xgb_test_bins$z)
   )
-  
+
   # Too few data
-  expect_error(
+  expect_snapshot(error = TRUE,
     recipe(class ~ ., data = sim_tr_mcls[1:9, ]) %>%
-      step_discretize_xgb(all_predictors(), outcome = "class") %>% 
-      prep(),
-    "Too few observations in the early stopping validation set"
+      step_discretize_xgb(all_predictors(), outcome = "class") %>%
+      prep()
   )
-  
-  
+
+
   # No numeric variables present
   predictors_non_numeric <- c(
     "Attrition", "BusinessTravel", "Department",
@@ -404,39 +383,38 @@ test_that("step_discretize_xgb for multi-classification", {
     "MaritalStatus", "OverTime", "PerformanceRating",
     "RelationshipSatisfaction", "WorkLifeBalance"
   )
-  
-  xgb_rec <- attrition_data_train %>% 
-    select(one_of(predictors_non_numeric)) %>% 
+
+  xgb_rec <- attrition_data_train %>%
+    select(one_of(predictors_non_numeric)) %>%
     recipe(BusinessTravel ~ .) %>%
     step_impute_median(all_numeric()) %>%
     step_discretize_xgb(all_numeric(), outcome = "BusinessTravel")
-
 })
 
 test_that("step_discretize_xgb for regression", {
-  # Skip on R < 3.6 since the rng is different. 
+  # Skip on R < 3.6 since the rng is different.
   skip("Needs to determine why random numbers are different")
-  
+
   less_than_3.6 <- function() {
     utils::compareVersion("3.5.3", as.character(getRversion())) >= 0
   }
   skip_if(less_than_3.6())
-  
+
   # General use
   set.seed(83834)
   xgb_rec <-
     recipe(y ~ ., data = sim_tr_reg) %>%
     step_discretize_xgb(all_predictors(), outcome = "y")
   tidy_untrained <- tidy(xgb_rec, 1)
-  
+
   xgb_rec <- prep(xgb_rec, training = sim_tr_reg)
   tidy_trained <- tidy(xgb_rec, 1)
-  
+
   xgb_train_bins <- bake(xgb_rec, sim_tr_reg)
   xgb_test_bins <- bake(xgb_rec, sim_te_reg)
-  
-  expect_snapshot(print(xgb_train_bins))
-  expect_snapshot(print(xgb_test_bins))
+
+  expect_snapshot(xgb_train_bins)
+  expect_snapshot(xgb_test_bins)
 
   expect_true(length(levels(xgb_train_bins$x)) > 0)
   expect_true(length(levels(xgb_train_bins$z)) > 0)
@@ -448,56 +426,54 @@ test_that("step_discretize_xgb for regression", {
   expect_equal(
     levels(xgb_train_bins$z),
     levels(xgb_test_bins$z)
-  )  
+  )
 
   expect_true(tibble::is_tibble(tidy_untrained))
   expect_equal(
     tidy_untrained$variable,
     "all_predictors()"
-  )  
+  )
   expect_equal(
     tidy_untrained$values,
     NA_character_
-  ) 
+  )
   expect_true(tibble::is_tibble(tidy_trained))
   expect_equal(
     tidy_trained$terms,
     rep(c("x", "z"), c(4, 7))
-  )  
+  )
   expect_equal(
     tidy_trained$values,
     unlist(xgb_rec$steps[[1]]$rules, use.names = FALSE)
-  )  
-  
+  )
+
   # one bad predictor
   sim_tr_reg$x <- round(sim_tr_reg$x, 1)
-  expect_warning(
+  expect_snapshot({
     xgb_rec <-
-      recipe(y ~ ., data = sim_tr_reg[1:100,]) %>%
-      step_discretize_xgb(all_predictors(), outcome = "y") %>% 
-      prep(),
-    "Predictors 'x' were not processed"
-  )
-  
+      recipe(y ~ ., data = sim_tr_reg[1:100, ]) %>%
+      step_discretize_xgb(all_predictors(), outcome = "y") %>%
+      prep()
+  })
+
   # No numeric variables present
   predictors_non_numeric <- c(
     "Neighborhood"
   )
-  
-  xgb_rec <- ames_data_train %>% 
-    select(Sale_Price, one_of(predictors_non_numeric)) %>% 
+
+  xgb_rec <- ames_data_train %>%
+    select(Sale_Price, one_of(predictors_non_numeric)) %>%
     recipe(Sale_Price ~ .) %>%
     step_medianimpute(all_numeric()) %>%
     step_discretize_xgb(all_predictors(), outcome = "Sale_Price")
-
 })
 
 test_that("printing", {
   xgb_rec <-
     recipe(class ~ ., data = sim_tr_cls) %>%
     step_discretize_xgb(all_predictors(), outcome = "class")
-  
-  expect_snapshot(print(xgb_rec))
+
+  expect_snapshot(xgb_rec)
   ## can't use snapshot because of xgboost output here:
   expect_output(prep(xgb_rec, verbose = TRUE))
 })
@@ -509,7 +485,7 @@ test_that("empty selections", {
   expect_error(
     rec <-
       recipe(Class ~ Genotype + tau, data = ad_data) %>%
-      step_discretize_xgb(starts_with("potato"), outcome = "Class") %>% 
+      step_discretize_xgb(starts_with("potato"), outcome = "Class") %>%
       prep(),
     regexp = NA
   )
@@ -518,4 +494,3 @@ test_that("empty selections", {
     ad_data %>% select(Genotype, tau, Class)
   )
 })
-

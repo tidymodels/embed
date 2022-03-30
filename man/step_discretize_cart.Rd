@@ -94,13 +94,13 @@ split <- initial_split(ad_data, strata = "Class")
 ad_data_tr <- training(split)
 ad_data_te <- testing(split)
 
-cart_rec <- 
+cart_rec <-
   recipe(Class ~ ., data = ad_data_tr) \%>\%
   step_discretize_cart(tau, age, p_tau, Ab_42, outcome = "Class", id = "cart splits")
 
 cart_rec <- prep(cart_rec, training = ad_data_tr)
 
-# The splits: 
+# The splits:
 tidy(cart_rec, id = "cart splits")
 
 bake(cart_rec, ad_data_te, tau)

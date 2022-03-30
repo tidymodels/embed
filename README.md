@@ -3,11 +3,10 @@
 
 <!-- badges: start -->
 
-[![R build
-status](https://github.com/tidymodels/embed/workflows/R-CMD-check/badge.svg)](https://github.com/tidymodels/embed/actions)
+[![R-CMD-check](https://github.com/tidymodels/embed/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/tidymodels/embed/actions/workflows/R-CMD-check.yaml)
 [![Codecov test
 coverage](https://codecov.io/gh/tidymodels/embed/branch/main/graph/badge.svg)](https://app.codecov.io/gh/tidymodels/embed?branch=main)
-[![CRAN\_Status\_Badge](https://www.r-pkg.org/badges/version/embed)](https://CRAN.r-project.org/package=embed)
+[![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/embed)](https://CRAN.r-project.org/package=embed)
 [![Downloads](https://CRANlogs.r-pkg.org/badges/embed)](https://CRAN.r-project.org/package=embed)
 ![](https://img.shields.io/badge/lifecycle-maturing-blue.svg)
 <!-- badges: end -->
@@ -35,11 +34,11 @@ Some steps handle categorical predictors:
     numeric and two-class outcomes.
 
 -   `step_embed()` uses `keras::layer_embedding` to translate the
-    original *C* factor levels into a set of *D* new variables (&lt;
-    *C*). The model fitting routine optimizes which factor levels are
-    mapped to each of the new variables as well as the corresponding
-    regression coefficients (i.e., neural network weights) that will be
-    used as the new encodings.
+    original *C* factor levels into a set of *D* new variables (\< *C*).
+    The model fitting routine optimizes which factor levels are mapped
+    to each of the new variables as well as the corresponding regression
+    coefficients (i.e., neural network weights) that will be used as the
+    new encodings.
 
 -   `step_woe()` creates new variables based on weight of evidence
     encodings.

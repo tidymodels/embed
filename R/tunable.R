@@ -79,8 +79,8 @@ tunable.step_discretize_cart <- function(x, ...) {
   tibble::tibble(
     name = c("cost_complexity", "tree_depth", "min_n"),
     call_info = list(
-      list(pkg = "dials", fun = "cost_complexity"), 
-      list(pkg = "dials", fun = "tree_depth"), 
+      list(pkg = "dials", fun = "cost_complexity"),
+      list(pkg = "dials", fun = "tree_depth"),
       list(pkg = "dials", fun = "min_n")
     ),
     source = "recipe",
@@ -119,4 +119,3 @@ tunable.step_pca_sparse_bayes <- function(x, ...) {
     component_id = x$id
   )
 }
-
