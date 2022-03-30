@@ -5,7 +5,7 @@ opts <- list(seed = 34677, chains = 2, iter = 500)
 
 omit_warning <- function(pattern) {
   function(x) {
-    if (grepl(pattern, x[1])) {
+    if (any(grepl(pattern, x))) {
       return(NULL)
     }
     x
