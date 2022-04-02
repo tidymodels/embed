@@ -251,7 +251,7 @@ is_tf_2 <- function() {
     rlang::abort(
       c(
         "tensorflow could now be found.", 
-        "PLease run `tensorflow::install_tensorflow()` to install."
+        "Please run `tensorflow::install_tensorflow()` to install."
       )
     )
   }
