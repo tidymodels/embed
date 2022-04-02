@@ -7,6 +7,7 @@ opts <- list(seed = 34677, chains = 2, iter = 500)
 
 test_that("factor encoded predictor", {
   skip_on_cran()
+  skip(message = "wait for #114")
   skip_if_not_installed("rstanarm")
   
   scrub_rhat_warning <- function(x) {
