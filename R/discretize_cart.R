@@ -125,14 +125,17 @@ step_discretize_cart_new <-
 
 
 cart_binning <- function(predictor, term, outcome, cost_complexity, tree_depth, 
-                         min_n, wts) {
+                         min_n, wts = NULL) {
   df <- data.frame(y = outcome, x = predictor)
+  if (is.null(wts)) {
+    wts <- rep(1, nrow(df))
+  }
   cart_mdl <-
     try(
       rpart::rpart(
         y ~ x,
         data = df,
-        weights = wts,
+        weights = as.numeric(wts),
         cp  = cost_complexity,
         minsplit = min_n,
         maxdepth = tree_depth,
@@ -193,7 +196,7 @@ prep.step_discretize_cart <- function(x, training, info = NULL, ...) {
         cost_complexity = x$cost_complexity,
         tree_depth = x$tree_depth,
         min_n = x$min_n,
-        wts = as.numeric(wts)
+        wts = wts
       )
 
     has_splits <- purrr::map_lgl(rules, ~ length(.x) > 0)
@@ -250,7 +253,8 @@ bake.step_discretize_cart <- function(object, new_data, ...) {
 #' @export
 print.step_discretize_cart <- function(x, width = max(20, options()$width - 30), ...) {
   title <- "Discretizing variables using CART "
-  print_step(names(x$rules), x$terms, x$trained, title, width)
+  print_step(names(x$rules), x$terms, x$trained, title, width,
+             case_weights = x$case_weights)
   invisible(x)
 }
 
