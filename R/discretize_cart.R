@@ -98,14 +98,15 @@ step_discretize_cart <-
         min_n = min_n,
         rules = rules,
         skip = skip,
-        id = id
+        id = id,
+        case_weights = NULL
       )
     )
   }
 
 step_discretize_cart_new <-
   function(terms, role, trained, outcome, cost_complexity, tree_depth,
-           min_n, rules, skip, id) {
+           min_n, rules, skip, id, case_weights) {
     step(
       subclass = "discretize_cart",
       terms = terms,
@@ -117,18 +118,21 @@ step_discretize_cart_new <-
       min_n = min_n,
       rules = rules,
       skip = skip,
-      id = id
+      id = id,
+      case_weights = case_weights
     )
   }
 
 
-cart_binning <- function(predictor, term, outcome, cost_complexity, tree_depth, min_n) {
+cart_binning <- function(predictor, term, outcome, cost_complexity, tree_depth, 
+                         min_n, wts) {
   df <- data.frame(y = outcome, x = predictor)
   cart_mdl <-
     try(
       rpart::rpart(
         y ~ x,
         data = df,
+        weights = wts,
         cp  = cost_complexity,
         minsplit = min_n,
         maxdepth = tree_depth,
@@ -167,6 +171,12 @@ cart_binning <- function(predictor, term, outcome, cost_complexity, tree_depth, 
 prep.step_discretize_cart <- function(x, training, info = NULL, ...) {
   col_names <- recipes::recipes_eval_select(x$terms, training, info)
 
+  wts <- recipes::get_case_weights(info, training)
+  were_weights_used <- recipes::are_weights_used(wts)
+  if (isFALSE(were_weights_used)) {
+    wts <- rep(1, nrow(training))
+  }
+  
   if (length(col_names) > 0) {
     check_type(training[, col_names])
 
@@ -182,7 +192,8 @@ prep.step_discretize_cart <- function(x, training, info = NULL, ...) {
         outcome = training[[y_name]],
         cost_complexity = x$cost_complexity,
         tree_depth = x$tree_depth,
-        min_n = x$min_n
+        min_n = x$min_n,
+        wts = as.numeric(wts)
       )
 
     has_splits <- purrr::map_lgl(rules, ~ length(.x) > 0)
@@ -207,7 +218,8 @@ prep.step_discretize_cart <- function(x, training, info = NULL, ...) {
     min_n = x$min_n,
     rules = rules,
     skip = x$skip,
-    id = x$id
+    id = x$id,
+    case_weights = were_weights_used
   )
 }
 
