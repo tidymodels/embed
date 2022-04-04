@@ -3,7 +3,8 @@
     Code
       splits <- embed:::cart_binning(sample(sim_tr_cls$x), "x", sim_tr_cls$class,
       cost_complexity = 0.01, tree_depth = 5, min_n = 10)
-    Warning <rlang_warning>
+    Condition
+      Warning:
       `step_discretize_cart()` failed to find any meaningful splits for predictor 'x', which will not be binned.
 
 # low-level binning for regression
@@ -11,7 +12,8 @@
     Code
       splits <- embed:::cart_binning(sample(sim_tr_reg$x), "potato", sim_tr_reg$y,
       cost_complexity = 0.01, tree_depth = 5, min_n = 10)
-    Warning <rlang_warning>
+    Condition
+      Warning:
       `step_discretize_cart()` failed to find any meaningful splits for predictor 'potato', which will not be binned.
 
 # step function for classification
@@ -19,7 +21,8 @@
     Code
       cart_rec <- recipe(class ~ ., data = sim_tr_cls) %>% step_discretize_cart(
         all_predictors(), outcome = "class") %>% prep()
-    Warning <rlang_warning>
+    Condition
+      Warning:
       `step_discretize_cart()` failed to find any meaningful splits for predictor 'z', which will not be binned.
 
 # step function for regression
@@ -27,7 +30,8 @@
     Code
       cart_rec <- recipe(y ~ ., data = sim_tr_reg) %>% step_discretize_cart(
         all_predictors(), outcome = "y") %>% prep()
-    Warning <rlang_warning>
+    Condition
+      Warning:
       `step_discretize_cart()` failed to find any meaningful splits for predictor 'z', which will not be binned.
 
 # bad args
@@ -35,14 +39,16 @@
     Code
       cart_rec <- recipe(y ~ ., data = tmp) %>% step_discretize_cart(all_predictors(),
       outcome = "y") %>% prep()
-    Error <rlang_error>
-      All columns selected for the step should be numeric
+    Condition
+      Error in `check_type()`:
+      ! All columns selected for the step should be numeric
 
 # tidy method
 
     Code
       cart_rec <- prep(cart_rec)
-    Warning <rlang_warning>
+    Condition
+      Warning:
       `step_discretize_cart()` failed to find any meaningful splits for predictor 'z', which will not be binned.
 
 # printing
@@ -68,7 +74,8 @@
       prep(cart_rec, verbose = TRUE)
     Output
       oper 1 step discretize cart [training] 
-    Warning <rlang_warning>
+    Condition
+      Warning:
       `step_discretize_cart()` failed to find any meaningful splits for predictor 'z', which will not be binned.
     Output
       The retained training set is ~ 0.02 Mb  in memory.
