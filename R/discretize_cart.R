@@ -249,8 +249,8 @@ bake.step_discretize_cart <- function(object, new_data, ...) {
 
 #' @export
 print.step_discretize_cart <- function(x, width = max(20, options()$width - 30), ...) {
-  cat("Discretizing variables using CART ")
-  recipes::printer(names(x$rules), x$terms, x$trained, width = width)
+  title <- "Discretizing variables using CART "
+  print_step(names(x$rules), x$terms, x$trained, title, width)
   invisible(x)
 }
 

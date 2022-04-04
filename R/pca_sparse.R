@@ -199,12 +199,11 @@ bake.step_pca_sparse <- function(object, new_data, ...) {
 print.step_pca_sparse <-
   function(x, width = max(20, options()$width - 29), ...) {
     if (all(is.na(x$res))) {
-      cat("No Sparse PCA components were extracted.\n")
+      title <- "No Sparse PCA components were extracted from "
     } else {
-      cat("Sparse PCA extraction with ")
-      printer(rownames(x$res), x$terms, x$trained, width = width)
+      title <- "Sparse PCA extraction with "
     }
-
+    print_step(rownames(x$res), x$terms, x$trained, title, width)
     invisible(x)
   }
 

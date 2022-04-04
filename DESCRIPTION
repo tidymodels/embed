@@ -50,7 +50,7 @@ Suggests:
 Remotes:
     tidymodels/recipes#835
 ByteCompile: true
-Config/Needs/website: tidymodels, ggiraph, tidyverse/tidytemplate
+Config/Needs/website: tidymodels, ggiraph, tidyverse/tidytemplate, reticulate
 Config/testthat/edition: 3
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)

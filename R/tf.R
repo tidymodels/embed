@@ -435,8 +435,8 @@ tidy.step_embed <- function(x, ...) {
 #' @export
 print.step_embed <-
   function(x, width = max(20, options()$width - 31), ...) {
-    cat("Embedding of factors via tensorflow for ", sep = "")
-    printer(names(x$mapping), x$terms, x$trained, width = width)
+    title <- "Embedding of factors via tensorflow for "
+    print_step(names(x$mapping), x$terms, x$trained, title, width)
     invisible(x)
   }
 
