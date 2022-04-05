@@ -421,8 +421,9 @@ bake.step_woe <- function(object, new_data, ...) {
 
 #' @export
 print.step_woe <- function(x, width = max(20, options()$width - 29), ...) {
-  cat("WoE version against outcome", rlang::quo_text(x$outcome[[1]]), "for ")
-  printer(unique(x$dictionary$variable), x$terms, x$trained, width = width)
+  outcome <- rlang::quo_text(x$outcome[[1]])
+  title <- paste("WoE version against outcome", outcome, "for ")
+  print_step(unique(x$dictionary$variable), x$terms, x$trained, title, width)
   invisible(x)
 }
 

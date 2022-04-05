@@ -228,8 +228,8 @@ bake.step_lencode_mixed <- function(object, new_data, ...) {
 #' @export
 print.step_lencode_mixed <-
   function(x, width = max(20, options()$width - 31), ...) {
-    cat("Linear embedding for factors via mixed effects for ", sep = "")
-    printer(names(x$mapping), x$terms, x$trained, width = width)
+    title <- "Linear embedding for factors via mixed effects for "
+    print_step(names(x$mapping), x$terms, x$trained, title, width)
     invisible(x)
   }
 

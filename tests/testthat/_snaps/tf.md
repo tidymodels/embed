@@ -2,7 +2,8 @@
 
     Code
       new_values_ch <- bake(class_test, new_data = new_dat_ch, contains("embed"))
-    Warning <rlang_warning>
+    Condition
+      Warning:
        There was 1 column that was a factor when the recipe was prepped:
        'x3'.
        This may cause errors when processing new data.
@@ -11,7 +12,8 @@
 
     Code
       new_values_ch <- bake(class_test, new_data = new_dat_ch, contains("embed"))
-    Warning <rlang_warning>
+    Condition
+      Warning:
        There was 1 column that was a factor when the recipe was prepped:
        'x3'.
        This may cause errors when processing new data.
@@ -21,8 +23,9 @@
     Code
       recipe(Species ~ ., data = three_class) %>% step_embed(Sepal.Length, outcome = vars(
         Species)) %>% prep(training = three_class, retain = TRUE)
-    Error <rlang_error>
-      All columns selected for the step should be factor or character
+    Condition
+      Error in `check_type()`:
+      ! All columns selected for the step should be factor or character
 
 # printing
 
