@@ -171,33 +171,6 @@ prep.step_lencode_bayes <- function(x, training, info = NULL, ...) {
   )
 }
 
-
-glm_coefs <- function(x, y, ...) {
-  fam <- if (is.factor(y[[1]])) binomial else gaussian
-  form <- as.formula(paste0(names(y), "~ 0 + value"))
-  mod <-
-    glm(
-      form,
-      data = bind_cols(as_tibble(x), y),
-      family = fam,
-      na.action = na.omit,
-      ...
-    )
-
-  coefs <- coef(mod)
-  names(coefs) <- gsub("^value", "", names(coefs))
-  mean_coef <- mean(coefs, na.rm = TRUE, trim = .1)
-  coefs[is.na(coefs)] <- mean_coef
-  coefs <- c(coefs, ..new = mean_coef)
-  if (is.factor(y[[1]])) {
-    coefs <- -coefs
-  }
-  tibble(
-    ..level = names(coefs),
-    ..value = unname(coefs)
-  )
-}
-
 stan_coefs <- function(x, y, options, verbose, ...) {
   rlang::check_installed("rstanarm")
   if (is.factor(y[[1]])) {
@@ -247,23 +220,6 @@ stan_coefs <- function(x, y, options, verbose, ...) {
   coefs
 }
 
-
-map_glm_coef <- function(dat, mapping) {
-  new_val <- mapping$..value[mapping$..level == "..new"]
-  dat <-
-    dat %>%
-    mutate(..order = 1:nrow(dat)) %>%
-    set_names(c("..level", "..order")) %>%
-    mutate(..level = as.character(..level))
-  mapping <- mapping %>% dplyr::filter(..level != "..new")
-  dat <-
-    left_join(dat, mapping, by = "..level") %>%
-    arrange(..order)
-  dat$..value[is.na(dat$..value)] <- new_val
-  dat$..value
-}
-
-
 #' @export
 bake.step_lencode_bayes <- function(object, new_data, ...) {
   for (col in names(object$mapping)) {
@@ -277,8 +233,8 @@ bake.step_lencode_bayes <- function(object, new_data, ...) {
 #' @export
 print.step_lencode_bayes <-
   function(x, width = max(20, options()$width - 31), ...) {
-    cat("Linear embedding for factors via Bayesian GLM for ", sep = "")
-    printer(names(x$mapping), x$terms, x$trained, width = width)
+    title <- "Linear embedding for factors via Bayesian GLM for "
+    print_step(names(x$mapping), x$terms, x$trained, title, width)
     invisible(x)
   }
 
