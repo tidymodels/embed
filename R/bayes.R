@@ -121,13 +121,15 @@ step_lencode_bayes <-
         verbose = verbose,
         mapping = mapping,
         skip = skip,
-        id = id
+        id = id,
+        case_weights = NULL
       )
     )
   }
 
 step_lencode_bayes_new <-
-  function(terms, role, trained, outcome, options, verbose, mapping, skip, id) {
+  function(terms, role, trained, outcome, options, verbose, mapping, skip, id,
+           case_weights) {
     step(
       subclass = "lencode_bayes",
       terms = terms,
@@ -138,7 +140,8 @@ step_lencode_bayes_new <-
       verbose = verbose,
       mapping = mapping,
       skip = skip,
-      id = id
+      id = id,
+      case_weights = case_weights
     )
   }
 
@@ -146,13 +149,20 @@ step_lencode_bayes_new <-
 #' @export
 prep.step_lencode_bayes <- function(x, training, info = NULL, ...) {
   col_names <- recipes::recipes_eval_select(x$terms, training, info)
+  
+  wts <- recipes::get_case_weights(info, training)
+  were_weights_used <- recipes::are_weights_used(wts)
+  if (isFALSE(were_weights_used) || is.null(wts)) {
+    wts <- NULL
+  }
+  
   if (length(col_names) > 0) {
     check_type(training[, col_names], quant = FALSE)
     y_name <- recipes::recipes_eval_select(x$outcome, training, info)
     res <-
       map(training[, col_names], stan_coefs,
         y = training[, y_name],
-        x$options, x$verbose
+        x$options, x$verbose, wts
       )
   } else {
     res <- list()
@@ -167,11 +177,12 @@ prep.step_lencode_bayes <- function(x, training, info = NULL, ...) {
     verbose = x$verbose,
     mapping = res,
     skip = x$skip,
-    id = x$id
+    id = x$id,
+    case_weights = were_weights_used
   )
 }
 
-stan_coefs <- function(x, y, options, verbose, ...) {
+stan_coefs <- function(x, y, options, verbose, wts = NULL, ...) {
   rlang::check_installed("rstanarm")
   if (is.factor(y[[1]])) {
     fam <- binomial()
@@ -195,6 +206,9 @@ stan_coefs <- function(x, y, options, verbose, ...) {
     )
   if (length(options) > 0) {
     args <- c(args, options)
+  }
+  if (!is.null(wts)) {
+    args$weights <- as.numeric(wts)
   }
 
   cl <- rlang::call2("stan_glmer", .ns = "rstanarm", !!!args)
@@ -234,7 +248,8 @@ bake.step_lencode_bayes <- function(object, new_data, ...) {
 print.step_lencode_bayes <-
   function(x, width = max(20, options()$width - 31), ...) {
     title <- "Linear embedding for factors via Bayesian GLM for "
-    print_step(names(x$mapping), x$terms, x$trained, title, width)
+    print_step(names(x$mapping), x$terms, x$trained, title, width,
+               case_weights = x$case_weights)
     invisible(x)
   }
 
