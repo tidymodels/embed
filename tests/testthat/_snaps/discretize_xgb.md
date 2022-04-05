@@ -289,3 +289,23 @@
       
       Discretizing variables using xgboost all_predictors()
 
+# case weights step_discretize_xgb
+
+    Code
+      xgb_rec_cw
+    Output
+      Recipe
+      
+      Inputs:
+      
+               role #variables
+       case_weights          1
+            outcome          1
+          predictor          2
+      
+      Training data contained 1000 data points and no missing data.
+      
+      Operations:
+      
+      Discretizing variables using xgboost x, z [weighted, trained]
+

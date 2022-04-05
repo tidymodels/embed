@@ -494,3 +494,111 @@ test_that("empty selections", {
     ad_data %>% select(Genotype, tau, Class)
   )
 })
+
+
+test_that("case weights step_discretize_xgb", {
+  sim_tr_cls_cw <- sim_tr_cls %>%
+    mutate(weight = importance_weights(rep(1:0, each = 500)))
+  
+  sim_tr_mcls_cw <- sim_tr_mcls %>%
+    mutate(weight = importance_weights(rep(1:0, each = 500)))
+  
+  sim_tr_reg_cw <- sim_tr_reg %>%
+    mutate(weight = importance_weights(rep(1:0, each = 500)))
+  
+  # classification ------------------------------------------------------------
+  set.seed(125)
+  # General use
+  xgb_rec_cw <-
+    recipe(class ~ ., data = sim_tr_cls_cw) %>%
+    step_discretize_xgb(all_predictors(), outcome = "class")
+  
+  set.seed(28)
+  xgb_rec_cw <- prep(xgb_rec_cw, training = sim_tr_cls_cw)
+  
+  exp_rules <- list()
+  
+  set.seed(28)
+  for (col_names in c("x", "z")) {
+    exp_rules[[col_names]] <- xgb_binning(
+      sim_tr_cls_cw %>% select(-weight),
+      "class",
+      col_names,
+      sample_val = 0.20,
+      learn_rate = 0.3,
+      num_breaks = 10,
+      tree_depth = 1,
+      min_n = 5,
+      as.numeric(sim_tr_cls_cw$weight)
+    )
+  }
+  expect_identical(
+    exp_rules,
+    xgb_rec_cw$steps[[1]]$rules
+  )
+  
+  # multi-classification ------------------------------------------------------
+  set.seed(125)
+  # General use
+  xgb_rec_cw <-
+    recipe(class ~ ., data = sim_tr_mcls_cw) %>%
+    step_discretize_xgb(all_predictors(), outcome = "class")
+  
+  set.seed(28)
+  xgb_rec_cw <- prep(xgb_rec_cw, training = sim_tr_mcls_cw)
+  
+  exp_rules <- list()
+  
+  set.seed(28)
+  for (col_names in c("x", "z")) {
+    exp_rules[[col_names]] <- xgb_binning(
+      sim_tr_mcls_cw %>% select(-weight),
+      "class",
+      col_names,
+      sample_val = 0.20,
+      learn_rate = 0.3,
+      num_breaks = 10,
+      tree_depth = 1,
+      min_n = 5,
+      as.numeric(sim_tr_mcls_cw$weight)
+    )
+  }
+  expect_identical(
+    exp_rules,
+    xgb_rec_cw$steps[[1]]$rules
+  )
+  
+  # regression ----------------------------------------------------------------
+  set.seed(125)
+  # General use
+  xgb_rec_cw <-
+    recipe(y ~ ., data = sim_tr_reg_cw) %>%
+    step_discretize_xgb(all_predictors(), outcome = "y")
+  
+  set.seed(28)
+  xgb_rec_cw <- prep(xgb_rec_cw, training = sim_tr_reg_cw)
+  
+  exp_rules <- list()
+  
+  set.seed(28)
+  for (col_names in c("x", "z")) {
+    exp_rules[[col_names]] <- xgb_binning(
+      sim_tr_reg_cw %>% select(-weight),
+      "y",
+      col_names,
+      sample_val = 0.20,
+      learn_rate = 0.3,
+      num_breaks = 10,
+      tree_depth = 1,
+      min_n = 5,
+      as.numeric(sim_tr_reg_cw$weight)
+    )
+  }
+  expect_identical(
+    exp_rules,
+    xgb_rec_cw$steps[[1]]$rules
+  )
+  
+  # printing ------------------------------------------------------------------
+  expect_snapshot(xgb_rec_cw)
+})
