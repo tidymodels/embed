@@ -3,20 +3,24 @@ source(testthat::test_path("test_helpers.R"))
 
 opts <- list(seed = 34677, chains = 2, iter = 500)
 
+omit_warning <- function(pattern) {
+  function(x) {
+    if (any(grepl(pattern, x))) {
+      return(NULL)
+    }
+    x
+  }
+}
+
 # ------------------------------------------------------------------------------
 
 test_that("factor encoded predictor", {
   skip_on_cran()
-  skip(message = "wait for #114")
   skip_if_not_installed("rstanarm")
   
-  scrub_rhat_warning <- function(x) {
-    if (grepl("^The largest R-hat is", x[1])) {
-      return(character())
-    }
-    x
-  }
-  expect_snapshot(transform = scrub_rhat_warning, {
+  expect_snapshot(
+    transform = omit_warning("^The largest R-hat is"),
+    {
     class_test <- recipe(x2 ~ ., data = ex_dat) %>%
       step_lencode_bayes(x3,
                          outcome = vars(x2),
@@ -81,24 +85,20 @@ test_that("factor encoded predictor", {
 
 test_that("character encoded predictor", {
   skip_on_cran()
-  skip_on_os("mac")
   skip_if_not_installed("rstanarm")
-  expect_warning(
-    expect_warning(
-      class_test <- recipe(x2 ~ ., data = ex_dat_ch) %>%
-        step_lencode_bayes(x3,
-          outcome = vars(x2),
-          verbose = FALSE,
-          options = opts,
-          id = "id"
-        ) %>%
-        prep(
-          training = ex_dat_ch, retain = TRUE,
-          options = opts
-        ),
-      "Bulk Effective Samples Size"
-    ),
-    "Tail Effective Samples Size"
+  expect_snapshot(
+    transform = omit_warning("^The largest R-hat is"),
+    class_test <- recipe(x2 ~ ., data = ex_dat_ch) %>%
+      step_lencode_bayes(x3,
+        outcome = vars(x2),
+        verbose = FALSE,
+        options = opts,
+        id = "id"
+      ) %>%
+      prep(
+        training = ex_dat_ch, retain = TRUE,
+        options = opts
+      )
   )
   tr_values <- juice(class_test)$x3
   new_values <- bake(class_test, new_data = new_dat_ch)
@@ -155,9 +155,10 @@ test_that("character encoded predictor", {
 
 test_that("factor encoded predictor", {
   skip_on_cran()
-  skip_on_os("mac")
   skip_if_not_installed("rstanarm")
-  expect_warning({
+  expect_snapshot(
+    transform = omit_warning("^(Bulk Effective|Tail Effective)"),
+    {
     set.seed(8283)
     reg_test <- recipe(x1 ~ ., data = ex_dat) %>%
       step_lencode_bayes(x3,
@@ -170,7 +171,7 @@ test_that("factor encoded predictor", {
 
   tr_values <- juice(reg_test)$x3
   new_values <- bake(reg_test, new_data = new_dat)
-  expect_warning(
+  expect_snapshot(
     new_values_ch <- bake(reg_test, new_data = new_dat_ch)
   )
   td_obj <- tidy(reg_test, number = 1)
@@ -224,9 +225,10 @@ test_that("factor encoded predictor", {
 
 test_that("character encoded predictor", {
   skip_on_cran()
-  skip_on_os("mac")
   skip_if_not_installed("rstanarm")
-  expect_warning({
+  expect_snapshot(
+    transform = omit_warning("^(Bulk Effective|Tail Effective)"),
+    {
     set.seed(8283)
     reg_test <- recipe(x1 ~ ., data = ex_dat_ch) %>%
       step_lencode_bayes(x3,

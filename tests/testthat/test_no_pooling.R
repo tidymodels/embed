@@ -66,7 +66,9 @@ test_that("character encoded predictor", {
     step_lencode_glm(x3, outcome = vars(x2)) %>%
     prep(training = ex_dat_ch, retain = TRUE)
   tr_values <- juice(class_test)$x3
-  new_values <- bake(class_test, new_data = new_dat_ch)
+  expect_snapshot(
+    new_values <- bake(class_test, new_data = new_dat_ch)
+  )
   new_values_fc <- bake(class_test, new_data = new_dat)
   key <- class_test$steps[[1]]$mapping
   td_obj <- tidy(class_test, number = 1)
@@ -119,7 +121,6 @@ test_that("character encoded predictor", {
 # ------------------------------------------------------------------------------
 
 test_that("factor encoded predictor", {
-  skip_on_os("mac")
 
   reg_test <- recipe(x1 ~ ., data = ex_dat) %>%
     step_lencode_glm(x3, outcome = vars(x1)) %>%
