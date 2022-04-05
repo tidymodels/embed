@@ -208,8 +208,8 @@ bake.step_feature_hash <- function(object, new_data, ...) {
 
 print.step_feature_hash <-
   function(x, width = max(20, options()$width - 31), ...) {
-    cat("Feature hashed dummy variables for ", sep = "")
-    printer(names(x$mapping), x$terms, x$trained, width = width)
+    title <- "Feature hashed dummy variables for "
+    print_step(names(x$mapping), x$terms, x$trained, title, width)
     invisible(x)
   }
 
