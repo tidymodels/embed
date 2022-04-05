@@ -2,7 +2,8 @@
 
     Code
       umap_pred <- prep(unsupervised, training = tr[, -5], verbose = FALSE)
-    Warning <rlang_warning>
+    Condition
+      Warning:
       'keep_original_cols' was added to `step_umap()` after this recipe was created.
       Regenerate your recipe to avoid this warning.
 

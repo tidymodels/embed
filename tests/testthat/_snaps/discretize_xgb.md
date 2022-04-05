@@ -126,7 +126,8 @@
     Code
       embed:::xgb_binning(attrition_data_small, "EducationField", "Age", sample_val = 0.3,
         learn_rate = 0.3, num_breaks = 10, tree_depth = 1, min_n = 5)
-    Warning <rlang_warning>
+    Condition
+      Warning:
       `step_discretize_xgb()` failed for predictor 'Age'. This could be because the data have no trend or because the learning rate is too low (current value: 0.3). The predictor was not binned.
     Output
       numeric(0)
@@ -143,7 +144,8 @@
     Code
       embed:::xgb_binning(ames_data_small, "Sale_Price", "Latitude", sample_val = 0.3,
         learn_rate = 0.3, num_breaks = 10, tree_depth = 1, min_n = 5)
-    Warning <rlang_warning>
+    Condition
+      Warning:
       `step_discretize_xgb()` failed for predictor 'Latitude'. This could be because the data have no trend or because the learning rate is too low (current value: 0.3). The predictor was not binned.
     Output
       numeric(0)
@@ -193,8 +195,9 @@
     Code
       recipe(class ~ ., data = sim_tr_cls[1:9, ]) %>% step_discretize_xgb(
         all_predictors(), outcome = "class") %>% prep()
-    Error <rlang_error>
-      Too few observations in the early stopping validation set.Consider increasing the `sample_val` parameter.
+    Condition
+      Error in `prep()`:
+      ! Too few observations in the early stopping validation set.Consider increasing the `sample_val` parameter.
 
 ---
 
@@ -202,7 +205,8 @@
       set.seed(1)
       recipe(Status ~ ., data = credit_data_train) %>% step_discretize_xgb(Time,
         outcome = "Status") %>% prep(retain = TRUE)
-    Warning <rlang_warning>
+    Condition
+      Warning:
       More than 20 unique training set values are required. Predictors 'Time' were not processed; their original values will be used.
     Output
       Recipe
@@ -264,8 +268,9 @@
     Code
       recipe(class ~ ., data = sim_tr_mcls[1:9, ]) %>% step_discretize_xgb(
         all_predictors(), outcome = "class") %>% prep()
-    Error <rlang_error>
-      Too few observations in the early stopping validation set.Consider increasing the `sample_val` parameter.
+    Condition
+      Error in `prep()`:
+      ! Too few observations in the early stopping validation set.Consider increasing the `sample_val` parameter.
 
 # printing
 
