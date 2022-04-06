@@ -187,7 +187,7 @@ lme_coefs <- function(x, y, wts = NULL, ...) {
     args <- c(args, dots[[1]])
   }
   if (!is.null(wts)) {
-    args$weights <- as.numeric(wts)
+    args$weights <- as.double(wts)
   }
 
   if (!is.factor(y[[1]])) {

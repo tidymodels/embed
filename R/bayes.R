@@ -208,7 +208,7 @@ stan_coefs <- function(x, y, options, verbose, wts = NULL, ...) {
     args <- c(args, options)
   }
   if (!is.null(wts)) {
-    args$weights <- as.numeric(wts)
+    args$weights <- as.double(wts)
   }
 
   cl <- rlang::call2("stan_glmer", .ns = "rstanarm", !!!args)

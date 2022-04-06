@@ -218,7 +218,7 @@ xgb_binning <- function(df, outcome, predictor, sample_val, learn_rate, num_brea
   test <- rsample::testing(split)
   
   if (!is.null(wts)) {
-    wts <- as.numeric(wts)
+    wts <- as.double(wts)
     wts_train <- wts[split$in_id]
     wts_test <- wts[-split$in_id]
   } else {

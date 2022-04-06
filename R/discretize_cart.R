@@ -135,7 +135,7 @@ cart_binning <- function(predictor, term, outcome, cost_complexity, tree_depth,
       rpart::rpart(
         y ~ x,
         data = df,
-        weights = as.numeric(wts),
+        weights = as.double(wts),
         cp  = cost_complexity,
         minsplit = min_n,
         maxdepth = tree_depth,
