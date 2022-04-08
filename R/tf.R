@@ -110,6 +110,12 @@
 #'  session (via `foreach` or `futures`) or the `parallel` package.
 #'  If using a recipes with this step with `caret`, avoid parallel
 #'  processing.
+#'  
+#' # Tidying
+#'
+#' When you [`tidy()`][tidy.recipe()] this step, a tibble with columns
+#' `terms` (the selectors or variables selected), `levels` (levels in variable),
+#' and a number of columns with embedding information are returned.
 #'
 #' @references Francois C and Allaire JJ (2018)
 #' _Deep Learning with R_, Manning

@@ -105,6 +105,13 @@ want to tweak this object with the goal to fix the orders between
 the levels of one given predictor. One easy way to do this is by
 tweaking an output returned from \code{dictionary()}.
 }
+\section{Tidying}{
+When you \code{\link[=tidy.recipe]{tidy()}} this step, a tibble with columns
+\code{terms} (the selectors or variables selected), \code{value}, \code{n_tot}, \code{n_bad},
+\code{n_good}, \code{p_bad}, \code{p_good}, \code{woe} and \code{outcome} is returned.. See
+\code{\link[=dictionary]{dictionary()}} for more information.
+}
+
 \examples{
 library(modeldata)
 data("credit_data")

@@ -76,6 +76,12 @@ interest being the \emph{first} level of the factor.
 For novel levels, a slightly timmed average of the coefficients
 is returned.
 }
+\section{Tidying}{
+When you \code{\link[=tidy.recipe]{tidy()}} this step, a tibble with columns
+\code{terms} (the selectors or variables selected), \code{value} and \code{component} is
+returned.
+}
+
 \examples{
 library(recipes)
 library(dplyr)

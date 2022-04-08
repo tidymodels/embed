@@ -61,6 +61,11 @@
 #'
 #' Note that the original data will be replaced with the new bins.
 #'
+#' # Tidying
+#'
+#' When you [`tidy()`][tidy.recipe()] this step, a tibble with columns
+#' `terms` (the columns that is selected), `values` is returned.
+#'
 #' @examples
 #' library(modeldata)
 #' data(credit_data)

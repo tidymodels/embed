@@ -104,6 +104,11 @@ step will stop with a note about installing the package.
 
 Note that the original data will be replaced with the new bins.
 }
+\section{Tidying}{
+When you \code{\link[=tidy.recipe]{tidy()}} this step, a tibble with columns
+\code{terms} (the columns that is selected), \code{values} is returned.
+}
+
 \examples{
 library(modeldata)
 data(credit_data)

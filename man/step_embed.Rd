@@ -161,6 +161,12 @@ session (via \code{foreach} or \code{futures}) or the \code{parallel} package.
 If using a recipes with this step with \code{caret}, avoid parallel
 processing.
 }
+\section{Tidying}{
+When you \code{\link[=tidy.recipe]{tidy()}} this step, a tibble with columns
+\code{terms} (the selectors or variables selected), \code{levels} (levels in variable),
+and a number of columns with embedding information are returned.
+}
+
 \examples{
 library(modeldata)
 

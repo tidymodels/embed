@@ -42,10 +42,15 @@
 #'  coefficients are created using a no intercept model and, when
 #'  two factor outcomes are used, the log-odds reflect the event of
 #'  interest being the _first_ level of the factor.
-
 #'
 #' For novel levels, a slightly timmed average of the coefficients
 #'  is returned.
+#'  
+#' # Tidying
+#' 
+#' When you [`tidy()`][tidy.recipe()] this step, a tibble with columns
+#' `terms` (the selectors or variables selected), `value` and `component` is
+#' returned.
 #'
 #' @references
 #' Micci-Barreca D (2001) "A preprocessing scheme for

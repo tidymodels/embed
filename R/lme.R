@@ -60,7 +60,12 @@
 #'  set by the step) as well as any arguments given to the `options`
 #'  argument to the step. Relevant options include `control` and
 #'  others.
-#'
+#'  
+#' # Tidying
+#' 
+#' When you [`tidy()`][tidy.recipe()] this step, a tibble with columns
+#' `terms` (the selectors or variables selected), `value` and `component` is
+#' returned.
 #'
 #' @references
 #' Micci-Barreca D (2001) "A preprocessing scheme for

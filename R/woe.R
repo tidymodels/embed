@@ -63,6 +63,13 @@
 #' want to tweak this object with the goal to fix the orders between
 #' the levels of one given predictor. One easy way to do this is by
 #' tweaking an output returned from \code{dictionary()}.
+#' 
+#' # Tidying
+#'
+#' When you [`tidy()`][tidy.recipe()] this step, a tibble with columns
+#' `terms` (the selectors or variables selected), `value`, `n_tot`, `n_bad`,
+#' `n_good`, `p_bad`, `p_good`, `woe` and `outcome` is returned.. See 
+#' [dictionary()] for more information.
 #'
 #' @references Kullback, S. (1959). *Information Theory and Statistics.* Wiley, New York.
 #'

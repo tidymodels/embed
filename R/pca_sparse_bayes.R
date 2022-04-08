@@ -67,6 +67,12 @@
 #'  if `num_comp < 10`, their names will be `PC1` - `PC9`.
 #'  If `num_comp = 101`, the names would be `PC001` -
 #'  `PC101`.
+#' 
+#' # Tidying
+#'
+#' When you [`tidy()`][tidy.recipe()] this step, a tibble with columns
+#' `terms` (the selectors or variables selected), `value` and `component` is
+#' returned.
 #'
 #' @seealso [step_pca_sparse()]
 #' @examples

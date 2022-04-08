@@ -90,6 +90,12 @@ set by the step) as well as any arguments given to the \code{options}
 argument to the step. Relevant options include \code{control} and
 others.
 }
+\section{Tidying}{
+When you \code{\link[=tidy.recipe]{tidy()}} this step, a tibble with columns
+\code{terms} (the selectors or variables selected), \code{value} and \code{component} is
+returned.
+}
+
 \examples{
 library(recipes)
 library(dplyr)

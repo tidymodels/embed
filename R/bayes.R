@@ -63,7 +63,12 @@
 #'  `cores`, and arguments for the priors (see the links in the
 #'  References below). `prior_intercept` is the argument that has the
 #'  most effect on the amount of shrinkage.
-#'
+#' 
+#' # Tidying
+#' 
+#' When you [`tidy()`][tidy.recipe()] this step, a tibble with columns
+#' `terms` (the selectors or variables selected), `value` and `component` is
+#' returned.
 #'
 #' @references
 #' Micci-Barreca D (2001) "A preprocessing scheme for

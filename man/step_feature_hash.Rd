@@ -82,6 +82,11 @@ it is likely that some columns will have all zeros. A zero-variance filter
 (via \code{\link[recipes:step_zv]{recipes::step_zv()}}) is recommended for any recipe that uses hashed
 columns.
 }
+\section{Tidying}{
+When you \code{\link[=tidy.recipe]{tidy()}} this step, a tibble with columns
+\code{terms} (the columns that is selected)  is returned.
+}
+
 \examples{
 \donttest{
 data(grants, package = "modeldata")

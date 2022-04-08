@@ -95,6 +95,12 @@ argument to the step. Relevant options include \code{chains}, \code{iter},
 References below). \code{prior_intercept} is the argument that has the
 most effect on the amount of shrinkage.
 }
+\section{Tidying}{
+When you \code{\link[=tidy.recipe]{tidy()}} this step, a tibble with columns
+\code{terms} (the selectors or variables selected), \code{value} and \code{component} is
+returned.
+}
+
 \examples{
 library(recipes)
 library(dplyr)

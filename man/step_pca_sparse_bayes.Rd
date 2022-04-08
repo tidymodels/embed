@@ -112,6 +112,12 @@ if \code{num_comp < 10}, their names will be \code{PC1} - \code{PC9}.
 If \code{num_comp = 101}, the names would be \code{PC001} -
 \code{PC101}.
 }
+\section{Tidying}{
+When you \code{\link[=tidy.recipe]{tidy()}} this step, a tibble with columns
+\code{terms} (the selectors or variables selected), \code{value} and \code{component} is
+returned.
+}
+
 \examples{
 library(recipes)
 library(ggplot2)
