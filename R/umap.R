@@ -24,12 +24,12 @@
 #' @param seed Two integers to control the random numbers used by the
 #'  numerical methods. The default pulls from the main session's stream of
 #'  numbers and will give reproducible results if the seed is set prior to
-#'  calling [prep.recipe()] or [bake.recipe()].
+#'  calling [prep()] or [bake()].
 #' @param retain Use `keep_original_cols` instead to specify whether the
 #'  original predictors should be retained along with the new embedding
 #'  variables.
 #' @param object An object that defines the encoding. This is
-#'  `NULL` until the step is trained by [recipes::prep.recipe()].
+#'  `NULL` until the step is trained by [recipes::prep()].
 #' @template step-return
 #' @export
 #' @details

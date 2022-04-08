@@ -56,7 +56,7 @@ increases the number of zero coefficients.}
 \code{\link[VBsparsePCA:VBsparsePCA]{VBsparsePCA::VBsparsePCA()}}.}
 
 \item{res}{The rotation matrix once this preprocessing step has been trained
-by \code{\link[=prep.recipe]{prep.recipe()}}.}
+by \code{\link[=prep]{prep()}}.}
 
 \item{prefix}{A character string that will be the prefix to the resulting
 new variables. See notes below.}
@@ -65,8 +65,8 @@ new variables. See notes below.}
 output. Defaults to \code{FALSE}.}
 
 \item{skip}{A logical. Should the step be skipped when the
-recipe is baked by \code{\link[recipes:bake]{recipes::bake.recipe()}}? While all operations are baked
-when \code{\link[recipes:prep]{recipes::prep.recipe()}} is run, some operations may not be able to be
+recipe is baked by \code{\link[recipes:bake]{recipes::bake()}}? While all operations are baked
+when \code{\link[recipes:prep]{recipes::prep()}} is run, some operations may not be able to be
 conducted on new data (e.g. processing the outcome variable(s)).
 Care should be taken when using \code{skip = TRUE} as it may affect
 the computations for subsequent operations}

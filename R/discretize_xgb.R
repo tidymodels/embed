@@ -30,8 +30,8 @@
 #'  each variable.
 #' @param id A character string that is unique to this step to identify it.
 #' @param skip A logical. Should the step be skipped when the
-#'  recipe is baked by [recipes::bake.recipe()]? While all operations are baked
-#'  when [recipes::prep.recipe()] is run, some operations may not be able to be
+#'  recipe is baked by [recipes::bake()]? While all operations are baked
+#'  when [recipes::prep()] is run, some operations may not be able to be
 #'  conducted on new data (e.g. processing the outcome variable(s)).
 #'  Care should be taken when using `skip = TRUE` as it may affect
 #'  the computations for subsequent operations
@@ -83,7 +83,7 @@
 #'   bake(xgb_rec, credit_data_te, Price)
 #' }
 #' @seealso [embed::step_discretize_cart()], [recipes::recipe()],
-#' [recipes::prep.recipe()], [recipes::bake.recipe()]
+#' [recipes::prep()], [recipes::bake()]
 
 step_discretize_xgb <-
   function(recipe,

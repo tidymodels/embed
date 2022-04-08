@@ -9,7 +9,7 @@
 #' @param preserve Use `keep_original_cols` instead to specify whether the
 #' selected column(s) should be retained in addition to the new dummy variables.
 #' @param columns A character vector for the selected columns. This is `NULL`
-#'  until the step is trained by [recipes::prep.recipe()].
+#'  until the step is trained by [recipes::prep()].
 #' @template step-return
 #' @export
 #' @details `step_feature_hash()` will create a set of binary dummy variables

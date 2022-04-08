@@ -40,7 +40,7 @@ preprocessing have been estimated.}
 selected column(s) should be retained in addition to the new dummy variables.}
 
 \item{columns}{A character vector for the selected columns. This is \code{NULL}
-until the step is trained by \code{\link[recipes:prep]{recipes::prep.recipe()}}.}
+until the step is trained by \code{\link[recipes:prep]{recipes::prep()}}.}
 
 \item{keep_original_cols}{A logical to keep the original variables in the
 output. Defaults to \code{FALSE}.}

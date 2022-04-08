@@ -69,7 +69,7 @@ process.}
 \item{seed}{Two integers to control the random numbers used by the
 numerical methods. The default pulls from the main session's stream of
 numbers and will give reproducible results if the seed is set prior to
-calling \code{\link[=prep.recipe]{prep.recipe()}} or \code{\link[=bake.recipe]{bake.recipe()}}.}
+calling \code{\link[=prep]{prep()}} or \code{\link[=bake]{bake()}}.}
 
 \item{prefix}{A character string for the prefix of the resulting new
 variables. See notes below.}
@@ -82,7 +82,7 @@ original predictors should be retained along with the new embedding
 variables.}
 
 \item{object}{An object that defines the encoding. This is
-\code{NULL} until the step is trained by \code{\link[recipes:prep]{recipes::prep.recipe()}}.}
+\code{NULL} until the step is trained by \code{\link[recipes:prep]{recipes::prep()}}.}
 
 \item{skip}{A logical. Should the step be skipped when the
 recipe is baked by \code{\link[recipes:bake]{bake()}}? While all operations are baked

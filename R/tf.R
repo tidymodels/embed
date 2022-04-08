@@ -28,13 +28,13 @@
 #' @param options A list of options for the model fitting process.
 #' @param mapping A list of tibble results that define the
 #'  encoding. This is `NULL` until the step is trained by
-#'  [recipes::prep.recipe()].
+#'  [recipes::prep()].
 #' @param history A tibble with the convergence statistics for
 #'  each term. This is `NULL` until the step is trained by
-#'  [recipes::prep.recipe()].
+#'  [recipes::prep()].
 #' @param skip A logical. Should the step be skipped when the
-#'  recipe is baked by [recipes::bake.recipe()]? While all
-#'  operations are baked when [recipes::prep.recipe()] is run, some
+#'  recipe is baked by [recipes::bake()]? While all
+#'  operations are baked when [recipes::prep()] is run, some
 #'  operations may not be able to be conducted on new data (e.g.
 #'  processing the outcome variable(s)). Care should be taken when
 #'  using `skip = TRUE` as it may affect the computations for

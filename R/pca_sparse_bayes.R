@@ -28,7 +28,7 @@
 #' @param options A list of options to the default method for
 #' [VBsparsePCA::VBsparsePCA()].
 #' @param res The rotation matrix once this preprocessing step has been trained
-#' by [prep.recipe()].
+#' by [prep()].
 #' @param prefix A character string that will be the prefix to the resulting
 #'  new variables. See notes below.
 #' @return An updated version of `recipe` with the new step added to the
