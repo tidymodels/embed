@@ -441,11 +441,11 @@ tidy.step_woe <- function(x, ...) {
     res <- tibble(
       terms = term_names,
       value = rlang::na_chr,
-      ntot = rlang::na_int,
-      n_0 = rlang::na_int,
-      n_1 = rlang::na_int,
-      p_0 = rlang::na_dbl,
-      p_1 = rlang::na_dbl,
+      n_tot = rlang::na_int,
+      n_bad = rlang::na_int,
+      n_good = rlang::na_int,
+      p_bad = rlang::na_dbl,
+      p_good = rlang::na_dbl,
       woe = rlang::na_dbl
     )
   }
