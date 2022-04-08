@@ -428,7 +428,7 @@ print.step_woe <- function(x, width = max(20, options()$width - 29), ...) {
 }
 
 
-#' @rdname step_woe
+#' @rdname tidy.recipe
 #' @param x A `step_woe` object.
 #' @export
 tidy.step_woe <- function(x, ...) {

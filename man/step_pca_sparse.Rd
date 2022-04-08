@@ -2,7 +2,6 @@
 % Please edit documentation in R/pca_sparse.R
 \name{step_pca_sparse}
 \alias{step_pca_sparse}
-\alias{tidy.step_pca_sparse}
 \title{Sparse PCA Signal Extraction}
 \usage{
 step_pca_sparse(
@@ -19,10 +18,6 @@ step_pca_sparse(
   skip = FALSE,
   id = rand_id("pca_sparse")
 )
-
-\method{tidy}{step_pca_sparse}(x, ...)
-
-\method{tidy}{step_pca_sparse}(x, ...)
 }
 \arguments{
 \item{recipe}{A recipe object. The step will be added to the
@@ -66,8 +61,6 @@ Care should be taken when using \code{skip = TRUE} as it may affect
 the computations for subsequent operations}
 
 \item{id}{A character string that is unique to this step to identify it.}
-
-\item{x}{A \code{step_pca_sparse} object.}
 }
 \value{
 An updated version of \code{recipe} with the new step added to the

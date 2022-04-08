@@ -199,10 +199,9 @@ print.step_lencode_glm <-
   }
 
 
-#' @rdname step_lencode_glm
+#' @rdname tidy.recipe
 #' @param x A `step_lencode_glm` object.
 #' @export
-#' @export tidy.step_lencode_glm
 tidy.step_lencode_glm <- function(x, ...) {
   if (is_trained(x)) {
     for (i in seq_along(x$mapping)) {
