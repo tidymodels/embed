@@ -240,6 +240,24 @@ test_that("2-level factors", {
   )
 })
 
+test_that("woe_table respects factor levels", {
+  dat <- tibble(
+    predictor  = sample(0:1, 100, TRUE),
+    target = factor(predictor == 0, levels = c(TRUE, FALSE), labels = 0:1),
+    target0 = relevel(target, ref = "0"),
+    target1 = relevel(target, ref = "1")
+  ) 
+  
+  expect_equal(
+    woe_table(dat$predictor, dat$target0)$woe,
+    -woe_table(dat$predictor, dat$target1)$woe
+  )
+  
+  expect_identical(
+    woe_table(dat$predictor, dat$target0) %>% select(-woe),
+    woe_table(dat$predictor, dat$target1) %>% select(-woe)
+  )
+})
 
 # ------------------------------------------------------------------------------
 
@@ -257,3 +275,4 @@ test_that("empty selections", {
     ad_data %>% select(Genotype, tau, Class)
   )
 })
+
