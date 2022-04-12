@@ -128,7 +128,7 @@ step_umap <-
         seed = seed,
         prefix = prefix,
         keep_original_cols = keep_original_cols,
-        retain = retain,
+        retain = keep_original_cols,
         object = object,
         skip = skip,
         id = id
