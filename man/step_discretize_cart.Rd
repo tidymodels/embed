@@ -48,8 +48,8 @@ splitting. Corresponds to \code{minsplit} in  \code{\link[rpart:rpart]{rpart::rp
 each variable. If length zero, splitting could not be used on that column.}
 
 \item{skip}{A logical. Should the step be skipped when the
-recipe is baked by \code{\link[recipes:bake]{recipes::bake.recipe()}}? While all operations are baked
-when \code{\link[recipes:prep]{recipes::prep.recipe()}} is run, some operations may not be able to be
+recipe is baked by \code{\link[recipes:bake]{recipes::bake()}}? While all operations are baked
+when \code{\link[recipes:prep]{recipes::prep()}} is run, some operations may not be able to be
 conducted on new data (e.g. processing the outcome variable(s)).
 Care should be taken when using \code{skip = TRUE} as it may affect
 the computations for subsequent operations}
@@ -79,6 +79,11 @@ step will stop with a note about installing the package.
 
 Note that the original data will be replaced with the new bins.
 }
+\section{Tidying}{
+When you \code{\link[=tidy.recipe]{tidy()}} this step, a tibble with columns
+\code{terms} (the columns that is selected), \code{values} is returned.
+}
+
 \examples{
 library(modeldata)
 data(ad_data)
@@ -102,5 +107,5 @@ bake(cart_rec, ad_data_te, tau)
 }
 \seealso{
 \code{\link[=step_discretize_xgb]{step_discretize_xgb()}}, \code{\link[recipes:recipe]{recipes::recipe()}},
-\code{\link[recipes:prep]{recipes::prep.recipe()}}, \code{\link[recipes:bake]{recipes::bake.recipe()}}
+\code{\link[recipes:prep]{recipes::prep()}}, \code{\link[recipes:bake]{recipes::bake()}}
 }

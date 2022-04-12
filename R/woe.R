@@ -63,6 +63,13 @@
 #' want to tweak this object with the goal to fix the orders between
 #' the levels of one given predictor. One easy way to do this is by
 #' tweaking an output returned from \code{dictionary()}.
+#' 
+#' # Tidying
+#'
+#' When you [`tidy()`][tidy.recipe()] this step, a tibble with columns
+#' `terms` (the selectors or variables selected), `value`, `n_tot`, `n_bad`,
+#' `n_good`, `p_bad`, `p_good`, `woe` and `outcome` is returned.. See 
+#' [dictionary()] for more information.
 #'
 #' @references Kullback, S. (1959). *Information Theory and Statistics.* Wiley, New York.
 #'
@@ -445,11 +452,11 @@ tidy.step_woe <- function(x, ...) {
     res <- tibble(
       terms = term_names,
       value = rlang::na_chr,
-      ntot = rlang::na_int,
-      n_0 = rlang::na_int,
-      n_1 = rlang::na_int,
-      p_0 = rlang::na_dbl,
-      p_1 = rlang::na_dbl,
+      n_tot = rlang::na_int,
+      n_bad = rlang::na_int,
+      n_good = rlang::na_int,
+      p_bad = rlang::na_dbl,
+      p_good = rlang::na_dbl,
       woe = rlang::na_dbl
     )
   }

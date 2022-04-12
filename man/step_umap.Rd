@@ -66,7 +66,7 @@ process.}
 \item{seed}{Two integers to control the random numbers used by the
 numerical methods. The default pulls from the main session's stream of
 numbers and will give reproducible results if the seed is set prior to
-calling \code{\link[=prep.recipe]{prep.recipe()}} or \code{\link[=bake.recipe]{bake.recipe()}}.}
+calling \code{\link[=prep]{prep()}} or \code{\link[=bake]{bake()}}.}
 
 \item{prefix}{A character string for the prefix of the resulting new
 variables. See notes below.}
@@ -79,7 +79,7 @@ original predictors should be retained along with the new embedding
 variables.}
 
 \item{object}{An object that defines the encoding. This is
-\code{NULL} until the step is trained by \code{\link[recipes:prep]{recipes::prep.recipe()}}.}
+\code{NULL} until the step is trained by \code{\link[recipes:prep]{recipes::prep()}}.}
 
 \item{skip}{A logical. Should the step be skipped when the
 recipe is baked by \code{\link[recipes:bake]{bake()}}? While all operations are baked
@@ -109,6 +109,11 @@ of numbers. The variable names are padded with zeros. For example, if
 \code{num_comp < 10}, their names will be \code{UMAP1} - \code{UMAP9}. If \code{num_comp = 101},
 the names would be \code{UMAP001} - \code{UMAP101}.
 }
+\section{Tidying}{
+When you \code{\link[=tidy.recipe]{tidy()}} this step, a tibble with columns
+\code{terms} (the selectors or variables selected) is returned.
+}
+
 \examples{
 library(recipes)
 library(ggplot2)

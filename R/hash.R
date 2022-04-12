@@ -9,7 +9,7 @@
 #' @param preserve Use `keep_original_cols` instead to specify whether the
 #' selected column(s) should be retained in addition to the new dummy variables.
 #' @param columns A character vector for the selected columns. This is `NULL`
-#'  until the step is trained by [recipes::prep.recipe()].
+#'  until the step is trained by [recipes::prep()].
 #' @template step-return
 #' @export
 #' @details `step_feature_hash()` will create a set of binary dummy variables
@@ -27,6 +27,12 @@
 #'  it is likely that some columns will have all zeros. A zero-variance filter
 #'  (via [recipes::step_zv()]) is recommended for any recipe that uses hashed
 #'  columns.
+#'  
+#' # Tidying
+#'
+#' When you [`tidy()`][tidy.recipe()] this step, a tibble with columns
+#' `terms` (the columns that is selected)  is returned.
+#' 
 #' @references
 #' Weinberger, K, A Dasgupta, J Langford, A Smola, and J Attenberg. 2009.
 #'  "Feature Hashing for Large Scale Multitask Learning." In Proceedings of the

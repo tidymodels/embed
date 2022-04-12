@@ -40,11 +40,11 @@ numeric and two-level factors are currently supported.}
 
 \item{mapping}{A list of tibble results that define the
 encoding. This is \code{NULL} until the step is trained by
-\code{\link[recipes:prep]{recipes::prep.recipe()}}.}
+\code{\link[recipes:prep]{recipes::prep()}}.}
 
 \item{skip}{A logical. Should the step be skipped when the
-recipe is baked by \code{\link[recipes:bake]{recipes::bake.recipe()}}? While all operations are baked
-when \code{\link[recipes:prep]{recipes::prep.recipe()}} is run, some operations may not be able to be
+recipe is baked by \code{\link[recipes:bake]{recipes::bake()}}? While all operations are baked
+when \code{\link[recipes:prep]{recipes::prep()}} is run, some operations may not be able to be
 conducted on new data (e.g. processing the outcome variable(s)).
 Care should be taken when using \code{skip = TRUE} as it may affect
 the computations for subsequent operations}
@@ -85,6 +85,12 @@ set by the step) as well as any arguments given to the \code{options}
 argument to the step. Relevant options include \code{control} and
 others.
 }
+\section{Tidying}{
+When you \code{\link[=tidy.recipe]{tidy()}} this step, a tibble with columns
+\code{terms} (the selectors or variables selected), \code{value} and \code{component} is
+returned.
+}
+
 \examples{
 library(recipes)
 library(dplyr)

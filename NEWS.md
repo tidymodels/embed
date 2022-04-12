@@ -2,6 +2,8 @@
 
 * `step_embed()` now correctly defaults to have a random id with the word "embed". (#102)
 
+* Steps now have a dedicated subsection detailing what happens when `tidy()` is applied. (#105)
+
 * Reorganize documentation for all recipe step `tidy` methods (#115).
 
 * Fixed a bug where `woe_table()` and `step_woe()` didn't respect the factor levels of the outcome. (109)
