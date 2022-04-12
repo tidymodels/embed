@@ -185,7 +185,9 @@ lme_coefs <- function(x, y, ...) {
     mod <- rlang::eval_tidy(cl)
   } else {
     args$data$y <- as.numeric(args$data$y) - 1
-    args$family <- stats::binomial
+    if (is.null(args$family)) {
+      args$family <- stats::binomial
+    }
     cl <- rlang::call2("glmer", .ns = "lme4", !!!args)
     mod <- rlang::eval_tidy(cl)
   }
