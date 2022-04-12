@@ -239,10 +239,9 @@ print.step_lencode_mixed <-
   }
 
 
-#' @rdname step_lencode_mixed
+#' @rdname tidy.recipe
 #' @param x A `step_lencode_mixed` object.
 #' @export
-#' @export tidy.step_lencode_mixed
 tidy.step_lencode_mixed <- function(x, ...) {
   if (is_trained(x)) {
     for (i in seq_along(x$mapping)) {

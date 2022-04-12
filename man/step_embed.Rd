@@ -2,7 +2,6 @@
 % Please edit documentation in R/tf.R
 \name{step_embed}
 \alias{step_embed}
-\alias{tidy.step_embed}
 \alias{embed_control}
 \title{Encoding Factors into Multiple Columns}
 \usage{
@@ -21,8 +20,6 @@ step_embed(
   skip = FALSE,
   id = rand_id("embed")
 )
-
-\method{tidy}{step_embed}(x, ...)
 
 embed_control(
   loss = "mse",
@@ -85,8 +82,6 @@ using \code{skip = TRUE} as it may affect the computations for
 subsequent operations.}
 
 \item{id}{A character string that is unique to this step to identify it.}
-
-\item{x}{A \code{step_embed} object.}
 
 \item{optimizer, loss, metrics}{Arguments to pass to \code{\link[keras:reexports]{keras::compile()}}}
 

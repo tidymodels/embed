@@ -2,7 +2,6 @@
 % Please edit documentation in R/hash.R
 \name{step_feature_hash}
 \alias{step_feature_hash}
-\alias{tidy.step_feature_hash}
 \title{Dummy Variables Creation via Feature Hashing}
 \usage{
 step_feature_hash(
@@ -17,8 +16,6 @@ step_feature_hash(
   skip = FALSE,
   id = rand_id("feature_hash")
 )
-
-\method{tidy}{step_feature_hash}(x, ...)
 }
 \arguments{
 \item{recipe}{A recipe object. The step will be added to the
@@ -53,8 +50,6 @@ Care should be taken when using \code{skip = TRUE} as it may affect
 the computations for subsequent operations.}
 
 \item{id}{A character string that is unique to this step to identify it.}
-
-\item{x}{A \code{step_feature_hash} object.}
 }
 \value{
 An updated version of \code{recipe} with the new step added to the

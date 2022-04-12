@@ -2,7 +2,6 @@
 % Please edit documentation in R/discretize_xgb.R
 \name{step_discretize_xgb}
 \alias{step_discretize_xgb}
-\alias{tidy.step_discretize_xgb}
 \title{Discretize numeric variables with XgBoost}
 \usage{
 step_discretize_xgb(
@@ -20,8 +19,6 @@ step_discretize_xgb(
   skip = FALSE,
   id = rand_id("discretize_xgb")
 )
-
-\method{tidy}{step_discretize_xgb}(x, ...)
 }
 \arguments{
 \item{recipe}{A recipe object. The step will be added to the sequence of
@@ -67,8 +64,6 @@ Care should be taken when using \code{skip = TRUE} as it may affect
 the computations for subsequent operations}
 
 \item{id}{A character string that is unique to this step to identify it.}
-
-\item{x}{A \code{step_discretize_xgb} object.}
 }
 \value{
 An updated version of \code{recipe} with the new step added to the

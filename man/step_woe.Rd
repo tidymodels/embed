@@ -2,7 +2,6 @@
 % Please edit documentation in R/woe.R
 \name{step_woe}
 \alias{step_woe}
-\alias{tidy.step_woe}
 \title{Weight of evidence transformation}
 \usage{
 step_woe(
@@ -17,8 +16,6 @@ step_woe(
   skip = FALSE,
   id = rand_id("woe")
 )
-
-\method{tidy}{step_woe}(x, ...)
 }
 \arguments{
 \item{recipe}{A recipe object. The step will be added to the
@@ -60,8 +57,6 @@ Care should be taken when using \code{skip = TRUE} as it may affect
 the computations for subsequent operations}
 
 \item{id}{A character string that is unique to this step to identify it.}
-
-\item{x}{A \code{step_woe} object.}
 }
 \value{
 An updated version of \code{recipe} with the new step

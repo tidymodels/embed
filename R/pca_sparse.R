@@ -232,22 +232,7 @@ pca_coefs <- function(x) {
   res
 }
 
-#' @rdname step_pca_sparse
-#' @param x A `step_pca_sparse` object.
-#' @export
-tidy.step_pca_sparse <- function(x, ...) {
-  if (!is_trained(x)) {
-    term_names <- sel2char(x$terms)
-    res <- tibble(terms = term_names, value = na_dbl, component = na_chr)
-  } else {
-    res <- pca_coefs(x)
-  }
-  res$id <- x$id
-  res
-}
-
-
-#' @rdname step_pca_sparse
+#' @rdname tidy.recipe
 #' @param x A `step_pca_sparse` object.
 #' @export
 tidy.step_pca_sparse <- function(x, ...) {

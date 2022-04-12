@@ -454,7 +454,7 @@ print.step_discretize_xgb <- function(x, width = max(20, options()$width - 30), 
   invisible(x)
 }
 
-#' @rdname step_discretize_xgb
+#' @rdname tidy.recipe
 #' @param x A `step_discretize_xgb` object.
 #' @export
 tidy.step_discretize_xgb <- function(x, ...) {

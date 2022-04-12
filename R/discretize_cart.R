@@ -247,7 +247,7 @@ print.step_discretize_cart <- function(x, width = max(20, options()$width - 30),
   invisible(x)
 }
 
-#' @rdname step_discretize_cart
+#' @rdname tidy.recipe
 #' @param x A `step_discretize_cart` object.
 #' @export
 tidy.step_discretize_cart <- function(x, ...) {

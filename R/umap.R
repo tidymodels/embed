@@ -260,10 +260,9 @@ print.step_umap <-
     invisible(x)
   }
 
-#' @rdname step_umap
+#' @rdname tidy.recipe
 #' @param x A `step_umap` object.
 #' @export
-#' @export tidy.step_umap
 tidy.step_umap <- function(x, ...) {
   if (is_trained(x)) {
     res <- tibble(terms = x$object$xnames)

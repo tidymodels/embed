@@ -220,7 +220,7 @@ print.step_feature_hash <-
   }
 
 
-#' @rdname step_feature_hash
+#' @rdname tidy.recipe
 #' @param x A `step_feature_hash` object.
 #' @export
 tidy.step_feature_hash <- function(x, ...) {

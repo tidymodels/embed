@@ -2,7 +2,6 @@
 % Please edit documentation in R/bayes.R
 \name{step_lencode_bayes}
 \alias{step_lencode_bayes}
-\alias{tidy.step_lencode_bayes}
 \title{Supervised Factor Conversions into Linear Functions using Bayesian Likelihood Encodings}
 \usage{
 step_lencode_bayes(
@@ -17,8 +16,6 @@ step_lencode_bayes(
   skip = FALSE,
   id = rand_id("lencode_bayes")
 )
-
-\method{tidy}{step_lencode_bayes}(x, ...)
 }
 \arguments{
 \item{recipe}{A recipe object. The step will be added to the
@@ -56,8 +53,6 @@ Care should be taken when using \code{skip = TRUE} as it may affect
 the computations for subsequent operations}
 
 \item{id}{A character string that is unique to this step to identify it.}
-
-\item{x}{A \code{step_lencode_bayes} object.}
 }
 \value{
 An updated version of \code{recipe} with the new step added

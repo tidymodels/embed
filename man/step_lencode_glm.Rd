@@ -2,7 +2,6 @@
 % Please edit documentation in R/glm.R
 \name{step_lencode_glm}
 \alias{step_lencode_glm}
-\alias{tidy.step_lencode_glm}
 \title{Supervised Factor Conversions into Linear Functions using Likelihood Encodings}
 \usage{
 step_lencode_glm(
@@ -15,8 +14,6 @@ step_lencode_glm(
   skip = FALSE,
   id = rand_id("lencode_glm")
 )
-
-\method{tidy}{step_lencode_glm}(x, ...)
 }
 \arguments{
 \item{recipe}{A recipe object. The step will be added to the
@@ -49,8 +46,6 @@ Care should be taken when using \code{skip = TRUE} as it may affect
 the computations for subsequent operations}
 
 \item{id}{A character string that is unique to this step to identify it.}
-
-\item{x}{A \code{step_lencode_glm} object.}
 }
 \value{
 An updated version of \code{recipe} with the new step added
