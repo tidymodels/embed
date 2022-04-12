@@ -2,6 +2,8 @@
 
 * `step_embed()` now correctly defaults to have a random id with the word "embed". (#102)
 
+* `step_feature_hash()` is soft deprecated in embed in favor of `step_dummy_hash()` in textrecipes. (#95)
+
 * Steps now have a dedicated subsection detailing what happens when `tidy()` is applied. (#105)
 
 * Reorganize documentation for all recipe step `tidy` methods (#115).
