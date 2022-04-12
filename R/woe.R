@@ -175,7 +175,11 @@ step_woe_new <- function(terms, role, trained, outcome, dictionary, Laplace, pre
 #'
 #' Good, I. J. (1985), "Weight of evidence: A brief survey", _Bayesian Statistics_, 2, pp.249-270.
 woe_table <- function(predictor, outcome, Laplace = 1e-6) {
-  outcome_original_labels <- unique(outcome)
+  if (is.factor(outcome)) {
+    outcome_original_labels <- levels(outcome)
+  } else {
+    outcome_original_labels <- unique(outcome)
+  }
 
   if (length(outcome_original_labels) != 2) {
     rlang::abort(sprintf(
