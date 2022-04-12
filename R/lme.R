@@ -179,18 +179,16 @@ lme_coefs <- function(x, y, ...) {
   if (length(dots) > 0) {
     args <- c(args, dots[[1]])
   }
-
-  if (!is.factor(y[[1]])) {
-    cl <- rlang::call2("lmer", .ns = "lme4", !!!args)
-    mod <- rlang::eval_tidy(cl)
-  } else {
+  
+  if (is.factor(y[[1]])) {
     args$data$y <- as.numeric(args$data$y) - 1
     if (is.null(args$family)) {
       args$family <- stats::binomial
     }
-    cl <- rlang::call2("glmer", .ns = "lme4", !!!args)
-    mod <- rlang::eval_tidy(cl)
   }
+  
+  cl <- rlang::call2("glmer", .ns = "lme4", !!!args)
+  mod <- rlang::eval_tidy(cl)
 
   coefs <- coef(mod)$value
   ..levels <- rownames(coefs)
