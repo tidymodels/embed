@@ -2,7 +2,9 @@ Package: embed
 Title: Extra Recipes for Encoding Predictors
 Version: 0.1.5.9000
 Authors@R: c(
-    person("Max", "Kuhn", , "max@rstudio.com", role = c("aut", "cre"),
+    person("Emil", "Hvitfeldt", , "emilhhvitfeldt@gmail.com", role = c("aut", "cre"),
+           comment = c(ORCID = "0000-0002-0679-1945")),
+    person("Max", "Kuhn", , "max@rstudio.com", role = c("aut"),
            comment = c(ORCID = "0000-0003-2402-136X")),
     person("RStudio", role = "cph")
   )
@@ -52,4 +54,4 @@ Config/Needs/website: tidymodels, ggiraph, tidyverse/tidytemplate, reticulate
 Config/testthat/edition: 3
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.1.2
+RoxygenNote: 7.1.2.9000
