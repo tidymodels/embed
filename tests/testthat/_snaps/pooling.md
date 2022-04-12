@@ -66,3 +66,21 @@
         retain = TRUE)
     Condition
 
+# Works with passing family 
+
+    Code
+      class_test <- recipe(outcome ~ ., data = ex_dat_poisson) %>% step_lencode_bayes(
+        x3, outcome = vars(outcome), verbose = FALSE, options = c(opts, family = stats::poisson)) %>%
+        prep(training = ex_dat_poisson, retain = TRUE)
+    Condition
+
+---
+
+    Code
+      new_values_ch <- bake(class_test, new_data = new_dat_ch)
+    Condition
+      Warning:
+       There was 1 column that was a factor when the recipe was prepped:
+       'x3'.
+       This may cause errors when processing new data.
+

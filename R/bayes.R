@@ -58,10 +58,10 @@
 #' ```
 #'
 #' where the `...` include the `family` argument (automatically
-#'  set by the step) as well as any arguments given to the `options`
-#'  argument to the step. Relevant options include `chains`, `iter`,
-#'  `cores`, and arguments for the priors (see the links in the
-#'  References below). `prior_intercept` is the argument that has the
+#'  set by the step, unless passed in by `options`) as well as any arguments 
+#'  given to the `options` argument to the step. Relevant options include 
+#'  `chains`, `iter`, `cores`, and arguments for the priors (see the links 
+#'  in the References below). `prior_intercept` is the argument that has the
 #'  most effect on the amount of shrinkage.
 #' 
 #' # Tidying
@@ -178,11 +178,17 @@ prep.step_lencode_bayes <- function(x, training, info = NULL, ...) {
 
 stan_coefs <- function(x, y, options, verbose, ...) {
   rlang::check_installed("rstanarm")
-  if (is.factor(y[[1]])) {
-    fam <- binomial()
+  if (is.null(options$family)) {
+    if (is.factor(y[[1]])) {
+      fam <- binomial()
+    } else {
+      fam <- gaussian()
+    }
   } else {
-    fam <- gaussian()
+    fam <- options$family
+    options$family <- NULL
   }
+  
   form <- as.formula(paste0(names(y), "~ (1|value)"))
 
   if (is.vector(x) | is.factor(x)) {
