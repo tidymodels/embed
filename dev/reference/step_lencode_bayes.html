@@ -142,10 +142,10 @@ is returned.</p>
 <code><a href="https://mc-stan.org/rstanarm/reference/stan_glmer.html" class="external-link">rstanarm::stan_glmer()</a></code> and no intercept via</p><div class="sourceCode"><pre><code><span class="fu">stan_glmer</span><span class="op">(</span><span class="va">outcome</span> <span class="op">~</span> <span class="op">(</span><span class="fl">1</span> <span class="op">|</span> <span class="va">predictor</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">data</span>, <span class="va">...</span><span class="op">)</span></code></pre></div>
 
 <p>where the <code>...</code> include the <code>family</code> argument (automatically
-set by the step) as well as any arguments given to the <code>options</code>
-argument to the step. Relevant options include <code>chains</code>, <code>iter</code>,
-<code>cores</code>, and arguments for the priors (see the links in the
-References below). <code>prior_intercept</code> is the argument that has the
+set by the step, unless passed in by <code>options</code>) as well as any arguments
+given to the <code>options</code> argument to the step. Relevant options include
+<code>chains</code>, <code>iter</code>, <code>cores</code>, and arguments for the priors (see the links
+in the References below). <code>prior_intercept</code> is the argument that has the
 most effect on the amount of shrinkage.</p>
     </div>
     <div class="section level2">
