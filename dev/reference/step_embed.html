@@ -132,15 +132,15 @@ below).</p></dd>
 <dt>mapping</dt>
 <dd><p>A list of tibble results that define the
 encoding. This is <code>NULL</code> until the step is trained by
-<code><a href="https://recipes.tidymodels.org/reference/prep.html" class="external-link">recipes::prep.recipe()</a></code>.</p></dd>
+<code><a href="https://recipes.tidymodels.org/reference/prep.html" class="external-link">recipes::prep()</a></code>.</p></dd>
 <dt>history</dt>
 <dd><p>A tibble with the convergence statistics for
 each term. This is <code>NULL</code> until the step is trained by
-<code><a href="https://recipes.tidymodels.org/reference/prep.html" class="external-link">recipes::prep.recipe()</a></code>.</p></dd>
+<code><a href="https://recipes.tidymodels.org/reference/prep.html" class="external-link">recipes::prep()</a></code>.</p></dd>
 <dt>skip</dt>
 <dd><p>A logical. Should the step be skipped when the
-recipe is baked by <code><a href="https://recipes.tidymodels.org/reference/bake.html" class="external-link">recipes::bake.recipe()</a></code>? While all
-operations are baked when <code><a href="https://recipes.tidymodels.org/reference/prep.html" class="external-link">recipes::prep.recipe()</a></code> is run, some
+recipe is baked by <code><a href="https://recipes.tidymodels.org/reference/bake.html" class="external-link">recipes::bake()</a></code>? While all
+operations are baked when <code><a href="https://recipes.tidymodels.org/reference/prep.html" class="external-link">recipes::prep()</a></code> is run, some
 operations may not be able to be conducted on new data (e.g.
 processing the outcome variable(s)). Care should be taken when
 using <code>skip = TRUE</code> as it may affect the computations for
@@ -207,6 +207,12 @@ link in References).</p>
 session (via <code>foreach</code> or <code>futures</code>) or the <code>parallel</code> package.
 If using a recipes with this step with <code>caret</code>, avoid parallel
 processing.</p>
+    </div>
+    <div class="section level2">
+    <h2 id="tidying">Tidying<a class="anchor" aria-label="anchor" href="#tidying"></a></h2>
+    <p>When you <code><a href="tidy.recipe.html">tidy()</a></code> this step, a tibble with columns
+<code>terms</code> (the selectors or variables selected), <code>levels</code> (levels in variable),
+and a number of columns with embedding information are returned.</p>
     </div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>

@@ -103,11 +103,11 @@ numeric and two-level factors are currently supported.</p></dd>
 <dt>mapping</dt>
 <dd><p>A list of tibble results that define the
 encoding. This is <code>NULL</code> until the step is trained by
-<code><a href="https://recipes.tidymodels.org/reference/prep.html" class="external-link">recipes::prep.recipe()</a></code>.</p></dd>
+<code><a href="https://recipes.tidymodels.org/reference/prep.html" class="external-link">recipes::prep()</a></code>.</p></dd>
 <dt>skip</dt>
 <dd><p>A logical. Should the step be skipped when the
-recipe is baked by <code><a href="https://recipes.tidymodels.org/reference/bake.html" class="external-link">recipes::bake.recipe()</a></code>? While all operations are baked
-when <code><a href="https://recipes.tidymodels.org/reference/prep.html" class="external-link">recipes::prep.recipe()</a></code> is run, some operations may not be able to be
+recipe is baked by <code><a href="https://recipes.tidymodels.org/reference/bake.html" class="external-link">recipes::bake()</a></code>? While all operations are baked
+when <code><a href="https://recipes.tidymodels.org/reference/prep.html" class="external-link">recipes::prep()</a></code> is run, some operations may not be able to be
 conducted on new data (e.g. processing the outcome variable(s)).
 Care should be taken when using <code>skip = TRUE</code> as it may affect
 the computations for subsequent operations</p></dd>
@@ -140,6 +140,12 @@ on the nature of the outcome, and no intercept via</p><div class="sourceCode"><p
 set by the step) as well as any arguments given to the <code>options</code>
 argument to the step. Relevant options include <code>control</code> and
 others.</p>
+    </div>
+    <div class="section level2">
+    <h2 id="tidying">Tidying<a class="anchor" aria-label="anchor" href="#tidying"></a></h2>
+    <p>When you <code><a href="tidy.recipe.html">tidy()</a></code> this step, a tibble with columns
+<code>terms</code> (the selectors or variables selected), <code>value</code> and <code>component</code> is
+returned.</p>
     </div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>

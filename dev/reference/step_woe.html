@@ -113,8 +113,8 @@ Also known as 'pseudocount' parameter of the Laplace smoothing technique.</p></d
 resulting new variables. See notes below.</p></dd>
 <dt>skip</dt>
 <dd><p>A logical. Should the step be skipped when the
-recipe is baked by <code><a href="https://recipes.tidymodels.org/reference/bake.html" class="external-link">recipes::bake.recipe()</a></code>? While all operations are baked
-when <code><a href="https://recipes.tidymodels.org/reference/prep.html" class="external-link">recipes::prep.recipe()</a></code> is run, some operations may not be able to be
+recipe is baked by <code><a href="https://recipes.tidymodels.org/reference/bake.html" class="external-link">recipes::bake()</a></code>? While all operations are baked
+when <code><a href="https://recipes.tidymodels.org/reference/prep.html" class="external-link">recipes::prep()</a></code> is run, some operations may not be able to be
 conducted on new data (e.g. processing the outcome variable(s)).
 Care should be taken when using <code>skip = TRUE</code> as it may affect
 the computations for subsequent operations</p></dd>
@@ -154,6 +154,13 @@ between the levels of nominal predictor to its woe values. You may
 want to tweak this object with the goal to fix the orders between
 the levels of one given predictor. One easy way to do this is by
 tweaking an output returned from <code><a href="dictionary.html">dictionary()</a></code>.</p>
+    </div>
+    <div class="section level2">
+    <h2 id="tidying">Tidying<a class="anchor" aria-label="anchor" href="#tidying"></a></h2>
+    <p>When you <code><a href="tidy.recipe.html">tidy()</a></code> this step, a tibble with columns
+<code>terms</code> (the selectors or variables selected), <code>value</code>, <code>n_tot</code>, <code>n_bad</code>,
+<code>n_good</code>, <code>p_bad</code>, <code>p_good</code>, <code>woe</code> and <code>outcome</code> is returned.. See
+<code><a href="dictionary.html">dictionary()</a></code> for more information.</p>
     </div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>

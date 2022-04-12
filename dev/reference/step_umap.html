@@ -126,7 +126,7 @@ process.</p></dd>
 <dd><p>Two integers to control the random numbers used by the
 numerical methods. The default pulls from the main session's stream of
 numbers and will give reproducible results if the seed is set prior to
-calling <code><a href="https://recipes.tidymodels.org/reference/prep.html" class="external-link">prep.recipe()</a></code> or <code><a href="https://recipes.tidymodels.org/reference/bake.html" class="external-link">bake.recipe()</a></code>.</p></dd>
+calling <code><a href="https://recipes.tidymodels.org/reference/prep.html" class="external-link">prep()</a></code> or <code><a href="https://recipes.tidymodels.org/reference/bake.html" class="external-link">bake()</a></code>.</p></dd>
 <dt>prefix</dt>
 <dd><p>A character string for the prefix of the resulting new
 variables. See notes below.</p></dd>
@@ -139,7 +139,7 @@ original predictors should be retained along with the new embedding
 variables.</p></dd>
 <dt>object</dt>
 <dd><p>An object that defines the encoding. This is
-<code>NULL</code> until the step is trained by <code><a href="https://recipes.tidymodels.org/reference/prep.html" class="external-link">recipes::prep.recipe()</a></code>.</p></dd>
+<code>NULL</code> until the step is trained by <code><a href="https://recipes.tidymodels.org/reference/prep.html" class="external-link">recipes::prep()</a></code>.</p></dd>
 <dt>skip</dt>
 <dd><p>A logical. Should the step be skipped when the
 recipe is baked by <code><a href="https://recipes.tidymodels.org/reference/bake.html" class="external-link">bake()</a></code>? While all operations are baked
@@ -165,6 +165,11 @@ different types of outcome data (e.g. numeric, factor, etc).</p>
 of numbers. The variable names are padded with zeros. For example, if
 <code>num_comp &lt; 10</code>, their names will be <code>UMAP1</code> - <code>UMAP9</code>. If <code>num_comp = 101</code>,
 the names would be <code>UMAP001</code> - <code>UMAP101</code>.</p>
+    </div>
+    <div class="section level2">
+    <h2 id="tidying">Tidying<a class="anchor" aria-label="anchor" href="#tidying"></a></h2>
+    <p>When you <code><a href="tidy.recipe.html">tidy()</a></code> this step, a tibble with columns
+<code>terms</code> (the selectors or variables selected) is returned.</p>
     </div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>

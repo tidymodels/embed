@@ -100,7 +100,7 @@ preprocessing have been estimated.</p></dd>
 selected column(s) should be retained in addition to the new dummy variables.</p></dd>
 <dt>columns</dt>
 <dd><p>A character vector for the selected columns. This is <code>NULL</code>
-until the step is trained by <code><a href="https://recipes.tidymodels.org/reference/prep.html" class="external-link">recipes::prep.recipe()</a></code>.</p></dd>
+until the step is trained by <code><a href="https://recipes.tidymodels.org/reference/prep.html" class="external-link">recipes::prep()</a></code>.</p></dd>
 <dt>keep_original_cols</dt>
 <dd><p>A logical to keep the original variables in the
 output. Defaults to <code>FALSE</code>.</p></dd>
@@ -136,6 +136,11 @@ it is likely that some columns will have all zeros. A zero-variance filter
 columns.</p>
     </div>
     <div class="section level2">
+    <h2 id="tidying">Tidying<a class="anchor" aria-label="anchor" href="#tidying"></a></h2>
+    <p>When you <code><a href="tidy.recipe.html">tidy()</a></code> this step, a tibble with columns
+<code>terms</code> (the columns that is selected)  is returned.</p>
+    </div>
+    <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
     <p>Weinberger, K, A Dasgupta, J Langford, A Smola, and J Attenberg. 2009.
 "Feature Hashing for Large Scale Multitask Learning." In Proceedings of the
@@ -169,8 +174,8 @@ Approach for Predictive Models</em>. CRC/Chapman Hall
 <span class="r-in">  <span class="fu"><a href="https://rdrr.io/r/base/apply.html" class="external-link">apply</a></span><span class="op">(</span><span class="va">results</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">sponsor_code</span><span class="op">)</span>, <span class="fl">2</span>, <span class="va">sum</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="op">)</span></span>
 <span class="r-in"><span class="op">}</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> .</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  0  1  2  3  4  5  6  7  8  9 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  1  5  3 10 16 11  3  9  4  2 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  0  1  2  3  4  5  6  7  8  9 11 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  1  9  2  9 10  9 12  6  4  1  1 </span>
 <span class="r-in"><span class="co"># }</span></span>
 </code></pre></div>
     </div>
