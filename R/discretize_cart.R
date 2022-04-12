@@ -25,8 +25,8 @@
 #'  each variable. If length zero, splitting could not be used on that column.
 #' @param id A character string that is unique to this step to identify it.
 #' @param skip A logical. Should the step be skipped when the
-#'  recipe is baked by [recipes::bake.recipe()]? While all operations are baked
-#'  when [recipes::prep.recipe()] is run, some operations may not be able to be
+#'  recipe is baked by [recipes::bake()]? While all operations are baked
+#'  when [recipes::prep()] is run, some operations may not be able to be
 #'  conducted on new data (e.g. processing the outcome variable(s)).
 #'  Care should be taken when using `skip = TRUE` as it may affect
 #'  the computations for subsequent operations
@@ -44,6 +44,11 @@
 #'  step will stop with a note about installing the package.
 #'
 #' Note that the original data will be replaced with the new bins.
+#' 
+#' # Tidying
+#'
+#' When you [`tidy()`][tidy.recipe()] this step, a tibble with columns
+#' `terms` (the columns that is selected), `values` is returned.
 #'
 #' @examples
 #' library(modeldata)
@@ -66,7 +71,7 @@
 #'
 #' bake(cart_rec, ad_data_te, tau)
 #' @seealso [embed::step_discretize_xgb()], [recipes::recipe()],
-#' [recipes::prep.recipe()], [recipes::bake.recipe()]
+#' [recipes::prep()], [recipes::bake()]
 #'
 step_discretize_cart <-
   function(recipe,
@@ -242,7 +247,7 @@ print.step_discretize_cart <- function(x, width = max(20, options()$width - 30),
   invisible(x)
 }
 
-#' @rdname step_discretize_cart
+#' @rdname tidy.recipe
 #' @param x A `step_discretize_cart` object.
 #' @export
 tidy.step_discretize_cart <- function(x, ...) {

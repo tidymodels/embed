@@ -22,7 +22,7 @@
 #'  output. Defaults to `FALSE`.
 #' @param options A list of options to the default method for [irlba::ssvd()].
 #' @param res The rotation matrix once this
-#'  preprocessing step has be trained by [prep.recipe()].
+#'  preprocessing step has be trained by [prep()].
 #' @param prefix A character string that will be the prefix to the resulting
 #'  new variables. See notes below.
 #' @return An updated version of `recipe` with the new step added to the
@@ -47,6 +47,12 @@
 #'  if `num_comp < 10`, their names will be `PC1` - `PC9`.
 #'  If `num_comp = 101`, the names would be `PC001` -
 #'  `PC101`.
+#'  
+#' # Tidying
+#' 
+#' When you [`tidy()`][tidy.recipe()] this step, a tibble with columns
+#' `terms` (the selectors or variables selected), `value` and `component` is
+#' returned.
 #'
 #' @seealso [step_pca_sparse_bayes()]
 #' @examples
@@ -226,22 +232,7 @@ pca_coefs <- function(x) {
   res
 }
 
-#' @rdname step_pca_sparse
-#' @param x A `step_pca_sparse` object.
-#' @export
-tidy.step_pca_sparse <- function(x, ...) {
-  if (!is_trained(x)) {
-    term_names <- sel2char(x$terms)
-    res <- tibble(terms = term_names, value = na_dbl, component = na_chr)
-  } else {
-    res <- pca_coefs(x)
-  }
-  res$id <- x$id
-  res
-}
-
-
-#' @rdname step_pca_sparse
+#' @rdname tidy.recipe
 #' @param x A `step_pca_sparse` object.
 #' @export
 tidy.step_pca_sparse <- function(x, ...) {

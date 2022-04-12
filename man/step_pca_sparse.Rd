@@ -2,7 +2,6 @@
 % Please edit documentation in R/pca_sparse.R
 \name{step_pca_sparse}
 \alias{step_pca_sparse}
-\alias{tidy.step_pca_sparse}
 \title{Sparse PCA Signal Extraction}
 \usage{
 step_pca_sparse(
@@ -19,10 +18,6 @@ step_pca_sparse(
   skip = FALSE,
   id = rand_id("pca_sparse")
 )
-
-\method{tidy}{step_pca_sparse}(x, ...)
-
-\method{tidy}{step_pca_sparse}(x, ...)
 }
 \arguments{
 \item{recipe}{A recipe object. The step will be added to the
@@ -50,7 +45,7 @@ non-zero coefficients for each PCA component (via regularization).}
 \item{options}{A list of options to the default method for \code{\link[irlba:ssvd]{irlba::ssvd()}}.}
 
 \item{res}{The rotation matrix once this
-preprocessing step has be trained by \code{\link[=prep.recipe]{prep.recipe()}}.}
+preprocessing step has be trained by \code{\link[=prep]{prep()}}.}
 
 \item{prefix}{A character string that will be the prefix to the resulting
 new variables. See notes below.}
@@ -59,15 +54,13 @@ new variables. See notes below.}
 output. Defaults to \code{FALSE}.}
 
 \item{skip}{A logical. Should the step be skipped when the
-recipe is baked by \code{\link[recipes:bake]{recipes::bake.recipe()}}? While all operations are baked
-when \code{\link[recipes:prep]{recipes::prep.recipe()}} is run, some operations may not be able to be
+recipe is baked by \code{\link[recipes:bake]{recipes::bake()}}? While all operations are baked
+when \code{\link[recipes:prep]{recipes::prep()}} is run, some operations may not be able to be
 conducted on new data (e.g. processing the outcome variable(s)).
 Care should be taken when using \code{skip = TRUE} as it may affect
 the computations for subsequent operations}
 
 \item{id}{A character string that is unique to this step to identify it.}
-
-\item{x}{A \code{step_pca_sparse} object.}
 }
 \value{
 An updated version of \code{recipe} with the new step added to the
@@ -94,6 +87,12 @@ if \code{num_comp < 10}, their names will be \code{PC1} - \code{PC9}.
 If \code{num_comp = 101}, the names would be \code{PC001} -
 \code{PC101}.
 }
+\section{Tidying}{
+When you \code{\link[=tidy.recipe]{tidy()}} this step, a tibble with columns
+\code{terms} (the selectors or variables selected), \code{value} and \code{component} is
+returned.
+}
+
 \examples{
 library(recipes)
 library(ggplot2)

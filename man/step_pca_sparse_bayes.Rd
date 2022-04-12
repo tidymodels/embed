@@ -2,7 +2,6 @@
 % Please edit documentation in R/pca_sparse_bayes.R
 \name{step_pca_sparse_bayes}
 \alias{step_pca_sparse_bayes}
-\alias{tidy.step_pca_sparse_bayes}
 \title{Sparse Bayesian PCA Signal Extraction}
 \usage{
 step_pca_sparse_bayes(
@@ -20,8 +19,6 @@ step_pca_sparse_bayes(
   skip = FALSE,
   id = rand_id("pca_sparse_bayes")
 )
-
-\method{tidy}{step_pca_sparse_bayes}(x, ...)
 }
 \arguments{
 \item{recipe}{A recipe object. The step will be added to the
@@ -56,7 +53,7 @@ increases the number of zero coefficients.}
 \code{\link[VBsparsePCA:VBsparsePCA]{VBsparsePCA::VBsparsePCA()}}.}
 
 \item{res}{The rotation matrix once this preprocessing step has been trained
-by \code{\link[=prep.recipe]{prep.recipe()}}.}
+by \code{\link[=prep]{prep()}}.}
 
 \item{prefix}{A character string that will be the prefix to the resulting
 new variables. See notes below.}
@@ -65,15 +62,13 @@ new variables. See notes below.}
 output. Defaults to \code{FALSE}.}
 
 \item{skip}{A logical. Should the step be skipped when the
-recipe is baked by \code{\link[recipes:bake]{recipes::bake.recipe()}}? While all operations are baked
-when \code{\link[recipes:prep]{recipes::prep.recipe()}} is run, some operations may not be able to be
+recipe is baked by \code{\link[recipes:bake]{recipes::bake()}}? While all operations are baked
+when \code{\link[recipes:prep]{recipes::prep()}} is run, some operations may not be able to be
 conducted on new data (e.g. processing the outcome variable(s)).
 Care should be taken when using \code{skip = TRUE} as it may affect
 the computations for subsequent operations}
 
 \item{id}{A character string that is unique to this step to identify it.}
-
-\item{x}{A \code{step_pca_sparse_bayes} object.}
 }
 \value{
 An updated version of \code{recipe} with the new step added to the
@@ -112,6 +107,12 @@ if \code{num_comp < 10}, their names will be \code{PC1} - \code{PC9}.
 If \code{num_comp = 101}, the names would be \code{PC001} -
 \code{PC101}.
 }
+\section{Tidying}{
+When you \code{\link[=tidy.recipe]{tidy()}} this step, a tibble with columns
+\code{terms} (the selectors or variables selected), \code{value} and \code{component} is
+returned.
+}
+
 \examples{
 library(recipes)
 library(ggplot2)

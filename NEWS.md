@@ -4,6 +4,12 @@
 
 * `step_feature_hash()` is soft deprecated in embed in favor of `step_dummy_hash()` in textrecipes. (#95)
 
+* Steps now have a dedicated subsection detailing what happens when `tidy()` is applied. (#105)
+
+* Reorganize documentation for all recipe step `tidy` methods (#115).
+
+* Fixed a bug where `woe_table()` and `step_woe()` didn't respect the factor levels of the outcome. (109)
+
 # embed 0.1.5
 
 * Re-licensed package from GPL-2 to MIT. See [consent from copyright holders here](https://github.com/tidymodels/embed/issues/78).

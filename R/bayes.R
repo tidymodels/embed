@@ -21,10 +21,10 @@
 #'  [rstanarm::stan_glmer()].
 #' @param mapping A list of tibble results that define the
 #'  encoding. This is `NULL` until the step is trained by
-#'  [recipes::prep.recipe()].
+#'  [recipes::prep()].
 #' @param skip A logical. Should the step be skipped when the
-#'  recipe is baked by [recipes::bake.recipe()]? While all operations are baked
-#'  when [recipes::prep.recipe()] is run, some operations may not be able to be
+#'  recipe is baked by [recipes::bake()]? While all operations are baked
+#'  when [recipes::prep()] is run, some operations may not be able to be
 #'  conducted on new data (e.g. processing the outcome variable(s)).
 #'  Care should be taken when using `skip = TRUE` as it may affect
 #'  the computations for subsequent operations
@@ -63,7 +63,12 @@
 #'  `cores`, and arguments for the priors (see the links in the
 #'  References below). `prior_intercept` is the argument that has the
 #'  most effect on the amount of shrinkage.
-#'
+#' 
+#' # Tidying
+#' 
+#' When you [`tidy()`][tidy.recipe()] this step, a tibble with columns
+#' `terms` (the selectors or variables selected), `value` and `component` is
+#' returned.
 #'
 #' @references
 #' Micci-Barreca D (2001) "A preprocessing scheme for
@@ -239,10 +244,9 @@ print.step_lencode_bayes <-
   }
 
 
-#' @rdname step_lencode_bayes
+#' @rdname tidy.recipe
 #' @param x A `step_lencode_bayes` object.
 #' @export
-#' @export tidy.step_lencode_bayes
 tidy.step_lencode_bayes <- function(x, ...) {
   if (is_trained(x)) {
     for (i in seq_along(x$mapping)) {

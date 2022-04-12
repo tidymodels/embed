@@ -2,7 +2,6 @@
 % Please edit documentation in R/discretize_xgb.R
 \name{step_discretize_xgb}
 \alias{step_discretize_xgb}
-\alias{tidy.step_discretize_xgb}
 \title{Discretize numeric variables with XgBoost}
 \usage{
 step_discretize_xgb(
@@ -20,8 +19,6 @@ step_discretize_xgb(
   skip = FALSE,
   id = rand_id("discretize_xgb")
 )
-
-\method{tidy}{step_discretize_xgb}(x, ...)
 }
 \arguments{
 \item{recipe}{A recipe object. The step will be added to the sequence of
@@ -60,15 +57,13 @@ Corresponds to \code{min_child_weight} in the \pkg{xgboost} package. Defaults to
 each variable.}
 
 \item{skip}{A logical. Should the step be skipped when the
-recipe is baked by \code{\link[recipes:bake]{recipes::bake.recipe()}}? While all operations are baked
-when \code{\link[recipes:prep]{recipes::prep.recipe()}} is run, some operations may not be able to be
+recipe is baked by \code{\link[recipes:bake]{recipes::bake()}}? While all operations are baked
+when \code{\link[recipes:prep]{recipes::prep()}} is run, some operations may not be able to be
 conducted on new data (e.g. processing the outcome variable(s)).
 Care should be taken when using \code{skip = TRUE} as it may affect
 the computations for subsequent operations}
 
 \item{id}{A character string that is unique to this step to identify it.}
-
-\item{x}{A \code{step_discretize_xgb} object.}
 }
 \value{
 An updated version of \code{recipe} with the new step added to the
@@ -104,6 +99,11 @@ step will stop with a note about installing the package.
 
 Note that the original data will be replaced with the new bins.
 }
+\section{Tidying}{
+When you \code{\link[=tidy.recipe]{tidy()}} this step, a tibble with columns
+\code{terms} (the columns that is selected), \code{values} is returned.
+}
+
 \examples{
 library(modeldata)
 data(credit_data)
@@ -128,5 +128,5 @@ if (rlang::is_installed("xgboost")) {
 }
 \seealso{
 \code{\link[=step_discretize_cart]{step_discretize_cart()}}, \code{\link[recipes:recipe]{recipes::recipe()}},
-\code{\link[recipes:prep]{recipes::prep.recipe()}}, \code{\link[recipes:bake]{recipes::bake.recipe()}}
+\code{\link[recipes:prep]{recipes::prep()}}, \code{\link[recipes:bake]{recipes::bake()}}
 }

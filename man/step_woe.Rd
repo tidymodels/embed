@@ -2,7 +2,6 @@
 % Please edit documentation in R/woe.R
 \name{step_woe}
 \alias{step_woe}
-\alias{tidy.step_woe}
 \title{Weight of evidence transformation}
 \usage{
 step_woe(
@@ -17,8 +16,6 @@ step_woe(
   skip = FALSE,
   id = rand_id("woe")
 )
-
-\method{tidy}{step_woe}(x, ...)
 }
 \arguments{
 \item{recipe}{A recipe object. The step will be added to the
@@ -53,15 +50,13 @@ Also known as 'pseudocount' parameter of the Laplace smoothing technique.}
 resulting new variables. See notes below.}
 
 \item{skip}{A logical. Should the step be skipped when the
-recipe is baked by \code{\link[recipes:bake]{recipes::bake.recipe()}}? While all operations are baked
-when \code{\link[recipes:prep]{recipes::prep.recipe()}} is run, some operations may not be able to be
+recipe is baked by \code{\link[recipes:bake]{recipes::bake()}}? While all operations are baked
+when \code{\link[recipes:prep]{recipes::prep()}} is run, some operations may not be able to be
 conducted on new data (e.g. processing the outcome variable(s)).
 Care should be taken when using \code{skip = TRUE} as it may affect
 the computations for subsequent operations}
 
 \item{id}{A character string that is unique to this step to identify it.}
-
-\item{x}{A \code{step_woe} object.}
 }
 \value{
 An updated version of \code{recipe} with the new step
@@ -105,6 +100,13 @@ want to tweak this object with the goal to fix the orders between
 the levels of one given predictor. One easy way to do this is by
 tweaking an output returned from \code{dictionary()}.
 }
+\section{Tidying}{
+When you \code{\link[=tidy.recipe]{tidy()}} this step, a tibble with columns
+\code{terms} (the selectors or variables selected), \code{value}, \code{n_tot}, \code{n_bad},
+\code{n_good}, \code{p_bad}, \code{p_good}, \code{woe} and \code{outcome} is returned.. See
+\code{\link[=dictionary]{dictionary()}} for more information.
+}
+
 \examples{
 library(modeldata)
 data("credit_data")

@@ -8,6 +8,21 @@
        'x3'.
        This may cause errors when processing new data.
 
+---
+
+    Code
+      new_values_ch <- bake(reg_test, new_data = new_dat_ch)
+    Condition
+      Warning:
+       There was 1 column that was a factor when the recipe was prepped:
+       'x3'.
+       This may cause errors when processing new data.
+
+# character encoded predictor
+
+    Code
+      new_values <- bake(class_test, new_data = new_dat_ch)
+
 # bad args
 
     Code

@@ -2,7 +2,6 @@
 % Please edit documentation in R/hash.R
 \name{step_feature_hash}
 \alias{step_feature_hash}
-\alias{tidy.step_feature_hash}
 \title{Dummy Variables Creation via Feature Hashing}
 \usage{
 step_feature_hash(
@@ -17,8 +16,6 @@ step_feature_hash(
   skip = FALSE,
   id = rand_id("feature_hash")
 )
-
-\method{tidy}{step_feature_hash}(x, ...)
 }
 \arguments{
 \item{recipe}{A recipe object. The step will be added to the
@@ -40,7 +37,7 @@ preprocessing have been estimated.}
 selected column(s) should be retained in addition to the new dummy variables.}
 
 \item{columns}{A character vector for the selected columns. This is \code{NULL}
-until the step is trained by \code{\link[recipes:prep]{recipes::prep.recipe()}}.}
+until the step is trained by \code{\link[recipes:prep]{recipes::prep()}}.}
 
 \item{keep_original_cols}{A logical to keep the original variables in the
 output. Defaults to \code{FALSE}.}
@@ -53,8 +50,6 @@ Care should be taken when using \code{skip = TRUE} as it may affect
 the computations for subsequent operations.}
 
 \item{id}{A character string that is unique to this step to identify it.}
-
-\item{x}{A \code{step_feature_hash} object.}
 }
 \value{
 An updated version of \code{recipe} with the new step added to the
@@ -85,6 +80,11 @@ it is likely that some columns will have all zeros. A zero-variance filter
 (via \code{\link[recipes:step_zv]{recipes::step_zv()}}) is recommended for any recipe that uses hashed
 columns.
 }
+\section{Tidying}{
+When you \code{\link[=tidy.recipe]{tidy()}} this step, a tibble with columns
+\code{terms} (the columns that is selected)  is returned.
+}
+
 \examples{
 \donttest{
 data(grants, package = "modeldata")
