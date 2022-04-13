@@ -40,6 +40,9 @@
     <loc>https://embed.tidymodels.org/reference/dictionary.html</loc>
   </url>
   <url>
+    <loc>https://embed.tidymodels.org/reference/embed-package.html</loc>
+  </url>
+  <url>
     <loc>https://embed.tidymodels.org/reference/index.html</loc>
   </url>
   <url>
@@ -86,6 +89,9 @@
   </url>
   <url>
     <loc>https://embed.tidymodels.org/reference/step_woe.html</loc>
+  </url>
+  <url>
+    <loc>https://embed.tidymodels.org/reference/tidy.recipe.html</loc>
   </url>
   <url>
     <loc>https://embed.tidymodels.org/reference/tunable_embed.html</loc>
