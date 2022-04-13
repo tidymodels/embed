@@ -16,3 +16,4 @@ Applications/Tensorflow.Rmd
 ^man-roxygen$
 ^revdep$
 ^cran-comments\.md$
+^CRAN-SUBMISSION$
