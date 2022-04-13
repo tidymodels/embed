@@ -15,3 +15,4 @@ Applications/Tensorflow.Rmd
 ^LICENSE\.md$
 ^man-roxygen$
 ^revdep$
+^cran-comments\.md$
