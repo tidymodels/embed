@@ -186,6 +186,12 @@ test_that("can prep recipes with no keep_original_cols", {
   )
 })
 
+test_that("printing", {
+  print_test <- recipe(~., data = tr[, -5]) %>%
+    step_umap(all_predictors())
+  expect_snapshot(print_test)
+  expect_snapshot(prep(print_test))
+})
 
 # ------------------------------------------------------------------------------
 

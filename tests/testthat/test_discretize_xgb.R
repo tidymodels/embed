@@ -20,7 +20,7 @@ credit_data_train <- training(credit_data_split)
 credit_data_test <- testing(credit_data_split)
 
 set.seed(2393)
-credit_data_small <- dplyr::sample_n(credit_data_train, 20)
+credit_data_small <- dplyr::sample_n(credit_data_train, 30)
 
 rec_credit <- credit_data_train %>%
   select(-Status) %>%
@@ -190,8 +190,8 @@ test_that("xgb_binning for classification", {
   expect_true(length(xgb_binning) > 1)
   expect_type(xgb_binning, "double")
 
+  skip_if(packageVersion("xgboost") > "1.5.2.1")
   # Algorithm runs on a too small training set/ insufficient variation in data
-
   expect_snapshot_warning(
     embed:::xgb_binning(
       credit_data_small,
@@ -230,7 +230,6 @@ test_that("xgb_binning for multi-classification", {
   expect_type(xgb_binning, "double")
 
   # Algorithm runs on a too small training set/ insufficient variation in data
-
   expect_snapshot(
     embed:::xgb_binning(
       attrition_data_small,
@@ -474,8 +473,7 @@ test_that("printing", {
     step_discretize_xgb(all_predictors(), outcome = "class")
 
   expect_snapshot(xgb_rec)
-  ## can't use snapshot because of xgboost output here:
-  expect_output(prep(xgb_rec, verbose = TRUE))
+  expect_snapshot(prep(xgb_rec))
 })
 
 # ------------------------------------------------------------------------------

@@ -84,3 +84,40 @@
        'x3'.
        This may cause errors when processing new data.
 
+# printing
+
+    Code
+      print_test
+    Output
+      Recipe
+      
+      Inputs:
+      
+            role #variables
+         outcome          1
+       predictor          3
+      
+      Operations:
+      
+      Linear embedding for factors via Bayesian GLM for x3
+
+---
+
+    Code
+      prep(print_test)
+    Condition
+    Output
+      Recipe
+      
+      Inputs:
+      
+            role #variables
+         outcome          1
+       predictor          3
+      
+      Training data contained 500 data points and no missing data.
+      
+      Operations:
+      
+      Linear embedding for factors via Bayesian GLM for x3 [trained]
+

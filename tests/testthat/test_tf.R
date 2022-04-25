@@ -308,7 +308,7 @@ test_that("printing", {
   print_test <- recipe(x2 ~ ., data = ex_dat_ch) %>%
     step_embed(x3, outcome = vars(x2))
   expect_snapshot(print_test)
-  expect_snapshot(prep(print_test, training = ex_dat_ch, verbose = TRUE))
+  expect_snapshot(prep(print_test))
 })
 
 
