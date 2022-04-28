@@ -105,6 +105,12 @@ want to tweak this object with the goal to fix the orders between
 the levels of one given predictor. One easy way to do this is by
 tweaking an output returned from \code{dictionary()}.
 }
+\section{Case weights}{
+
+
+The underlying operation does not allow for case weights.
+}
+
 \examples{
 library(modeldata)
 data("credit_data")

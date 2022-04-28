@@ -82,6 +82,12 @@ it is likely that some columns will have all zeros. A zero-variance filter
 (via \code{\link[recipes:step_zv]{recipes::step_zv()}}) is recommended for any recipe that uses hashed
 columns.
 }
+\section{Case weights}{
+
+
+The underlying operation does not allow for case weights.
+}
+
 \examples{
 \donttest{
 data(grants, package = "modeldata")

@@ -110,6 +110,8 @@
 #'  session (via `foreach` or `futures`) or the `parallel` package.
 #'  If using a recipes with this step with `caret`, avoid parallel
 #'  processing.
+#'  
+#' @template case-weights-not-supported
 #'
 #' @references Francois C and Allaire JJ (2018)
 #' _Deep Learning with R_, Manning

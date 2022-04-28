@@ -63,6 +63,8 @@
 #' want to tweak this object with the goal to fix the orders between
 #' the levels of one given predictor. One easy way to do this is by
 #' tweaking an output returned from \code{dictionary()}.
+#' 
+#' @template case-weights-not-supported
 #'
 #' @references Kullback, S. (1959). *Information Theory and Statistics.* Wiley, New York.
 #'

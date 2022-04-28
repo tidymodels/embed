@@ -90,6 +90,14 @@ set by the step) as well as any arguments given to the \code{options}
 argument to the step. Relevant options include \code{control} and
 others.
 }
+\section{Case weights}{
+
+
+This step performs an supervised operation that can utilize case weights.
+To use them, see the documentation in \link[recipes:case_weights]{recipes::case_weights} and the examples on
+\code{tidymodels.org}.
+}
+
 \examples{
 library(recipes)
 library(dplyr)

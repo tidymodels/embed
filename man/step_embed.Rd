@@ -161,6 +161,12 @@ session (via \code{foreach} or \code{futures}) or the \code{parallel} package.
 If using a recipes with this step with \code{caret}, avoid parallel
 processing.
 }
+\section{Case weights}{
+
+
+The underlying operation does not allow for case weights.
+}
+
 \examples{
 library(modeldata)
 

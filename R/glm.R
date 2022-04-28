@@ -46,6 +46,8 @@
 #'
 #' For novel levels, a slightly timmed average of the coefficients
 #'  is returned.
+#'  
+#' @template case-weights-supervised
 #'
 #' @references
 #' Micci-Barreca D (2001) "A preprocessing scheme for

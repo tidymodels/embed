@@ -60,7 +60,8 @@
 #'  set by the step) as well as any arguments given to the `options`
 #'  argument to the step. Relevant options include `control` and
 #'  others.
-#'
+#'  
+#' @template case-weights-supervised
 #'
 #' @references
 #' Micci-Barreca D (2001) "A preprocessing scheme for

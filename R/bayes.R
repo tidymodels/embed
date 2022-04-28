@@ -63,7 +63,8 @@
 #'  `cores`, and arguments for the priors (see the links in the
 #'  References below). `prior_intercept` is the argument that has the
 #'  most effect on the amount of shrinkage.
-#'
+#'  
+#' @template case-weights-supervised
 #'
 #' @references
 #' Micci-Barreca D (2001) "A preprocessing scheme for

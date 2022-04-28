@@ -42,6 +42,8 @@
 #'  of numbers. The variable names are padded with zeros. For example, if
 #'  `num_comp < 10`, their names will be `UMAP1` - `UMAP9`. If `num_comp = 101`,
 #'  the names would be `UMAP001` - `UMAP101`.
+#'  
+#' @template case-weights-not-supported
 #'
 #' @references
 #' McInnes, L., & Healy, J. (2018). UMAP: Uniform Manifold Approximation and

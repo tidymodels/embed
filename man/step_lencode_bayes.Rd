@@ -95,6 +95,14 @@ argument to the step. Relevant options include \code{chains}, \code{iter},
 References below). \code{prior_intercept} is the argument that has the
 most effect on the amount of shrinkage.
 }
+\section{Case weights}{
+
+
+This step performs an supervised operation that can utilize case weights.
+To use them, see the documentation in \link[recipes:case_weights]{recipes::case_weights} and the examples on
+\code{tidymodels.org}.
+}
+
 \examples{
 library(recipes)
 library(dplyr)

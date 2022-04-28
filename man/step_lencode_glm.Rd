@@ -76,6 +76,14 @@ interest being the \emph{first} level of the factor.
 For novel levels, a slightly timmed average of the coefficients
 is returned.
 }
+\section{Case weights}{
+
+
+This step performs an supervised operation that can utilize case weights.
+To use them, see the documentation in \link[recipes:case_weights]{recipes::case_weights} and the examples on
+\code{tidymodels.org}.
+}
+
 \examples{
 library(recipes)
 library(dplyr)

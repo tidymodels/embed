@@ -114,6 +114,12 @@ of numbers. The variable names are padded with zeros. For example, if
 \code{num_comp < 10}, their names will be \code{UMAP1} - \code{UMAP9}. If \code{num_comp = 101},
 the names would be \code{UMAP001} - \code{UMAP101}.
 }
+\section{Case weights}{
+
+
+The underlying operation does not allow for case weights.
+}
+
 \examples{
 library(recipes)
 library(ggplot2)

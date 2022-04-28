@@ -47,6 +47,8 @@
 #'  if `num_comp < 10`, their names will be `PC1` - `PC9`.
 #'  If `num_comp = 101`, the names would be `PC001` -
 #'  `PC101`.
+#'  
+#' @template case-weights-not-supported
 #'
 #' @seealso [step_pca_sparse_bayes()]
 #' @examples

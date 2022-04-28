@@ -44,6 +44,8 @@
 #'  step will stop with a note about installing the package.
 #'
 #' Note that the original data will be replaced with the new bins.
+#' 
+#' @template case-weights-supervised
 #'
 #' @examples
 #' library(modeldata)

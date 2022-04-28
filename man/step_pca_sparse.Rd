@@ -94,6 +94,12 @@ if \code{num_comp < 10}, their names will be \code{PC1} - \code{PC9}.
 If \code{num_comp = 101}, the names would be \code{PC001} -
 \code{PC101}.
 }
+\section{Case weights}{
+
+
+The underlying operation does not allow for case weights.
+}
+
 \examples{
 library(recipes)
 library(ggplot2)

@@ -104,6 +104,14 @@ step will stop with a note about installing the package.
 
 Note that the original data will be replaced with the new bins.
 }
+\section{Case weights}{
+
+
+This step performs an supervised operation that can utilize case weights.
+To use them, see the documentation in \link[recipes:case_weights]{recipes::case_weights} and the examples on
+\code{tidymodels.org}.
+}
+
 \examples{
 library(modeldata)
 data(credit_data)
