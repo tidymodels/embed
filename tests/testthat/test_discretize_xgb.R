@@ -192,7 +192,7 @@ test_that("xgb_binning for classification", {
 
   # Algorithm runs on a too small training set/ insufficient variation in data
 
-  expect_snapshot_warning(
+  expect_snapshot(
     embed:::xgb_binning(
       credit_data_small,
       "Status",
