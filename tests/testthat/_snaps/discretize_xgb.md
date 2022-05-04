@@ -112,7 +112,11 @@
 
 ---
 
-    `step_discretize_xgb()` failed for predictor 'Seniority'. This could be because the data have no trend or because the learning rate is too low (current value: 0.3). The predictor was not binned.
+    Code
+      embed:::xgb_binning(credit_data_small, "Status", "Seniority", sample_val = 0.3,
+        learn_rate = 0.3, num_breaks = 10, tree_depth = 1, min_n = 5)
+    Output
+      numeric(0)
 
 # xgb_binning for multi-classification
 

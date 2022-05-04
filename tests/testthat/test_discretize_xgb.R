@@ -192,7 +192,7 @@ test_that("xgb_binning for classification", {
 
   skip_if(packageVersion("xgboost") > "1.5.2.1")
   # Algorithm runs on a too small training set/ insufficient variation in data
-  expect_snapshot_warning(
+  expect_snapshot(
     embed:::xgb_binning(
       credit_data_small,
       "Status",

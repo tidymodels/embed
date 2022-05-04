@@ -187,7 +187,12 @@ lme_coefs <- function(x, y, ...) {
     }
   }
   
-  cl <- rlang::call2("glmer", .ns = "lme4", !!!args)
+  if (is.null(args$family) || identical(args$family, gaussian)) {
+    cl <- rlang::call2("lmer", .ns = "lme4", !!!args)
+  } else {
+    cl <- rlang::call2("glmer", .ns = "lme4", !!!args)
+  }
+  
   mod <- rlang::eval_tidy(cl)
 
   coefs <- coef(mod)$value
