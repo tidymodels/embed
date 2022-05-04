@@ -47,11 +47,8 @@
 ---
 
     Code
-      prep(print_test, training = ex_dat_ch, verbose = TRUE)
+      prep(print_test)
     Output
-      oper 1 step embed [training] 
-      The retained training set is ~ 0.02 Mb  in memory.
-      
       Recipe
       
       Inputs:

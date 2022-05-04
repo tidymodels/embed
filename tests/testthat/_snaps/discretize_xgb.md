@@ -287,3 +287,22 @@
       
       Discretizing variables using xgboost all_predictors()
 
+---
+
+    Code
+      prep(xgb_rec)
+    Output
+      Recipe
+      
+      Inputs:
+      
+            role #variables
+         outcome          1
+       predictor          2
+      
+      Training data contained 1000 data points and no missing data.
+      
+      Operations:
+      
+      Discretizing variables using xgboost x, z [trained]
+

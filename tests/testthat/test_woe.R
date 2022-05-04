@@ -225,7 +225,7 @@ test_that("printing", {
   woe_extract <- recipe(Status ~ ., data = credit_tr) %>%
     step_woe(Job, Home, outcome = vars(Status))
   expect_snapshot(woe_extract)
-  expect_snapshot(prep(woe_extract, training = credit_tr, verbose = TRUE))
+  expect_snapshot(prep(woe_extract))
 })
 
 

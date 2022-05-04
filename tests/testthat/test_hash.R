@@ -139,6 +139,13 @@ test_that("can prep recipes with no keep_original_cols", {
   )
 })
 
+test_that("printing", {
+  rlang::local_options(lifecycle_verbosity = "quiet")
+  print_test <- recipe(x1 ~ x3, data = ex_dat) %>%
+    step_feature_hash(x3)
+  expect_snapshot(print_test)
+  expect_snapshot(prep(print_test))
+})
 
 # ------------------------------------------------------------------------------
 

@@ -365,6 +365,18 @@ test_that("Works with passing family ", {
   )
 })
 
+
+test_that("printing", {
+  print_test <- recipe(x2 ~ ., data = ex_dat) %>%
+    step_lencode_bayes(x3,
+                       outcome = vars(x2),
+                       verbose = FALSE,
+                       options = opts
+    )
+  expect_snapshot(print_test)
+  expect_snapshot(prep(print_test), transform = omit_warning("^(Bulk Effective|Tail Effective|The largest)"))
+})
+
 # ------------------------------------------------------------------------------
 
 test_that("empty selections", {
