@@ -225,7 +225,7 @@ bake.step_pca_sparse_bayes <- function(object, new_data, ...) {
       new_data <- new_data[, !(colnames(new_data) %in% pca_vars), drop = FALSE]
     }
   }
-  as_tibble(new_data)
+  new_data
 }
 
 #' @export

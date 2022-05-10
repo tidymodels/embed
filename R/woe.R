@@ -427,7 +427,7 @@ bake.step_woe <- function(object, new_data, ...) {
     prefix = object$prefix
   )
   new_data <- new_data[, !(colnames(new_data) %in% woe_vars), drop = FALSE]
-  as_tibble(new_data)
+  new_data
 }
 
 #' @export

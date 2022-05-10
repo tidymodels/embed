@@ -237,7 +237,7 @@ bake.step_discretize_cart <- function(object, new_data, ...) {
       new_data <- binned_data
     }
   }
-  tibble::as_tibble(new_data)
+  new_data
 }
 
 #' @export
