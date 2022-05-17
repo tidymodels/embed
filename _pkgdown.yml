@@ -10,6 +10,7 @@ template:
 reference:
 - title: Embed categorical predictors
   contents:
+    - step_collapse_cart
     - step_embed
     - step_feature_hash
     - step_lencode_bayes
