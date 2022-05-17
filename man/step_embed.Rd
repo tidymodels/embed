@@ -121,7 +121,9 @@ used in the last layer while softmax is used for factor outcomes
 (with any number of levels).
 
 For example, the \code{keras} code for a numeric outcome, one
-categorical predictor, and no hidden units used here would be\preformatted{  keras_model_sequential() \%>\%
+categorical predictor, and no hidden units used here would be
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{  keras_model_sequential() \%>\%
   layer_embedding(
     input_dim = num_factor_levels_x + 1,
     output_dim = num_terms,
@@ -129,10 +131,12 @@ categorical predictor, and no hidden units used here would be\preformatted{  ker
   ) \%>\%
   layer_flatten() \%>\%
   layer_dense(units = 1, activation = 'linear')
-}
+}\if{html}{\out{</div>}}
 
 If a factor outcome is used and hidden units were requested, the code
-would be\preformatted{  keras_model_sequential() \%>\%
+would be
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{  keras_model_sequential() \%>\%
   layer_embedding(
     input_dim = num_factor_levels_x + 1,
     output_dim = num_terms,
@@ -141,7 +145,7 @@ would be\preformatted{  keras_model_sequential() \%>\%
   layer_flatten() \%>\%
   layer_dense(units = hidden_units, activation = "relu") \%>\%
   layer_dense(units = num_factor_levels_y, activation = 'softmax')
-}
+}\if{html}{\out{</div>}}
 
 Other variables specified by \code{predictors} are added as an
 additional dense layer after \code{layer_flatten} and before the

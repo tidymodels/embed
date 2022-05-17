@@ -1,5 +1,7 @@
 # embed (development version)
 
+* `step_collapse_cart()` can pool a predictor's factor levels using a tree-based method. 
+
 # embed 0.2.0
 
 * `step_embed()` now correctly defaults to have a random id with the word "embed". (#102)

@@ -6,9 +6,9 @@
 \alias{embed-package}
 \title{embed: Extra Recipes for Encoding Predictors}
 \description{
-\if{html}{\figure{logo.png}{options: align='right' alt='logo' width='120'}}
+\if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
 
-Predictors can be converted to one or more numeric representations using a variety of methods. Effect encodings using simple generalized linear models <arXiv:1611.09477> or nonlinear models <arXiv:1604.06737> can be used. There are also functions for dimension reduction and other approaches.
+Predictors can be converted to one or more numeric representations using a variety of methods. Effect encodings using simple generalized linear models \href{https://arxiv.org/abs/1611.09477}{arXiv:1611.09477} or nonlinear models \href{https://arxiv.org/abs/1604.06737}{arXiv:1604.06737} can be used. There are also functions for dimension reduction and other approaches.
 }
 \seealso{
 Useful links:
