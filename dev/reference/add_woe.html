@@ -68,21 +68,32 @@ given binary outcome.</p>
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>.data</dt>
 <dd><p>A tbl. The data.frame to plug the new woe version columns.</p></dd>
+
+
 <dt>outcome</dt>
 <dd><p>The bare name of the outcome variable.</p></dd>
+
+
 <dt>...</dt>
 <dd><p>Bare names of predictor variables, passed as you would pass variables to
 <code><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">dplyr::select()</a></code>. This means that you can use all the helpers like <code>starts_with()</code>
 and <code>matches()</code>.</p></dd>
+
+
 <dt>dictionary</dt>
 <dd><p>A tbl. If NULL the function will build a dictionary with those variables
 passed to <code>...</code>. You can pass a custom dictionary too, see <code><a href="dictionary.html">dictionary()</a></code> for details.</p></dd>
+
+
 <dt>prefix</dt>
 <dd><p>A character string that will be the prefix to the resulting new variables.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A tibble with the original columns of .data plus the woe columns wanted.</p>
+    
+
+<p>A tibble with the original columns of .data plus the woe columns wanted.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
@@ -123,7 +134,7 @@ returned from it.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
 </div>
 
   </div></footer></body></html>

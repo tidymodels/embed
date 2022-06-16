@@ -88,58 +88,90 @@ will project a set of features into a smaller space.</p>
     <dl><dt>recipe</dt>
 <dd><p>A recipe object. The step will be added to the
 sequence of operations for this recipe.</p></dd>
+
+
 <dt>...</dt>
 <dd><p>One or more selector functions to choose variables
 for this step. See <code><a href="https://recipes.tidymodels.org/reference/selections.html" class="external-link">selections()</a></code> for more details.</p></dd>
+
+
 <dt>role</dt>
 <dd><p>For model terms created by this step, what analysis role should
 they be assigned? By default, the new columns created by this step from
 the original variables will be used as <em>predictors</em> in a model.</p></dd>
+
+
 <dt>trained</dt>
 <dd><p>A logical to indicate if the quantities for
 preprocessing have been estimated.</p></dd>
+
+
 <dt>outcome</dt>
 <dd><p>A call to <code>vars</code> to specify which variable is
 used as the outcome in the encoding process (if any).</p></dd>
+
+
 <dt>neighbors</dt>
 <dd><p>An integer for the number of nearest neighbors used to
 construct the target simplicial set. If <code>neighbors</code> is greater than the
 number of data points, the smaller value is used.</p></dd>
+
+
 <dt>num_comp</dt>
 <dd><p>An integer for the number of UMAP components. If <code>num_comp</code>
 is greater than the number of selected columns minus one, the smaller value
 is used.</p></dd>
+
+
 <dt>min_dist</dt>
 <dd><p>The effective minimum distance between embedded points.</p></dd>
+
+
 <dt>learn_rate</dt>
 <dd><p>Positive number of the learning rate for the optimization
 process.</p></dd>
+
+
 <dt>epochs</dt>
 <dd><p>Number of iterations for the neighbor optimization. See
 <code><a href="https://rdrr.io/pkg/uwot/man/umap.html" class="external-link">uwot::umap()</a></code> for more details.</p></dd>
+
+
 <dt>options</dt>
 <dd><p>A list of options to pass to <code><a href="https://rdrr.io/pkg/uwot/man/umap.html" class="external-link">uwot::umap()</a></code>. The arguments
 <code>X</code>, <code>n_neighbors</code>, <code>n_components</code>, <code>min_dist</code>, <code>n_epochs</code>, <code>ret_model</code>, and
 <code>learning_rate</code> should not be passed here. By default, <code>verbose</code> and
 <code>n_threads</code> are set.</p></dd>
+
+
 <dt>seed</dt>
 <dd><p>Two integers to control the random numbers used by the
 numerical methods. The default pulls from the main session's stream of
 numbers and will give reproducible results if the seed is set prior to
 calling <code><a href="https://recipes.tidymodels.org/reference/prep.html" class="external-link">prep()</a></code> or <code><a href="https://recipes.tidymodels.org/reference/bake.html" class="external-link">bake()</a></code>.</p></dd>
+
+
 <dt>prefix</dt>
 <dd><p>A character string for the prefix of the resulting new
 variables. See notes below.</p></dd>
+
+
 <dt>keep_original_cols</dt>
 <dd><p>A logical to keep the original variables in the
 output. Defaults to <code>FALSE</code>.</p></dd>
+
+
 <dt>retain</dt>
 <dd><p>Use <code>keep_original_cols</code> instead to specify whether the
 original predictors should be retained along with the new embedding
 variables.</p></dd>
+
+
 <dt>object</dt>
 <dd><p>An object that defines the encoding. This is
 <code>NULL</code> until the step is trained by <code><a href="https://recipes.tidymodels.org/reference/prep.html" class="external-link">recipes::prep()</a></code>.</p></dd>
+
+
 <dt>skip</dt>
 <dd><p>A logical. Should the step be skipped when the
 recipe is baked by <code><a href="https://recipes.tidymodels.org/reference/bake.html" class="external-link">bake()</a></code>? While all operations are baked
@@ -147,12 +179,17 @@ when <code><a href="https://recipes.tidymodels.org/reference/prep.html" class="e
 conducted on new data (e.g. processing the outcome variable(s)).
 Care should be taken when using <code>skip = TRUE</code> as it may affect
 the computations for subsequent operations.</p></dd>
+
+
 <dt>id</dt>
 <dd><p>A character string that is unique to this step to identify it.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>An updated version of <code>recipe</code> with the new step added to the
+    
+
+<p>An updated version of <code>recipe</code> with the new step added to the
 sequence of any existing operations.</p>
     </div>
     <div class="section level2">
@@ -214,7 +251,7 @@ Projection for Dimension Reduction. <a href="https://arxiv.org/abs/1802.03426" c
 </div>
 
 <div class="pkgdown-footer-right">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
 </div>
 
   </div></footer></body></html>

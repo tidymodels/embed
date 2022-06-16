@@ -100,43 +100,65 @@ scores derived from a tensorflow model via a word-embedding model.
     <dl><dt>recipe</dt>
 <dd><p>A recipe object. The step will be added to the
 sequence of operations for this recipe.</p></dd>
+
+
 <dt>...</dt>
 <dd><p>One or more selector functions to choose variables.
 For <code>step_embed</code>, this indicates the variables to be encoded
 into a numeric format. See <code><a href="https://recipes.tidymodels.org/reference/selections.html" class="external-link">recipes::selections()</a></code> for more
 details. For the <code>tidy</code> method, these are not currently used.</p></dd>
+
+
 <dt>role</dt>
 <dd><p>For model terms created by this step, what analysis
 role should they be assigned?. By default, the function assumes
 that the embedding variables created will be used as predictors in a model.</p></dd>
+
+
 <dt>trained</dt>
 <dd><p>A logical to indicate if the quantities for
 preprocessing have been estimated.</p></dd>
+
+
 <dt>outcome</dt>
 <dd><p>A call to <code>vars</code> to specify which variable is
 used as the outcome in the neural network.</p></dd>
+
+
 <dt>predictors</dt>
 <dd><p>An optional call to <code>vars</code> to specify any
 variables to be added as additional predictors in the neural
 network. These variables should be numeric and perhaps centered
 and scaled.</p></dd>
+
+
 <dt>num_terms</dt>
 <dd><p>An integer for the number of resulting variables.</p></dd>
+
+
 <dt>hidden_units</dt>
 <dd><p>An integer for the number of hidden units
 in a dense ReLu layer between the embedding and output later.
 Use a value of zero for no intermediate layer (see Details
 below).</p></dd>
+
+
 <dt>options</dt>
 <dd><p>A list of options for the model fitting process.</p></dd>
+
+
 <dt>mapping</dt>
 <dd><p>A list of tibble results that define the
 encoding. This is <code>NULL</code> until the step is trained by
 <code><a href="https://recipes.tidymodels.org/reference/prep.html" class="external-link">recipes::prep()</a></code>.</p></dd>
+
+
 <dt>history</dt>
 <dd><p>A tibble with the convergence statistics for
 each term. This is <code>NULL</code> until the step is trained by
 <code><a href="https://recipes.tidymodels.org/reference/prep.html" class="external-link">recipes::prep()</a></code>.</p></dd>
+
+
 <dt>skip</dt>
 <dd><p>A logical. Should the step be skipped when the
 recipe is baked by <code><a href="https://recipes.tidymodels.org/reference/bake.html" class="external-link">recipes::bake()</a></code>? While all
@@ -145,17 +167,29 @@ operations may not be able to be conducted on new data (e.g.
 processing the outcome variable(s)). Care should be taken when
 using <code>skip = TRUE</code> as it may affect the computations for
 subsequent operations.</p></dd>
+
+
 <dt>id</dt>
 <dd><p>A character string that is unique to this step to identify it.</p></dd>
+
+
 <dt>optimizer, loss, metrics</dt>
 <dd><p>Arguments to pass to <code><a href="https://generics.r-lib.org/reference/compile.html" class="external-link">keras::compile()</a></code></p></dd>
+
+
 <dt>epochs, validation_split, batch_size, verbose, callbacks</dt>
 <dd><p>Arguments to pass to <code><a href="https://generics.r-lib.org/reference/fit.html" class="external-link">keras::fit()</a></code></p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>An updated version of <code>recipe</code> with the new step added
-to the sequence of existing steps (if any). For the <code>tidy</code>method, a tibble with columns <code>terms</code> (the selectors or
+    
+
+<p>An updated version of <code>recipe</code> with the new step added
+to the sequence of existing steps (if any). For the <code>tidy</code></p>
+
+
+<p>method, a tibble with columns <code>terms</code> (the selectors or
 variables for encoding), <code>level</code> (the factor levels), and
 several columns containing <code>embed</code> in the name.</p>
     </div>
@@ -177,26 +211,26 @@ any).</p>
 used in the last layer while softmax is used for factor outcomes
 (with any number of levels).</p>
 <p>For example, the <code>keras</code> code for a numeric outcome, one
-categorical predictor, and no hidden units used here would be</p><div class="sourceCode"><pre><code><span class="fu">keras_model_sequential</span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  <span class="fu">layer_embedding</span><span class="op">(</span>
-    input_dim <span class="op">=</span> <span class="va">num_factor_levels_x</span> <span class="op">+</span> <span class="fl">1</span>,
-    output_dim <span class="op">=</span> <span class="va">num_terms</span>,
-    input_length <span class="op">=</span> <span class="fl">1</span>
-  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  <span class="fu">layer_flatten</span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  <span class="fu">layer_dense</span><span class="op">(</span>units <span class="op">=</span> <span class="fl">1</span>, activation <span class="op">=</span> <span class="st">'linear'</span><span class="op">)</span></code></pre></div>
-
+categorical predictor, and no hidden units used here would be</p>
+<p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>  <span class="fu">keras_model_sequential</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layer_embedding</span>(</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">input_dim =</span> num_factor_levels_x <span class="sc">+</span> <span class="dv">1</span>,</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">output_dim =</span> num_terms,</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">input_length =</span> <span class="dv">1</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layer_flatten</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layer_dense</span>(<span class="at">units =</span> <span class="dv">1</span>, <span class="at">activation =</span> <span class="st">'linear'</span>)</span></code></pre><p></p></div>
 <p>If a factor outcome is used and hidden units were requested, the code
-would be</p><div class="sourceCode"><pre><code><span class="fu">keras_model_sequential</span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  <span class="fu">layer_embedding</span><span class="op">(</span>
-    input_dim <span class="op">=</span> <span class="va">num_factor_levels_x</span> <span class="op">+</span> <span class="fl">1</span>,
-    output_dim <span class="op">=</span> <span class="va">num_terms</span>,
-    input_length <span class="op">=</span> <span class="fl">1</span>
-   <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  <span class="fu">layer_flatten</span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  <span class="fu">layer_dense</span><span class="op">(</span>units <span class="op">=</span> <span class="va">hidden_units</span>, activation <span class="op">=</span> <span class="st">"relu"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  <span class="fu">layer_dense</span><span class="op">(</span>units <span class="op">=</span> <span class="va">num_factor_levels_y</span>, activation <span class="op">=</span> <span class="st">'softmax'</span><span class="op">)</span></code></pre></div>
-
+would be</p>
+<p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>  <span class="fu">keras_model_sequential</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layer_embedding</span>(</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">input_dim =</span> num_factor_levels_x <span class="sc">+</span> <span class="dv">1</span>,</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">output_dim =</span> num_terms,</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">input_length =</span> <span class="dv">1</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>   ) <span class="sc">%&gt;%</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layer_flatten</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layer_dense</span>(<span class="at">units =</span> hidden_units, <span class="at">activation =</span> <span class="st">"relu"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layer_dense</span>(<span class="at">units =</span> num_factor_levels_y, <span class="at">activation =</span> <span class="st">'softmax'</span>)</span></code></pre><p></p></div>
 <p>Other variables specified by <code>predictors</code> are added as an
 additional dense layer after <code>layer_flatten</code> and before the
 hidden layer.</p>
@@ -253,7 +287,7 @@ development?" <a href="https://tinyurl.com/keras-repro" class="external-link">ht
 </div>
 
 <div class="pkgdown-footer-right">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
 </div>
 
   </div></footer></body></html>

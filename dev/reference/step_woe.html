@@ -83,34 +83,50 @@ transformation based on weights of evidence against a binary outcome.</p>
     <dl><dt>recipe</dt>
 <dd><p>A recipe object. The step will be added to the
 sequence of operations for this recipe.</p></dd>
+
+
 <dt>...</dt>
 <dd><p>One or more selector functions to choose which
 variables will be used to compute the components. See
 <code><a href="https://recipes.tidymodels.org/reference/selections.html" class="external-link">selections()</a></code> for more details. For the <code>tidy</code>
 method, these are not currently used.</p></dd>
+
+
 <dt>role</dt>
 <dd><p>For model terms created by this step, what analysis
 role should they be assigned?. By default, the function assumes
 that the new woe components columns created by the original
 variables will be used as predictors in a model.</p></dd>
+
+
 <dt>outcome</dt>
 <dd><p>The bare name of the binary outcome encased in <code><a href="https://ggplot2.tidyverse.org/reference/vars.html" class="external-link">vars()</a></code>.</p></dd>
+
+
 <dt>trained</dt>
 <dd><p>A logical to indicate if the quantities for
 preprocessing have been estimated.</p></dd>
+
+
 <dt>dictionary</dt>
 <dd><p>A tbl. A map of levels and woe values. It must
 have the same layout than the output returned from <code><a href="dictionary.html">dictionary()</a></code>.
 If `NULL`` the function will build a dictionary with those variables
 passed to <code>...</code>. See <code><a href="dictionary.html">dictionary()</a></code> for details.</p></dd>
+
+
 <dt>Laplace</dt>
 <dd><p>The Laplace smoothing parameter. A value usually
 applied to avoid -Inf/Inf from predictor category with only one
 outcome class. Set to 0 to allow Inf/-Inf. The default is 1e-6.
 Also known as 'pseudocount' parameter of the Laplace smoothing technique.</p></dd>
+
+
 <dt>prefix</dt>
 <dd><p>A character string that will be the prefix to the
 resulting new variables. See notes below.</p></dd>
+
+
 <dt>skip</dt>
 <dd><p>A logical. Should the step be skipped when the
 recipe is baked by <code><a href="https://recipes.tidymodels.org/reference/bake.html" class="external-link">recipes::bake()</a></code>? While all operations are baked
@@ -118,12 +134,17 @@ when <code><a href="https://recipes.tidymodels.org/reference/prep.html" class="e
 conducted on new data (e.g. processing the outcome variable(s)).
 Care should be taken when using <code>skip = TRUE</code> as it may affect
 the computations for subsequent operations</p></dd>
+
+
 <dt>id</dt>
 <dd><p>A character string that is unique to this step to identify it.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>An updated version of <code>recipe</code> with the new step
+    
+
+<p>An updated version of <code>recipe</code> with the new step
 added to the sequence of existing steps (if any). For the
 <code>tidy</code> method, a tibble with the woe dictionary used to map
 categories with woe values.</p>
@@ -263,7 +284,7 @@ tweaking an output returned from <code><a href="dictionary.html">dictionary()</a
 </div>
 
 <div class="pkgdown-footer-right">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
 </div>
 
   </div></footer></body></html>
