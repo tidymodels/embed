@@ -2,7 +2,6 @@
 % Please edit documentation in R/step_collapse_cart.R
 \name{step_collapse_cart}
 \alias{step_collapse_cart}
-\alias{tidy.step_collapse_cart}
 \title{Supervised Collapsing of Factor Levels}
 \usage{
 step_collapse_cart(
@@ -17,8 +16,6 @@ step_collapse_cart(
   skip = FALSE,
   id = rand_id("step_collapse_cart")
 )
-
-\method{tidy}{step_collapse_cart}(x, ...)
 }
 \arguments{
 \item{recipe}{A recipe object. The step will be added to the
@@ -56,8 +53,6 @@ Care should be taken when using \code{skip = TRUE} as it may affect
 the computations for subsequent operations}
 
 \item{id}{A character string that is unique to this step to identify it.}
-
-\item{x}{A \code{step_collapse_cart} object.}
 }
 \value{
 An updated recipe step.

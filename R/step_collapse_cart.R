@@ -153,7 +153,7 @@ print.step_collapse_cart <-
     invisible(x)
   }
 
-#' @rdname step_collapse_cart
+#' @rdname tidy.recipe
 #' @param x A `step_collapse_cart` object.
 #' @export
 tidy.step_collapse_cart <- function(x, ...) {
