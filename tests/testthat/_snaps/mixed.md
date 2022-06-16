@@ -47,11 +47,8 @@
 ---
 
     Code
-      prep(print_test, training = ex_dat_ch, verbose = TRUE)
+      prep(print_test)
     Output
-      oper 1 step lencode mixed [training] 
-      The retained training set is ~ 0.01 Mb  in memory.
-      
       Recipe
       
       Inputs:

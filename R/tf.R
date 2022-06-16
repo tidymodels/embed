@@ -28,13 +28,13 @@
 #' @param options A list of options for the model fitting process.
 #' @param mapping A list of tibble results that define the
 #'  encoding. This is `NULL` until the step is trained by
-#'  [recipes::prep.recipe()].
+#'  [recipes::prep()].
 #' @param history A tibble with the convergence statistics for
 #'  each term. This is `NULL` until the step is trained by
-#'  [recipes::prep.recipe()].
+#'  [recipes::prep()].
 #' @param skip A logical. Should the step be skipped when the
-#'  recipe is baked by [recipes::bake.recipe()]? While all
-#'  operations are baked when [recipes::prep.recipe()] is run, some
+#'  recipe is baked by [recipes::bake()]? While all
+#'  operations are baked when [recipes::prep()] is run, some
 #'  operations may not be able to be conducted on new data (e.g.
 #'  processing the outcome variable(s)). Care should be taken when
 #'  using `skip = TRUE` as it may affect the computations for
@@ -111,6 +111,12 @@
 #'  If using a recipes with this step with `caret`, avoid parallel
 #'  processing.
 #'  
+#' # Tidying
+#'
+#' When you [`tidy()`][tidy.recipe()] this step, a tibble with columns
+#' `terms` (the selectors or variables selected), `levels` (levels in variable),
+#' and a number of columns with embedding information are returned.
+#' 
 #' @template case-weights-not-supported
 #'
 #' @references Francois C and Allaire JJ (2018)
@@ -249,6 +255,14 @@ prep.step_embed <- function(x, training, info = NULL, ...) {
 }
 
 is_tf_2 <- function() {
+  if (!is_tf_available()) {
+    rlang::abort(
+      c(
+        "tensorflow could now be found.", 
+        "Please run `tensorflow::install_tensorflow()` to install."
+      )
+    )
+  }
   compareVersion("2.0", as.character(tensorflow::tf_version())) <= 0
 }
 
@@ -411,10 +425,9 @@ bake.step_embed <- function(object, new_data, ...) {
 }
 
 
-#' @rdname step_embed
+#' @rdname tidy.recipe
 #' @param x A `step_embed` object.
 #' @export
-#' @export tidy.step_embed
 tidy.step_embed <- function(x, ...) {
   if (is_trained(x)) {
     for (i in seq_along(x$mapping)) {

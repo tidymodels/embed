@@ -64,6 +64,13 @@
 #' the levels of one given predictor. One easy way to do this is by
 #' tweaking an output returned from \code{dictionary()}.
 #' 
+#' # Tidying
+#'
+#' When you [`tidy()`][tidy.recipe()] this step, a tibble with columns
+#' `terms` (the selectors or variables selected), `value`, `n_tot`, `n_bad`,
+#' `n_good`, `p_bad`, `p_good`, `woe` and `outcome` is returned.. See 
+#' [dictionary()] for more information.
+#' 
 #' @template case-weights-not-supported
 #'
 #' @references Kullback, S. (1959). *Information Theory and Statistics.* Wiley, New York.
@@ -177,7 +184,11 @@ step_woe_new <- function(terms, role, trained, outcome, dictionary, Laplace, pre
 #'
 #' Good, I. J. (1985), "Weight of evidence: A brief survey", _Bayesian Statistics_, 2, pp.249-270.
 woe_table <- function(predictor, outcome, Laplace = 1e-6) {
-  outcome_original_labels <- unique(outcome)
+  if (is.factor(outcome)) {
+    outcome_original_labels <- levels(outcome)
+  } else {
+    outcome_original_labels <- unique(outcome)
+  }
 
   if (length(outcome_original_labels) != 2) {
     rlang::abort(sprintf(
@@ -418,7 +429,7 @@ bake.step_woe <- function(object, new_data, ...) {
     prefix = object$prefix
   )
   new_data <- new_data[, !(colnames(new_data) %in% woe_vars), drop = FALSE]
-  as_tibble(new_data)
+  new_data
 }
 
 #' @export
@@ -430,7 +441,7 @@ print.step_woe <- function(x, width = max(20, options()$width - 29), ...) {
 }
 
 
-#' @rdname step_woe
+#' @rdname tidy.recipe
 #' @param x A `step_woe` object.
 #' @export
 tidy.step_woe <- function(x, ...) {
@@ -443,11 +454,11 @@ tidy.step_woe <- function(x, ...) {
     res <- tibble(
       terms = term_names,
       value = rlang::na_chr,
-      ntot = rlang::na_int,
-      n_0 = rlang::na_int,
-      n_1 = rlang::na_int,
-      p_0 = rlang::na_dbl,
-      p_1 = rlang::na_dbl,
+      n_tot = rlang::na_int,
+      n_bad = rlang::na_int,
+      n_good = rlang::na_int,
+      p_bad = rlang::na_dbl,
+      p_good = rlang::na_dbl,
       woe = rlang::na_dbl
     )
   }

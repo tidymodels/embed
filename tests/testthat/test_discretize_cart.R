@@ -180,7 +180,7 @@ test_that("printing", {
     step_discretize_cart(all_predictors(), outcome = "class")
 
   expect_snapshot(cart_rec)
-  expect_snapshot(prep(cart_rec, verbose = TRUE))
+  expect_snapshot(prep(cart_rec))
 })
 
 

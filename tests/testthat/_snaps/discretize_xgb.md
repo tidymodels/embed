@@ -4,7 +4,7 @@
       xgboost
     Output
       ##### xgb.Booster
-      raw: 53.1 Kb 
+      raw: 74.2 Kb 
       call:
         xgboost::xgb.train(params = .params, data = .train, nrounds = 100, 
           watchlist = list(train = .train, test = .test), verbose = 0, 
@@ -22,16 +22,16 @@
       niter: 96
       best_iteration : 86 
       best_ntreelimit : 86 
-      best_score : 0.44215 
-      best_msg : [86]	train-logloss:0.417584	test-logloss:0.442150 
+      best_score : 0.4421503 
+      best_msg : [86]	train-logloss:0.417583	test-logloss:0.442150 
       nfeatures : 13 
       evaluation_log:
           iter train_logloss test_logloss
-             1      0.627907     0.630349
-             2      0.587016     0.589497
+             1     0.6279229    0.6303495
+             2     0.5869984    0.5894989
       ---                                
-            95      0.415791     0.442585
-            96      0.415610     0.443270
+            95     0.4157892    0.4425857
+            96     0.4156102    0.4432699
 
 # run_xgboost for multi-classification
 
@@ -39,7 +39,7 @@
       xgboost
     Output
       ##### xgb.Booster
-      raw: 107.5 Kb 
+      raw: 149.7 Kb 
       call:
         xgboost::xgb.train(params = .params, data = .train, nrounds = 100, 
           watchlist = list(train = .train, test = .test), verbose = 0, 
@@ -58,14 +58,14 @@
       best_iteration : 23 
       best_ntreelimit : 23 
       best_score : 1.246428 
-      best_msg : [23]	train-mlogloss:1.178122	test-mlogloss:1.246428 
+      best_msg : [23]	train-mlogloss:1.178121	test-mlogloss:1.246428 
       nfeatures : 30 
       evaluation_log:
           iter train_mlogloss test_mlogloss
-             1       1.623173      1.631783
-             2       1.515109      1.531188
+             1       1.623174      1.631783
+             2       1.515108      1.531188
       ---                                  
-            32       1.159813      1.249700
+            32       1.159813      1.249701
             33       1.158088      1.250462
 
 # run_xgboost for regression
@@ -74,7 +74,7 @@
       xgboost
     Output
       ##### xgb.Booster
-      raw: 28.1 Kb 
+      raw: 40.2 Kb 
       call:
         xgboost::xgb.train(params = .params, data = .train, nrounds = 100, 
           watchlist = list(train = .train, test = .test), verbose = 0, 
@@ -92,16 +92,16 @@
       niter: 50
       best_iteration : 40 
       best_ntreelimit : 40 
-      best_score : 0.116534 
+      best_score : 0.1165337 
       best_msg : [40]	train-rmse:0.064010	test-rmse:0.116534 
       nfeatures : 73 
       evaluation_log:
           iter train_rmse test_rmse
-             1   3.310080  3.306889
-             2   2.319692  2.326220
+             1 3.31007782 3.3068878
+             2 2.31969213 2.3262197
       ---                          
-            49   0.062079  0.117522
-            50   0.061913  0.118811
+            49 0.06207940 0.1175223
+            50 0.06191289 0.1188113
 
 # xgb_binning for classification
 
@@ -109,10 +109,6 @@
       xgb_binning
     Output
       [1]  1  2  3  5  6  9 12 15 20
-
----
-
-    `step_discretize_xgb()` failed for predictor 'Seniority'. This could be because the data have no trend or because the learning rate is too low (current value: 0.3). The predictor was not binned.
 
 # xgb_binning for multi-classification
 
@@ -126,9 +122,6 @@
     Code
       embed:::xgb_binning(attrition_data_small, "EducationField", "Age", sample_val = 0.3,
         learn_rate = 0.3, num_breaks = 10, tree_depth = 1, min_n = 5)
-    Condition
-      Warning:
-      `step_discretize_xgb()` failed for predictor 'Age'. This could be because the data have no trend or because the learning rate is too low (current value: 0.3). The predictor was not binned.
     Output
       numeric(0)
 
@@ -144,9 +137,6 @@
     Code
       embed:::xgb_binning(ames_data_small, "Sale_Price", "Latitude", sample_val = 0.3,
         learn_rate = 0.3, num_breaks = 10, tree_depth = 1, min_n = 5)
-    Condition
-      Warning:
-      `step_discretize_xgb()` failed for predictor 'Latitude'. This could be because the data have no trend or because the learning rate is too low (current value: 0.3). The predictor was not binned.
     Output
       numeric(0)
 
@@ -288,6 +278,25 @@
       Operations:
       
       Discretizing variables using xgboost all_predictors()
+
+---
+
+    Code
+      prep(xgb_rec)
+    Output
+      Recipe
+      
+      Inputs:
+      
+            role #variables
+         outcome          1
+       predictor          2
+      
+      Training data contained 1000 data points and no missing data.
+      
+      Operations:
+      
+      Discretizing variables using xgboost x, z [trained]
 
 # case weights step_discretize_xgb
 

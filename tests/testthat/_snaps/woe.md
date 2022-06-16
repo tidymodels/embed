@@ -116,15 +116,11 @@
 ---
 
     Code
-      prep(woe_extract, training = credit_tr, verbose = TRUE)
-    Output
-      oper 1 step woe [training] 
+      prep(woe_extract)
     Condition
       Warning:
       Some columns used by `step_woe()` have categories with less than 10 values: 'Home', 'Job'
     Output
-      The retained training set is ~ 0.13 Mb  in memory.
-      
       Recipe
       
       Inputs:

@@ -19,10 +19,10 @@
 #'  [lme4::glmer()].
 #' @param mapping A list of tibble results that define the
 #'  encoding. This is `NULL` until the step is trained by
-#'  [recipes::prep.recipe()].
+#'  [recipes::prep()].
 #' @param skip A logical. Should the step be skipped when the
-#'  recipe is baked by [recipes::bake.recipe()]? While all operations are baked
-#'  when [recipes::prep.recipe()] is run, some operations may not be able to be
+#'  recipe is baked by [recipes::bake()]? While all operations are baked
+#'  when [recipes::prep()] is run, some operations may not be able to be
 #'  conducted on new data (e.g. processing the outcome variable(s)).
 #'  Care should be taken when using `skip = TRUE` as it may affect
 #'  the computations for subsequent operations
@@ -61,6 +61,12 @@
 #'  argument to the step. Relevant options include `control` and
 #'  others.
 #'  
+#' # Tidying
+#' 
+#' When you [`tidy()`][tidy.recipe()] this step, a tibble with columns
+#' `terms` (the selectors or variables selected), `value` and `component` is
+#' returned.
+#' 
 #' @template case-weights-supervised
 #'
 #' @references
@@ -174,7 +180,6 @@ prep.step_lencode_mixed <- function(x, training, info = NULL, ...) {
   )
 }
 
-
 lme_coefs <- function(x, y, wts = NULL, ...) {
   rlang::check_installed("lme4")
   args <- list(
@@ -182,24 +187,30 @@ lme_coefs <- function(x, y, wts = NULL, ...) {
     data = data.frame(value = x, y = y),
     na.action = na.omit
   )
-
+  
   dots <- list(...)
   if (length(dots) > 0) {
     args <- c(args, dots[[1]])
   }
+  
   if (!is.null(wts)) {
     args$weights <- as.double(wts)
   }
-
-  if (!is.factor(y[[1]])) {
-    cl <- rlang::call2("lmer", .ns = "lme4", !!!args)
-    mod <- rlang::eval_tidy(cl)
-  } else {
+  
+  if (is.factor(y[[1]])) {
     args$data$y <- as.numeric(args$data$y) - 1
-    args$family <- stats::binomial
-    cl <- rlang::call2("glmer", .ns = "lme4", !!!args)
-    mod <- rlang::eval_tidy(cl)
+    if (is.null(args$family)) {
+      args$family <- stats::binomial
+    }
   }
+  
+  if (is.null(args$family) || identical(args$family, gaussian)) {
+    cl <- rlang::call2("lmer", .ns = "lme4", !!!args)
+  } else {
+    cl <- rlang::call2("glmer", .ns = "lme4", !!!args)
+  }
+  
+  mod <- rlang::eval_tidy(cl)
 
   coefs <- coef(mod)$value
   ..levels <- rownames(coefs)
@@ -251,10 +262,9 @@ print.step_lencode_mixed <-
   }
 
 
-#' @rdname step_lencode_mixed
+#' @rdname tidy.recipe
 #' @param x A `step_lencode_mixed` object.
 #' @export
-#' @export tidy.step_lencode_mixed
 tidy.step_lencode_mixed <- function(x, ...) {
   if (is_trained(x)) {
     for (i in seq_along(x$mapping)) {

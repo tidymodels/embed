@@ -87,6 +87,12 @@ test_that("step_pca_sparse", {
   expect_snapshot(rec)
 })
 
+test_that("printing", {
+  print_test <- recipe(~., data = tr[, -5]) %>%
+    step_pca_sparse_bayes(all_predictors())
+  expect_snapshot(print_test)
+  expect_snapshot(prep(print_test))
+})
 
 # ------------------------------------------------------------------------------
 

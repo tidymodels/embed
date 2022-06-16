@@ -292,6 +292,93 @@ test_that("character encoded predictor", {
 
 # ------------------------------------------------------------------------------
 
+
+test_that("Works with passing family ", {
+  skip_on_cran()
+  skip_if_not_installed("rstanarm")
+  
+  ex_dat_poisson <- ex_dat %>%
+    mutate(outcome = rpois(n(), 5))
+  
+  expect_snapshot(
+    transform = omit_warning("^(Bulk Effective|Tail Effective)"),
+    {
+      class_test <- recipe(outcome ~ ., data = ex_dat_poisson) %>%
+        step_lencode_bayes(x3,
+                           outcome = vars(outcome),
+                           verbose = FALSE,
+                           options = c(opts, family = stats::poisson)
+        ) %>%
+        prep(training = ex_dat_poisson, retain = TRUE)
+    }
+  )
+  tr_values <- juice(class_test)$x3
+  new_values <- bake(class_test, new_data = new_dat)
+  expect_snapshot(
+    new_values_ch <- bake(class_test, new_data = new_dat_ch)
+  )
+  key <- class_test$steps[[1]]$mapping
+  td_obj <- tidy(class_test, number = 1)
+  
+  expect_equal("x3", names(key))
+  
+  expect_equal(
+    length(unique(ex_dat$x3)) + 1,
+    nrow(key$x3)
+  )
+  expect_true(sum(key$x3$..level == "..new") == 1)
+  
+  expect_true(is.numeric(tr_values))
+  
+  expect_equal(
+    new_values$x3[1],
+    key$x3$..value[key$x3$..level == "..new"]
+  )
+  expect_equal(
+    new_values$x3[2],
+    key$x3$..value[key$x3$..level == levels(ex_dat$x3)[1]]
+  )
+  expect_equal(
+    new_values$x3[3],
+    key$x3$..value[key$x3$..level == "..new"]
+  )
+  expect_equal(
+    new_values_ch$x3[1],
+    key$x3$..value[key$x3$..level == "..new"]
+  )
+  expect_equal(
+    new_values_ch$x3[2],
+    key$x3$..value[key$x3$..level == levels(ex_dat$x3)[1]]
+  )
+  expect_equal(
+    new_values_ch$x3[3],
+    key$x3$..value[key$x3$..level == "..new"]
+  )
+  
+  expect_equal(
+    td_obj$level,
+    key$x3$..level
+  )
+  expect_equal(
+    td_obj$value,
+    key$x3$..value
+  )
+})
+
+
+test_that("printing", {
+  print_test <- recipe(x2 ~ ., data = ex_dat) %>%
+    step_lencode_bayes(x3,
+                       outcome = vars(x2),
+                       verbose = FALSE,
+                       options = opts
+    )
+  expect_snapshot(print_test)
+  expect_snapshot(prep(print_test), transform = omit_warning("^(Bulk Effective|Tail Effective|The largest)"))
+})
+
+# ------------------------------------------------------------------------------
+
 test_that("empty selections", {
   data(ad_data, package = "modeldata")
   expect_error(

@@ -17,10 +17,10 @@
 #'  numeric and two-level factors are currently supported.
 #' @param mapping A list of tibble results that define the
 #'  encoding. This is `NULL` until the step is trained by
-#'  [recipes::prep.recipe()].
+#'  [recipes::prep()].
 #' @param skip A logical. Should the step be skipped when the
-#'  recipe is baked by [recipes::bake.recipe()]? While all operations are baked
-#'  when [recipes::prep.recipe()] is run, some operations may not be able to be
+#'  recipe is baked by [recipes::bake()]? While all operations are baked
+#'  when [recipes::prep()] is run, some operations may not be able to be
 #'  conducted on new data (e.g. processing the outcome variable(s)).
 #'  Care should be taken when using `skip = TRUE` as it may affect
 #'  the computations for subsequent operations
@@ -42,11 +42,16 @@
 #'  coefficients are created using a no intercept model and, when
 #'  two factor outcomes are used, the log-odds reflect the event of
 #'  interest being the _first_ level of the factor.
-
 #'
 #' For novel levels, a slightly timmed average of the coefficients
 #'  is returned.
 #'  
+#' # Tidying
+#' 
+#' When you [`tidy()`][tidy.recipe()] this step, a tibble with columns
+#' `terms` (the selectors or variables selected), `value` and `component` is
+#' returned.
+#' 
 #' @template case-weights-supervised
 #'
 #' @references
@@ -218,10 +223,9 @@ print.step_lencode_glm <-
   }
 
 
-#' @rdname step_lencode_glm
+#' @rdname tidy.recipe
 #' @param x A `step_lencode_glm` object.
 #' @export
-#' @export tidy.step_lencode_glm
 tidy.step_lencode_glm <- function(x, ...) {
   if (is_trained(x)) {
     for (i in seq_along(x$mapping)) {

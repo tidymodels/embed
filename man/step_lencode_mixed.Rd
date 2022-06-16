@@ -2,7 +2,6 @@
 % Please edit documentation in R/lme.R
 \name{step_lencode_mixed}
 \alias{step_lencode_mixed}
-\alias{tidy.step_lencode_mixed}
 \title{Supervised Factor Conversions into Linear Functions using Bayesian Likelihood Encodings}
 \usage{
 step_lencode_mixed(
@@ -16,8 +15,6 @@ step_lencode_mixed(
   skip = FALSE,
   id = rand_id("lencode_mixed")
 )
-
-\method{tidy}{step_lencode_mixed}(x, ...)
 }
 \arguments{
 \item{recipe}{A recipe object. The step will be added to the
@@ -43,18 +40,16 @@ numeric and two-level factors are currently supported.}
 
 \item{mapping}{A list of tibble results that define the
 encoding. This is \code{NULL} until the step is trained by
-\code{\link[recipes:prep]{recipes::prep.recipe()}}.}
+\code{\link[recipes:prep]{recipes::prep()}}.}
 
 \item{skip}{A logical. Should the step be skipped when the
-recipe is baked by \code{\link[recipes:bake]{recipes::bake.recipe()}}? While all operations are baked
-when \code{\link[recipes:prep]{recipes::prep.recipe()}} is run, some operations may not be able to be
+recipe is baked by \code{\link[recipes:bake]{recipes::bake()}}? While all operations are baked
+when \code{\link[recipes:prep]{recipes::prep()}} is run, some operations may not be able to be
 conducted on new data (e.g. processing the outcome variable(s)).
 Care should be taken when using \code{skip = TRUE} as it may affect
 the computations for subsequent operations}
 
 \item{id}{A character string that is unique to this step to identify it.}
-
-\item{x}{A \code{step_lencode_mixed} object.}
 }
 \value{
 An updated version of \code{recipe} with the new step added
@@ -82,14 +77,22 @@ is returned.
 
 A hierarchical generalized linear model is fit using
 \code{\link[lme4:lmer]{lme4::lmer()}} or \code{\link[lme4:glmer]{lme4::glmer()}}, depending
-on the nature of the outcome, and no intercept via\preformatted{  lmer(outcome ~ 1 + (1 | predictor), data = data, ...)
-}
+on the nature of the outcome, and no intercept via
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{  lmer(outcome ~ 1 + (1 | predictor), data = data, ...)
+}\if{html}{\out{</div>}}
 
 where the \code{...} include the \code{family} argument (automatically
 set by the step) as well as any arguments given to the \code{options}
 argument to the step. Relevant options include \code{control} and
 others.
 }
+\section{Tidying}{
+When you \code{\link[=tidy.recipe]{tidy()}} this step, a tibble with columns
+\code{terms} (the selectors or variables selected), \code{value} and \code{component} is
+returned.
+}
+
 \section{Case weights}{
 
 

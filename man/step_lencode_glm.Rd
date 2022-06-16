@@ -2,7 +2,6 @@
 % Please edit documentation in R/glm.R
 \name{step_lencode_glm}
 \alias{step_lencode_glm}
-\alias{tidy.step_lencode_glm}
 \title{Supervised Factor Conversions into Linear Functions using Likelihood Encodings}
 \usage{
 step_lencode_glm(
@@ -15,8 +14,6 @@ step_lencode_glm(
   skip = FALSE,
   id = rand_id("lencode_glm")
 )
-
-\method{tidy}{step_lencode_glm}(x, ...)
 }
 \arguments{
 \item{recipe}{A recipe object. The step will be added to the
@@ -39,18 +36,16 @@ numeric and two-level factors are currently supported.}
 
 \item{mapping}{A list of tibble results that define the
 encoding. This is \code{NULL} until the step is trained by
-\code{\link[recipes:prep]{recipes::prep.recipe()}}.}
+\code{\link[recipes:prep]{recipes::prep()}}.}
 
 \item{skip}{A logical. Should the step be skipped when the
-recipe is baked by \code{\link[recipes:bake]{recipes::bake.recipe()}}? While all operations are baked
-when \code{\link[recipes:prep]{recipes::prep.recipe()}} is run, some operations may not be able to be
+recipe is baked by \code{\link[recipes:bake]{recipes::bake()}}? While all operations are baked
+when \code{\link[recipes:prep]{recipes::prep()}} is run, some operations may not be able to be
 conducted on new data (e.g. processing the outcome variable(s)).
 Care should be taken when using \code{skip = TRUE} as it may affect
 the computations for subsequent operations}
 
 \item{id}{A character string that is unique to this step to identify it.}
-
-\item{x}{A \code{step_lencode_glm} object.}
 }
 \value{
 An updated version of \code{recipe} with the new step added
@@ -76,6 +71,12 @@ interest being the \emph{first} level of the factor.
 For novel levels, a slightly timmed average of the coefficients
 is returned.
 }
+\section{Tidying}{
+When you \code{\link[=tidy.recipe]{tidy()}} this step, a tibble with columns
+\code{terms} (the selectors or variables selected), \code{value} and \code{component} is
+returned.
+}
+
 \section{Case weights}{
 
 

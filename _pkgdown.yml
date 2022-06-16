@@ -7,6 +7,40 @@ template:
     primary: "#CA225E"
   package: tidytemplate
 
+reference:
+- title: Embed categorical predictors
+  contents:
+    - step_embed
+    - step_feature_hash
+    - step_lencode_bayes
+    - step_lencode_glm
+    - step_lencode_mixed
+    - step_woe
+- title: Collapse categorical predictors
+  contents:
+    - step_collapse_cart
+- title: Embed numeric predictors
+  contents:
+    - step_discretize_cart
+    - step_discretize_xgb
+    - step_pca_sparse
+    - step_pca_sparse_bayes
+    - step_umap
+- title: Datasets
+  contents:
+    - solubility
+- title: Weight of evidence helpers
+  contents:
+    - add_woe
+    - woe_table
+- title: miscellaneous
+  contents:
+    - dictionary
+    - is_tf_available
+- title: Tidy Methods
+  contents:
+    - tidy.recipe
+
 figures:
   fig.width: 8
   fig.height: 5.75

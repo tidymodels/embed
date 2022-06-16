@@ -24,12 +24,12 @@
 #' @param seed Two integers to control the random numbers used by the
 #'  numerical methods. The default pulls from the main session's stream of
 #'  numbers and will give reproducible results if the seed is set prior to
-#'  calling [prep.recipe()] or [bake.recipe()].
+#'  calling [prep()] or [bake()].
 #' @param retain Use `keep_original_cols` instead to specify whether the
 #'  original predictors should be retained along with the new embedding
 #'  variables.
 #' @param object An object that defines the encoding. This is
-#'  `NULL` until the step is trained by [recipes::prep.recipe()].
+#'  `NULL` until the step is trained by [recipes::prep()].
 #' @template step-return
 #' @export
 #' @details
@@ -43,6 +43,11 @@
 #'  `num_comp < 10`, their names will be `UMAP1` - `UMAP9`. If `num_comp = 101`,
 #'  the names would be `UMAP001` - `UMAP101`.
 #'  
+#' # Tidying
+#'
+#' When you [`tidy()`][tidy.recipe()] this step, a tibble with columns
+#' `terms` (the selectors or variables selected) is returned.
+#' 
 #' @template case-weights-not-supported
 #'
 #' @references
@@ -125,7 +130,7 @@ step_umap <-
         seed = seed,
         prefix = prefix,
         keep_original_cols = keep_original_cols,
-        retain = retain,
+        retain = keep_original_cols,
         object = object,
         skip = skip,
         id = id
@@ -257,10 +262,9 @@ print.step_umap <-
     invisible(x)
   }
 
-#' @rdname step_umap
+#' @rdname tidy.recipe
 #' @param x A `step_umap` object.
 #' @export
-#' @export tidy.step_umap
 tidy.step_umap <- function(x, ...) {
   if (is_trained(x)) {
     res <- tibble(terms = x$object$xnames)

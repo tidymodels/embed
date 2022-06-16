@@ -28,7 +28,7 @@
 #' @param options A list of options to the default method for
 #' [VBsparsePCA::VBsparsePCA()].
 #' @param res The rotation matrix once this preprocessing step has been trained
-#' by [prep.recipe()].
+#' by [prep()].
 #' @param prefix A character string that will be the prefix to the resulting
 #'  new variables. See notes below.
 #' @return An updated version of `recipe` with the new step added to the
@@ -67,6 +67,12 @@
 #'  if `num_comp < 10`, their names will be `PC1` - `PC9`.
 #'  If `num_comp = 101`, the names would be `PC001` -
 #'  `PC101`.
+#' 
+#' # Tidying
+#'
+#' When you [`tidy()`][tidy.recipe()] this step, a tibble with columns
+#' `terms` (the selectors or variables selected), `value` and `component` is
+#' returned.
 #'  
 #' @template case-weights-not-supported
 #'
@@ -221,7 +227,7 @@ bake.step_pca_sparse_bayes <- function(object, new_data, ...) {
       new_data <- new_data[, !(colnames(new_data) %in% pca_vars), drop = FALSE]
     }
   }
-  as_tibble(new_data)
+  new_data
 }
 
 #' @export
@@ -236,7 +242,7 @@ print.step_pca_sparse_bayes <-
     invisible(x)
   }
 
-#' @rdname step_pca_sparse_bayes
+#' @rdname tidy.recipe
 #' @param x A `step_pca_sparse_bayes` object.
 #' @export
 tidy.step_pca_sparse_bayes <- function(x, ...) {

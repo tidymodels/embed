@@ -1,15 +1,19 @@
 #' Dummy Variables Creation via Feature Hashing
 #'
-#' `step_feature_hash` creates a a *specification* of a recipe step that will
-#'  convert nominal data (e.g. character or factors) into one or more numeric
-#'  binary columns using the levels of the original data.
+#' @description
+#' `r lifecycle::badge("soft-deprecated")`
+#' 
+#' `step_feature_hash` is being deprecated in favor of
+#' [textrecipes::step_dummy_hash()]. This function creates a *specification* of
+#' a recipe step that will convert nominal data (e.g. character or factors) into
+#' one or more numeric binary columns using the levels of the original data.
 #'
 #' @inheritParams recipes::step_pca
 #' @param num_hash The number of resulting dummy variable columns.
 #' @param preserve Use `keep_original_cols` instead to specify whether the
 #' selected column(s) should be retained in addition to the new dummy variables.
 #' @param columns A character vector for the selected columns. This is `NULL`
-#'  until the step is trained by [recipes::prep.recipe()].
+#'  until the step is trained by [recipes::prep()].
 #' @template step-return
 #' @export
 #' @details `step_feature_hash()` will create a set of binary dummy variables
@@ -28,6 +32,11 @@
 #'  (via [recipes::step_zv()]) is recommended for any recipe that uses hashed
 #'  columns.
 #'  
+#' # Tidying
+#'
+#' When you [`tidy()`][tidy.recipe()] this step, a tibble with columns
+#' `terms` (the columns that is selected)  is returned.
+#' 
 #' @template case-weights-not-supported
 #' 
 #' @references
@@ -69,6 +78,13 @@ step_feature_hash <-
            keep_original_cols = FALSE,
            skip = FALSE,
            id = rand_id("feature_hash")) {
+    
+    lifecycle::deprecate_soft(
+      "0.2.0",
+      "embed::step_feature_hash()",
+      "textrecipes::step_dummy_hash()"
+    )
+    
     if (lifecycle::is_present(preserve)) {
       lifecycle::deprecate_soft(
         "0.1.5",
@@ -209,6 +225,7 @@ bake.step_feature_hash <- function(object, new_data, ...) {
   new_data
 }
 
+#' @export
 print.step_feature_hash <-
   function(x, width = max(20, options()$width - 31), ...) {
     title <- "Feature hashed dummy variables for "
@@ -217,7 +234,7 @@ print.step_feature_hash <-
   }
 
 
-#' @rdname step_feature_hash
+#' @rdname tidy.recipe
 #' @param x A `step_feature_hash` object.
 #' @export
 tidy.step_feature_hash <- function(x, ...) {

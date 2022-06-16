@@ -71,15 +71,11 @@
 ---
 
     Code
-      prep(cart_rec, verbose = TRUE)
-    Output
-      oper 1 step discretize cart [training] 
+      prep(cart_rec)
     Condition
       Warning:
       `step_discretize_cart()` failed to find any meaningful splits for predictor 'z', which will not be binned.
     Output
-      The retained training set is ~ 0.02 Mb  in memory.
-      
       Recipe
       
       Inputs:

@@ -2,7 +2,6 @@
 % Please edit documentation in R/tf.R
 \name{step_embed}
 \alias{step_embed}
-\alias{tidy.step_embed}
 \alias{embed_control}
 \title{Encoding Factors into Multiple Columns}
 \usage{
@@ -21,8 +20,6 @@ step_embed(
   skip = FALSE,
   id = rand_id("embed")
 )
-
-\method{tidy}{step_embed}(x, ...)
 
 embed_control(
   loss = "mse",
@@ -70,23 +67,21 @@ below).}
 
 \item{mapping}{A list of tibble results that define the
 encoding. This is \code{NULL} until the step is trained by
-\code{\link[recipes:prep]{recipes::prep.recipe()}}.}
+\code{\link[recipes:prep]{recipes::prep()}}.}
 
 \item{history}{A tibble with the convergence statistics for
 each term. This is \code{NULL} until the step is trained by
-\code{\link[recipes:prep]{recipes::prep.recipe()}}.}
+\code{\link[recipes:prep]{recipes::prep()}}.}
 
 \item{skip}{A logical. Should the step be skipped when the
-recipe is baked by \code{\link[recipes:bake]{recipes::bake.recipe()}}? While all
-operations are baked when \code{\link[recipes:prep]{recipes::prep.recipe()}} is run, some
+recipe is baked by \code{\link[recipes:bake]{recipes::bake()}}? While all
+operations are baked when \code{\link[recipes:prep]{recipes::prep()}} is run, some
 operations may not be able to be conducted on new data (e.g.
 processing the outcome variable(s)). Care should be taken when
 using \code{skip = TRUE} as it may affect the computations for
 subsequent operations.}
 
 \item{id}{A character string that is unique to this step to identify it.}
-
-\item{x}{A \code{step_embed} object.}
 
 \item{optimizer, loss, metrics}{Arguments to pass to \code{\link[keras:reexports]{keras::compile()}}}
 
@@ -126,7 +121,9 @@ used in the last layer while softmax is used for factor outcomes
 (with any number of levels).
 
 For example, the \code{keras} code for a numeric outcome, one
-categorical predictor, and no hidden units used here would be\preformatted{  keras_model_sequential() \%>\%
+categorical predictor, and no hidden units used here would be
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{  keras_model_sequential() \%>\%
   layer_embedding(
     input_dim = num_factor_levels_x + 1,
     output_dim = num_terms,
@@ -134,10 +131,12 @@ categorical predictor, and no hidden units used here would be\preformatted{  ker
   ) \%>\%
   layer_flatten() \%>\%
   layer_dense(units = 1, activation = 'linear')
-}
+}\if{html}{\out{</div>}}
 
 If a factor outcome is used and hidden units were requested, the code
-would be\preformatted{  keras_model_sequential() \%>\%
+would be
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{  keras_model_sequential() \%>\%
   layer_embedding(
     input_dim = num_factor_levels_x + 1,
     output_dim = num_terms,
@@ -146,7 +145,7 @@ would be\preformatted{  keras_model_sequential() \%>\%
   layer_flatten() \%>\%
   layer_dense(units = hidden_units, activation = "relu") \%>\%
   layer_dense(units = num_factor_levels_y, activation = 'softmax')
-}
+}\if{html}{\out{</div>}}
 
 Other variables specified by \code{predictors} are added as an
 additional dense layer after \code{layer_flatten} and before the
@@ -161,6 +160,12 @@ session (via \code{foreach} or \code{futures}) or the \code{parallel} package.
 If using a recipes with this step with \code{caret}, avoid parallel
 processing.
 }
+\section{Tidying}{
+When you \code{\link[=tidy.recipe]{tidy()}} this step, a tibble with columns
+\code{terms} (the selectors or variables selected), \code{levels} (levels in variable),
+and a number of columns with embedding information are returned.
+}
+
 \section{Case weights}{
 
 

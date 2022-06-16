@@ -66,6 +66,61 @@
         retain = TRUE)
     Condition
 
+# Works with passing family 
+
+    Code
+      class_test <- recipe(outcome ~ ., data = ex_dat_poisson) %>% step_lencode_bayes(
+        x3, outcome = vars(outcome), verbose = FALSE, options = c(opts, family = stats::poisson)) %>%
+        prep(training = ex_dat_poisson, retain = TRUE)
+    Condition
+
+---
+
+    Code
+      new_values_ch <- bake(class_test, new_data = new_dat_ch)
+    Condition
+      Warning:
+       There was 1 column that was a factor when the recipe was prepped:
+       'x3'.
+       This may cause errors when processing new data.
+
+# printing
+
+    Code
+      print_test
+    Output
+      Recipe
+      
+      Inputs:
+      
+            role #variables
+         outcome          1
+       predictor          3
+      
+      Operations:
+      
+      Linear embedding for factors via Bayesian GLM for x3
+
+---
+
+    Code
+      prep(print_test)
+    Condition
+    Output
+      Recipe
+      
+      Inputs:
+      
+            role #variables
+         outcome          1
+       predictor          3
+      
+      Training data contained 500 data points and no missing data.
+      
+      Operations:
+      
+      Linear embedding for factors via Bayesian GLM for x3 [trained]
+
 # case weights
 
     Code
