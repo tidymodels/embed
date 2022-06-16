@@ -80,8 +80,10 @@ For novel levels, a slightly timmed average of the coefficients
 is returned.
 
 A hierarchical generalized linear model is fit using
-\code{\link[rstanarm:stan_glmer]{rstanarm::stan_glmer()}} and no intercept via\preformatted{  stan_glmer(outcome ~ (1 | predictor), data = data, ...)
-}
+\code{\link[rstanarm:stan_glmer]{rstanarm::stan_glmer()}} and no intercept via
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{  stan_glmer(outcome ~ (1 | predictor), data = data, ...)
+}\if{html}{\out{</div>}}
 
 where the \code{...} include the \code{family} argument (automatically
 set by the step, unless passed in by \code{options}) as well as any arguments

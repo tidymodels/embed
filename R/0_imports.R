@@ -40,7 +40,8 @@ utils::globalVariables(
     "n", "p", "predictor", "summary_outcome", "value", "woe", "select",
     "variable", ".",
     "type", "loss", "epochs", "..level", "..order",
-    "data", "n_tot"
+    "data", "n_tot",
+    ".group", ".rows", "group", "group_f", "terms", "var", "where"
   )
 )
 

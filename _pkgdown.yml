@@ -16,6 +16,9 @@ reference:
     - step_lencode_glm
     - step_lencode_mixed
     - step_woe
+- title: Collapse categorical predictors
+  contents:
+    - step_collapse_cart
 - title: Embed numeric predictors
   contents:
     - step_discretize_cart
