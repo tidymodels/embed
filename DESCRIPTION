@@ -49,7 +49,7 @@ Suggests:
     VBsparsePCA,
     xgboost
 Remotes:
-    tidymodels/recipes#835
+    tidymodels/recipes
 ByteCompile: true
 Config/Needs/website: tidymodels, ggiraph, tidyverse/tidytemplate, reticulate
 Config/testthat/edition: 3
