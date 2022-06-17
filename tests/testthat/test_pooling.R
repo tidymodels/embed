@@ -393,3 +393,48 @@ test_that("empty selections", {
     ad_data %>% select(Genotype, tau, Class)
   )
 })
+
+# ------------------------------------------------------------------------------
+
+test_that("case weights", {
+  skip_on_cran()
+  skip_if_not_installed("rstanarm")
+  
+  wts_int <- rep(c(0, 1), times = c(100, 400))
+  
+  ex_dat_cw <- ex_dat %>%
+    mutate(wts = importance_weights(wts_int))
+  
+  expect_snapshot(
+    transform = omit_warning("^^(Bulk Effective|Tail Effective|The largest)"),
+    {
+      class_test <- recipe(x2 ~ ., data = ex_dat_cw) %>%
+        step_lencode_bayes(x3,
+                           outcome = vars(x2),
+                           verbose = FALSE,
+                           options = opts
+        ) %>%
+        prep(training = ex_dat_cw, retain = TRUE)
+      
+      junk <- capture.output(
+        ref_mod <- rstanarm::stan_glmer(
+          formula = x2 ~ (1 | value), 
+          data = ex_dat_cw %>% transmute(value = x3, x2),
+          family = binomial(),
+          na.action = na.omit,
+          seed = 34677,
+          chains = 2,
+          iter = 500,
+          weights = wts_int,
+        )
+      )
+    }
+  )
+  
+  expect_equal(
+    -coef(ref_mod)$value[[1]],
+    slice_head(class_test$steps[[1]]$mapping$x3, n = -1)$..value
+  )
+  
+  expect_snapshot(class_test)
+})

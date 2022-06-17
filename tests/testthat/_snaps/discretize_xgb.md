@@ -110,14 +110,6 @@
     Output
       [1]  1  2  3  5  6  9 12 15 20
 
----
-
-    Code
-      embed:::xgb_binning(credit_data_small, "Status", "Seniority", sample_val = 0.3,
-        learn_rate = 0.3, num_breaks = 10, tree_depth = 1, min_n = 5)
-    Output
-      numeric(0)
-
 # xgb_binning for multi-classification
 
     Code
@@ -305,4 +297,24 @@
       Operations:
       
       Discretizing variables using xgboost x, z [trained]
+
+# case weights step_discretize_xgb
+
+    Code
+      xgb_rec_cw
+    Output
+      Recipe
+      
+      Inputs:
+      
+               role #variables
+       case_weights          1
+            outcome          1
+          predictor          2
+      
+      Training data contained 1000 data points and no missing data.
+      
+      Operations:
+      
+      Discretizing variables using xgboost x, z [weighted, trained]
 

@@ -48,6 +48,8 @@ Suggests:
     testthat (>= 3.0.0),
     VBsparsePCA,
     xgboost
+Remotes:
+    tidymodels/recipes
 ByteCompile: true
 Config/Needs/website: tidymodels, ggiraph, tidyverse/tidytemplate, reticulate
 Config/testthat/edition: 3

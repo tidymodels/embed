@@ -51,6 +51,8 @@
 #' When you [`tidy()`][tidy.recipe()] this step, a tibble with columns
 #' `terms` (the selectors or variables selected), `value` and `component` is
 #' returned.
+#' 
+#' @template case-weights-supervised
 #'
 #' @references
 #' Micci-Barreca D (2001) "A preprocessing scheme for
@@ -95,13 +97,14 @@ step_lencode_glm <-
         outcome = outcome,
         mapping = mapping,
         skip = skip,
-        id = id
+        id = id,
+        case_weights = NULL
       )
     )
   }
 
 step_lencode_glm_new <-
-  function(terms, role, trained, outcome, mapping, skip, id) {
+  function(terms, role, trained, outcome, mapping, skip, id, case_weights) {
     step(
       subclass = "lencode_glm",
       terms = terms,
@@ -110,7 +113,8 @@ step_lencode_glm_new <-
       outcome = outcome,
       mapping = mapping,
       skip = skip,
-      id = id
+      id = id,
+      case_weights = case_weights
     )
   }
 
@@ -118,10 +122,22 @@ step_lencode_glm_new <-
 #' @export
 prep.step_lencode_glm <- function(x, training, info = NULL, ...) {
   col_names <- recipes::recipes_eval_select(x$terms, training, info)
+  
+  wts <- recipes::get_case_weights(info, training)
+  were_weights_used <- recipes::are_weights_used(wts)
+  if (isFALSE(were_weights_used) || is.null(wts)) {
+    wts <- NULL
+  }
+  
   if (length(col_names) > 0) {
     check_type(training[, col_names], quant = FALSE)
     y_name <- recipes::recipes_eval_select(x$outcome, training, info)
-    res <- map(training[, col_names], glm_coefs, y = training[, y_name])
+    res <- map(
+      training[, col_names],
+      glm_coefs, 
+      y = training[, y_name],
+      wts = wts
+    )
   } else {
     res <- list()
   }
@@ -132,12 +148,13 @@ prep.step_lencode_glm <- function(x, training, info = NULL, ...) {
     outcome = x$outcome,
     mapping = res,
     skip = x$skip,
-    id = x$id
+    id = x$id,
+    case_weights = were_weights_used
   )
 }
 
 
-glm_coefs <- function(x, y, ...) {
+glm_coefs <- function(x, y, wts = NULL, ...) {
   fam <- if (is.factor(y[[1]])) binomial else gaussian
   form <- as.formula(paste0(names(y), "~ 0 + value"))
 
@@ -152,6 +169,7 @@ glm_coefs <- function(x, y, ...) {
       form,
       data = bind_cols(x, y),
       family = fam,
+      weights = wts,
       na.action = na.omit,
       ...
     )
@@ -199,7 +217,8 @@ bake.step_lencode_glm <- function(object, new_data, ...) {
 print.step_lencode_glm <-
   function(x, width = max(20, options()$width - 31), ...) {
     title <- "Linear embedding for factors via GLM for "
-    print_step(names(x$mapping), x$terms, x$trained, title, width)
+    print_step(names(x$mapping), x$terms, x$trained, title, width,
+               case_weights = x$case_weights)
     invisible(x)
   }
 

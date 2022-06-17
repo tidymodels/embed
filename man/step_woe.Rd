@@ -107,6 +107,12 @@ When you \code{\link[=tidy.recipe]{tidy()}} this step, a tibble with columns
 \code{\link[=dictionary]{dictionary()}} for more information.
 }
 
+\section{Case weights}{
+
+
+The underlying operation does not allow for case weights.
+}
+
 \examples{
 library(modeldata)
 data("credit_data")

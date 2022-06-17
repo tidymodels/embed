@@ -68,3 +68,23 @@
       
       Linear embedding for factors via GLM for x3 [trained]
 
+# case weights
+
+    Code
+      class_test
+    Output
+      Recipe
+      
+      Inputs:
+      
+               role #variables
+       case_weights          1
+            outcome          1
+          predictor          3
+      
+      Training data contained 500 data points and no missing data.
+      
+      Operations:
+      
+      Linear embedding for factors via GLM for x3 [weighted, trained]
+

@@ -121,3 +121,36 @@
       
       Linear embedding for factors via Bayesian GLM for x3 [trained]
 
+# case weights
+
+    Code
+      class_test <- recipe(x2 ~ ., data = ex_dat_cw) %>% step_lencode_bayes(x3,
+        outcome = vars(x2), verbose = FALSE, options = opts) %>% prep(training = ex_dat_cw,
+        retain = TRUE)
+    Condition
+    Code
+      junk <- capture.output(ref_mod <- rstanarm::stan_glmer(formula = x2 ~ (1 |
+      value), data = ex_dat_cw %>% transmute(value = x3, x2), family = binomial(),
+      na.action = na.omit, seed = 34677, chains = 2, iter = 500, weights = wts_int, ))
+    Condition
+
+---
+
+    Code
+      class_test
+    Output
+      Recipe
+      
+      Inputs:
+      
+               role #variables
+       case_weights          1
+            outcome          1
+          predictor          3
+      
+      Training data contained 500 data points and no missing data.
+      
+      Operations:
+      
+      Linear embedding for factors via Bayesian GLM for x3 [weighted, trained]
+
