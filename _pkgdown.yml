@@ -19,6 +19,7 @@ reference:
 - title: Collapse categorical predictors
   contents:
     - step_collapse_cart
+    - step_collapse_stringdist
 - title: Embed numeric predictors
   contents:
     - step_discretize_cart
