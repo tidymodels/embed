@@ -13,7 +13,7 @@
 #' @param distance Integer, value to determine which strings should be collapsed
 #'  with which. The value is being used inclusive, so `2` will collapse levels
 #'  that have a string distance between them of 2 or lower.
-#' @param res A list denoting the way the labels should be collapses is stored
+#' @param results A list denoting the way the labels should be collapses is stored
 #'  here once this preprocessing step has be trained by [prep()].
 #' @param columns A character string of variable names that will
 #'  be populated (eventually) by the `terms` argument.
@@ -54,7 +54,7 @@ step_collapse_stringdist <-
            role = NA,
            trained = FALSE,
            distance = NULL,
-           res = NULL,
+           results = NULL,
            columns = NULL,
            skip = FALSE,
            id = rand_id("collapse_stringdist")
@@ -71,7 +71,7 @@ step_collapse_stringdist <-
         role = role,
         trained = trained,
         distance = distance,
-        res = res,
+        results = results,
         columns = columns,
         skip = skip,
         id = id
@@ -80,14 +80,14 @@ step_collapse_stringdist <-
   }
 
 step_collapse_stringdist_new <-
-  function(terms, role, trained, distance, res, columns, skip, id) {
+  function(terms, role, trained, distance, results, columns, skip, id) {
     step(
       subclass = "collapse_stringdist",
       terms = terms,
       role = role,
       trained = trained,
       distance = distance,
-      res = res,
+      results = results,
       columns = columns,
       skip = skip,
       id = id
@@ -105,7 +105,7 @@ prep.step_collapse_stringdist <- function(x, training, info = NULL, ...) {
     role = x$role,
     trained = TRUE,
     distance = x$distance,
-    res = values,
+    results = values,
     columns = col_names,
     skip = x$skip,
     id = x$id
@@ -152,7 +152,7 @@ bake.step_collapse_stringdist <- function(object, new_data, ...) {
   for (i in seq_along(col_names)) {
     new_data[, col_names[i]] <- collapse_apply(
       new_data[[col_names[i]]],
-      object$res[[i]]
+      object$results[[i]]
     )
   }
   as_tibble(new_data)
@@ -178,7 +178,7 @@ print.step_collapse_stringdist <-
 tidy.step_collapse_stringdist <- function(x, ...) {
   if (is_trained(x)) {
     res <- purrr::map_dfr(
-      x$res,
+      x$results,
       ~purrr::map_dfr(.x, ~list(from = .x, to = .x[1])),
       .id = "terms"
     )

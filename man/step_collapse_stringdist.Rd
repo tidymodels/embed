@@ -10,7 +10,7 @@ step_collapse_stringdist(
   role = NA,
   trained = FALSE,
   distance = NULL,
-  res = NULL,
+  results = NULL,
   columns = NULL,
   skip = FALSE,
   id = rand_id("collapse_stringdist")
@@ -35,7 +35,7 @@ preprocessing have been estimated.}
 with which. The value is being used inclusive, so \code{2} will collapse levels
 that have a string distance between them of 2 or lower.}
 
-\item{res}{A list denoting the way the labels should be collapses is stored
+\item{results}{A list denoting the way the labels should be collapses is stored
 here once this preprocessing step has be trained by \code{\link[=prep]{prep()}}.}
 
 \item{columns}{A character string of variable names that will
