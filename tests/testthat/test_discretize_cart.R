@@ -200,3 +200,38 @@ test_that("empty selections", {
     ad_data %>% select(Genotype, tau, Class)
   )
 })
+
+test_that("case weights step functions", {
+  sim_tr_cls_cw <- sim_tr_cls %>%
+    mutate(weight = importance_weights(rep(0:1, each = 500)))
+  
+  sim_tr_reg_cw <- sim_tr_reg %>%
+    mutate(weight = importance_weights(rep(0:1, each = 500)))
+  
+  mod_cw <- rpart(y ~ x, data = sim_tr_reg, weights = rep(0:1, each = 500))
+  best_split_cw <- unname(mod_cw$splits[, "index"])
+
+  # Classification
+  expect_snapshot({
+    cart_rec <-
+      recipe(class ~ ., data = sim_tr_cls_cw) %>%
+      step_discretize_cart(all_predictors(), outcome = "class") %>%
+      prep()
+  })
+  
+  expect_equal(names(cart_rec$steps[[1]]$rules), "x")
+  expect_equal(cart_rec$steps[[1]]$rules$x, best_split_cw)
+  
+  # Regression
+  expect_snapshot({
+    cart_rec <-
+      recipe(y ~ ., data = sim_tr_reg_cw) %>%
+      step_discretize_cart(all_predictors(), outcome = "y") %>%
+      prep()
+  })
+  
+  expect_equal(names(cart_rec$steps[[1]]$rules), c("x", "z"))
+  expect_equal(cart_rec$steps[[1]]$rules$x, best_split_cw)
+  
+  expect_snapshot(cart_rec)
+})

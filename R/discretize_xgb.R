@@ -60,11 +60,13 @@
 #' step will stop with a note about installing the package.
 #'
 #' Note that the original data will be replaced with the new bins.
-#'
+#' 
 #' # Tidying
 #'
 #' When you [`tidy()`][tidy.recipe()] this step, a tibble with columns
 #' `terms` (the columns that is selected), `values` is returned.
+#' 
+#' @template case-weights-supervised
 #'
 #' @examples
 #' library(modeldata)
@@ -124,14 +126,15 @@ step_discretize_xgb <-
         min_n = min_n,
         rules = rules,
         skip = skip,
-        id = id
+        id = id,
+        case_weights = NULL
       )
     )
   }
 
 step_discretize_xgb_new <-
   function(terms, role, trained, outcome, sample_val, learn_rate, num_breaks,
-           tree_depth, min_n, rules, skip, id) {
+           tree_depth, min_n, rules, skip, id, case_weights) {
     step(
       subclass = "discretize_xgb",
       terms = terms,
@@ -145,7 +148,8 @@ step_discretize_xgb_new <-
       min_n = min_n,
       rules = rules,
       skip = skip,
-      id = id
+      id = id,
+      case_weights = case_weights
     )
   }
 
@@ -185,7 +189,7 @@ run_xgboost <- function(.train, .test, .learn_rate, .num_breaks, .tree_depth, .m
   )
 }
 
-xgb_binning <- function(df, outcome, predictor, sample_val, learn_rate, num_breaks, tree_depth, min_n) {
+xgb_binning <- function(df, outcome, predictor, sample_val, learn_rate, num_breaks, tree_depth, min_n, wts = NULL) {
 
   # Assuring correct types
   if (is.character(df[[outcome]])) {
@@ -219,18 +223,29 @@ xgb_binning <- function(df, outcome, predictor, sample_val, learn_rate, num_brea
 
   train <- rsample::training(split)
   test <- rsample::testing(split)
+  
+  if (!is.null(wts)) {
+    wts <- as.double(wts)
+    wts_train <- wts[split$in_id]
+    wts_test <- wts[-split$in_id]
+  } else {
+    wts_train <- NULL
+    wts_test <- NULL
+  }
 
   # Defining the objective function
   if (is.null(levels)) {
     objective <- "reg:squarederror"
     xgb_train <- xgboost::xgb.DMatrix(
       data = as.matrix(train[[predictor]], ncol = 1),
-      label = train[[outcome]]
+      label = train[[outcome]],
+      weight = wts_train
     )
 
     xgb_test <- xgboost::xgb.DMatrix(
       data = as.matrix(test[[predictor]], ncol = 1),
-      label = test[[outcome]]
+      label = test[[outcome]],
+      weight = wts_test
     )
   } else {
     if (length(levels) == 2) {
@@ -238,12 +253,14 @@ xgb_binning <- function(df, outcome, predictor, sample_val, learn_rate, num_brea
 
       xgb_train <- xgboost::xgb.DMatrix(
         data = as.matrix(train[[predictor]], ncol = 1),
-        label = ifelse(train[[outcome]] == levels[[1]], 0, 1)
+        label = ifelse(train[[outcome]] == levels[[1]], 0, 1),
+        weight = wts_train
       )
 
       xgb_test <- xgboost::xgb.DMatrix(
         data = as.matrix(test[[predictor]], ncol = 1),
-        label = ifelse(test[[outcome]] == levels[[1]], 0, 1)
+        label = ifelse(test[[outcome]] == levels[[1]], 0, 1),
+        weight = wts_test
       )
     } else if (length(levels) >= 3) {
       objective <- "multi:softprob" # returning estimated probability
@@ -251,12 +268,14 @@ xgb_binning <- function(df, outcome, predictor, sample_val, learn_rate, num_brea
 
       xgb_train <- xgboost::xgb.DMatrix(
         data = as.matrix(train[[predictor]], ncol = 1),
-        label = train[[outcome]]
+        label = train[[outcome]],
+        weight = wts_train
       )
 
       xgb_test <- xgboost::xgb.DMatrix(
         data = as.matrix(test[[predictor]], ncol = 1),
-        label = test[[outcome]]
+        label = test[[outcome]],
+        weight = wts_test
       )
     } else {
       rlang::abort("Outcome variable doesn't conform to regresion or classification task.")
@@ -346,6 +365,12 @@ xgb_binning <- function(df, outcome, predictor, sample_val, learn_rate, num_brea
 prep.step_discretize_xgb <- function(x, training, info = NULL, ...) {
   col_names <- recipes::recipes_eval_select(x$terms, training, info)
 
+  wts <- recipes::get_case_weights(info, training)
+  were_weights_used <- recipes::are_weights_used(wts)
+  if (isFALSE(were_weights_used) || is.null(wts)) {
+    wts <- NULL
+  }
+  
   if (length(col_names) > 0) {
     check_type(training[, col_names])
 
@@ -392,7 +417,8 @@ prep.step_discretize_xgb <- function(x, training, info = NULL, ...) {
         x$learn_rate,
         x$num_breaks,
         x$tree_depth,
-        x$min_n
+        x$min_n,
+        wts
       )
     }
 
@@ -419,7 +445,8 @@ prep.step_discretize_xgb <- function(x, training, info = NULL, ...) {
     min_n = x$min_n,
     rules = rules,
     skip = x$skip,
-    id = x$id
+    id = x$id,
+    case_weights = were_weights_used
   )
 }
 
@@ -450,7 +477,8 @@ bake.step_discretize_xgb <- function(object, new_data, ...) {
 #' @export
 print.step_discretize_xgb <- function(x, width = max(20, options()$width - 30), ...) {
   title <- "Discretizing variables using xgboost "
-  print_step(names(x$rules), x$terms, x$trained, title, width)
+  print_step(names(x$rules), x$terms, x$trained, title, width,
+             case_weights = x$case_weights)
   invisible(x)
 }
 

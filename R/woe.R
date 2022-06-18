@@ -70,6 +70,8 @@
 #' `terms` (the selectors or variables selected), `value`, `n_tot`, `n_bad`,
 #' `n_good`, `p_bad`, `p_good`, `woe` and `outcome` is returned.. See 
 #' [dictionary()] for more information.
+#' 
+#' @template case-weights-not-supported
 #'
 #' @references Kullback, S. (1959). *Information Theory and Statistics.* Wiley, New York.
 #'

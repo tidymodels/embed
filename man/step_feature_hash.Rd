@@ -85,6 +85,12 @@ When you \code{\link[=tidy.recipe]{tidy()}} this step, a tibble with columns
 \code{terms} (the columns that is selected)  is returned.
 }
 
+\section{Case weights}{
+
+
+The underlying operation does not allow for case weights.
+}
+
 \examples{
 \donttest{
 data(grants, package = "modeldata")

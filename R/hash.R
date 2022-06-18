@@ -37,6 +37,8 @@
 #' When you [`tidy()`][tidy.recipe()] this step, a tibble with columns
 #' `terms` (the columns that is selected)  is returned.
 #' 
+#' @template case-weights-not-supported
+#' 
 #' @references
 #' Weinberger, K, A Dasgupta, J Langford, A Smola, and J Attenberg. 2009.
 #'  "Feature Hashing for Large Scale Multitask Learning." In Proceedings of the

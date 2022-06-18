@@ -116,6 +116,8 @@
 #' When you [`tidy()`][tidy.recipe()] this step, a tibble with columns
 #' `terms` (the selectors or variables selected), `levels` (levels in variable),
 #' and a number of columns with embedding information are returned.
+#' 
+#' @template case-weights-not-supported
 #'
 #' @references Francois C and Allaire JJ (2018)
 #' _Deep Learning with R_, Manning

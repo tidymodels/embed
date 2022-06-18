@@ -77,8 +77,10 @@ is returned.
 
 A hierarchical generalized linear model is fit using
 \code{\link[lme4:lmer]{lme4::lmer()}} or \code{\link[lme4:glmer]{lme4::glmer()}}, depending
-on the nature of the outcome, and no intercept via\preformatted{  lmer(outcome ~ 1 + (1 | predictor), data = data, ...)
-}
+on the nature of the outcome, and no intercept via
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{  lmer(outcome ~ 1 + (1 | predictor), data = data, ...)
+}\if{html}{\out{</div>}}
 
 where the \code{...} include the \code{family} argument (automatically
 set by the step) as well as any arguments given to the \code{options}
@@ -89,6 +91,14 @@ others.
 When you \code{\link[=tidy.recipe]{tidy()}} this step, a tibble with columns
 \code{terms} (the selectors or variables selected), \code{value} and \code{component} is
 returned.
+}
+
+\section{Case weights}{
+
+
+This step performs an supervised operation that can utilize case weights.
+To use them, see the documentation in \link[recipes:case_weights]{recipes::case_weights} and the examples on
+\code{tidymodels.org}.
 }
 
 \examples{
