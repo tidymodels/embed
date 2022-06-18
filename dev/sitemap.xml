@@ -58,6 +58,9 @@
     <loc>https://embed.tidymodels.org/dev/reference/step_collapse_cart.html</loc>
   </url>
   <url>
+    <loc>https://embed.tidymodels.org/dev/reference/step_collapse_stringdist.html</loc>
+  </url>
+  <url>
     <loc>https://embed.tidymodels.org/dev/reference/step_discretize_cart.html</loc>
   </url>
   <url>
