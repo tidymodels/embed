@@ -45,6 +45,7 @@ Suggests:
     rmarkdown,
     rpart,
     rstanarm,
+    stringdist,
     testthat (>= 3.0.0),
     VBsparsePCA,
     xgboost
