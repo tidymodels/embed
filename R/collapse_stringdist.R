@@ -113,7 +113,11 @@ prep.step_collapse_stringdist <- function(x, training, info = NULL, ...) {
 }
 
 collapse_stringdist_impl <- function(x, dist) {
-  x <- as.character(x)
+  if (is.factor(x)) {
+    x <- levels(x)
+  } else {
+    x <- unique(x)
+  }
   dists <- stringdist::stringdistmatrix(x, x)
   
   pairs <- which(dists <= dist, arr.ind = TRUE)
