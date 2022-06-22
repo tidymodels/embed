@@ -121,6 +121,8 @@ prep.step_collapse_cart <- function(x, training, info = NULL, ...) {
                         minsplit = x$min_n)
     check_res <- purrr::map_lgl(keys, tibble::is_tibble)
     keys <- keys[check_res]
+  } else {
+    keys <- list()
   }
 
   step_collapse_cart_new(
@@ -158,7 +160,11 @@ print.step_collapse_cart <-
 #' @export
 tidy.step_collapse_cart <- function(x, ...) {
   if (recipes::is_trained(x)) {
-    res <- purrr::map2_dfr(x$results, names(x$results), format_collapse_keys)
+    if (length(x$results) == 0) {
+      res <- tibble(terms = character(), value = double())
+    } else {
+      res <- purrr::map2_dfr(x$results, names(x$results), format_collapse_keys)
+    }
   } else {
     term_names <- recipes::sel2char(x$terms)
     res <- tibble(terms = term_names,
