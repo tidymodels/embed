@@ -60,6 +60,12 @@ columns that will be affected) and \code{base}.
 \code{step_collapse_stringdist} creates a \emph{specification} of a recipe step
 that will collapse factor levels that have a low stringdist between them.
 }
+\section{Tidying}{
+When you \code{\link[=tidy.recipe]{tidy()}} this step, a tibble with columns \code{"terms"}
+(the column being modified), \code{"from"} (the old levels), \code{"to"} (the new
+levels), and \code{"id"}.
+}
+
 \section{Case weights}{
 
 
