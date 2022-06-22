@@ -21,6 +21,9 @@
 #'  added to the sequence of existing steps (if any). For the
 #'  `tidy` method, a tibble with columns `terms` (the
 #'  columns that will be affected) and `base`.
+#'  
+#' @template case-weights-not-supported
+#'  
 #' @export
 #' @examples
 #' library(recipes)

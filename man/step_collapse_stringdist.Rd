@@ -60,6 +60,12 @@ columns that will be affected) and \code{base}.
 \code{step_collapse_stringdist} creates a \emph{specification} of a recipe step
 that will collapse factor levels that have a low stringdist between them.
 }
+\section{Case weights}{
+
+
+The underlying operation does not allow for case weights.
+}
+
 \examples{
 library(recipes)
 library(tibble)

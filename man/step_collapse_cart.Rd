@@ -81,6 +81,12 @@ levels), and \code{"id"}. If the CART model failed or could not find a good spli
 the requested predictor will not be in the results.
 }
 
+\section{Case weights}{
+
+
+The underlying operation does not allow for case weights.
+}
+
 \examples{
 if (rlang::is_installed(c("modeldata", "rpart"))) {
   
