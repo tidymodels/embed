@@ -177,11 +177,16 @@ print.step_collapse_stringdist <-
 #' @export
 tidy.step_collapse_stringdist <- function(x, ...) {
   if (is_trained(x)) {
-    res <- purrr::map_dfr(
-      x$results,
-      ~purrr::map_dfr(.x, ~list(from = .x, to = .x[1])),
-      .id = "terms"
-    )
+    if (length(x$results) == 0) {
+      res <- tibble(terms = character())
+    } else {
+      res <- purrr::map_dfr(
+        x$results,
+        ~purrr::map_dfr(.x, ~list(from = .x, to = .x[1])),
+        .id = "terms"
+      )
+    }
+    
   } else {
     term_names <- sel2char(x$terms)
     res <- tibble(terms = term_names)

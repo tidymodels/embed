@@ -109,3 +109,52 @@ test_that("failed collapsing", {
   )
 })
 
+
+test_that("printing", {
+  skip_if_not_installed("modeldata")
+  data(ames, package = "modeldata")
+  
+  rec <- 
+    recipe(Sale_Price ~ ., data = ames) %>% 
+    step_collapse_stringdist(MS_SubClass, distance = 5)
+  expect_snapshot(print(rec))
+  expect_snapshot(prep(rec))
+})
+
+test_that("empty selection prep/bake is a no-op", {
+  rec1 <- recipe(mpg ~ ., mtcars)
+  rec2 <- step_collapse_stringdist(rec1, distance = 1)
+  
+  rec1 <- prep(rec1, mtcars)
+  rec2 <- prep(rec2, mtcars)
+  
+  baked1 <- bake(rec1, mtcars)
+  baked2 <- bake(rec2, mtcars)
+  
+  expect_identical(baked1, baked2)
+})
+
+test_that("empty selection tidy method works", {
+  rec <- recipe(mpg ~ ., mtcars)
+  rec <- step_collapse_stringdist(rec, distance = 1)
+  
+  expect <- tibble(terms = character(), id = character())
+  
+  expect_identical(tidy(rec, number = 1), expect)
+  
+  rec <- prep(rec, mtcars)
+  
+  expect_identical(tidy(rec, number = 1), expect)
+})
+
+test_that("empty printing", {
+  skip_if(packageVersion("rlang") < "1.0.0")
+  rec <- recipe(mpg ~ ., mtcars)
+  rec <- step_collapse_stringdist(rec, distance = 1)
+  
+  expect_snapshot(rec)
+  
+  rec <- prep(rec, mtcars)
+  
+  expect_snapshot(rec)
+})
