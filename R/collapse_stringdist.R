@@ -21,6 +21,17 @@
 #'  added to the sequence of existing steps (if any). For the
 #'  `tidy` method, a tibble with columns `terms` (the
 #'  columns that will be affected) and `base`.
+#'  
+#' @details
+#' 
+#' # Tidying
+#'
+#' When you [`tidy()`][tidy.recipe()] this step, a tibble with columns `"terms"`
+#' (the column being modified), `"from"` (the old levels), `"to"` (the new 
+#' levels), and `"id"`.
+#' 
+#' @template case-weights-not-supported
+#'  
 #' @export
 #' @examples
 #' library(recipes)

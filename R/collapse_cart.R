@@ -51,6 +51,8 @@
 #' levels), and `"id"`. If the CART model failed or could not find a good split,
 #' the requested predictor will not be in the results.
 #'
+#' @template case-weights-not-supported
+#' 
 #' @examples
 #' if (rlang::is_installed(c("modeldata", "rpart"))) {
 #'   
