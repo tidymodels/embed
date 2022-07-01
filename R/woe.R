@@ -417,11 +417,15 @@ prep.step_woe <- function(x, training, info = NULL, ...) {
 
 #' @export
 bake.step_woe <- function(object, new_data, ...) {
+  dict <- object$dictionary
+  woe_vars <- unique(dict$variable)
+  
+  check_new_data(woe_vars, object, new_data)
+  
   if (nrow(object$dictionary) == 0) {
     return(new_data)
   }
-  dict <- object$dictionary
-  woe_vars <- unique(dict$variable)
+  
   new_data <- add_woe(
     .data = new_data,
     outcome = dict$outcome[1],

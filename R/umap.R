@@ -228,6 +228,8 @@ prep.step_umap <- function(x, training, info = NULL, ...) {
 
 #' @export
 bake.step_umap <- function(object, new_data, ...) {
+  check_new_data(names(object$object$xnames), object, new_data)
+  
   if (length(object$object) == 0) {
     return(new_data)
   }

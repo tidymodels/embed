@@ -199,7 +199,8 @@ make_hash_tbl <- function(ind, nms) {
 
 #' @export
 bake.step_feature_hash <- function(object, new_data, ...) {
-
+  check_new_data(names(object$columns), object, new_data)
+  
   # If no terms were selected
   if (length(object$columns) == 0) {
     return(new_data)

@@ -454,6 +454,8 @@ prep.step_discretize_xgb <- function(x, training, info = NULL, ...) {
 bake.step_discretize_xgb <- function(object, new_data, ...) {
   vars <- object$rules
 
+  check_new_data(names(vars), object, new_data)
+  
   for (i in seq_along(vars)) {
     if (length(vars[[i]]) > 0) {
       var <- names(vars)[[i]]

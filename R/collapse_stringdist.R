@@ -159,6 +159,7 @@ collapse_stringdist_impl <- function(x, dist) {
 bake.step_collapse_stringdist <- function(object, new_data, ...) {
   col_names <- object$columns
   # for backward compat
+  check_new_data(names(col_names), object, new_data)
   
   for (i in seq_along(col_names)) {
     new_data[, col_names[i]] <- collapse_apply(

@@ -236,7 +236,8 @@ prep.step_discretize_cart <- function(x, training, info = NULL, ...) {
 #' @export
 bake.step_discretize_cart <- function(object, new_data, ...) {
   vars <- object$rules
-
+  check_new_data(names(vars), object, new_data)
+  
   for (i in seq_along(vars)) {
     if (length(vars[[i]]) > 0) {
       var <- names(vars)[[i]]
