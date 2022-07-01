@@ -217,6 +217,8 @@ prep.step_pca_sparse_bayes <- function(x, training, info = NULL, ...) {
 bake.step_pca_sparse_bayes <- function(object, new_data, ...) {
   if (!all(is.na(object$res))) {
     pca_vars <- rownames(object$res)
+    check_new_data(pca_vars, object, new_data)
+    
     x <- as.matrix(new_data[, pca_vars])
     comps <- x %*% object$res
     comps <- check_name(comps, new_data, object)

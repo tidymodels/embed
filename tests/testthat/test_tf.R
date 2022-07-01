@@ -300,6 +300,17 @@ test_that("bad args", {
   )
 })
 
+test_that("bake method errors when needed non-standard role columns are missing", {
+  rec <- recipe(x2 ~ ., data = ex_dat) %>%
+    step_embed(x3, outcome = vars(x2), options = embed_control(verbose = 0), id = "id") %>%
+    update_role(x3, new_role = "potato") %>%
+    update_role_requirements(role = "potato", bake = FALSE)
+  
+  rec_trained <- prep(rec, training = ex_dat, verbose = FALSE)
+  
+  expect_error(bake(rec_trained, new_data = ex_dat[, -3]),
+               class = "new_data_missing_column")
+})
 
 test_that("printing", {
   skip_on_cran()
