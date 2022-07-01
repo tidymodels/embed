@@ -82,6 +82,18 @@ test_that("failed collapsing", {
   expect_true(length(rec_5$steps[[1]]$results) == 0)
 })
 
+test_that("bake method errors when needed non-standard role columns are missing", {
+  rec <- recipe(Sale_Price ~ ., data = ames) %>% 
+    step_collapse_cart(MS_SubClass, outcome = vars(Sale_Price)) %>%
+    update_role(MS_SubClass, new_role = "potato") %>%
+    update_role_requirements(role = "potato", bake = FALSE)
+  
+  rec_trained <- prep(rec, training = ames, verbose = FALSE)
+  
+  expect_error(bake(rec_trained, new_data = ames[, -1]),
+               class = "new_data_missing_column")
+})
+
 test_that("printing", {
   skip_if_not_installed("modeldata")
   data(ames, package = "modeldata")
