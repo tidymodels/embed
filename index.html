@@ -43,7 +43,7 @@
     
     <a class="navbar-brand me-2" href="index.html">embed</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.0.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -91,7 +91,6 @@
 </h1>
 </div>
 <!-- badges: start -->
-
 <div class="section level2">
 <h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
@@ -100,7 +99,7 @@
 <p>Some steps handle categorical predictors:</p>
 <ul>
 <li><p><code><a href="reference/step_lencode_glm.html">step_lencode_glm()</a></code>, <code><a href="reference/step_lencode_bayes.html">step_lencode_bayes()</a></code>, and <code><a href="reference/step_lencode_mixed.html">step_lencode_mixed()</a></code> estimate the effect of each of the factor levels on the outcome and these estimates are used as the new encoding. The estimates are estimated by a generalized linear model. This step can be executed without pooling (via <code>glm</code>) or with partial pooling (<code>stan_glm</code> or <code>lmer</code>). Currently implemented for numeric and two-class outcomes.</p></li>
-<li><p><code><a href="reference/step_embed.html">step_embed()</a></code> uses <code><a href="https://keras.rstudio.com/reference/layer_embedding.html" class="external-link">keras::layer_embedding</a></code> to translate the original <em>C</em> factor levels into a set of <em>D</em> new variables (&lt; <em>C</em>). The model fitting routine optimizes which factor levels are mapped to each of the new variables as well as the corresponding regression coefficients (i.e., neural network weights) that will be used as the new encodings.</p></li>
+<li><p><code><a href="reference/step_embed.html">step_embed()</a></code> uses <code><a href="https://rdrr.io/pkg/keras/man/layer_embedding.html" class="external-link">keras::layer_embedding</a></code> to translate the original <em>C</em> factor levels into a set of <em>D</em> new variables (&lt; <em>C</em>). The model fitting routine optimizes which factor levels are mapped to each of the new variables as well as the corresponding regression coefficients (i.e., neural network weights) that will be used as the new encodings.</p></li>
 <li><p><code><a href="reference/step_woe.html">step_woe()</a></code> creates new variables based on weight of evidence encodings.</p></li>
 <li><p><code><a href="reference/step_feature_hash.html">step_feature_hash()</a></code> can create indicator variables using feature hashing.</p></li>
 </ul>
@@ -131,14 +130,14 @@
 </h2>
 <p>To install the package:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"embed"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"embed"</span><span class="op">)</span></span></code></pre></div>
 <p>Note that to use some steps, you will also have to install other packages such as <code>rstanarm</code> and <code>lme4</code>. For all of the steps to work, you may want to use:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"rpart"</span>, <span class="st">"xgboost"</span>, <span class="st">"rstanarm"</span>, <span class="st">"lme4"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"rpart"</span>, <span class="st">"xgboost"</span>, <span class="st">"rstanarm"</span>, <span class="st">"lme4"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>To get a bug fix or to use a feature from the development version, you can install the development version of this package from GitHub.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># install.packages("remotes")</span>
-<span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"tidymodels/embed"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># install.packages("remotes")</span></span>
+<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"tidymodels/embed"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="contributing">Contributing<a class="anchor" aria-label="anchor" href="#contributing"></a>
@@ -194,15 +193,7 @@
 </ul>
 </div>
 
-<div class="dev-status">
-<h2 data-toc-skip>Dev status</h2>
-<ul class="list-unstyled">
-<li><a href="https://github.com/tidymodels/embed/actions/workflows/R-CMD-check.yaml" class="external-link"><img src="https://github.com/tidymodels/embed/actions/workflows/R-CMD-check.yaml/badge.svg" alt="R-CMD-check"></a></li>
-<li><a href="https://app.codecov.io/gh/tidymodels/embed?branch=main" class="external-link"><img src="https://codecov.io/gh/tidymodels/embed/branch/main/graph/badge.svg" alt="Codecov test coverage"></a></li>
-<li><a href="https://CRAN.r-project.org/package=embed" class="external-link"><img src="https://www.r-pkg.org/badges/version/embed" alt="CRAN_Status_Badge"></a></li>
-<li><a href="https://CRAN.r-project.org/package=embed" class="external-link"><img src="https://CRANlogs.r-pkg.org/badges/embed" alt="Downloads"></a></li>
-</ul>
-</div>
+
 
   </aside>
 </div>
@@ -217,7 +208,7 @@
 
 <div class="pkgdown-footer-right">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
   </div></footer>
