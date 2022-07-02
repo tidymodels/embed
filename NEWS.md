@@ -1,8 +1,10 @@
-# embed (development version)
+# embed 1.0.0
 
 * `step_collapse_cart()` can pool a predictor's factor levels using a tree-based method. 
 
 * `step_collapse_stringdist()` can pool a predictor's factor levels using string distances.
+
+* Case weights support have been added to `step_discretize_cart()`, `step_discretize_xgb()`, `step_lencode_bayes()`, `step_lencode_glm()`, and `step_lencode_mixed()`.
 
 # embed 0.2.0
 

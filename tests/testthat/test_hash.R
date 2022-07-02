@@ -140,6 +140,7 @@ test_that("can prep recipes with no keep_original_cols", {
 })
 
 test_that("bake method errors when needed non-standard role columns are missing", {
+  skip_on_cran()
   rlang::local_options(lifecycle_verbosity = "quiet")
   rec <- recipe(x2 ~ ., data = ex_dat) %>%
     step_feature_hash(x3) %>%
