@@ -1,4 +1,4 @@
-# embed (development version)
+# embed 1.0.0
 
 * `step_collapse_cart()` can pool a predictor's factor levels using a tree-based method. 
 
