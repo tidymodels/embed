@@ -120,6 +120,14 @@ When you \code{\link[=tidy.recipe]{tidy()}} this step, a tibble with columns
 The underlying operation does not allow for case weights.
 }
 
+\section{Saving prepped recipe object}{
+
+
+This recipe step may require native serialization methods to be properly
+saved and/or passed between R sessions. To learn more about preparing
+prepped recipes for serialization, see the bundle package.
+}
+
 \examples{
 library(recipes)
 library(ggplot2)

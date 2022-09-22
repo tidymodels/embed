@@ -49,6 +49,8 @@
 #' `terms` (the selectors or variables selected) is returned.
 #' 
 #' @template case-weights-not-supported
+#' 
+#' @template bundle
 #'
 #' @references
 #' McInnes, L., & Healy, J. (2018). UMAP: Uniform Manifold Approximation and
