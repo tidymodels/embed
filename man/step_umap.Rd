@@ -123,9 +123,9 @@ The underlying operation does not allow for case weights.
 \section{Saving prepped recipe object}{
 
 
-This recipe step may require native serialization methods to be properly
-saved and/or passed between R sessions. To learn more about preparing
-prepped recipes for serialization, see the bundle package.
+This recipe step may require native serialization when saving for
+use in another R session. To learn more about serialization for
+prepped recipes, see the \href{https://rstudio.github.io/bundle/}{bundle} package.
 }
 
 \examples{
