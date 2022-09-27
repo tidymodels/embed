@@ -113,10 +113,10 @@ To use them, see the documentation in \link[recipes:case_weights]{recipes::case_
 }
 
 \examples{
-library(modeldata)
-data(credit_data)
+\dontshow{if (rlang::is_installed(c("xgboost", "modeldata"))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 library(rsample)
 library(recipes)
+data(credit_data, package = "modeldata")
 
 split <- initial_split(credit_data, strata = "Status")
 
@@ -128,11 +128,10 @@ xgb_rec <-
   step_impute_median(all_numeric()) \%>\%
   step_discretize_xgb(all_numeric(), outcome = "Status")
 
-if (rlang::is_installed("xgboost")) {
-  xgb_rec <- prep(xgb_rec, training = credit_data_tr)
+xgb_rec <- prep(xgb_rec, training = credit_data_tr)
 
-  bake(xgb_rec, credit_data_te, Price)
-}
+bake(xgb_rec, credit_data_te, Price)
+\dontshow{\}) # examplesIf}
 }
 \seealso{
 \code{\link[=step_discretize_cart]{step_discretize_cart()}}, \code{\link[recipes:recipe]{recipes::recipe()}},

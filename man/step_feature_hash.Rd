@@ -92,24 +92,19 @@ The underlying operation does not allow for case weights.
 }
 
 \examples{
-\donttest{
-data(grants, package = "modeldata")
+\dontshow{if (is_tf_available() && rlang::is_installed("modeldata")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+rec <-
+  recipe(class ~ sponsor_code, data = grants_other) \%>\%
+  step_feature_hash(sponsor_code, num_hash = 2^6, keep_original_cols = TRUE) \%>\%
+  prep()
 
-if (is_tf_available()) {
-  # This may take a while:
-  rec <-
-    recipe(class ~ sponsor_code, data = grants_other) \%>\%
-    step_feature_hash(sponsor_code, num_hash = 2^6, keep_original_cols = TRUE) \%>\%
-    prep()
+# How many of the 298 locations ended up in each hash column?
+results <-
+  bake(rec, new_data = NULL, starts_with("sponsor_code")) \%>\%
+  distinct()
 
-  # How many of the 298 locations ended up in each hash column?
-  results <-
-    bake(rec, new_data = NULL, starts_with("sponsor_code")) \%>\%
-    distinct()
-
-  apply(results \%>\% select(-sponsor_code), 2, sum) \%>\% table()
-}
-}
+apply(results \%>\% select(-sponsor_code), 2, sum) \%>\% table()
+\dontshow{\}) # examplesIf}
 }
 \references{
 Weinberger, K, A Dasgupta, J Langford, A Smola, and J Attenberg. 2009.

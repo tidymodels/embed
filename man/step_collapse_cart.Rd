@@ -88,16 +88,15 @@ The underlying operation does not allow for case weights.
 }
 
 \examples{
-if (rlang::is_installed(c("modeldata", "rpart"))) {
-  
-  data(ames, package = "modeldata")
-  ames$Sale_Price <- log10(ames$Sale_Price)
-  
-  rec <- 
-    recipe(Sale_Price ~ ., data = ames) \%>\% 
-    step_collapse_cart(Sale_Type, Garage_Type, Neighborhood, 
-                       outcome = vars(Sale_Price)) \%>\% 
-    prep()
-  tidy(rec, number = 1)
-}
+\dontshow{if (rlang::is_installed(c("modeldata", "rpart"))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+data(ames, package = "modeldata")
+ames$Sale_Price <- log10(ames$Sale_Price)
+
+rec <- 
+  recipe(Sale_Price ~ ., data = ames) \%>\% 
+  step_collapse_cart(Sale_Type, Garage_Type, Neighborhood, 
+                     outcome = vars(Sale_Price)) \%>\% 
+  prep()
+tidy(rec, number = 1)
+\dontshow{\}) # examplesIf}
 }

@@ -53,19 +53,16 @@
 #'
 #' @template case-weights-not-supported
 #' 
-#' @examples
-#' if (rlang::is_installed(c("modeldata", "rpart"))) {
-#'   
-#'   data(ames, package = "modeldata")
-#'   ames$Sale_Price <- log10(ames$Sale_Price)
-#'   
-#'   rec <- 
-#'     recipe(Sale_Price ~ ., data = ames) %>% 
-#'     step_collapse_cart(Sale_Type, Garage_Type, Neighborhood, 
-#'                        outcome = vars(Sale_Price)) %>% 
-#'     prep()
-#'   tidy(rec, number = 1)
-#' }
+#' @examplesIf rlang::is_installed(c("modeldata", "rpart"))
+#' data(ames, package = "modeldata")
+#' ames$Sale_Price <- log10(ames$Sale_Price)
+#' 
+#' rec <- 
+#'   recipe(Sale_Price ~ ., data = ames) %>% 
+#'   step_collapse_cart(Sale_Type, Garage_Type, Neighborhood, 
+#'                      outcome = vars(Sale_Price)) %>% 
+#'   prep()
+#' tidy(rec, number = 1)
 step_collapse_cart <-
     function(recipe,
              ...,
