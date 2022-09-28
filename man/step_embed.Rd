@@ -173,20 +173,18 @@ The underlying operation does not allow for case weights.
 }
 
 \examples{
-library(modeldata)
-
-data(grants)
+\dontshow{if (is_tf_available() && rlang::is_installed("modeldata")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+data(grants, package = "modeldata")
 
 set.seed(1)
 grants_other <- sample_n(grants_other, 500)
 
-if (is_tf_available()) {
-  rec <- recipe(class ~ num_ci + sponsor_code, data = grants_other) \%>\%
-    step_embed(sponsor_code,
-      outcome = vars(class),
-      options = embed_control(epochs = 10)
-    )
-}
+rec <- recipe(class ~ num_ci + sponsor_code, data = grants_other) \%>\%
+  step_embed(sponsor_code,
+    outcome = vars(class),
+    options = embed_control(epochs = 10)
+  )
+\dontshow{\}) # examplesIf}
 }
 \references{
 Francois C and Allaire JJ (2018)

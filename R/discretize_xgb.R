@@ -68,11 +68,10 @@
 #' 
 #' @template case-weights-supervised
 #'
-#' @examples
-#' library(modeldata)
-#' data(credit_data)
+#' @examplesIf rlang::is_installed(c("xgboost", "modeldata"))
 #' library(rsample)
 #' library(recipes)
+#' data(credit_data, package = "modeldata")
 #'
 #' split <- initial_split(credit_data, strata = "Status")
 #'
@@ -84,11 +83,9 @@
 #'   step_impute_median(all_numeric()) %>%
 #'   step_discretize_xgb(all_numeric(), outcome = "Status")
 #'
-#' if (rlang::is_installed("xgboost")) {
-#'   xgb_rec <- prep(xgb_rec, training = credit_data_tr)
+#' xgb_rec <- prep(xgb_rec, training = credit_data_tr)
 #'
-#'   bake(xgb_rec, credit_data_te, Price)
-#' }
+#' bake(xgb_rec, credit_data_te, Price)
 #' @seealso [embed::step_discretize_cart()], [recipes::recipe()],
 #' [recipes::prep()], [recipes::bake()]
 
