@@ -93,6 +93,7 @@ The underlying operation does not allow for case weights.
 
 \examples{
 \dontshow{if (is_tf_available() && rlang::is_installed("modeldata")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+data(grants, package = "modeldata")
 rec <-
   recipe(class ~ sponsor_code, data = grants_other) \%>\%
   step_feature_hash(sponsor_code, num_hash = 2^6, keep_original_cols = TRUE) \%>\%

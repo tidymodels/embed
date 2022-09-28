@@ -49,6 +49,7 @@
 #'  \url{https://bookdown.org/max/FES/encoding-predictors-with-many-categories.html}
 #' @seealso [recipes::step_dummy()], [recipes::step_zv()]
 #' @examplesIf is_tf_available() && rlang::is_installed("modeldata")
+#' data(grants, package = "modeldata")
 #' rec <-
 #'   recipe(class ~ sponsor_code, data = grants_other) %>%
 #'   step_feature_hash(sponsor_code, num_hash = 2^6, keep_original_cols = TRUE) %>%
