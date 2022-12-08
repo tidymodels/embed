@@ -14,7 +14,7 @@ test_that("basic usage", {
 
   expect_error(rec_tr <- prep(rec), regex = NA)
 
-  res_tr <- juice(rec_tr, dplyr::starts_with("x3"))
+  res_tr <- bake(rec_tr, new_data = NULL, dplyr::starts_with("x3"))
 
   expect_equal(ncol(res_tr), 2^6)
   expect_true(all(grepl("^x3_hash_", names(res_tr))))
@@ -69,7 +69,7 @@ test_that("basic usage - character strings", {
 
   expect_error(rec_tr <- prep(rec), regex = NA)
 
-  res_tr <- juice(rec_tr, dplyr::starts_with("x3"))
+  res_tr <- bake(rec_tr, new_data = NULL, dplyr::starts_with("x3"))
 
   expect_equal(ncol(res_tr), 2^6)
   expect_true(all(grepl("^x3_hash_", names(res_tr))))

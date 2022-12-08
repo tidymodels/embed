@@ -22,10 +22,12 @@ test_that("collapsing factors", {
   
   expect_equal(
     ames %>% select(-Neighborhood, -Sale_Price),
-    juice(rec_1) %>% select(-Neighborhood, -Sale_Price)
+    bake(rec_1, new_data = NULL) %>% select(-Neighborhood, -Sale_Price)
   )
   
-  expect_false(isTRUE(all.equal(juice(rec_1)$Neighborhood, ames$Neighborhood)))
+  expect_false(
+    isTRUE(all.equal(bake(rec_1, new_data = NULL)$Neighborhood, ames$Neighborhood))
+  )
   
   expect_error({
     rec_2 <- 

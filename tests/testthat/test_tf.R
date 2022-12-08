@@ -10,7 +10,7 @@ test_that("factor encoded predictor", {
   class_test <- recipe(x2 ~ ., data = ex_dat) %>%
     step_embed(x3, outcome = vars(x2), options = embed_control(verbose = 0), id = "id") %>%
     prep(training = ex_dat, retain = TRUE)
-  tr_values <- juice(class_test, contains("embed"))
+  tr_values <- bake(class_test, new_data = NULL, contains("embed"))
   new_values <- bake(class_test, new_data = new_dat, contains("embed"))
   expect_snapshot(
     new_values_ch <- bake(class_test, new_data = new_dat_ch, contains("embed"))
@@ -81,7 +81,7 @@ test_that("character encoded predictor", {
   class_test <- recipe(x2 ~ ., data = ex_dat_ch) %>%
     step_embed(x3, outcome = vars(x2), options = embed_control(verbose = 0)) %>%
     prep(training = ex_dat_ch, retain = TRUE)
-  tr_values <- juice(class_test, contains("embed"))
+  tr_values <- bake(class_test, new_data = NULL, contains("embed"))
   new_values <- bake(class_test, new_data = new_dat, contains("embed"))
   new_values_fc <- bake(class_test, new_data = new_dat, contains("embed"))
 
@@ -151,7 +151,7 @@ test_that("factor encoded predictor", {
   class_test <- recipe(x1 ~ ., data = ex_dat) %>%
     step_embed(x3, outcome = vars(x1), options = embed_control(verbose = 0)) %>%
     prep(training = ex_dat, retain = TRUE)
-  tr_values <- juice(class_test, contains("embed"))
+  tr_values <- bake(class_test, new_data = NULL, contains("embed"))
   new_values <- bake(class_test, new_data = new_dat, contains("embed"))
   expect_snapshot(
     new_values_ch <- bake(class_test, new_data = new_dat_ch, contains("embed"))
@@ -221,7 +221,7 @@ test_that("character encoded predictor", {
   class_test <- recipe(x1 ~ ., data = ex_dat_ch) %>%
     step_embed(x3, outcome = vars(x1), num_terms = 5, options = embed_control(verbose = 0)) %>%
     prep(training = ex_dat_ch, retain = TRUE)
-  tr_values <- juice(class_test, contains("embed"))
+  tr_values <- bake(class_test, new_data = NULL, contains("embed"))
   new_values <- bake(class_test, new_data = new_dat, contains("embed"))
   new_values_fc <- bake(class_test, new_data = new_dat, contains("embed"))
 

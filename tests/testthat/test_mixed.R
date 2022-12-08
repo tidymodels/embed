@@ -8,7 +8,7 @@ test_that("factor encoded predictor", {
   class_test <- recipe(x2 ~ ., data = ex_dat) %>%
     step_lencode_mixed(x3, outcome = vars(x2), id = "id") %>%
     prep(training = ex_dat, retain = TRUE)
-  tr_values <- juice(class_test)$x3
+  tr_values <- bake(class_test, new_data = NULL)$x3
   new_values <- bake(class_test, new_data = new_dat)
   expect_snapshot(
     new_values_ch <- bake(class_test, new_data = new_dat_ch)
@@ -66,7 +66,7 @@ test_that("character encoded predictor", {
   class_test <- recipe(x2 ~ ., data = ex_dat_ch) %>%
     step_lencode_mixed(x3, outcome = vars(x2)) %>%
     prep(training = ex_dat_ch, retain = TRUE)
-  tr_values <- juice(class_test)$x3
+  tr_values <- bake(class_test, new_data = NULL)$x3
   new_values <- bake(class_test, new_data = new_dat_ch)
   new_values_fc <- bake(class_test, new_data = new_dat)
   key <- class_test$steps[[1]]$mapping
@@ -124,7 +124,7 @@ test_that("factor encoded predictor", {
   reg_test <- recipe(x1 ~ ., data = ex_dat) %>%
     step_lencode_mixed(x3, outcome = vars(x1)) %>%
     prep(training = ex_dat, retain = TRUE)
-  tr_values <- juice(reg_test)$x3
+  tr_values <- bake(reg_test, new_data = NULL)$x3
   new_values <- bake(reg_test, new_data = new_dat)
   expect_snapshot(
     new_values_ch <- bake(reg_test, new_data = new_dat_ch)
@@ -183,7 +183,7 @@ test_that("character encoded predictor", {
   reg_test <- recipe(x1 ~ ., data = ex_dat_ch) %>%
     step_lencode_mixed(x3, outcome = vars(x1)) %>%
     prep(training = ex_dat_ch, retain = TRUE)
-  tr_values <- juice(reg_test)$x3
+  tr_values <- bake(reg_test, new_data = NULL)$x3
   new_values <- bake(reg_test, new_data = new_dat_ch)
   new_values_fc <- bake(reg_test, new_data = new_dat)
   key <- reg_test$steps[[1]]$mapping
