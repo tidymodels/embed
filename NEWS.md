@@ -1,5 +1,7 @@
 # embed (development version)
 
+* All steps now have `required_pkgs()` methods.
+
 # embed 1.0.0
 
 * `step_collapse_cart()` can pool a predictor's factor levels using a tree-based method. 

@@ -206,3 +206,9 @@ tidy.step_collapse_stringdist <- function(x, ...) {
   res$id <- x$id
   res
 }
+
+#' @rdname required_pkgs.embed
+#' @export
+required_pkgs.step_collapse_stringdist <- function(x, ...) {
+  c("embed", "stringdist")
+}

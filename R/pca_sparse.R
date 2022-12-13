@@ -249,3 +249,9 @@ tidy.step_pca_sparse <- function(x, ...) {
   res$id <- x$id
   res
 }
+
+#' @rdname required_pkgs.embed
+#' @export
+required_pkgs.step_pca_sparse <- function(x, ...) {
+  c("embed", "irlba")
+}
