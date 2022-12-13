@@ -29,7 +29,7 @@ rec_credit <- credit_data_train %>%
   prep(retain = TRUE)
 
 xgb_credit_train <- xgboost::xgb.DMatrix(
-  data = as.matrix(juice(rec_credit)),
+  data = as.matrix(bake(rec_credit, new_data = NULL)),
   label = ifelse(credit_data_train[["Status"]] == "bad", 0, 1)
 )
 
@@ -57,7 +57,7 @@ rec_attrition <- attrition_data_train %>%
   prep(retain = TRUE)
 
 xgb_attrition_train <- xgboost::xgb.DMatrix(
-  data = as.matrix(juice(rec_attrition)),
+  data = as.matrix(bake(rec_attrition, new_data = NULL)),
   label = attrition_data_train$EducationField
 )
 
@@ -85,7 +85,7 @@ ames_rec <- ames_data_train %>%
   prep(retain = TRUE)
 
 xgb_ames_train <- xgboost::xgb.DMatrix(
-  data = as.matrix(juice(ames_rec)),
+  data = as.matrix(bake(ames_rec, new_data = NULL)),
   label = ames_data_train[["Sale_Price"]]
 )
 
