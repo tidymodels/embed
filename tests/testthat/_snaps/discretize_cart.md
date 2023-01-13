@@ -40,8 +40,9 @@
       cart_rec <- recipe(y ~ ., data = tmp) %>% step_discretize_cart(all_predictors(),
       outcome = "y") %>% prep()
     Condition
-      Error in `check_type()`:
-      ! All columns selected for the step should be numeric
+      Error in `step_discretize_cart()`:
+      Caused by error in `prep()`:
+      ! All columns selected for the step should be numeric.
 
 # tidy method
 

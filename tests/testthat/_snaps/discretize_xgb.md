@@ -186,7 +186,8 @@
       recipe(class ~ ., data = sim_tr_cls[1:9, ]) %>% step_discretize_xgb(
         all_predictors(), outcome = "class") %>% prep()
     Condition
-      Error in `prep()`:
+      Error in `step_discretize_xgb()`:
+      Caused by error in `prep()`:
       ! Too few observations in the early stopping validation set.Consider increasing the `sample_val` parameter.
 
 ---
@@ -259,7 +260,8 @@
       recipe(class ~ ., data = sim_tr_mcls[1:9, ]) %>% step_discretize_xgb(
         all_predictors(), outcome = "class") %>% prep()
     Condition
-      Error in `prep()`:
+      Error in `step_discretize_xgb()`:
+      Caused by error in `prep()`:
       ! Too few observations in the early stopping validation set.Consider increasing the `sample_val` parameter.
 
 # printing

@@ -29,8 +29,9 @@
       recipe(Species ~ ., data = three_class) %>% step_lencode_glm(Sepal.Length,
         outcome = vars(Species)) %>% prep(training = three_class, retain = TRUE)
     Condition
-      Error in `check_type()`:
-      ! All columns selected for the step should be factor or character
+      Error in `step_lencode_glm()`:
+      Caused by error in `prep()`:
+      ! All columns selected for the step should be factor or character.
 
 # printing
 
