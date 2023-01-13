@@ -164,7 +164,7 @@ prep.step_lencode_bayes <- function(x, training, info = NULL, ...) {
   }
   
   if (length(col_names) > 0) {
-    check_type(training[, col_names], quant = FALSE)
+    check_type(training[, col_names], types = c("string", "factor", "ordered"))
     y_name <- recipes::recipes_eval_select(x$outcome, training, info)
     res <-
       map(training[, col_names], stan_coefs,

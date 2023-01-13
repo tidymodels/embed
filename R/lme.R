@@ -148,7 +148,7 @@ prep.step_lencode_mixed <- function(x, training, info = NULL, ...) {
   }
   
   if (length(col_names) > 0) {
-    check_type(training[, col_names], quant = FALSE)
+    check_type(training[, col_names], types = c("string", "factor", "ordered"))
     y_name <- recipes::recipes_eval_select(x$outcome, training, info)
     if (is.factor(training[[y_name]])) {
       if (length(levels(training[[y_name]])) > 2) {

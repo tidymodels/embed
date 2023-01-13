@@ -112,7 +112,7 @@ prep.step_collapse_cart <- function(x, training, info = NULL, ...) {
 
   col_names <- recipes::recipes_eval_select(x$terms, training, info)
   y_name <- recipes::recipes_eval_select(x$outcome, training, info)
-  recipes::check_type(training[, col_names], quant = FALSE)
+  recipes::check_type(training[, col_names], types = c("string", "factor", "ordered"))
   
   if (length(col_names) > 0) {
     keys <- purrr::map2(training[, col_names], col_names, collapse_rpart, 

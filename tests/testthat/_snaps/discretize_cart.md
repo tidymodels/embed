@@ -42,7 +42,7 @@
     Condition
       Error in `step_discretize_cart()`:
       Caused by error in `prep()`:
-      ! All columns selected for the step should be numeric.
+      ! All columns selected for the step should be double, or integer.
 
 # tidy method
 

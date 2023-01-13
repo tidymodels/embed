@@ -98,7 +98,7 @@
     Condition
       Error in `step_woe()`:
       Caused by error in `prep()`:
-      ! All columns selected for the step should be factor or character.
+      ! All columns selected for the step should be string, factor, or ordered.
 
 # printing
 
