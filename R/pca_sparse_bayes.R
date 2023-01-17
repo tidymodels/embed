@@ -163,7 +163,7 @@ prep.step_pca_sparse_bayes <- function(x, training, info = NULL, ...) {
   col_names <- recipes::recipes_eval_select(x$terms, training, info)
 
   if (length(col_names) > 0) {
-    check_type(training[, col_names])
+    check_type(training[, col_names], types = c("double", "integer"))
 
     p <- length(col_names)
     x$num_comp <- min(x$num_comp, p)

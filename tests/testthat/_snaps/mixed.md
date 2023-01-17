@@ -24,8 +24,9 @@
       recipe(Species ~ ., data = three_class) %>% step_lencode_mixed(Sepal.Length,
         outcome = vars(Species)) %>% prep(training = three_class, retain = TRUE)
     Condition
-      Error in `check_type()`:
-      ! All columns selected for the step should be factor or character
+      Error in `step_lencode_mixed()`:
+      Caused by error in `prep()`:
+      ! All columns selected for the step should be string, factor, or ordered.
 
 # printing
 

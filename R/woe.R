@@ -373,8 +373,8 @@ prep.step_woe <- function(x, training, info = NULL, ...) {
     outcome_name <- recipes::recipes_eval_select(x$outcome, training, info)
 
     col_names <- col_names[!(col_names %in% outcome_name)]
-    check_type(training[, col_names], quant = FALSE)
-    check_type(training[, outcome_name], quant = FALSE)
+    check_type(training[, col_names], types = c("string", "factor", "ordered"))
+    check_type(training[, outcome_name], types = c("string", "factor", "ordered"))
 
     if (is.null(x$dictionary)) {
       x$dictionary <- dictionary(

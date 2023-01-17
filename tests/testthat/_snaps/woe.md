@@ -35,7 +35,10 @@
     Code
       dictionary(df %>% filter(y %in% "B"), "y")
     Condition
-      Error in `.f()`:
+      Error in `purrr::map()`:
+      i In index: 1.
+      i With name: x1.
+      Caused by error in `.f()`:
       ! 'outcome' must have exactly 2 categories (has 1)
 
 # add_woe do not accept dictionary with unexpected layout
@@ -93,8 +96,9 @@
     Code
       prep(rec_all_numeric, training = credit_tr)
     Condition
-      Error in `check_type()`:
-      ! All columns selected for the step should be factor or character
+      Error in `step_woe()`:
+      Caused by error in `prep()`:
+      ! All columns selected for the step should be string, factor, or ordered.
 
 # printing
 
@@ -141,6 +145,10 @@
       recipe(Species ~ ., data = iris3) %>% step_woe(group, outcome = vars(Species)) %>%
         prep()
     Condition
-      Error in `.f()`:
+      Error in `step_woe()`:
+      Caused by error in `purrr::map()`:
+      i In index: 1.
+      i With name: group.
+      Caused by error in `.f()`:
       ! 'outcome' must have exactly 2 categories (has 3)
 

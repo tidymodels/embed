@@ -369,7 +369,7 @@ prep.step_discretize_xgb <- function(x, training, info = NULL, ...) {
   }
   
   if (length(col_names) > 0) {
-    check_type(training[, col_names])
+    check_type(training[, col_names], types = c("double", "integer"))
 
     y_name <- recipes::recipes_eval_select(x$outcome, training, info)
 
