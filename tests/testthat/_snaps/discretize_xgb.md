@@ -199,20 +199,20 @@
     Condition
       Warning:
       More than 20 unique training set values are required. Predictors 'Time' were not processed; their original values will be used.
-    Output
-      Recipe
+    Message
       
-      Inputs:
+      -- Recipe ----------------------------------------------------------------------
       
-            role #variables
-         outcome          1
-       predictor         13
+      -- Inputs 
+      Number of variables by role
+      outcome:    1
+      predictor: 13
       
-      Training data contained 3340 data points and 301 incomplete rows. 
+      -- Training information 
+      Training data contained 3340 data points and 301 incomplete rows.
       
-      Operations:
-      
-      Discretizing variables using xgboost <none> [trained]
+      -- Operations 
+      * Discretizing variables using xgboost: <none> | Trained
 
 # step_discretize_xgb for multi-classification
 
@@ -268,55 +268,54 @@
 
     Code
       xgb_rec
-    Output
-      Recipe
+    Message
       
-      Inputs:
+      -- Recipe ----------------------------------------------------------------------
       
-            role #variables
-         outcome          1
-       predictor          2
+      -- Inputs 
+      Number of variables by role
+      outcome:   1
+      predictor: 2
       
-      Operations:
-      
-      Discretizing variables using xgboost all_predictors()
+      -- Operations 
+      * Discretizing variables using xgboost: all_predictors()
 
 ---
 
     Code
       prep(xgb_rec)
-    Output
-      Recipe
+    Message
       
-      Inputs:
+      -- Recipe ----------------------------------------------------------------------
       
-            role #variables
-         outcome          1
-       predictor          2
+      -- Inputs 
+      Number of variables by role
+      outcome:   1
+      predictor: 2
       
-      Training data contained 1000 data points and no missing data.
+      -- Training information 
+      Training data contained 1000 data points and no incomplete rows.
       
-      Operations:
-      
-      Discretizing variables using xgboost x, z [trained]
+      -- Operations 
+      * Discretizing variables using xgboost: x, z | Trained
 
 # case weights step_discretize_xgb
 
     Code
       xgb_rec_cw
-    Output
-      Recipe
+    Message
       
-      Inputs:
+      -- Recipe ----------------------------------------------------------------------
       
-               role #variables
-       case_weights          1
-            outcome          1
-          predictor          2
+      -- Inputs 
+      Number of variables by role
+      outcome:      1
+      predictor:    2
+      case_weights: 1
       
-      Training data contained 1000 data points and no missing data.
+      -- Training information 
+      Training data contained 1000 data points and no incomplete rows.
       
-      Operations:
-      
-      Discretizing variables using xgboost x, z [weighted, trained]
+      -- Operations 
+      * Discretizing variables using xgboost: x, z | Trained, weighted
 

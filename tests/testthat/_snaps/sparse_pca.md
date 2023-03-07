@@ -2,69 +2,68 @@
 
     Code
       rec
-    Output
-      Recipe
+    Message
       
-      Inputs:
+      -- Recipe ----------------------------------------------------------------------
       
-            role #variables
-       predictor         56
+      -- Inputs 
+      Number of variables by role
+      predictor: 56
       
-      Training data contained 1817 data points and no missing data.
+      -- Training information 
+      Training data contained 1817 data points and no incomplete rows.
       
-      Operations:
-      
-      Sparse PCA extraction with angle_ch_1, area_ch_1, avg_inten_ch_1, avg_inten... [trained]
+      -- Operations 
+      * Sparse PCA extraction with: angle_ch_1, area_ch_1, ... | Trained
 
 # step_pca_sparse
 
     Code
       rec
-    Output
-      Recipe
+    Message
       
-      Inputs:
+      -- Recipe ----------------------------------------------------------------------
       
-            role #variables
-       predictor         56
+      -- Inputs 
+      Number of variables by role
+      predictor: 56
       
-      Training data contained 1817 data points and no missing data.
+      -- Training information 
+      Training data contained 1817 data points and no incomplete rows.
       
-      Operations:
-      
-      Sparse PCA extraction with angle_ch_1, area_ch_1, avg_inten_ch_1, avg_inten... [trained]
+      -- Operations 
+      * Sparse PCA extraction with: angle_ch_1, area_ch_1, ... | Trained
 
 # printing
 
     Code
       print_test
-    Output
-      Recipe
+    Message
       
-      Inputs:
+      -- Recipe ----------------------------------------------------------------------
       
-            role #variables
-       predictor         55
+      -- Inputs 
+      Number of variables by role
+      predictor: 55
       
-      Operations:
-      
-      No Sparse PCA components were extracted from all_predictors()
+      -- Operations 
+      * No Sparse PCA components were extracted from: all_predictors()
 
 ---
 
     Code
       prep(print_test)
-    Output
-      Recipe
+    Message
       
-      Inputs:
+      -- Recipe ----------------------------------------------------------------------
       
-            role #variables
-       predictor         55
+      -- Inputs 
+      Number of variables by role
+      predictor: 55
       
-      Training data contained 1817 data points and no missing data.
+      -- Training information 
+      Training data contained 1817 data points and no incomplete rows.
       
-      Operations:
-      
-      Sparse PCA extraction with angle_ch_1, area_ch_1, avg_inten_ch_1, avg_inten... [trained]
+      -- Operations 
+      * Sparse PCA extraction with: angle_ch_1, area_ch_1, ... | Trained
 

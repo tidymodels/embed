@@ -77,19 +77,20 @@
     Output
       The retained training set is ~ 0.14 Mb  in memory.
       
-      Recipe
+    Message
       
-      Inputs:
+      -- Recipe ----------------------------------------------------------------------
       
-            role #variables
-         outcome          1
-       predictor         13
+      -- Inputs 
+      Number of variables by role
+      outcome:    1
+      predictor: 13
       
-      Training data contained 2000 data points and 186 incomplete rows. 
+      -- Training information 
+      Training data contained 2000 data points and 186 incomplete rows.
       
-      Operations:
-      
-      WoE version against outcome Status for Home, Marital, Records, Job [trained]
+      -- Operations 
+      * WoE version against outcome Status for: Home, Marital, Records, Job | Trained
 
 ---
 
@@ -104,18 +105,17 @@
 
     Code
       woe_extract
-    Output
-      Recipe
+    Message
       
-      Inputs:
+      -- Recipe ----------------------------------------------------------------------
       
-            role #variables
-         outcome          1
-       predictor         13
+      -- Inputs 
+      Number of variables by role
+      outcome:    1
+      predictor: 13
       
-      Operations:
-      
-      WoE version against outcome Status for Job, Home
+      -- Operations 
+      * WoE version against outcome Status for: Job, Home
 
 ---
 
@@ -124,20 +124,20 @@
     Condition
       Warning:
       Some columns used by `step_woe()` have categories with less than 10 values: 'Home', 'Job'
-    Output
-      Recipe
+    Message
       
-      Inputs:
+      -- Recipe ----------------------------------------------------------------------
       
-            role #variables
-         outcome          1
-       predictor         13
+      -- Inputs 
+      Number of variables by role
+      outcome:    1
+      predictor: 13
       
-      Training data contained 2000 data points and 186 incomplete rows. 
+      -- Training information 
+      Training data contained 2000 data points and 186 incomplete rows.
       
-      Operations:
-      
-      WoE version against outcome Status for Job, Home [trained]
+      -- Operations 
+      * WoE version against outcome Status for: Job, Home | Trained
 
 # 2-level factors
 

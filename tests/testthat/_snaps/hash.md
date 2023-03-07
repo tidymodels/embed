@@ -21,35 +21,34 @@
 
     Code
       print_test
-    Output
-      Recipe
+    Message
       
-      Inputs:
+      -- Recipe ----------------------------------------------------------------------
       
-            role #variables
-         outcome          1
-       predictor          1
+      -- Inputs 
+      Number of variables by role
+      outcome:   1
+      predictor: 1
       
-      Operations:
-      
-      Feature hashed dummy variables for x3
+      -- Operations 
+      * Feature hashed dummy variables for: x3
 
 ---
 
     Code
       prep(print_test)
-    Output
-      Recipe
+    Message
       
-      Inputs:
+      -- Recipe ----------------------------------------------------------------------
       
-            role #variables
-         outcome          1
-       predictor          1
+      -- Inputs 
+      Number of variables by role
+      outcome:   1
+      predictor: 1
       
-      Training data contained 500 data points and no missing data.
+      -- Training information 
+      Training data contained 500 data points and no incomplete rows.
       
-      Operations:
-      
-      Feature hashed dummy variables for <none> [trained]
+      -- Operations 
+      * Feature hashed dummy variables for: <none> | Trained
 

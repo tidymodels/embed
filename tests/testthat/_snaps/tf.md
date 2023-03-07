@@ -32,35 +32,34 @@
 
     Code
       print_test
-    Output
-      Recipe
+    Message
       
-      Inputs:
+      -- Recipe ----------------------------------------------------------------------
       
-            role #variables
-         outcome          1
-       predictor          3
+      -- Inputs 
+      Number of variables by role
+      outcome:   1
+      predictor: 3
       
-      Operations:
-      
-      Embedding of factors via tensorflow for x3
+      -- Operations 
+      * Embedding of factors via tensorflow for: x3
 
 ---
 
     Code
       prep(print_test)
-    Output
-      Recipe
+    Message
       
-      Inputs:
+      -- Recipe ----------------------------------------------------------------------
       
-            role #variables
-         outcome          1
-       predictor          3
+      -- Inputs 
+      Number of variables by role
+      outcome:   1
+      predictor: 3
       
-      Training data contained 500 data points and no missing data.
+      -- Training information 
+      Training data contained 500 data points and no incomplete rows.
       
-      Operations:
-      
-      Embedding of factors via tensorflow for x3 [trained]
+      -- Operations 
+      * Embedding of factors via tensorflow for: x3 | Trained
 

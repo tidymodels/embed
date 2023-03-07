@@ -2,71 +2,69 @@
 
     Code
       print(rec)
-    Output
-      Recipe
+    Message
       
-      Inputs:
+      -- Recipe ----------------------------------------------------------------------
       
-            role #variables
-         outcome          1
-       predictor         73
+      -- Inputs 
+      Number of variables by role
+      outcome:    1
+      predictor: 73
       
-      Operations:
-      
-      Collapsing factor levels using CART Neighborhood, Central_Air
+      -- Operations 
+      * Collapsing factor levels using CART: Neighborhood, Central_Air
 
 ---
 
     Code
       prep(rec)
-    Output
-      Recipe
+    Message
       
-      Inputs:
+      -- Recipe ----------------------------------------------------------------------
       
-            role #variables
-         outcome          1
-       predictor         73
+      -- Inputs 
+      Number of variables by role
+      outcome:    1
+      predictor: 73
       
-      Training data contained 2930 data points and no missing data.
+      -- Training information 
+      Training data contained 2930 data points and no incomplete rows.
       
-      Operations:
-      
-      Collapsing factor levels using CART Neighborhood [trained]
+      -- Operations 
+      * Collapsing factor levels using CART: Neighborhood | Trained
 
 # empty printing
 
     Code
       rec
-    Output
-      Recipe
+    Message
       
-      Inputs:
+      -- Recipe ----------------------------------------------------------------------
       
-            role #variables
-         outcome          1
-       predictor         10
+      -- Inputs 
+      Number of variables by role
+      outcome:    1
+      predictor: 10
       
-      Operations:
-      
-      Collapsing factor levels using CART <none>
+      -- Operations 
+      * Collapsing factor levels using CART: <none>
 
 ---
 
     Code
       rec
-    Output
-      Recipe
+    Message
       
-      Inputs:
+      -- Recipe ----------------------------------------------------------------------
       
-            role #variables
-         outcome          1
-       predictor         10
+      -- Inputs 
+      Number of variables by role
+      outcome:    1
+      predictor: 10
       
-      Training data contained 32 data points and no missing data.
+      -- Training information 
+      Training data contained 32 data points and no incomplete rows.
       
-      Operations:
-      
-      Collapsing factor levels using CART <none> [trained]
+      -- Operations 
+      * Collapsing factor levels using CART: <none> | Trained
 

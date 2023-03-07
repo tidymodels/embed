@@ -21,7 +21,7 @@ Depends:
     recipes (>= 1.0.4)
 Imports:
     glue,
-    dplyr,
+    dplyr (>= 1.1.0),
     generics (>= 0.1.0),
     keras,
     lifecycle,
