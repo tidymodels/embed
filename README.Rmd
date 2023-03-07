@@ -12,7 +12,6 @@ knitr::opts_chunk$set(
 
 # embed <a href='https://embed.tidymodels.org'><img src='man/figures/logo.png' align="right" height="139" /></a>
 
-
 <!-- badges: start -->
 [![R-CMD-check](https://github.com/tidymodels/embed/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/tidymodels/embed/actions/workflows/R-CMD-check.yaml)
 [![Codecov test coverage](https://codecov.io/gh/tidymodels/embed/branch/main/graph/badge.svg)](https://app.codecov.io/gh/tidymodels/embed?branch=main)
@@ -58,7 +57,6 @@ Some references for these methods are:
 
 There are two articles that walk through how to use these embedding steps, using [generalized linear models](https://embed.tidymodels.org/articles/Applications/GLM.html) and [neural networks built via TensorFlow](https://embed.tidymodels.org/articles/Applications/Tensorflow.html).
 
-
 ## Installation
 
 To install the package:
@@ -76,10 +74,9 @@ install.packages(c("rpart", "xgboost", "rstanarm", "lme4"))
 To get a bug fix or to use a feature from the development version, you can install the development version of this package from GitHub.
 
 ```r
-# install.packages("remotes")
-remotes::install_github("tidymodels/embed")
+# install.packages("pak")
+pak::pak("tidymodels/embed")
 ```
-
 
 ## Contributing
 
