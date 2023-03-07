@@ -11,33 +11,32 @@
 
     Code
       print_test
-    Output
-      Recipe
+    Message
       
-      Inputs:
+      -- Recipe ----------------------------------------------------------------------
       
-            role #variables
-       predictor          4
+      -- Inputs 
+      Number of variables by role
+      predictor: 4
       
-      Operations:
-      
-      UMAP embedding for all_predictors()
+      -- Operations 
+      * UMAP embedding for: all_predictors()
 
 ---
 
     Code
       prep(print_test)
-    Output
-      Recipe
+    Message
       
-      Inputs:
+      -- Recipe ----------------------------------------------------------------------
       
-            role #variables
-       predictor          4
+      -- Inputs 
+      Number of variables by role
+      predictor: 4
       
-      Training data contained 133 data points and no missing data.
+      -- Training information 
+      Training data contained 133 data points and no incomplete rows.
       
-      Operations:
-      
-      UMAP embedding for Sepal.Length, Sepal.Width, Petal.Length, Petal... [trained]
+      -- Operations 
+      * UMAP embedding for: Sepal.Length, Sepal.Width, Petal.Length, ... | Trained
 

@@ -88,38 +88,37 @@
 
     Code
       print_test
-    Output
-      Recipe
+    Message
       
-      Inputs:
+      -- Recipe ----------------------------------------------------------------------
       
-            role #variables
-         outcome          1
-       predictor          3
+      -- Inputs 
+      Number of variables by role
+      outcome:   1
+      predictor: 3
       
-      Operations:
-      
-      Linear embedding for factors via Bayesian GLM for x3
+      -- Operations 
+      * Linear embedding for factors via Bayesian GLM for: x3
 
 ---
 
     Code
       prep(print_test)
     Condition
-    Output
-      Recipe
+    Message
       
-      Inputs:
+      -- Recipe ----------------------------------------------------------------------
       
-            role #variables
-         outcome          1
-       predictor          3
+      -- Inputs 
+      Number of variables by role
+      outcome:   1
+      predictor: 3
       
-      Training data contained 500 data points and no missing data.
+      -- Training information 
+      Training data contained 500 data points and no incomplete rows.
       
-      Operations:
-      
-      Linear embedding for factors via Bayesian GLM for x3 [trained]
+      -- Operations 
+      * Linear embedding for factors via Bayesian GLM for: x3 | Trained
 
 # case weights
 
@@ -138,19 +137,19 @@
 
     Code
       class_test
-    Output
-      Recipe
+    Message
       
-      Inputs:
+      -- Recipe ----------------------------------------------------------------------
       
-               role #variables
-       case_weights          1
-            outcome          1
-          predictor          3
+      -- Inputs 
+      Number of variables by role
+      outcome:      1
+      predictor:    3
+      case_weights: 1
       
-      Training data contained 500 data points and no missing data.
+      -- Training information 
+      Training data contained 500 data points and no incomplete rows.
       
-      Operations:
-      
-      Linear embedding for factors via Bayesian GLM for x3 [weighted, trained]
+      -- Operations 
+      * Linear embedding for factors via Bayesian GLM for: x3 | Trained, weighted
 
