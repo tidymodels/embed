@@ -168,7 +168,7 @@ make_hash_vars <- function(x, prefix, num_hash = 2^8) {
   nms <- recipes::names0(num_hash, prefix)
   make_hash_tbl(column_int, nms) %>%
     dplyr::mutate(data = uni_x) %>%
-    dplyr::left_join(tmp, by = "data") %>%
+    dplyr::left_join(tmp, by = "data", multiple = "all") %>%
     dplyr::arrange(..order) %>%
     dplyr::select(-data, -..order)
 }

@@ -16,10 +16,6 @@
       Warning:
       'keep_original_cols' was added to `step_feature_hash()` after this recipe was created.
       Regenerate your recipe to avoid this warning.
-      Warning in `dplyr::left_join()`:
-      Each row in `x` is expected to match at most 1 row in `y`.
-      i Row 1 of `x` matches multiple rows.
-      i If multiple matches are expected, set `multiple = "all"` to silence this warning.
 
 # printing
 
@@ -41,11 +37,6 @@
 
     Code
       prep(print_test)
-    Condition
-      Warning in `dplyr::left_join()`:
-      Each row in `x` is expected to match at most 1 row in `y`.
-      i Row 1 of `x` matches multiple rows.
-      i If multiple matches are expected, set `multiple = "all"` to silence this warning.
     Message
       
       -- Recipe ----------------------------------------------------------------------
