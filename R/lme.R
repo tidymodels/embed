@@ -159,7 +159,7 @@ prep.step_lencode_mixed <- function(x, training, info = NULL, ...) {
       }
     }
     res <-
-      map(training[, col_names], lme_coefs,
+      purrr::map(training[, col_names], lme_coefs,
         y = training[[y_name]],
         wts = wts,
         x$options
