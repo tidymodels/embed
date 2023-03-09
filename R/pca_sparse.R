@@ -186,6 +186,11 @@ prep.step_pca_sparse <- function(x, training, info = NULL, ...) {
   )
 }
 
+prop2int <- function(x, p) {
+  cuts <- seq(0, p, length.out = p + 1)
+  as.integer(cut(x * p, breaks = cuts, include.lowest = TRUE))
+}
+
 #' @export
 bake.step_pca_sparse <- function(object, new_data, ...) {
   if (!all(is.na(object$res))) {

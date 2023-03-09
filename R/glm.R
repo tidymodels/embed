@@ -132,7 +132,7 @@ prep.step_lencode_glm <- function(x, training, info = NULL, ...) {
   if (length(col_names) > 0) {
     check_type(training[, col_names], types = c("string", "factor", "ordered"))
     y_name <- recipes::recipes_eval_select(x$outcome, training, info)
-    res <- map(
+    res <- purrr::map(
       training[, col_names],
       glm_coefs, 
       y = training[, y_name],

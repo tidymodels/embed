@@ -37,6 +37,7 @@ length(levels(ames$Neighborhood))
 The distribution of data in the neighborhood is not uniform:
 
 ```{r ames-xtab}
+#| fig.alt: "Horizontal bar chart. n along the x axis, neighborhoods along the y-axis. The lengths of the bars vary from near zero for Landmarks and Green_Hills, to almost 450 for North_Ames."
 ames %>%
   count(Neighborhood) %>%
   ggplot(aes(n, reorder(Neighborhood, n))) +
@@ -62,6 +63,7 @@ means <-
 We'll fit a model with 10 hidden units and 3 encoding columns:
 
 ```{r ames-linear}
+#| fig-alt: "Line chart with 2 lines. epochs along the x-axis, loss along the y-axis. The two lines are colored according to the type of loss, red for normal loss and blue for validation loss. The lines have high values for small epochs and lower values for higher epochs, with the validation loss being lower at all times."
 library(embed)
 tf_embed <- 
   recipe(Sale_Price ~ ., data = ames) %>%
@@ -111,6 +113,7 @@ hood_coef
 We can make a simple, interactive plot of the new features versus the outcome:
 
 ```{r}
+#| fig-alt: "Faceted scatter chart. Embedding value along the x-axis, Mean (log scale) on the y-axis. Each facet is a diffferent embedding. Appears fairly random for facet 1, 3, and 4. Small trend in embedding 2 and 5."
 tf_plot <- 
   hood_coef %>%
   dplyr::select(-lon, -lat) %>%

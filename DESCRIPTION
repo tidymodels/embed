@@ -2,11 +2,11 @@ Package: embed
 Title: Extra Recipes for Encoding Predictors
 Version: 1.0.0.9000
 Authors@R: c(
-    person("Emil", "Hvitfeldt", , "emilhhvitfeldt@gmail.com", role = c("aut", "cre"),
+    person("Emil", "Hvitfeldt", , "emil.hvitfeldt@posit.co", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-0679-1945")),
-    person("Max", "Kuhn", , "max@rstudio.com", role = c("aut"),
+    person("Max", "Kuhn", , "max@posit.co", role = c("aut"),
            comment = c(ORCID = "0000-0003-2402-136X")),
-    person("RStudio", role = "cph")
+    person(given = "Posit Software, PBC", role = c("cph", "fnd"))
   )
 Description: Predictors can be converted to one or more numeric
     representations using a variety of methods. Effect encodings using

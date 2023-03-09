@@ -152,6 +152,7 @@ Note that the `n = 1` sponsor codes have estimates that are less extreme that th
 Let's see the effect of the shrinkage induced by partial pooling by plotting the naive results versus the new results (finite data only):
 
 ```{r stan-compare}
+#| fig-alt: "Scatter chart. log odds along the x-axis, glmer along the y-axis. a red line appears at x=y. Points appear near the line. with smaller values of log_odds appear over the line, and larger values appear over the line."
 pooled_plot <-
   all_estimates %>%
   dplyr::filter(is.finite(log_odds)) %>%
@@ -199,6 +200,7 @@ all_estimates %>%
 Comparing the raw and mixed model estimates:
 
 ```{r mixed-compare}
+#| fig-alt: "Scatter chart. log odds along the x-axis, glmer along the y-axis. a red line appears at x=y. Points appear near the line. with smaller values of log_odds appear over the line, and larger values appear over the line."
 mixed_plot <-
   all_estimates %>%
   dplyr::filter(is.finite(log_odds)) %>%
