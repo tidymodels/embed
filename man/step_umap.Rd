@@ -2,7 +2,8 @@
 % Please edit documentation in R/umap.R
 \name{step_umap}
 \alias{step_umap}
-\title{Supervised and unsupervised uniform manifold approximation and projection (UMAP)}
+\title{Supervised and unsupervised uniform manifold approximation and projection
+(UMAP)}
 \usage{
 step_umap(
   recipe,
@@ -39,8 +40,8 @@ the original variables will be used as \emph{predictors} in a model.}
 \item{trained}{A logical to indicate if the quantities for
 preprocessing have been estimated.}
 
-\item{outcome}{A call to \code{vars} to specify which variable is
-used as the outcome in the encoding process (if any).}
+\item{outcome}{A call to \code{vars} to specify which variable is used as the
+outcome in the encoding process (if any).}
 
 \item{neighbors}{An integer for the number of nearest neighbors used to
 construct the target simplicial set. If \code{neighbors} is greater than the
@@ -59,14 +60,14 @@ process.}
 \code{\link[uwot:umap]{uwot::umap()}} for more details.}
 
 \item{options}{A list of options to pass to \code{\link[uwot:umap]{uwot::umap()}}. The arguments
-\code{X}, \code{n_neighbors}, \code{n_components}, \code{min_dist}, \code{n_epochs}, \code{ret_model}, and
-\code{learning_rate} should not be passed here. By default, \code{verbose} and
+\code{X}, \code{n_neighbors}, \code{n_components}, \code{min_dist}, \code{n_epochs}, \code{ret_model},
+and \code{learning_rate} should not be passed here. By default, \code{verbose} and
 \code{n_threads} are set.}
 
-\item{seed}{Two integers to control the random numbers used by the
-numerical methods. The default pulls from the main session's stream of
-numbers and will give reproducible results if the seed is set prior to
-calling \code{\link[=prep]{prep()}} or \code{\link[=bake]{bake()}}.}
+\item{seed}{Two integers to control the random numbers used by the numerical
+methods. The default pulls from the main session's stream of numbers and
+will give reproducible results if the seed is set prior to calling \code{\link[=prep]{prep()}}
+or \code{\link[=bake]{bake()}}.}
 
 \item{prefix}{A character string for the prefix of the resulting new
 variables. See notes below.}
@@ -78,8 +79,8 @@ output. Defaults to \code{FALSE}.}
 original predictors should be retained along with the new embedding
 variables.}
 
-\item{object}{An object that defines the encoding. This is
-\code{NULL} until the step is trained by \code{\link[recipes:prep]{recipes::prep()}}.}
+\item{object}{An object that defines the encoding. This is \code{NULL} until the
+step is trained by \code{\link[recipes:prep]{recipes::prep()}}.}
 
 \item{skip}{A logical. Should the step be skipped when the
 recipe is baked by \code{\link[recipes:bake]{bake()}}? While all operations are baked
@@ -95,8 +96,8 @@ An updated version of \code{recipe} with the new step added to the
 sequence of any existing operations.
 }
 \description{
-\code{step_umap} creates a \emph{specification} of a recipe step that
-will project a set of features into a smaller space.
+\code{step_umap} creates a \emph{specification} of a recipe step that will project a
+set of features into a smaller space.
 }
 \details{
 UMAP, short for Uniform Manifold Approximation and Projection, is a nonlinear
@@ -104,14 +105,13 @@ dimension reduction technique that finds local, low-dimensional
 representations of the data. It can be run unsupervised or supervised with
 different types of outcome data (e.g. numeric, factor, etc).
 
-The new components will have names that begin with \code{prefix} and a sequence
-of numbers. The variable names are padded with zeros. For example, if
-\code{num_comp < 10}, their names will be \code{UMAP1} - \code{UMAP9}. If \code{num_comp = 101},
-the names would be \code{UMAP001} - \code{UMAP101}.
+The new components will have names that begin with \code{prefix} and a sequence of
+numbers. The variable names are padded with zeros. For example, if \code{num_comp < 10}, their names will be \code{UMAP1} - \code{UMAP9}. If \code{num_comp = 101}, the names
+would be \code{UMAP001} - \code{UMAP101}.
 }
 \section{Tidying}{
-When you \code{\link[=tidy.recipe]{tidy()}} this step, a tibble with columns
-\code{terms} (the selectors or variables selected) is returned.
+When you \code{\link[=tidy.recipe]{tidy()}} this step, a tibble with columns \code{terms}
+(the selectors or variables selected) is returned.
 }
 
 \section{Case weights}{
@@ -151,8 +151,10 @@ bake(supervised, new_data = te, Species, starts_with("umap")) \%>\%
   geom_point(alpha = .5)
 }
 \references{
-McInnes, L., & Healy, J. (2018). UMAP: Uniform Manifold Approximation and
-Projection for Dimension Reduction. \url{ https://arxiv.org/abs/1802.03426}.
+McInnes, L., & Healy, J. (2018). UMAP: Uniform Manifold
+Approximation and Projection for Dimension Reduction. \url{
+https://arxiv.org/abs/1802.03426}.
 
-"How UMAP Works" \url{https://umap-learn.readthedocs.io/en/latest/how_umap_works.html}
+"How UMAP Works"
+\url{https://umap-learn.readthedocs.io/en/latest/how_umap_works.html}
 }

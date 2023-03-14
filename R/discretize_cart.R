@@ -1,57 +1,56 @@
 #' Discretize numeric variables with CART
 #'
 #' `step_discretize_cart` creates a *specification* of a recipe step that will
-#'  discretize numeric data (e.g. integers or doubles) into bins in a
-#'  supervised way using a CART model.
+#' discretize numeric data (e.g. integers or doubles) into bins in a supervised
+#' way using a CART model.
 #'
 #' @param recipe A recipe object. The step will be added to the sequence of
 #'   operations for this recipe.
 #' @param ... One or more selector functions to choose which variables are
 #'   affected by the step. See [selections()] for more details.
 #' @param role Defaults to `"predictor"`.
-#' @param trained A logical to indicate if the quantities for preprocessing
-#'   have been estimated.
+#' @param trained A logical to indicate if the quantities for preprocessing have
+#'   been estimated.
 #' @param outcome A call to `vars` to specify which variable is used as the
-#'  outcome to train CART models in order to discretize explanatory
-#'  variables.
+#'   outcome to train CART models in order to discretize explanatory variables.
 #' @param cost_complexity The regularization parameter. Any split that does not
-#'  decrease the overall lack of fit by a factor of `cost_complexity` is not
-#'  attempted. Corresponds to `cp` in [rpart::rpart()]. Defaults to 0.01.
+#'   decrease the overall lack of fit by a factor of `cost_complexity` is not
+#'   attempted. Corresponds to `cp` in [rpart::rpart()]. Defaults to 0.01.
 #' @param tree_depth The _maximum_ depth in the final tree. Corresponds to
-#'  `maxdepth` in  [rpart::rpart()]. Defaults to 10.
+#'   `maxdepth` in  [rpart::rpart()]. Defaults to 10.
 #' @param min_n The number of data points in a node required to continue
-#'  splitting. Corresponds to `minsplit` in  [rpart::rpart()]. Defaults to 20.
-#' @param rules The splitting rules of the best CART tree to retain for
-#'  each variable. If length zero, splitting could not be used on that column.
+#'   splitting. Corresponds to `minsplit` in  [rpart::rpart()]. Defaults to 20.
+#' @param rules The splitting rules of the best CART tree to retain for each
+#'   variable. If length zero, splitting could not be used on that column.
 #' @param id A character string that is unique to this step to identify it.
-#' @param skip A logical. Should the step be skipped when the
-#'  recipe is baked by [recipes::bake()]? While all operations are baked
-#'  when [recipes::prep()] is run, some operations may not be able to be
-#'  conducted on new data (e.g. processing the outcome variable(s)).
-#'  Care should be taken when using `skip = TRUE` as it may affect
-#'  the computations for subsequent operations
+#' @param skip A logical. Should the step be skipped when the recipe is baked by
+#'   [recipes::bake()]? While all operations are baked when [recipes::prep()] is
+#'   run, some operations may not be able to be conducted on new data (e.g.
+#'   processing the outcome variable(s)). Care should be taken when using `skip
+#'   = TRUE` as it may affect the computations for subsequent operations
 #' @template step-return
-#' @export
-#' @details `step_discretize_cart()` creates non-uniform bins from numerical
-#'  variables by utilizing the information about the outcome variable and
-#'  applying a CART model.
+#' @details
 #'
-#'  The best selection of buckets for each variable is selected using
-#'  the standard cost-complexity pruning of CART, which makes this
-#'  discretization method resistant to overfitting.
+#' `step_discretize_cart()` creates non-uniform bins from numerical variables by
+#' utilizing the information about the outcome variable and applying a CART
+#' model.
 #'
-#' This step requires the \pkg{rpart} package. If not installed, the
-#'  step will stop with a note about installing the package.
+#' The best selection of buckets for each variable is selected using the
+#' standard cost-complexity pruning of CART, which makes this discretization
+#' method resistant to overfitting.
+#'
+#' This step requires the \pkg{rpart} package. If not installed, the step will
+#' stop with a note about installing the package.
 #'
 #' Note that the original data will be replaced with the new bins.
 #'
 #' # Tidying
 #'
-#' When you [`tidy()`][tidy.recipe()] this step, a tibble with columns
-#' `terms` (the columns that is selected), `values` is returned.
+#' When you [`tidy()`][tidy.recipe()] this step, a tibble with columns `terms`
+#' (the columns that is selected), `values` is returned.
 #'
 #' @template case-weights-supervised
-#'
+#' 
 #' @examples
 #' library(modeldata)
 #' data(ad_data)
@@ -74,7 +73,7 @@
 #' bake(cart_rec, ad_data_te, tau)
 #' @seealso [embed::step_discretize_xgb()], [recipes::recipe()],
 #' [recipes::prep()], [recipes::bake()]
-#'
+#' @export
 step_discretize_cart <-
   function(recipe,
            ...,

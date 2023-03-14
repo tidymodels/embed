@@ -1,73 +1,73 @@
 #' Discretize numeric variables with XgBoost
 #'
 #' `step_discretize_xgb` creates a *specification* of a recipe step that will
-#'  discretize numeric data (e.g. integers or doubles) into bins in a
-#'  supervised way using an XgBoost model.
+#' discretize numeric data (e.g. integers or doubles) into bins in a supervised
+#' way using an XgBoost model.
 #'
 #' @param recipe A recipe object. The step will be added to the sequence of
 #'   operations for this recipe.
 #' @param ... One or more selector functions to choose which variables are
 #'   affected by the step. See [selections()] for more details.
 #' @param role Defaults to `"predictor"`.
-#' @param trained A logical to indicate if the quantities for preprocessing
-#'   have been estimated.
+#' @param trained A logical to indicate if the quantities for preprocessing have
+#'   been estimated.
 #' @param outcome A call to `vars` to specify which variable is used as the
-#'  outcome to train XgBoost models in order to discretize explanatory
-#'  variables.
-#' @param sample_val Share of data used for validation (with early stopping) of the learned splits
-#' (the rest is used for training). Defaults to 0.20.
+#'   outcome to train XgBoost models in order to discretize explanatory
+#'   variables.
+#' @param sample_val Share of data used for validation (with early stopping) of
+#'   the learned splits (the rest is used for training). Defaults to 0.20.
 #' @param learn_rate The rate at which the boosting algorithm adapts from
-#'  iteration-to-iteration. Corresponds to `eta` in the \pkg{xgboost} package.
-#'  Defaults to 0.3.
+#'   iteration-to-iteration. Corresponds to `eta` in the \pkg{xgboost} package.
+#'   Defaults to 0.3.
 #' @param num_breaks The _maximum_ number of discrete bins to bucket continuous
-#'  features. Corresponds to `max_bin` in the \pkg{xgboost} package. Defaults to
-#'  10.
+#'   features. Corresponds to `max_bin` in the \pkg{xgboost} package. Defaults
+#'   to 10.
 #' @param tree_depth The maximum depth of the tree (i.e. number of splits).
-#' Corresponds to `max_depth` in the \pkg{xgboost} package. Defaults to 1.
+#'   Corresponds to `max_depth` in the \pkg{xgboost} package. Defaults to 1.
 #' @param min_n The minimum number of instances needed to be in each node.
-#' Corresponds to `min_child_weight` in the \pkg{xgboost} package. Defaults to 5.
-#' @param rules The splitting rules of the best XgBoost tree to retain for
-#'  each variable.
+#'   Corresponds to `min_child_weight` in the \pkg{xgboost} package. Defaults to
+#'   5.
+#' @param rules The splitting rules of the best XgBoost tree to retain for each
+#'   variable.
 #' @param id A character string that is unique to this step to identify it.
-#' @param skip A logical. Should the step be skipped when the
-#'  recipe is baked by [recipes::bake()]? While all operations are baked
-#'  when [recipes::prep()] is run, some operations may not be able to be
-#'  conducted on new data (e.g. processing the outcome variable(s)).
-#'  Care should be taken when using `skip = TRUE` as it may affect
-#'  the computations for subsequent operations
+#' @param skip A logical. Should the step be skipped when the recipe is baked by
+#'   [recipes::bake()]? While all operations are baked when [recipes::prep()] is
+#'   run, some operations may not be able to be conducted on new data (e.g.
+#'   processing the outcome variable(s)). Care should be taken when using `skip
+#'   = TRUE` as it may affect the computations for subsequent operations
 #' @template step-return
-#' @export
-#' @details `step_discretize_xgb()` creates non-uniform bins from numerical
-#'  variables by utilizing the information about the outcome variable and
-#'  applying the xgboost model. It is advised to impute missing values before
-#'  this step. This step is intended to be used particularly with linear models
-#'  because thanks to creating non-uniform bins it becomes easier to learn
-#'  non-linear patterns from the data.
+#' @details
 #'
-#'  The best selection of buckets for each variable is selected using
-#'  an internal early stopping scheme implemented in the \pkg{xgboost}
-#'  package, which makes this discretization method prone to overfitting.
+#' `step_discretize_xgb()` creates non-uniform bins from numerical variables by
+#' utilizing the information about the outcome variable and applying the xgboost
+#' model. It is advised to impute missing values before this step. This step is
+#' intended to be used particularly with linear models because thanks to
+#' creating non-uniform bins it becomes easier to learn non-linear patterns from
+#' the data.
 #'
-#' The pre-defined values of the underlying xgboost learns good
-#' and reasonably complex results. However, if one wishes to tune them the
-#' recommended path would be to first start with changing the value of
-#' `num_breaks` to e.g.: 20 or 30. If that doesn't give satisfactory results
-#' one could experiment with modifying the `tree_depth` or `min_n` parameters.
-#' Note that it is not recommended to tune `learn_rate` simultaneously with
-#' other parameters.
+#' The best selection of buckets for each variable is selected using an internal
+#' early stopping scheme implemented in the \pkg{xgboost} package, which makes
+#' this discretization method prone to overfitting.
 #'
-#' This step requires the \pkg{xgboost} package. If not installed, the
-#' step will stop with a note about installing the package.
+#' The pre-defined values of the underlying xgboost learns good and reasonably
+#' complex results. However, if one wishes to tune them the recommended path
+#' would be to first start with changing the value of `num_breaks` to e.g.: 20
+#' or 30. If that doesn't give satisfactory results one could experiment with
+#' modifying the `tree_depth` or `min_n` parameters. Note that it is not
+#' recommended to tune `learn_rate` simultaneously with other parameters.
+#'
+#' This step requires the \pkg{xgboost} package. If not installed, the step will
+#' stop with a note about installing the package.
 #'
 #' Note that the original data will be replaced with the new bins.
 #'
 #' # Tidying
 #'
-#' When you [`tidy()`][tidy.recipe()] this step, a tibble with columns
-#' `terms` (the columns that is selected), `values` is returned.
+#' When you [`tidy()`][tidy.recipe()] this step, a tibble with columns `terms`
+#' (the columns that is selected), `values` is returned.
 #'
 #' @template case-weights-supervised
-#'
+#' 
 #' @examplesIf rlang::is_installed(c("xgboost", "modeldata"))
 #' library(rsample)
 #' library(recipes)
@@ -88,7 +88,7 @@
 #' bake(xgb_rec, credit_data_te, Price)
 #' @seealso [embed::step_discretize_cart()], [recipes::recipe()],
 #' [recipes::prep()], [recipes::bake()]
-
+#' @export
 step_discretize_xgb <-
   function(recipe,
            ...,

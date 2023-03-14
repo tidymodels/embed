@@ -21,33 +21,33 @@ step_pca_sparse_bayes(
 )
 }
 \arguments{
-\item{recipe}{A recipe object. The step will be added to the
-sequence of operations for this recipe.}
+\item{recipe}{A recipe object. The step will be added to the sequence of
+operations for this recipe.}
 
 \item{...}{One or more selector functions to choose which variables will be
-used to compute the components. See \code{\link[=selections]{selections()}} for more details. For the
-\code{tidy} method, these are not currently used.}
+used to compute the components. See \code{\link[=selections]{selections()}} for more details. For
+the \code{tidy} method, these are not currently used.}
 
 \item{role}{For model terms created by this step, what analysis role should
 they be assigned? By default, the function assumes that the new principal
 component columns created by the original variables will be used as
 predictors in a model.}
 
-\item{trained}{A logical to indicate if the quantities for
-preprocessing have been estimated.}
+\item{trained}{A logical to indicate if the quantities for preprocessing have
+been estimated.}
 
-\item{num_comp}{The number of PCA components to retain as new predictors.
-If \code{num_comp} is greater than the number of columns or the number of
-possible components, a smaller value will be used. A value of zero indicates
-that PCA will \emph{not} be used on the data.}
+\item{num_comp}{The number of PCA components to retain as new predictors. If
+\code{num_comp} is greater than the number of columns or the number of possible
+components, a smaller value will be used. A value of zero indicates that
+PCA will \emph{not} be used on the data.}
 
-\item{prior_slab_dispersion}{This value is proportional to the dispersion
-(or scale) parameter for the slab portion of the prior. Smaller values result
+\item{prior_slab_dispersion}{This value is proportional to the dispersion (or
+scale) parameter for the slab portion of the prior. Smaller values result
 in an increase in zero coefficients.}
 
 \item{prior_mixture_threshold}{The parameter that defines the trade-off
-between the spike and slab components of the prior. Increasing this parameter
-increases the number of zero coefficients.}
+between the spike and slab components of the prior. Increasing this
+parameter increases the number of zero coefficients.}
 
 \item{options}{A list of options to the default method for
 \code{\link[VBsparsePCA:VBsparsePCA]{VBsparsePCA::VBsparsePCA()}}.}
@@ -55,18 +55,16 @@ increases the number of zero coefficients.}
 \item{res}{The rotation matrix once this preprocessing step has been trained
 by \code{\link[=prep]{prep()}}.}
 
-\item{prefix}{A character string that will be the prefix to the resulting
-new variables. See notes below.}
+\item{prefix}{A character string that will be the prefix to the resulting new
+variables. See notes below.}
 
 \item{keep_original_cols}{A logical to keep the original variables in the
 output. Defaults to \code{FALSE}.}
 
-\item{skip}{A logical. Should the step be skipped when the
-recipe is baked by \code{\link[recipes:bake]{recipes::bake()}}? While all operations are baked
-when \code{\link[recipes:prep]{recipes::prep()}} is run, some operations may not be able to be
-conducted on new data (e.g. processing the outcome variable(s)).
-Care should be taken when using \code{skip = TRUE} as it may affect
-the computations for subsequent operations}
+\item{skip}{A logical. Should the step be skipped when the recipe is baked by
+\code{\link[recipes:bake]{recipes::bake()}}? While all operations are baked when \code{\link[recipes:prep]{recipes::prep()}} is
+run, some operations may not be able to be conducted on new data (e.g.
+processing the outcome variable(s)). Care should be taken when using \code{skip = TRUE} as it may affect the computations for subsequent operations}
 
 \item{id}{A character string that is unique to this step to identify it.}
 }
@@ -77,40 +75,40 @@ columns \code{terms} (the selectors or variables selected), \code{value} (the
 loading), and \code{component}.
 }
 \description{
-\code{step_pca_sparse_bayes()} creates a \emph{specification} of a recipe step that will convert
-numeric data into one or more principal components that can have some zero
-coefficients.
+\code{step_pca_sparse_bayes()} creates a \emph{specification} of a recipe step that
+will convert numeric data into one or more principal components that can have
+some zero coefficients.
 }
 \details{
 The \code{VBsparsePCA} package is required for this step. If it is not installed,
 the user will be prompted to do so when the step is defined.
 
-A spike-and-slab prior is a mixture of two priors. One (the "spike") has
-all of its mass at zero and represents a variable that has no contribution
-to the PCA coefficients. The other prior is a broader distribution that
-reflects the coefficient distribution of variables that do affect the PCA
-analysis. This is the "slab". The narrower the slab, the more likely that a
-coefficient will be zero (or are regularized to be closer to zero). The
-mixture of these two priors is governed by a mixing parameter, which itself
-has a prior distribution and a hyper-parameter prior.
+A spike-and-slab prior is a mixture of two priors. One (the "spike") has all
+of its mass at zero and represents a variable that has no contribution to the
+PCA coefficients. The other prior is a broader distribution that reflects the
+coefficient distribution of variables that do affect the PCA analysis. This
+is the "slab". The narrower the slab, the more likely that a coefficient will
+be zero (or are regularized to be closer to zero). The mixture of these two
+priors is governed by a mixing parameter, which itself has a prior
+distribution and a hyper-parameter prior.
 
-PCA coefficients and their resulting scores are unique only up to the sign. This
-step will attempt to make the sign of the components more consistent from
-run-to-run. However, the sparsity constraint may interfere with this goal.
+PCA coefficients and their resulting scores are unique only up to the sign.
+This step will attempt to make the sign of the components more consistent
+from run-to-run. However, the sparsity constraint may interfere with this
+goal.
 
-The argument \code{num_comp} controls the number of components that
-will be retained (per default the original variables that are used to derive
-the components are removed from the data). The new components
-will have names that begin with \code{prefix} and a sequence of
-numbers. The variable names are padded with zeros. For example,
-if \code{num_comp < 10}, their names will be \code{PC1} - \code{PC9}.
-If \code{num_comp = 101}, the names would be \code{PC001} -
-\code{PC101}.
+The argument \code{num_comp} controls the number of components that will be
+retained (per default the original variables that are used to derive the
+components are removed from the data). The new components will have names
+that begin with \code{prefix} and a sequence of numbers. The variable names are
+padded with zeros. For example, if \code{num_comp < 10}, their names will be \code{PC1}
+\itemize{
+\item \code{PC9}. If \code{num_comp = 101}, the names would be \code{PC001} - \code{PC101}.
+}
 }
 \section{Tidying}{
-When you \code{\link[=tidy.recipe]{tidy()}} this step, a tibble with columns
-\code{terms} (the selectors or variables selected), \code{value} and \code{component} is
-returned.
+When you \code{\link[=tidy.recipe]{tidy()}} this step, a tibble with columns \code{terms}
+(the selectors or variables selected), \code{value} and \code{component} is returned.
 }
 
 \section{Case weights}{

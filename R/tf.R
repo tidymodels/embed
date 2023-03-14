@@ -1,76 +1,67 @@
 #' Encoding Factors into Multiple Columns
 #'
-#' `step_embed` creates a *specification* of a recipe step that
-#'  will convert a nominal (i.e. factor) predictor into a set of
-#'  scores derived from a tensorflow model via a word-embedding model.
-#'  `embed_control` is a simple wrapper for setting default options.
+#' `step_embed` creates a *specification* of a recipe step that will convert a
+#' nominal (i.e. factor) predictor into a set of scores derived from a
+#' tensorflow model via a word-embedding model. `embed_control` is a simple
+#' wrapper for setting default options.
 #'
-#' @param recipe A recipe object. The step will be added to the
-#'  sequence of operations for this recipe.
-#' @param ... One or more selector functions to choose variables.
-#'  For `step_embed`, this indicates the variables to be encoded
-#'  into a numeric format. See [recipes::selections()] for more
-#'  details. For the `tidy` method, these are not currently used.
-#' @param role For model terms created by this step, what analysis
-#'  role should they be assigned?. By default, the function assumes
-#'  that the embedding variables created will be used as predictors in a model.
-#' @param outcome A call to `vars` to specify which variable is
-#'  used as the outcome in the neural network.
-#' @param predictors An optional call to `vars` to specify any
-#'  variables to be added as additional predictors in the neural
-#'  network. These variables should be numeric and perhaps centered
-#'  and scaled.
+#' @param recipe A recipe object. The step will be added to the sequence of
+#'   operations for this recipe.
+#' @param ... One or more selector functions to choose variables. For
+#'   `step_embed`, this indicates the variables to be encoded into a numeric
+#'   format. See [recipes::selections()] for more details. For the `tidy`
+#'   method, these are not currently used.
+#' @param role For model terms created by this step, what analysis role should
+#'   they be assigned?. By default, the function assumes that the embedding
+#'   variables created will be used as predictors in a model.
+#' @param outcome A call to `vars` to specify which variable is used as the
+#'   outcome in the neural network.
+#' @param predictors An optional call to `vars` to specify any variables to be
+#'   added as additional predictors in the neural network. These variables
+#'   should be numeric and perhaps centered and scaled.
 #' @param num_terms An integer for the number of resulting variables.
-#' @param hidden_units An integer for the number of hidden units
-#'  in a dense ReLu layer between the embedding and output later.
-#'  Use a value of zero for no intermediate layer (see Details
-#'  below).
+#' @param hidden_units An integer for the number of hidden units in a dense ReLu
+#'   layer between the embedding and output later. Use a value of zero for no
+#'   intermediate layer (see Details below).
 #' @param options A list of options for the model fitting process.
-#' @param mapping A list of tibble results that define the
-#'  encoding. This is `NULL` until the step is trained by
-#'  [recipes::prep()].
-#' @param history A tibble with the convergence statistics for
-#'  each term. This is `NULL` until the step is trained by
-#'  [recipes::prep()].
-#' @param skip A logical. Should the step be skipped when the
-#'  recipe is baked by [recipes::bake()]? While all
-#'  operations are baked when [recipes::prep()] is run, some
-#'  operations may not be able to be conducted on new data (e.g.
-#'  processing the outcome variable(s)). Care should be taken when
-#'  using `skip = TRUE` as it may affect the computations for
-#'  subsequent operations.
-#' @param trained A logical to indicate if the quantities for
-#'  preprocessing have been estimated.
+#' @param mapping A list of tibble results that define the encoding. This is
+#'   `NULL` until the step is trained by [recipes::prep()].
+#' @param history A tibble with the convergence statistics for each term. This
+#'   is `NULL` until the step is trained by [recipes::prep()].
+#' @param skip A logical. Should the step be skipped when the recipe is baked by
+#'   [recipes::bake()]? While all operations are baked when [recipes::prep()] is
+#'   run, some operations may not be able to be conducted on new data (e.g.
+#'   processing the outcome variable(s)). Care should be taken when using `skip
+#'   = TRUE` as it may affect the computations for subsequent operations.
+#' @param trained A logical to indicate if the quantities for preprocessing have
+#'   been estimated.
 #' @param id A character string that is unique to this step to identify it.
-#' @return An updated version of `recipe` with the new step added
-#'  to the sequence of existing steps (if any). For the `tidy`
-#'  method, a tibble with columns `terms` (the selectors or
-#'  variables for encoding), `level` (the factor levels), and
-#'  several columns containing `embed` in the name.
+#' @return An updated version of `recipe` with the new step added to the
+#'   sequence of existing steps (if any). For the `tidy` method, a tibble with
+#'   columns `terms` (the selectors or variables for encoding), `level` (the
+#'   factor levels), and several columns containing `embed` in the name.
 #' @keywords datagen
 #' @concept preprocessing encoding
-#' @export
-#' @details Factor levels are initially assigned at random to the
-#'  new variables and these variables are used in a neural network
-#'  to optimize both the allocation of levels to new columns as well
-#'  as estimating a model to predict the outcome. See Section 6.1.2
-#'  of Francois and Allaire (2018) for more details.
+#' @details
 #'
-#'  The new variables are mapped to the specific levels seen at the
-#'  time of model training and an extra instance of the variables
-#'  are used for new levels of the factor.
+#' Factor levels are initially assigned at random to the new variables and these
+#' variables are used in a neural network to optimize both the allocation of
+#' levels to new columns as well as estimating a model to predict the outcome.
+#' See Section 6.1.2 of Francois and Allaire (2018) for more details.
 #'
-#' One model is created for each call to `step_embed`. All terms
-#'  given to the step are estimated and encoded in the same model
-#'  which would also contain predictors give in `predictors` (if
-#'  any).
+#' The new variables are mapped to the specific levels seen at the time of model
+#' training and an extra instance of the variables are used for new levels of
+#' the factor.
 #'
-#' When the outcome is numeric, a linear activation function is
-#'  used in the last layer while softmax is used for factor outcomes
-#'  (with any number of levels).
+#' One model is created for each call to `step_embed`. All terms given to the
+#' step are estimated and encoded in the same model which would also contain
+#' predictors give in `predictors` (if any).
 #'
-#' For example, the `keras` code for a numeric outcome, one
-#'  categorical predictor, and no hidden units used here would be
+#' When the outcome is numeric, a linear activation function is used in the last
+#' layer while softmax is used for factor outcomes (with any number of levels).
+#'
+#' For example, the `keras` code for a numeric outcome, one categorical
+#' predictor, and no hidden units used here would be
 #'
 #' ```
 #'   keras_model_sequential() %>%
@@ -83,8 +74,8 @@
 #'   layer_dense(units = 1, activation = 'linear')
 #' ```
 #'
-#' If a factor outcome is used and hidden units were requested, the code
-#' would be
+#' If a factor outcome is used and hidden units were requested, the code would
+#' be
 #'
 #' ```
 #'   keras_model_sequential() %>%
@@ -98,36 +89,34 @@
 #'   layer_dense(units = num_factor_levels_y, activation = 'softmax')
 #' ```
 #'
-#' Other variables specified by `predictors` are added as an
-#'  additional dense layer after `layer_flatten` and before the
-#'  hidden layer.
+#' Other variables specified by `predictors` are added as an additional dense
+#' layer after `layer_flatten` and before the hidden layer.
 #'
-#' Also note that it may be difficult to obtain reproducible
-#'  results using this step due to the nature of Tensorflow (see
-#'  link in References).
+#' Also note that it may be difficult to obtain reproducible results using this
+#' step due to the nature of Tensorflow (see link in References).
 #'
-#' tensorflow models cannot be run in parallel within the same
-#'  session (via `foreach` or `futures`) or the `parallel` package.
-#'  If using a recipes with this step with `caret`, avoid parallel
-#'  processing.
+#' tensorflow models cannot be run in parallel within the same session (via
+#' `foreach` or `futures`) or the `parallel` package. If using a recipes with
+#' this step with `caret`, avoid parallel processing.
 #'
 #' # Tidying
 #'
-#' When you [`tidy()`][tidy.recipe()] this step, a tibble with columns
-#' `terms` (the selectors or variables selected), `levels` (levels in variable),
-#' and a number of columns with embedding information are returned.
+#' When you [`tidy()`][tidy.recipe()] this step, a tibble with columns `terms`
+#' (the selectors or variables selected), `levels` (levels in variable), and a
+#' number of columns with embedding information are returned.
 #'
 #' @template case-weights-not-supported
 #'
-#' @references Francois C and Allaire JJ (2018)
-#' _Deep Learning with R_, Manning
+#' @references
 #'
-#' "How can I obtain reproducible results using Keras during
-#' development?" \url{https://tinyurl.com/keras-repro}
+#' Francois C and Allaire JJ (2018) _Deep Learning with R_, Manning
+#'
+#' "How can I obtain reproducible results using Keras during development?"
+#' \url{https://tinyurl.com/keras-repro}
 #'
 #' "Concatenate Embeddings for Categorical Variables with Keras"
-#'  \url{https://flovv.github.io/Embeddings_with_keras_part2/}
-#'
+#' \url{https://flovv.github.io/Embeddings_with_keras_part2/}
+#' 
 #' @examplesIf is_tf_available() && rlang::is_installed("modeldata")
 #' data(grants, package = "modeldata")
 #'
@@ -139,6 +128,7 @@
 #'     outcome = vars(class),
 #'     options = embed_control(epochs = 10)
 #'   )
+#' @export
 step_embed <-
   function(recipe,
            ...,

@@ -26,9 +26,9 @@ Convenient to make a woe version of the given set of predictor variables and als
 one to tweak some woe values by hand.
 }
 \details{
-You can pass a custom dictionary to \code{step_woe()}. It must have the exactly
-the same structure of the output of \code{\link[=dictionary]{dictionary()}}. One easy way to do this
-is by tweaking an output returned from it.
+You can pass a custom dictionary to \code{step_woe()}. It must have the
+exactly the same structure of the output of \code{\link[=dictionary]{dictionary()}}. One easy way to
+do this is by tweaking an output returned from it.
 }
 \examples{
 

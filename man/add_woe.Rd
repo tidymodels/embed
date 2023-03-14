@@ -28,9 +28,9 @@ A tidyverse friendly way to plug WoE versions of a set of predictor variables ag
 given binary outcome.
 }
 \details{
-You can pass a custom dictionary to \code{\link[=add_woe]{add_woe()}}. It must have the exactly the same
-structure of the output of \code{\link[=dictionary]{dictionary()}}. One easy way to do this is to tweak a output
-returned from it.
+You can pass a custom dictionary to \code{\link[=add_woe]{add_woe()}}. It must have the exactly the
+same structure of the output of \code{\link[=dictionary]{dictionary()}}. One easy way to do this is to
+tweak a output returned from it.
 }
 \examples{
 

@@ -18,93 +18,87 @@ step_woe(
 )
 }
 \arguments{
-\item{recipe}{A recipe object. The step will be added to the
-sequence of operations for this recipe.}
+\item{recipe}{A recipe object. The step will be added to the sequence of
+operations for this recipe.}
 
-\item{...}{One or more selector functions to choose which
-variables will be used to compute the components. See
-\code{\link[=selections]{selections()}} for more details. For the \code{tidy}
-method, these are not currently used.}
+\item{...}{One or more selector functions to choose which variables will be
+used to compute the components. See \code{\link[=selections]{selections()}} for more details. For
+the \code{tidy} method, these are not currently used.}
 
-\item{role}{For model terms created by this step, what analysis
-role should they be assigned?. By default, the function assumes
-that the new woe components columns created by the original
-variables will be used as predictors in a model.}
+\item{role}{For model terms created by this step, what analysis role should
+they be assigned?. By default, the function assumes that the new woe
+components columns created by the original variables will be used as
+predictors in a model.}
 
 \item{outcome}{The bare name of the binary outcome encased in \code{vars()}.}
 
-\item{trained}{A logical to indicate if the quantities for
-preprocessing have been estimated.}
+\item{trained}{A logical to indicate if the quantities for preprocessing have
+been estimated.}
 
-\item{dictionary}{A tbl. A map of levels and woe values. It must
-have the same layout than the output returned from \code{\link[=dictionary]{dictionary()}}.
-If `NULL`` the function will build a dictionary with those variables
-passed to \code{...}. See \code{\link[=dictionary]{dictionary()}} for details.}
+\item{dictionary}{A tbl. A map of levels and woe values. It must have the
+same layout than the output returned from \code{\link[=dictionary]{dictionary()}}. If `NULL`` the
+function will build a dictionary with those variables passed to \code{...}.
+See \code{\link[=dictionary]{dictionary()}} for details.}
 
-\item{Laplace}{The Laplace smoothing parameter. A value usually
-applied to avoid -Inf/Inf from predictor category with only one
-outcome class. Set to 0 to allow Inf/-Inf. The default is 1e-6.
-Also known as 'pseudocount' parameter of the Laplace smoothing technique.}
+\item{Laplace}{The Laplace smoothing parameter. A value usually applied to
+avoid -Inf/Inf from predictor category with only one outcome class. Set to
+0 to allow Inf/-Inf. The default is 1e-6. Also known as 'pseudocount'
+parameter of the Laplace smoothing technique.}
 
-\item{prefix}{A character string that will be the prefix to the
-resulting new variables. See notes below.}
+\item{prefix}{A character string that will be the prefix to the resulting new
+variables. See notes below.}
 
-\item{skip}{A logical. Should the step be skipped when the
-recipe is baked by \code{\link[recipes:bake]{recipes::bake()}}? While all operations are baked
-when \code{\link[recipes:prep]{recipes::prep()}} is run, some operations may not be able to be
-conducted on new data (e.g. processing the outcome variable(s)).
-Care should be taken when using \code{skip = TRUE} as it may affect
-the computations for subsequent operations}
+\item{skip}{A logical. Should the step be skipped when the recipe is baked by
+\code{\link[recipes:bake]{recipes::bake()}}? While all operations are baked when \code{\link[recipes:prep]{recipes::prep()}} is
+run, some operations may not be able to be conducted on new data (e.g.
+processing the outcome variable(s)). Care should be taken when using \code{skip = TRUE} as it may affect the computations for subsequent operations}
 
 \item{id}{A character string that is unique to this step to identify it.}
 }
 \value{
-An updated version of \code{recipe} with the new step
-added to the sequence of existing steps (if any). For the
-\code{tidy} method, a tibble with the woe dictionary used to map
-categories with woe values.
+An updated version of \code{recipe} with the new step added to the
+sequence of existing steps (if any). For the \code{tidy} method, a tibble with
+the woe dictionary used to map categories with woe values.
 }
 \description{
-\code{step_woe} creates a \emph{specification} of a
-recipe step that will transform nominal data into its numerical
-transformation based on weights of evidence against a binary outcome.
+\code{step_woe} creates a \emph{specification} of a recipe step that will transform
+nominal data into its numerical transformation based on weights of evidence
+against a binary outcome.
 }
 \details{
-WoE is a transformation of a group of variables that produces
-a new set of features. The formula is
+WoE is a transformation of a group of variables that produces a new set of
+features. The formula is
 
 \deqn{woe_c = log((P(X = c|Y = 1))/(P(X = c|Y = 0)))}
 
-where \eqn{c} goes from 1 to \eqn{C} levels of a given nominal
-predictor variable \eqn{X}.
+where \eqn{c} goes from 1 to \eqn{C} levels of a given nominal predictor
+variable \eqn{X}.
 
-These components are designed to transform nominal variables into
-numerical ones with the property that the order and magnitude
-reflects the association with a binary outcome.  To apply it on
-numerical predictors, it is advisable to discretize the variables
-prior to running WoE. Here, each variable will be binarized to
-have woe associated later. This can achieved by using \code{\link[=step_discretize]{step_discretize()}}.
+These components are designed to transform nominal variables into numerical
+ones with the property that the order and magnitude reflects the association
+with a binary outcome.  To apply it on numerical predictors, it is advisable
+to discretize the variables prior to running WoE. Here, each variable will be
+binarized to have woe associated later. This can achieved by using
+\code{\link[=step_discretize]{step_discretize()}}.
 
-The argument \code{Laplace} is an small quantity added to the
-proportions of 1's and 0's with the goal to avoid log(p/0) or
-log(0/p) results. The numerical woe versions will have names that
-begin with \code{woe_} followed by the respective original name of the
-variables. See Good (1985).
+The argument \code{Laplace} is an small quantity added to the proportions of 1's
+and 0's with the goal to avoid log(p/0) or log(0/p) results. The numerical
+woe versions will have names that begin with \code{woe_} followed by the
+respective original name of the variables. See Good (1985).
 
-One can pass a custom \code{dictionary} tibble to \code{step_woe()}.
-It must have the same structure of the output from
-\code{dictionary()} (see examples). If not provided it will be
-created automatically. The role of this tibble is to store the map
-between the levels of nominal predictor to its woe values. You may
-want to tweak this object with the goal to fix the orders between
-the levels of one given predictor. One easy way to do this is by
-tweaking an output returned from \code{dictionary()}.
+One can pass a custom \code{dictionary} tibble to \code{step_woe()}. It must have
+the same structure of the output from \code{dictionary()} (see examples). If
+not provided it will be created automatically. The role of this tibble is to
+store the map between the levels of nominal predictor to its woe values. You
+may want to tweak this object with the goal to fix the orders between the
+levels of one given predictor. One easy way to do this is by tweaking an
+output returned from \code{dictionary()}.
 }
 \section{Tidying}{
-When you \code{\link[=tidy.recipe]{tidy()}} this step, a tibble with columns
-\code{terms} (the selectors or variables selected), \code{value}, \code{n_tot}, \code{n_bad},
-\code{n_good}, \code{p_bad}, \code{p_good}, \code{woe} and \code{outcome} is returned.. See
-\code{\link[=dictionary]{dictionary()}} for more information.
+When you \code{\link[=tidy.recipe]{tidy()}} this step, a tibble with columns \code{terms}
+(the selectors or variables selected), \code{value}, \code{n_tot}, \code{n_bad}, \code{n_good},
+\code{p_bad}, \code{p_good}, \code{woe} and \code{outcome} is returned.. See \code{\link[=dictionary]{dictionary()}} for
+more information.
 }
 
 \section{Case weights}{
@@ -144,7 +138,10 @@ woe_dict_custom[4, "woe"] <- 1.23 # tweak
 
 # passing custom dict to step_woe()
 rec_custom <- recipe(Status ~ ., data = credit_tr) \%>\%
-  step_woe(Job, Home, outcome = vars(Status), dictionary = woe_dict_custom) \%>\%
+  step_woe(
+    Job, Home, 
+    outcome = vars(Status), dictionary = woe_dict_custom
+   ) \%>\%
   prep()
 
 rec_custom_baked <- bake(rec_custom, new_data = credit_te)
@@ -155,9 +152,11 @@ rec_custom_baked \%>\%
 \references{
 Kullback, S. (1959). \emph{Information Theory and Statistics.} Wiley, New York.
 
-Hastie, T., Tibshirani, R. and Friedman, J. (1986). \emph{Elements of Statistical Learning}, Second Edition, Springer, 2009.
+Hastie, T., Tibshirani, R. and Friedman, J. (1986). \emph{Elements of Statistical
+Learning}, Second Edition, Springer, 2009.
 
-Good, I. J. (1985), "Weight of evidence: A brief survey", \emph{Bayesian Statistics}, 2, pp.249-270.
+Good, I. J. (1985), "Weight of evidence: A brief survey", \emph{Bayesian
+Statistics}, 2, pp.249-270.
 }
 \concept{preprocessing woe transformation_methods}
 \keyword{datagen}

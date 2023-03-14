@@ -1,26 +1,23 @@
 #' collapse factor levels using stringdist
 #'
-#' `step_collapse_stringdist` creates a *specification* of a recipe step
-#'  that will collapse factor levels that have a low stringdist between them.
+#' `step_collapse_stringdist` creates a *specification* of a recipe step that
+#' will collapse factor levels that have a low stringdist between them.
 #'
 #' @inheritParams recipes::step_center
-#' @param ... One or more selector functions to choose which
-#'  variables are affected by the step. See [selections()]
-#'  for more details.  For the `tidy` method, these are not
-#'  currently used.
-#' @param role Not used by this step since no new variables are
-#'  created.
+#' @param ... One or more selector functions to choose which variables are
+#'   affected by the step. See [selections()] for more details.  For the `tidy`
+#'   method, these are not currently used.
+#' @param role Not used by this step since no new variables are created.
 #' @param distance Integer, value to determine which strings should be collapsed
-#'  with which. The value is being used inclusive, so `2` will collapse levels
-#'  that have a string distance between them of 2 or lower.
-#' @param results A list denoting the way the labels should be collapses is stored
-#'  here once this preprocessing step has be trained by [prep()].
-#' @param columns A character string of variable names that will
-#'  be populated (eventually) by the `terms` argument.
-#' @return An updated version of `recipe` with the new step
-#'  added to the sequence of existing steps (if any). For the
-#'  `tidy` method, a tibble with columns `terms` (the
-#'  columns that will be affected) and `base`.
+#'   with which. The value is being used inclusive, so `2` will collapse levels
+#'   that have a string distance between them of 2 or lower.
+#' @param results A list denoting the way the labels should be collapses is
+#'   stored here once this preprocessing step has be trained by [prep()].
+#' @param columns A character string of variable names that will be populated
+#'   (eventually) by the `terms` argument.
+#' @return An updated version of `recipe` with the new step added to the
+#'   sequence of existing steps (if any). For the `tidy` method, a tibble with
+#'   columns `terms` (the columns that will be affected) and `base`.
 #'
 #' @details
 #'
@@ -31,8 +28,7 @@
 #' levels), and `"id"`.
 #'
 #' @template case-weights-not-supported
-#'
-#' @export
+#' 
 #' @examples
 #' library(recipes)
 #' library(tibble)
@@ -58,7 +54,7 @@
 #'   bake(new_data = NULL)
 #'
 #' tidy(rec, 1)
-#'
+#' @export
 step_collapse_stringdist <-
   function(recipe,
            ...,

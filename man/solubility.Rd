@@ -20,16 +20,16 @@ Information and Computer Sciences}, 40(3), 773-777.
 Compound solubility data
 }
 \details{
-Tetko et al. (2001) and Huuskonen (2000) investigated a set of
-compounds with corresponding experimental solubility values using complex
-sets of descriptors. They used linear regression and neural network models
-to estimate the relationship between chemical structure and solubility. For
-our analyses, we will use 1267 compounds and a set of more understandable
+Tetko et al. (2001) and Huuskonen (2000) investigated a set of compounds with
+corresponding experimental solubility values using complex sets of
+descriptors. They used linear regression and neural network models to
+estimate the relationship between chemical structure and solubility. For our
+analyses, we will use 1267 compounds and a set of more understandable
 descriptors that fall into one of three groups: 208 binary "fingerprints"
-that indicate the presence or absence of a particular chemical
-sub-structure, 16 count descriptors (such as the number of bonds or the
-number of Bromine atoms) and 4 continuous descriptors (such as molecular
-weight or surface area).
+that indicate the presence or absence of a particular chemical sub-structure,
+16 count descriptors (such as the number of bonds or the number of Bromine
+atoms) and 4 continuous descriptors (such as molecular weight or surface
+area).
 }
 \examples{
 data(solubility)

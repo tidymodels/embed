@@ -1,38 +1,34 @@
 #' Supervised Collapsing of Factor Levels
 #'
-#' `step_collapse_cart` creates a *specification* of a recipe
-#'  step that can collapse factor levels into a smaller set using a supervised
-#'  tree.
+#' `step_collapse_cart` creates a *specification* of a recipe step that can
+#' collapse factor levels into a smaller set using a supervised tree.
 #'
-#' @param recipe A recipe object. The step will be added to the
-#'  sequence of operations for this recipe.
-#' @param ... One or more selector functions to choose which
-#'  variables are affected by the step. See [selections()]
-#'  for more details. For the `tidy` method, these are not
-#'  currently used.
+#' @param recipe A recipe object. The step will be added to the sequence of
+#'   operations for this recipe.
+#' @param ... One or more selector functions to choose which variables are
+#'   affected by the step. See [selections()] for more details. For the `tidy`
+#'   method, these are not currently used.
 #' @param outcome A call to `vars` to specify which variable is used as the
-#'  outcome to train CART models in order to pool factor levels.
-#' @param role Not used by this step since no new variables are
-#'  created.
-#' @param trained A logical to indicate if the quantities for
-#'  preprocessing have been estimated.
+#'   outcome to train CART models in order to pool factor levels.
+#' @param role Not used by this step since no new variables are created.
+#' @param trained A logical to indicate if the quantities for preprocessing have
+#'   been estimated.
 #' @param cost_complexity A non-negative value that regulates the complexity of
-#' the tree when pruning occurs. Values near 0.1 usually correspond to a tree
-#' with a single splits. Values of zero correspond to unpruned tree.
-#' @param min_n An integer for how many data points are required to make
-#' further splits during the tree growing process. Larger values correspond to
-#' less complex trees.
+#'   the tree when pruning occurs. Values near 0.1 usually correspond to a tree
+#'   with a single splits. Values of zero correspond to unpruned tree.
+#' @param min_n An integer for how many data points are required to make further
+#'   splits during the tree growing process. Larger values correspond to less
+#'   complex trees.
 #' @param results A list of results to convert to new factor levels.
-#' @param skip A logical. Should the step be skipped when the
-#'  recipe is baked by [bake()]? While all operations are baked
-#'  when [prep()] is run, some operations may not be able to be
-#'  conducted on new data (e.g. processing the outcome variable(s)).
-#'  Care should be taken when using `skip = TRUE` as it may affect
-#'  the computations for subsequent operations
+#' @param skip A logical. Should the step be skipped when the recipe is baked by
+#'   [bake()]? While all operations are baked when [prep()] is run, some
+#'   operations may not be able to be conducted on new data (e.g. processing the
+#'   outcome variable(s)). Care should be taken when using `skip = TRUE` as it
+#'   may affect the computations for subsequent operations
 #' @param id A character string that is unique to this step to identify it.
 #' @return An updated recipe step.
-#' @export
 #' @details
+#'
 #' This step uses a CART tree (classification or regression) to group the
 #' existing factor levels into a potentially smaller set. It changes the levels
 #' in the factor predictor (and the `tidy()` method can be used to understand
@@ -52,7 +48,7 @@
 #' the requested predictor will not be in the results.
 #'
 #' @template case-weights-not-supported
-#'
+#' 
 #' @examplesIf rlang::is_installed(c("modeldata", "rpart"))
 #' data(ames, package = "modeldata")
 #' ames$Sale_Price <- log10(ames$Sale_Price)
@@ -65,6 +61,7 @@
 #'   ) %>%
 #'   prep()
 #' tidy(rec, number = 1)
+#' @export
 step_collapse_cart <-
   function(recipe,
            ...,

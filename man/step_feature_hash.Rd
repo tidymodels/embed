@@ -34,7 +34,8 @@ preprocessing have been estimated.}
 \item{num_hash}{The number of resulting dummy variable columns.}
 
 \item{preserve}{Use \code{keep_original_cols} instead to specify whether the
-selected column(s) should be retained in addition to the new dummy variables.}
+selected column(s) should be retained in addition to the new dummy
+variables.}
 
 \item{columns}{A character vector for the selected columns. This is \code{NULL}
 until the step is trained by \code{\link[recipes:prep]{recipes::prep()}}.}
@@ -59,30 +60,30 @@ sequence of any existing operations.
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#soft-deprecated}{\figure{lifecycle-soft-deprecated.svg}{options: alt='[Soft-deprecated]'}}}{\strong{[Soft-deprecated]}}
 
 \code{step_feature_hash} is being deprecated in favor of
-\code{\link[textrecipes:step_dummy_hash]{textrecipes::step_dummy_hash()}}. This function creates a \emph{specification} of
-a recipe step that will convert nominal data (e.g. character or factors) into
-one or more numeric binary columns using the levels of the original data.
+\code{\link[textrecipes:step_dummy_hash]{textrecipes::step_dummy_hash()}}. This function creates a \emph{specification}
+of a recipe step that will convert nominal data (e.g. character or factors)
+into one or more numeric binary columns using the levels of the original
+data.
 }
 \details{
-\code{step_feature_hash()} will create a set of binary dummy variables
-from a factor or character variable. The values themselves are used to
-determine which row that the dummy variable should be assigned (as opposed
-to having a specific column that the value will map to).
+\code{step_feature_hash()} will create a set of binary dummy variables from a
+factor or character variable. The values themselves are used to determine
+which row that the dummy variable should be assigned (as opposed to having a
+specific column that the value will map to).
 
 Since this method does not rely on a pre-determined assignment of levels to
 columns, new factor levels can be added to the selected columns without
 issue. Missing values result in missing values for all of the hashed columns.
 
-Note that the assignment of the levels to the hashing columns does not try
-to maximize the allocation. It is likely that multiple levels of the column
-will map to the same hashed columns (even with small data sets). Similarly,
-it is likely that some columns will have all zeros. A zero-variance filter
-(via \code{\link[recipes:step_zv]{recipes::step_zv()}}) is recommended for any recipe that uses hashed
-columns.
+Note that the assignment of the levels to the hashing columns does not try to
+maximize the allocation. It is likely that multiple levels of the column will
+map to the same hashed columns (even with small data sets). Similarly, it is
+likely that some columns will have all zeros. A zero-variance filter (via
+\code{\link[recipes:step_zv]{recipes::step_zv()}}) is recommended for any recipe that uses hashed columns.
 }
 \section{Tidying}{
-When you \code{\link[=tidy.recipe]{tidy()}} this step, a tibble with columns
-\code{terms} (the columns that is selected)  is returned.
+When you \code{\link[=tidy.recipe]{tidy()}} this step, a tibble with columns \code{terms}
+(the columns that is selected)  is returned.
 }
 
 \section{Case weights}{

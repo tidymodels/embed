@@ -1,84 +1,84 @@
 #' Weight of evidence transformation
 #'
-#' `step_woe` creates a *specification* of a
-#'  recipe step that will transform nominal data into its numerical
-#'  transformation based on weights of evidence against a binary outcome.
+#' `step_woe` creates a *specification* of a recipe step that will transform
+#' nominal data into its numerical transformation based on weights of evidence
+#' against a binary outcome.
 #'
 #' @inheritParams step_lencode_bayes
 #' @inherit step_center return
-#' @param ... One or more selector functions to choose which
-#'  variables will be used to compute the components. See
-#'  [selections()] for more details. For the `tidy`
-#'  method, these are not currently used.
-#' @param role For model terms created by this step, what analysis
-#'  role should they be assigned?. By default, the function assumes
-#'  that the new woe components columns created by the original
-#'  variables will be used as predictors in a model.
+#' @param ... One or more selector functions to choose which variables will be
+#'   used to compute the components. See [selections()] for more details. For
+#'   the `tidy` method, these are not currently used.
+#' @param role For model terms created by this step, what analysis role should
+#'   they be assigned?. By default, the function assumes that the new woe
+#'   components columns created by the original variables will be used as
+#'   predictors in a model.
 #' @param outcome The bare name of the binary outcome encased in `vars()`.
 #' @param outcome The bare name of the binary outcome encased in `vars()`.
-#' @param dictionary A tbl. A map of levels and woe values. It must
-#' have the same layout than the output returned from [dictionary()].
-#' If `NULL`` the function will build a dictionary with those variables
-#' passed to \code{...}. See [dictionary()] for details.
-#' @param Laplace The Laplace smoothing parameter. A value usually
-#' applied to avoid -Inf/Inf from predictor category with only one
-#' outcome class. Set to 0 to allow Inf/-Inf. The default is 1e-6.
-#' Also known as 'pseudocount' parameter of the Laplace smoothing technique.
-#' @param prefix A character string that will be the prefix to the
-#'  resulting new variables. See notes below.
-#' @return An updated version of `recipe` with the new step
-#'  added to the sequence of existing steps (if any). For the
-#'  `tidy` method, a tibble with the woe dictionary used to map
-#'  categories with woe values.
+#' @param dictionary A tbl. A map of levels and woe values. It must have the
+#'   same layout than the output returned from [dictionary()]. If `NULL`` the
+#'   function will build a dictionary with those variables passed to \code{...}.
+#'   See [dictionary()] for details.
+#' @param Laplace The Laplace smoothing parameter. A value usually applied to
+#'   avoid -Inf/Inf from predictor category with only one outcome class. Set to
+#'   0 to allow Inf/-Inf. The default is 1e-6. Also known as 'pseudocount'
+#'   parameter of the Laplace smoothing technique.
+#' @param prefix A character string that will be the prefix to the resulting new
+#'   variables. See notes below.
+#' @return An updated version of `recipe` with the new step added to the
+#'   sequence of existing steps (if any). For the `tidy` method, a tibble with
+#'   the woe dictionary used to map categories with woe values.
 #' @keywords datagen
 #' @concept preprocessing woe transformation_methods
-#' @export
 #' @details
-#' WoE is a transformation of a group of variables that produces
-#' a new set of features. The formula is
+#'
+#' WoE is a transformation of a group of variables that produces a new set of
+#' features. The formula is
 #'
 #' \deqn{woe_c = log((P(X = c|Y = 1))/(P(X = c|Y = 0)))}
 #'
-#' where \eqn{c} goes from 1 to \eqn{C} levels of a given nominal
-#' predictor variable \eqn{X}.
+#' where \eqn{c} goes from 1 to \eqn{C} levels of a given nominal predictor
+#' variable \eqn{X}.
 #'
-#' These components are designed to transform nominal variables into
-#' numerical ones with the property that the order and magnitude
-#' reflects the association with a binary outcome.  To apply it on
-#' numerical predictors, it is advisable to discretize the variables
-#' prior to running WoE. Here, each variable will be binarized to
-#' have woe associated later. This can achieved by using [step_discretize()].
+#' These components are designed to transform nominal variables into numerical
+#' ones with the property that the order and magnitude reflects the association
+#' with a binary outcome.  To apply it on numerical predictors, it is advisable
+#' to discretize the variables prior to running WoE. Here, each variable will be
+#' binarized to have woe associated later. This can achieved by using
+#' [step_discretize()].
 #'
-#' The argument `Laplace` is an small quantity added to the
-#' proportions of 1's and 0's with the goal to avoid log(p/0) or
-#' log(0/p) results. The numerical woe versions will have names that
-#' begin with `woe_` followed by the respective original name of the
-#' variables. See Good (1985).
+#' The argument `Laplace` is an small quantity added to the proportions of 1's
+#' and 0's with the goal to avoid log(p/0) or log(0/p) results. The numerical
+#' woe versions will have names that begin with `woe_` followed by the
+#' respective original name of the variables. See Good (1985).
 #'
-#' One can pass a custom `dictionary` tibble to \code{step_woe()}.
-#' It must have the same structure of the output from
-#' \code{dictionary()} (see examples). If not provided it will be
-#' created automatically. The role of this tibble is to store the map
-#' between the levels of nominal predictor to its woe values. You may
-#' want to tweak this object with the goal to fix the orders between
-#' the levels of one given predictor. One easy way to do this is by
-#' tweaking an output returned from \code{dictionary()}.
+#' One can pass a custom `dictionary` tibble to \code{step_woe()}. It must have
+#' the same structure of the output from \code{dictionary()} (see examples). If
+#' not provided it will be created automatically. The role of this tibble is to
+#' store the map between the levels of nominal predictor to its woe values. You
+#' may want to tweak this object with the goal to fix the orders between the
+#' levels of one given predictor. One easy way to do this is by tweaking an
+#' output returned from \code{dictionary()}.
 #'
 #' # Tidying
 #'
-#' When you [`tidy()`][tidy.recipe()] this step, a tibble with columns
-#' `terms` (the selectors or variables selected), `value`, `n_tot`, `n_bad`,
-#' `n_good`, `p_bad`, `p_good`, `woe` and `outcome` is returned.. See
-#' [dictionary()] for more information.
+#' When you [`tidy()`][tidy.recipe()] this step, a tibble with columns `terms`
+#' (the selectors or variables selected), `value`, `n_tot`, `n_bad`, `n_good`,
+#' `p_bad`, `p_good`, `woe` and `outcome` is returned.. See [dictionary()] for
+#' more information.
 #'
 #' @template case-weights-not-supported
 #'
-#' @references Kullback, S. (1959). *Information Theory and Statistics.* Wiley, New York.
+#' @references
 #'
-#' Hastie, T., Tibshirani, R. and Friedman, J. (1986). *Elements of Statistical Learning*, Second Edition, Springer, 2009.
+#' Kullback, S. (1959). *Information Theory and Statistics.* Wiley, New York.
 #'
-#' Good, I. J. (1985), "Weight of evidence: A brief survey", _Bayesian Statistics_, 2, pp.249-270.
+#' Hastie, T., Tibshirani, R. and Friedman, J. (1986). *Elements of Statistical
+#' Learning*, Second Edition, Springer, 2009.
 #'
+#' Good, I. J. (1985), "Weight of evidence: A brief survey", _Bayesian
+#' Statistics_, 2, pp.249-270.
+#' 
 #' @examples
 #' library(modeldata)
 #' data("credit_data")
@@ -110,13 +110,17 @@
 #'
 #' # passing custom dict to step_woe()
 #' rec_custom <- recipe(Status ~ ., data = credit_tr) %>%
-#'   step_woe(Job, Home, outcome = vars(Status), dictionary = woe_dict_custom) %>%
+#'   step_woe(
+#'     Job, Home, 
+#'     outcome = vars(Status), dictionary = woe_dict_custom
+#'    ) %>%
 #'   prep()
 #'
 #' rec_custom_baked <- bake(rec_custom, new_data = credit_te)
 #' rec_custom_baked %>%
 #'   dplyr::filter(woe_Job == 1.23) %>%
 #'   head()
+#' @export
 step_woe <- function(recipe,
                      ...,
                      role = "predictor",
@@ -245,10 +249,12 @@ woe_table <- function(predictor, outcome, Laplace = 1e-6) {
 #'
 #' @return a tibble with summaries and woe for every given predictor variable stacked up.
 #'
-#' @details You can pass a custom dictionary to \code{step_woe()}. It must have the exactly
-#' the same structure of the output of [dictionary()]. One easy way to do this
-#' is by tweaking an output returned from it.
+#' @details
 #'
+#' You can pass a custom dictionary to \code{step_woe()}. It must have the
+#' exactly the same structure of the output of [dictionary()]. One easy way to
+#' do this is by tweaking an output returned from it.
+#' 
 #' @examples
 #'
 #' mtcars %>% dictionary("am", cyl, gear:carb)
@@ -285,10 +291,12 @@ dictionary <- function(.data, outcome, ..., Laplace = 1e-6) {
 #'
 #' @return A tibble with the original columns of .data plus the woe columns wanted.
 #'
-#' @details You can pass a custom dictionary to [add_woe()]. It must have the exactly the same
-#'  structure of the output of [dictionary()]. One easy way to do this is to tweak a output
-#'  returned from it.
+#' @details
 #'
+#' You can pass a custom dictionary to [add_woe()]. It must have the exactly the
+#' same structure of the output of [dictionary()]. One easy way to do this is to
+#' tweak a output returned from it.
+#' 
 #' @examples
 #'
 #' mtcars %>% add_woe("am", cyl, gear:carb)
