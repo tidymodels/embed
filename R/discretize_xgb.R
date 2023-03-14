@@ -60,12 +60,12 @@
 #' step will stop with a note about installing the package.
 #'
 #' Note that the original data will be replaced with the new bins.
-#' 
+#'
 #' # Tidying
 #'
 #' When you [`tidy()`][tidy.recipe()] this step, a tibble with columns
 #' `terms` (the columns that is selected), `values` is returned.
-#' 
+#'
 #' @template case-weights-supervised
 #'
 #' @examplesIf rlang::is_installed(c("xgboost", "modeldata"))
@@ -151,7 +151,6 @@ step_discretize_xgb_new <-
   }
 
 run_xgboost <- function(.train, .test, .learn_rate, .num_breaks, .tree_depth, .min_n, .objective, .num_class) {
-
   # Need to set an additional parameter (num_class) when perfoming multi-classification
   if (.objective == "multi:softprob") {
     .params <- list(
@@ -187,7 +186,6 @@ run_xgboost <- function(.train, .test, .learn_rate, .num_breaks, .tree_depth, .m
 }
 
 xgb_binning <- function(df, outcome, predictor, sample_val, learn_rate, num_breaks, tree_depth, min_n, wts = NULL) {
-
   # Assuring correct types
   if (is.character(df[[outcome]])) {
     df[[outcome]] <- as.factor(df[[outcome]])
@@ -220,7 +218,7 @@ xgb_binning <- function(df, outcome, predictor, sample_val, learn_rate, num_brea
 
   train <- rsample::training(split)
   test <- rsample::testing(split)
-  
+
   if (!is.null(wts)) {
     wts <- as.double(wts)
     wts_train <- wts[split$in_id]
@@ -367,7 +365,7 @@ prep.step_discretize_xgb <- function(x, training, info = NULL, ...) {
   if (isFALSE(were_weights_used) || is.null(wts)) {
     wts <- NULL
   }
-  
+
   if (length(col_names) > 0) {
     check_type(training[, col_names], types = c("double", "integer"))
 
@@ -452,7 +450,7 @@ bake.step_discretize_xgb <- function(object, new_data, ...) {
   vars <- object$rules
 
   check_new_data(names(vars), object, new_data)
-  
+
   for (i in seq_along(vars)) {
     if (length(vars[[i]]) > 0) {
       var <- names(vars)[[i]]
@@ -476,8 +474,10 @@ bake.step_discretize_xgb <- function(object, new_data, ...) {
 #' @export
 print.step_discretize_xgb <- function(x, width = max(20, options()$width - 30), ...) {
   title <- "Discretizing variables using xgboost "
-  print_step(names(x$rules), x$terms, x$trained, title, width,
-             case_weights = x$case_weights)
+  print_step(
+    names(x$rules), x$terms, x$trained, title, width,
+    case_weights = x$case_weights
+  )
   invisible(x)
 }
 

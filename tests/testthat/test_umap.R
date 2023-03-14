@@ -187,15 +187,17 @@ test_that("can prep recipes with no keep_original_cols", {
 })
 
 test_that("bake method errors when needed non-standard role columns are missing", {
-  rec <- recipe(Species ~ ., data = tr) %>% 
+  rec <- recipe(Species ~ ., data = tr) %>%
     step_umap(Sepal.Length, Sepal.Width, Petal.Length, Petal.Width) %>%
     update_role(Petal.Width, new_role = "potato") %>%
     update_role_requirements(role = "potato", bake = FALSE)
-  
+
   rec_trained <- prep(rec, training = tr, verbose = FALSE)
-  
-  expect_error(bake(rec_trained, new_data = tr[, -4]),
-               class = "new_data_missing_column")
+
+  expect_error(
+    bake(rec_trained, new_data = tr[, -4]),
+    class = "new_data_missing_column"
+  )
 })
 
 test_that("printing", {

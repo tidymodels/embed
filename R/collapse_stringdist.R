@@ -21,17 +21,17 @@
 #'  added to the sequence of existing steps (if any). For the
 #'  `tidy` method, a tibble with columns `terms` (the
 #'  columns that will be affected) and `base`.
-#'  
+#'
 #' @details
-#' 
+#'
 #' # Tidying
 #'
 #' When you [`tidy()`][tidy.recipe()] this step, a tibble with columns `"terms"`
-#' (the column being modified), `"from"` (the old levels), `"to"` (the new 
+#' (the column being modified), `"from"` (the old levels), `"to"` (the new
 #' levels), and `"id"`.
-#' 
+#'
 #' @template case-weights-not-supported
-#'  
+#'
 #' @export
 #' @examples
 #' library(recipes)
@@ -39,7 +39,7 @@
 #' data0 <- tibble(
 #'   x1 = c("a", "b", "d", "e", "sfgsfgsd", "hjhgfgjgr"),
 #'   x2 = c("ak", "b", "djj", "e", "hjhgfgjgr", "hjhgfgjgr")
-#'  )
+#' )
 #'
 #' rec <- recipe(~., data = data0) %>%
 #'   step_collapse_stringdist(all_predictors(), distance = 1) %>%
@@ -68,13 +68,11 @@ step_collapse_stringdist <-
            results = NULL,
            columns = NULL,
            skip = FALSE,
-           id = rand_id("collapse_stringdist")
-  ) {
-    
+           id = rand_id("collapse_stringdist")) {
     if (is.null(distance)) {
       rlang::abort("`distance` argument must be set.")
     }
-    
+
     add_step(
       recipe,
       step_collapse_stringdist_new(
@@ -108,9 +106,9 @@ step_collapse_stringdist_new <-
 #' @export
 prep.step_collapse_stringdist <- function(x, training, info = NULL, ...) {
   col_names <- recipes_eval_select(x$terms, training, info)
-  
-  values <- lapply(training[ ,col_names], collapse_stringdist_impl, x$distance)
-  
+
+  values <- lapply(training[, col_names], collapse_stringdist_impl, x$distance)
+
   step_collapse_stringdist_new(
     terms = x$terms,
     role = x$role,
@@ -130,17 +128,17 @@ collapse_stringdist_impl <- function(x, dist) {
     x <- unique(x)
   }
   dists <- stringdist::stringdistmatrix(x, x)
-  
+
   pairs <- which(dists <= dist, arr.ind = TRUE)
-  
+
   empty_logical <- logical(length(x))
-  
+
   groups <- list()
-  
+
   while (nrow(pairs) > 0) {
     group <- empty_logical
     selected <- pairs[1, 2]
-    
+
     repeat {
       group[selected] <- TRUE
       new_selected <- pairs[pairs[, 2] %in% selected, 1]
@@ -148,10 +146,10 @@ collapse_stringdist_impl <- function(x, dist) {
       pairs <- pairs[!pairs[, 2] %in% selected, , drop = FALSE]
       selected <- new_selected
     }
-    
+
     groups <- c(groups, list(which(group)))
   }
-  
+
   lapply(groups, function(.x) x[.x])
 }
 
@@ -160,7 +158,7 @@ bake.step_collapse_stringdist <- function(object, new_data, ...) {
   col_names <- object$columns
   # for backward compat
   check_new_data(names(col_names), object, new_data)
-  
+
   for (i in seq_along(col_names)) {
     new_data[, col_names[i]] <- collapse_apply(
       new_data[[col_names[i]]],
@@ -171,8 +169,8 @@ bake.step_collapse_stringdist <- function(object, new_data, ...) {
 }
 
 collapse_apply <- function(x, dict) {
-  dict <- purrr::map_dfr(dict, ~list(from = .x, to = .x[1]))
-  
+  dict <- purrr::map_dfr(dict, ~ list(from = .x, to = .x[1]))
+
   dict$to[match(x, dict$from)]
 }
 
@@ -194,11 +192,10 @@ tidy.step_collapse_stringdist <- function(x, ...) {
     } else {
       res <- purrr::map_dfr(
         x$results,
-        ~purrr::map_dfr(.x, ~list(from = .x, to = .x[1])),
+        ~ purrr::map_dfr(.x, ~ list(from = .x, to = .x[1])),
         .id = "terms"
       )
     }
-    
   } else {
     term_names <- sel2char(x$terms)
     res <- tibble(terms = term_names)

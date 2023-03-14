@@ -45,13 +45,13 @@
 #'
 #' For novel levels, a slightly timmed average of the coefficients
 #'  is returned.
-#'  
+#'
 #' # Tidying
-#' 
+#'
 #' When you [`tidy()`][tidy.recipe()] this step, a tibble with columns
 #' `terms` (the selectors or variables selected), `value` and `component` is
 #' returned.
-#' 
+#'
 #' @template case-weights-supervised
 #'
 #' @references
@@ -122,19 +122,19 @@ step_lencode_glm_new <-
 #' @export
 prep.step_lencode_glm <- function(x, training, info = NULL, ...) {
   col_names <- recipes::recipes_eval_select(x$terms, training, info)
-  
+
   wts <- recipes::get_case_weights(info, training)
   were_weights_used <- recipes::are_weights_used(wts)
   if (isFALSE(were_weights_used) || is.null(wts)) {
     wts <- NULL
   }
-  
+
   if (length(col_names) > 0) {
     check_type(training[, col_names], types = c("string", "factor", "ordered"))
     y_name <- recipes::recipes_eval_select(x$outcome, training, info)
     res <- purrr::map(
       training[, col_names],
-      glm_coefs, 
+      glm_coefs,
       y = training[, y_name],
       wts = wts
     )
@@ -207,7 +207,7 @@ map_glm_coef <- function(dat, mapping) {
 #' @export
 bake.step_lencode_glm <- function(object, new_data, ...) {
   check_new_data(names(object$mapping), object, new_data)
-  
+
   for (col in names(object$mapping)) {
     new_data[, col] <- map_glm_coef(new_data[, col], object$mapping[[col]])
   }
@@ -219,8 +219,10 @@ bake.step_lencode_glm <- function(object, new_data, ...) {
 print.step_lencode_glm <-
   function(x, width = max(20, options()$width - 31), ...) {
     title <- "Linear embedding for factors via GLM for "
-    print_step(names(x$mapping), x$terms, x$trained, title, width,
-               case_weights = x$case_weights)
+    print_step(
+      names(x$mapping), x$terms, x$trained, title, width,
+      case_weights = x$case_weights
+    )
     invisible(x)
   }
 

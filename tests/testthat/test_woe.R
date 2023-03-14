@@ -222,15 +222,17 @@ test_that("step_woe", {
 })
 
 test_that("bake method errors when needed non-standard role columns are missing", {
-  rec <- recipe(Status ~ ., data = credit_tr) %>% 
+  rec <- recipe(Status ~ ., data = credit_tr) %>%
     step_discretize(Price) %>%
     update_role(Price, new_role = "potato") %>%
     update_role_requirements(role = "potato", bake = FALSE)
-  
+
   rec_trained <- prep(rec, training = credit_tr, verbose = FALSE)
-  
-  expect_error(bake(rec_trained, new_data = credit_tr[, -14]),
-               class = "new_data_missing_column")
+
+  expect_error(
+    bake(rec_trained, new_data = credit_tr[, -14]),
+    class = "new_data_missing_column"
+  )
 })
 
 test_that("printing", {
@@ -245,7 +247,8 @@ test_that("2-level factors", {
   iris3 <- iris
   iris3$group <- factor(rep(letters[1:5], each = 30))
 
-  expect_snapshot(error = TRUE,
+  expect_snapshot(
+    error = TRUE,
     recipe(Species ~ ., data = iris3) %>%
       step_woe(group, outcome = vars(Species)) %>%
       prep()
@@ -254,17 +257,17 @@ test_that("2-level factors", {
 
 test_that("woe_table respects factor levels", {
   dat <- tibble(
-    predictor  = sample(0:1, 100, TRUE),
+    predictor = sample(0:1, 100, TRUE),
     target = factor(predictor == 0, levels = c(TRUE, FALSE), labels = 0:1),
     target0 = relevel(target, ref = "0"),
     target1 = relevel(target, ref = "1")
-  ) 
-  
+  )
+
   expect_equal(
     woe_table(dat$predictor, dat$target0)$woe,
     -woe_table(dat$predictor, dat$target1)$woe
   )
-  
+
   expect_identical(
     woe_table(dat$predictor, dat$target0) %>% select(-woe),
     woe_table(dat$predictor, dat$target1) %>% select(-woe)
@@ -287,4 +290,3 @@ test_that("empty selections", {
     ad_data %>% select(Genotype, tau, Class)
   )
 })
-

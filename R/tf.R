@@ -110,13 +110,13 @@
 #'  session (via `foreach` or `futures`) or the `parallel` package.
 #'  If using a recipes with this step with `caret`, avoid parallel
 #'  processing.
-#'  
+#'
 #' # Tidying
 #'
 #' When you [`tidy()`][tidy.recipe()] this step, a tibble with columns
 #' `terms` (the selectors or variables selected), `levels` (levels in variable),
 #' and a number of columns with embedding information are returned.
-#' 
+#'
 #' @template case-weights-not-supported
 #'
 #' @references Francois C and Allaire JJ (2018)
@@ -254,7 +254,7 @@ is_tf_2 <- function() {
   if (!is_tf_available()) {
     rlang::abort(
       c(
-        "tensorflow could now be found.", 
+        "tensorflow could now be found.",
         "Please run `tensorflow::install_tensorflow()` to install."
       )
     )
@@ -411,7 +411,7 @@ map_tf_coef2 <- function(dat, mapping, prefix) {
 #' @export
 bake.step_embed <- function(object, new_data, ...) {
   check_new_data(names(object$mapping), object, new_data)
-  
+
   for (col in names(object$mapping)) {
     tmp <- map_tf_coef2(new_data[, col], object$mapping[[col]], prefix = col)
     new_data <- bind_cols(new_data, tmp)

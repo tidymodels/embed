@@ -44,12 +44,12 @@
 #'  step will stop with a note about installing the package.
 #'
 #' Note that the original data will be replaced with the new bins.
-#' 
+#'
 #' # Tidying
 #'
 #' When you [`tidy()`][tidy.recipe()] this step, a tibble with columns
 #' `terms` (the columns that is selected), `values` is returned.
-#' 
+#'
 #' @template case-weights-supervised
 #'
 #' @examples
@@ -131,7 +131,7 @@ step_discretize_cart_new <-
   }
 
 
-cart_binning <- function(predictor, term, outcome, cost_complexity, tree_depth, 
+cart_binning <- function(predictor, term, outcome, cost_complexity, tree_depth,
                          min_n, wts = NULL) {
   df <- data.frame(y = outcome, x = predictor)
   if (is.null(wts)) {
@@ -143,7 +143,7 @@ cart_binning <- function(predictor, term, outcome, cost_complexity, tree_depth,
         y ~ x,
         data = df,
         weights = as.double(wts),
-        cp  = cost_complexity,
+        cp = cost_complexity,
         minsplit = min_n,
         maxdepth = tree_depth,
         maxcompete = 0,
@@ -186,7 +186,7 @@ prep.step_discretize_cart <- function(x, training, info = NULL, ...) {
   if (isFALSE(were_weights_used)) {
     wts <- rep(1, nrow(training))
   }
-  
+
   if (length(col_names) > 0) {
     check_type(training[, col_names], types = c("double", "integer"))
 
@@ -237,7 +237,7 @@ prep.step_discretize_cart <- function(x, training, info = NULL, ...) {
 bake.step_discretize_cart <- function(object, new_data, ...) {
   vars <- object$rules
   check_new_data(names(vars), object, new_data)
-  
+
   for (i in seq_along(vars)) {
     if (length(vars[[i]]) > 0) {
       var <- names(vars)[[i]]
@@ -261,8 +261,10 @@ bake.step_discretize_cart <- function(object, new_data, ...) {
 #' @export
 print.step_discretize_cart <- function(x, width = max(20, options()$width - 30), ...) {
   title <- "Discretizing variables using CART "
-  print_step(names(x$rules), x$terms, x$trained, title, width,
-             case_weights = x$case_weights)
+  print_step(
+    names(x$rules), x$terms, x$trained, title, width,
+    case_weights = x$case_weights
+  )
   invisible(x)
 }
 

@@ -2,7 +2,7 @@
 #'
 #' @description
 #' `r lifecycle::badge("soft-deprecated")`
-#' 
+#'
 #' `step_feature_hash` is being deprecated in favor of
 #' [textrecipes::step_dummy_hash()]. This function creates a *specification* of
 #' a recipe step that will convert nominal data (e.g. character or factors) into
@@ -31,14 +31,14 @@
 #'  it is likely that some columns will have all zeros. A zero-variance filter
 #'  (via [recipes::step_zv()]) is recommended for any recipe that uses hashed
 #'  columns.
-#'  
+#'
 #' # Tidying
 #'
 #' When you [`tidy()`][tidy.recipe()] this step, a tibble with columns
 #' `terms` (the columns that is selected)  is returned.
-#' 
+#'
 #' @template case-weights-not-supported
-#' 
+#'
 #' @references
 #' Weinberger, K, A Dasgupta, J Langford, A Smola, and J Attenberg. 2009.
 #'  "Feature Hashing for Large Scale Multitask Learning." In Proceedings of the
@@ -72,13 +72,12 @@ step_feature_hash <-
            keep_original_cols = FALSE,
            skip = FALSE,
            id = rand_id("feature_hash")) {
-    
     lifecycle::deprecate_soft(
       "0.2.0",
       "embed::step_feature_hash()",
       "textrecipes::step_dummy_hash()"
     )
-    
+
     if (lifecycle::is_present(preserve)) {
       lifecycle::deprecate_soft(
         "0.1.5",
@@ -194,7 +193,7 @@ make_hash_tbl <- function(ind, nms) {
 #' @export
 bake.step_feature_hash <- function(object, new_data, ...) {
   check_new_data(names(object$columns), object, new_data)
-  
+
   # If no terms were selected
   if (length(object$columns) == 0) {
     return(new_data)

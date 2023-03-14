@@ -58,18 +58,18 @@
 #' ```
 #'
 #' where the `...` include the `family` argument (automatically
-#'  set by the step, unless passed in by `options`) as well as any arguments 
-#'  given to the `options` argument to the step. Relevant options include 
-#'  `chains`, `iter`, `cores`, and arguments for the priors (see the links 
+#'  set by the step, unless passed in by `options`) as well as any arguments
+#'  given to the `options` argument to the step. Relevant options include
+#'  `chains`, `iter`, `cores`, and arguments for the priors (see the links
 #'  in the References below). `prior_intercept` is the argument that has the
 #'  most effect on the amount of shrinkage.
-#' 
+#'
 #' # Tidying
-#' 
+#'
 #' When you [`tidy()`][tidy.recipe()] this step, a tibble with columns
 #' `terms` (the selectors or variables selected), `value` and `component` is
 #' returned.
-#'  
+#'
 #' @template case-weights-supervised
 #'
 #' @references
@@ -156,13 +156,13 @@ step_lencode_bayes_new <-
 #' @export
 prep.step_lencode_bayes <- function(x, training, info = NULL, ...) {
   col_names <- recipes::recipes_eval_select(x$terms, training, info)
-  
+
   wts <- recipes::get_case_weights(info, training)
   were_weights_used <- recipes::are_weights_used(wts)
   if (isFALSE(were_weights_used) || is.null(wts)) {
     wts <- NULL
   }
-  
+
   if (length(col_names) > 0) {
     check_type(training[, col_names], types = c("string", "factor", "ordered"))
     y_name <- recipes::recipes_eval_select(x$outcome, training, info)
@@ -201,7 +201,7 @@ stan_coefs <- function(x, y, options, verbose, wts = NULL, ...) {
     fam <- options$family
     options$family <- NULL
   }
-  
+
   form <- as.formula(paste0(names(y), "~ (1|value)"))
 
   if (is.vector(x) | is.factor(x)) {
@@ -250,7 +250,7 @@ stan_coefs <- function(x, y, options, verbose, wts = NULL, ...) {
 #' @export
 bake.step_lencode_bayes <- function(object, new_data, ...) {
   check_new_data(names(object$mapping), object, new_data)
-  
+
   for (col in names(object$mapping)) {
     new_data[, col] <- map_glm_coef(new_data[, col], object$mapping[[col]])
   }
@@ -263,8 +263,10 @@ bake.step_lencode_bayes <- function(object, new_data, ...) {
 print.step_lencode_bayes <-
   function(x, width = max(20, options()$width - 31), ...) {
     title <- "Linear embedding for factors via Bayesian GLM for "
-    print_step(names(x$mapping), x$terms, x$trained, title, width,
-               case_weights = x$case_weights)
+    print_step(
+      names(x$mapping), x$terms, x$trained, title, width,
+      case_weights = x$case_weights
+    )
     invisible(x)
   }
 

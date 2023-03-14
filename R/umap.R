@@ -42,14 +42,14 @@
 #'  of numbers. The variable names are padded with zeros. For example, if
 #'  `num_comp < 10`, their names will be `UMAP1` - `UMAP9`. If `num_comp = 101`,
 #'  the names would be `UMAP001` - `UMAP101`.
-#'  
+#'
 #' # Tidying
 #'
 #' When you [`tidy()`][tidy.recipe()] this step, a tibble with columns
 #' `terms` (the selectors or variables selected) is returned.
-#' 
+#'
 #' @template case-weights-not-supported
-#' 
+#'
 #' @template bundle
 #'
 #' @references
@@ -231,7 +231,7 @@ prep.step_umap <- function(x, training, info = NULL, ...) {
 #' @export
 bake.step_umap <- function(object, new_data, ...) {
   check_new_data(names(object$object$xnames), object, new_data)
-  
+
   if (length(object$object) == 0) {
     return(new_data)
   }

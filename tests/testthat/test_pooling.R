@@ -17,18 +17,18 @@ omit_warning <- function(pattern) {
 test_that("factor encoded predictor", {
   skip_on_cran()
   skip_if_not_installed("rstanarm")
-  
+
   expect_snapshot(
     transform = omit_warning("^The largest R-hat is"),
     {
-    class_test <- recipe(x2 ~ ., data = ex_dat) %>%
-      step_lencode_bayes(x3,
-                         outcome = vars(x2),
-                         verbose = FALSE,
-                         options = opts
-      ) %>%
-      prep(training = ex_dat, retain = TRUE)
-  }
+      class_test <- recipe(x2 ~ ., data = ex_dat) %>%
+        step_lencode_bayes(x3,
+          outcome = vars(x2),
+          verbose = FALSE,
+          options = opts
+        ) %>%
+        prep(training = ex_dat, retain = TRUE)
+    }
   )
   tr_values <- bake(class_test, new_data = NULL)$x3
   new_values <- bake(class_test, new_data = new_dat)
@@ -159,15 +159,16 @@ test_that("factor encoded predictor", {
   expect_snapshot(
     transform = omit_warning("^(Bulk Effective|Tail Effective)"),
     {
-    set.seed(8283)
-    reg_test <- recipe(x1 ~ ., data = ex_dat) %>%
-      step_lencode_bayes(x3,
-        outcome = vars(x1),
-        verbose = FALSE,
-        options = opts
-      ) %>%
-      prep(training = ex_dat, retain = TRUE)
-  })
+      set.seed(8283)
+      reg_test <- recipe(x1 ~ ., data = ex_dat) %>%
+        step_lencode_bayes(x3,
+          outcome = vars(x1),
+          verbose = FALSE,
+          options = opts
+        ) %>%
+        prep(training = ex_dat, retain = TRUE)
+    }
+  )
 
   tr_values <- bake(reg_test, new_data = NULL)$x3
   new_values <- bake(reg_test, new_data = new_dat)
@@ -229,15 +230,16 @@ test_that("character encoded predictor", {
   expect_snapshot(
     transform = omit_warning("^(Bulk Effective|Tail Effective)"),
     {
-    set.seed(8283)
-    reg_test <- recipe(x1 ~ ., data = ex_dat_ch) %>%
-      step_lencode_bayes(x3,
-        outcome = vars(x1),
-        verbose = FALSE,
-        options = opts
-      ) %>%
-      prep(training = ex_dat_ch, retain = TRUE)
-  })
+      set.seed(8283)
+      reg_test <- recipe(x1 ~ ., data = ex_dat_ch) %>%
+        step_lencode_bayes(x3,
+          outcome = vars(x1),
+          verbose = FALSE,
+          options = opts
+        ) %>%
+        prep(training = ex_dat_ch, retain = TRUE)
+    }
+  )
 
   tr_values <- bake(reg_test, new_data = NULL)$x3
   new_values <- bake(reg_test, new_data = new_dat_ch)
@@ -296,18 +298,18 @@ test_that("character encoded predictor", {
 test_that("Works with passing family ", {
   skip_on_cran()
   skip_if_not_installed("rstanarm")
-  
+
   ex_dat_poisson <- ex_dat %>%
     mutate(outcome = rpois(n(), 5))
-  
+
   expect_snapshot(
     transform = omit_warning("^(Bulk Effective|Tail Effective)"),
     {
       class_test <- recipe(outcome ~ ., data = ex_dat_poisson) %>%
         step_lencode_bayes(x3,
-                           outcome = vars(outcome),
-                           verbose = FALSE,
-                           options = c(opts, family = stats::poisson)
+          outcome = vars(outcome),
+          verbose = FALSE,
+          options = c(opts, family = stats::poisson)
         ) %>%
         prep(training = ex_dat_poisson, retain = TRUE)
     }
@@ -319,17 +321,17 @@ test_that("Works with passing family ", {
   )
   key <- class_test$steps[[1]]$mapping
   td_obj <- tidy(class_test, number = 1)
-  
+
   expect_equal("x3", names(key))
-  
+
   expect_equal(
     length(unique(ex_dat$x3)) + 1,
     nrow(key$x3)
   )
   expect_true(sum(key$x3$..level == "..new") == 1)
-  
+
   expect_true(is.numeric(tr_values))
-  
+
   expect_equal(
     new_values$x3[1],
     key$x3$..value[key$x3$..level == "..new"]
@@ -354,7 +356,7 @@ test_that("Works with passing family ", {
     new_values_ch$x3[3],
     key$x3$..value[key$x3$..level == "..new"]
   )
-  
+
   expect_equal(
     td_obj$level,
     key$x3$..level
@@ -370,19 +372,21 @@ test_that("bake method errors when needed non-standard role columns are missing"
     step_lencode_bayes(x3, outcome = vars(x2)) %>%
     update_role(x3, new_role = "potato") %>%
     update_role_requirements(role = "potato", bake = FALSE)
-  
+
   rec_trained <- prep(rec, training = ex_dat, verbose = FALSE)
-  
-  expect_error(bake(rec_trained, new_data = ex_dat[, -3]),
-               class = "new_data_missing_column")
+
+  expect_error(
+    bake(rec_trained, new_data = ex_dat[, -3]),
+    class = "new_data_missing_column"
+  )
 })
 
 test_that("printing", {
   print_test <- recipe(x2 ~ ., data = ex_dat) %>%
     step_lencode_bayes(x3,
-                       outcome = vars(x2),
-                       verbose = FALSE,
-                       options = opts
+      outcome = vars(x2),
+      verbose = FALSE,
+      options = opts
     )
   expect_snapshot(print_test)
   expect_snapshot(prep(print_test), transform = omit_warning("^(Bulk Effective|Tail Effective|The largest)"))
@@ -410,26 +414,26 @@ test_that("empty selections", {
 test_that("case weights", {
   skip_on_cran()
   skip_if_not_installed("rstanarm")
-  
+
   wts_int <- rep(c(0, 1), times = c(100, 400))
-  
+
   ex_dat_cw <- ex_dat %>%
     mutate(wts = importance_weights(wts_int))
-  
+
   expect_snapshot(
     transform = omit_warning("^^(Bulk Effective|Tail Effective|The largest)"),
     {
       class_test <- recipe(x2 ~ ., data = ex_dat_cw) %>%
         step_lencode_bayes(x3,
-                           outcome = vars(x2),
-                           verbose = FALSE,
-                           options = opts
+          outcome = vars(x2),
+          verbose = FALSE,
+          options = opts
         ) %>%
         prep(training = ex_dat_cw, retain = TRUE)
-      
+
       junk <- capture.output(
         ref_mod <- rstanarm::stan_glmer(
-          formula = x2 ~ (1 | value), 
+          formula = x2 ~ (1 | value),
           data = ex_dat_cw %>% transmute(value = x3, x2),
           family = binomial(),
           na.action = na.omit,
@@ -441,11 +445,11 @@ test_that("case weights", {
       )
     }
   )
-  
+
   expect_equal(
     -coef(ref_mod)$value[[1]],
     slice_head(class_test$steps[[1]]$mapping$x3, n = -1)$..value
   )
-  
+
   expect_snapshot(class_test)
 })

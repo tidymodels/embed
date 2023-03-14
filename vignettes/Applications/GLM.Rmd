@@ -32,14 +32,14 @@ theme_set(theme_bw() + theme(legend.position = "top"))
 
 data(grants)
 
-props <- 
+props <-
   grants_other %>%
   group_by(sponsor_code) %>%
   summarise(
     prop = mean(class == "successful"),
-    log_odds  = log(prop/(1-prop)),
+    log_odds = log(prop / (1 - prop)),
     n = length(class)
-  ) %>% 
+  ) %>%
   mutate(label = paste0(gsub("_", " ", sponsor_code), " (n=", n, ")"))
 
 props %>%
@@ -58,7 +58,7 @@ In this case, the effect of each sponsor code can be estimated separately for ea
 For these data, a recipe is created and `step_lencode_glm` is used:
 
 ```{r simple-glm}
-grants_glm <- 
+grants_glm <-
   recipe(class ~ ., data = grants_other) %>%
   # specify the variable being encoded and the outcome
   step_lencode_glm(sponsor_code, outcome = vars(class)) %>%
@@ -69,15 +69,15 @@ grants_glm <-
 The `tidy` method can be used to extract the encodings and are merged with the raw estimates:
 
 ```{r simple-glm-extract}
-glm_estimates <- 
-  tidy(grants_glm, number = 1) %>% 
-  dplyr::select(-terms, -id) 
+glm_estimates <-
+  tidy(grants_glm, number = 1) %>%
+  dplyr::select(-terms, -id)
 glm_estimates
 
-glm_estimates <- 
-  glm_estimates%>%
+glm_estimates <-
+  glm_estimates %>%
   set_names(c("sponsor_code", "glm")) %>%
-  inner_join(props, by = "sponsor_code") 
+  inner_join(props, by = "sponsor_code")
 ```
 
 For the sponsor codes with `n > 1`, the estimates are effectively the same:
@@ -85,7 +85,7 @@ For the sponsor codes with `n > 1`, the estimates are effectively the same:
 ```{r simple-glm-check}
 glm_estimates %>%
   dplyr::filter(is.finite(log_odds)) %>%
-  mutate(difference = log_odds-glm) %>%
+  mutate(difference = log_odds - glm) %>%
   dplyr::select(difference) %>%
   summary()
 ```
@@ -109,11 +109,11 @@ Partial pooling estimates each effect as a combination of the separate empirical
 One appraoch to partial pooling is the function `step_lencode_bayes` uses the `stan_glmer` function in the `rstanarm` package. There are a number of options that can be used to control the model estimation routine, including:
 
 ```{r stan-options}
-opts <- 
+opts <-
   list(
     ## the number of chains
     chains = 4,
-    ## how many cores to use 
+    ## how many cores to use
     cores = 4,
     ## the total number of iterations per chain (low here for time)
     iter = 1000,
@@ -125,24 +125,24 @@ opts <-
 Using the default priors, the model is estimated via:
 
 ```{r stan-fit-defaults}
-grants_glmer <- 
+grants_glmer <-
   recipe(class ~ ., data = grants_other) %>%
   step_lencode_bayes(
     sponsor_code,
     outcome = vars(class),
     options = opts
-  ) %>% 
+  ) %>%
   prep(training = grants_other)
 ```
 
 This took more time than the simple non-pooled model. The embeddings are extracted in the same way:
 
 ```{r stan-extract}
-all_estimates <- 
-  tidy(grants_glmer, number = 1) %>% 
+all_estimates <-
+  tidy(grants_glmer, number = 1) %>%
   dplyr::select(-terms, -id) %>%
   set_names(c("sponsor_code", "glmer")) %>%
-    inner_join(glm_estimates, by = "sponsor_code")
+  inner_join(glm_estimates, by = "sponsor_code")
 
 all_estimates %>% dplyr::select(sponsor_code, log_odds, glm, glmer)
 ```
@@ -156,14 +156,17 @@ Let's see the effect of the shrinkage induced by partial pooling by plotting the
 pooled_plot <-
   all_estimates %>%
   dplyr::filter(is.finite(log_odds)) %>%
-  ggplot(aes(x = log_odds, y = glmer)) + 
-  geom_abline(col = "red", alpha = .5) + 
-  geom_point_interactive(aes(size = sqrt(n), tooltip = label), 
-                         alpha = .5) +
-  xlim(rng) + ylim(rng) 
-  
+  ggplot(aes(x = log_odds, y = glmer)) +
+  geom_abline(col = "red", alpha = .5) +
+  geom_point_interactive(
+    aes(size = sqrt(n), tooltip = label),
+    alpha = .5
+  ) +
+  xlim(rng) +
+  ylim(rng)
+
 # Convert the plot to a format that the html file can handle
-ggiraph(ggobj = pooled_plot)  
+ggiraph(ggobj = pooled_plot)
 ```
 
 New levels are encoded as:
@@ -179,21 +182,21 @@ tidy(grants_glmer, number = 1) %>%
 The same generalized linear model can be fit using mixed models via a random intercept. The `lme4` package can also be used to get pooled estimates via `step_lencode_mixed`.
 
 ```{r mixed-rec}
-grants_mixed <- 
+grants_mixed <-
   recipe(class ~ ., data = grants_other) %>%
   step_lencode_mixed(
     sponsor_code,
     outcome = vars(class),
-  ) %>% 
+  ) %>%
   prep(training = grants_other)
 
-all_estimates <- 
-  tidy(grants_mixed, number = 1) %>% 
+all_estimates <-
+  tidy(grants_mixed, number = 1) %>%
   dplyr::select(-terms, -id) %>%
   set_names(c("sponsor_code", "mixed")) %>%
-    inner_join(all_estimates, by = "sponsor_code")
+  inner_join(all_estimates, by = "sponsor_code")
 
-all_estimates %>% 
+all_estimates %>%
   dplyr::select(sponsor_code, log_odds, glm, glmer, mixed)
 ```
 
@@ -204,11 +207,14 @@ Comparing the raw and mixed model estimates:
 mixed_plot <-
   all_estimates %>%
   dplyr::filter(is.finite(log_odds)) %>%
-  ggplot(aes(x = log_odds, y = mixed)) + 
-  geom_abline(col = "red", alpha = .5) + 
-  geom_point_interactive(aes(size = sqrt(n), tooltip = label), 
-                         alpha = .5) + 
-  xlim(rng) + ylim(rng) 
+  ggplot(aes(x = log_odds, y = mixed)) +
+  geom_abline(col = "red", alpha = .5) +
+  geom_point_interactive(
+    aes(size = sqrt(n), tooltip = label),
+    alpha = .5
+  ) +
+  xlim(rng) +
+  ylim(rng)
 
 ggiraph(ggobj = mixed_plot)
 ```

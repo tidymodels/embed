@@ -60,13 +60,13 @@
 #'  set by the step) as well as any arguments given to the `options`
 #'  argument to the step. Relevant options include `control` and
 #'  others.
-#'  
+#'
 #' # Tidying
-#' 
+#'
 #' When you [`tidy()`][tidy.recipe()] this step, a tibble with columns
 #' `terms` (the selectors or variables selected), `value` and `component` is
 #' returned.
-#' 
+#'
 #' @template case-weights-supervised
 #'
 #' @references
@@ -140,13 +140,13 @@ step_lencode_mixed_new <-
 #' @export
 prep.step_lencode_mixed <- function(x, training, info = NULL, ...) {
   col_names <- recipes::recipes_eval_select(x$terms, training, info)
-  
+
   wts <- recipes::get_case_weights(info, training)
   were_weights_used <- recipes::are_weights_used(wts)
   if (isFALSE(were_weights_used) || is.null(wts)) {
     wts <- NULL
   }
-  
+
   if (length(col_names) > 0) {
     check_type(training[, col_names], types = c("string", "factor", "ordered"))
     y_name <- recipes::recipes_eval_select(x$outcome, training, info)
@@ -187,29 +187,29 @@ lme_coefs <- function(x, y, wts = NULL, ...) {
     data = data.frame(value = x, y = y),
     na.action = na.omit
   )
-  
+
   dots <- list(...)
   if (length(dots) > 0) {
     args <- c(args, dots[[1]])
   }
-  
+
   if (!is.null(wts)) {
     args$weights <- as.double(wts)
   }
-  
+
   if (is.factor(y[[1]])) {
     args$data$y <- as.numeric(args$data$y) - 1
     if (is.null(args$family)) {
       args$family <- stats::binomial
     }
   }
-  
+
   if (is.null(args$family) || identical(args$family, gaussian)) {
     cl <- rlang::call2("lmer", .ns = "lme4", !!!args)
   } else {
     cl <- rlang::call2("glmer", .ns = "lme4", !!!args)
   }
-  
+
   mod <- rlang::eval_tidy(cl)
 
   coefs <- coef(mod)$value
@@ -246,7 +246,7 @@ map_lme_coef <- function(dat, mapping) {
 #' @export
 bake.step_lencode_mixed <- function(object, new_data, ...) {
   check_new_data(names(object$mapping), object, new_data)
-  
+
   for (col in names(object$mapping)) {
     new_data[, col] <- map_lme_coef(new_data[, col], object$mapping[[col]])
   }
@@ -258,8 +258,10 @@ bake.step_lencode_mixed <- function(object, new_data, ...) {
 print.step_lencode_mixed <-
   function(x, width = max(20, options()$width - 31), ...) {
     title <- "Linear embedding for factors via mixed effects for "
-    print_step(names(x$mapping), x$terms, x$trained, title, width,
-               case_weights = x$case_weights)
+    print_step(
+      names(x$mapping), x$terms, x$trained, title, width,
+      case_weights = x$case_weights
+    )
     invisible(x)
   }
 

@@ -121,7 +121,6 @@ test_that("character encoded predictor", {
 # ------------------------------------------------------------------------------
 
 test_that("factor encoded predictor", {
-
   reg_test <- recipe(x1 ~ ., data = ex_dat) %>%
     step_lencode_glm(x3, outcome = vars(x1)) %>%
     prep(training = ex_dat, retain = TRUE)
@@ -242,7 +241,8 @@ test_that("bad args", {
   three_class$fac <- rep(letters[1:3], 50)
   three_class$logical <- rep(c(TRUE, FALSE), 75)
 
-  expect_snapshot(error = TRUE,
+  expect_snapshot(
+    error = TRUE,
     recipe(Species ~ ., data = three_class) %>%
       step_lencode_glm(Sepal.Length, outcome = vars(Species)) %>%
       prep(training = three_class, retain = TRUE)
@@ -254,11 +254,13 @@ test_that("bake method errors when needed non-standard role columns are missing"
     step_lencode_glm(x3, outcome = vars(x2)) %>%
     update_role(x3, new_role = "potato") %>%
     update_role_requirements(role = "potato", bake = FALSE)
-  
+
   rec_trained <- prep(rec, training = ex_dat, verbose = FALSE)
-  
-  expect_error(bake(rec_trained, new_data = ex_dat[, -3]),
-               class = "new_data_missing_column")
+
+  expect_error(
+    bake(rec_trained, new_data = ex_dat[, -3]),
+    class = "new_data_missing_column"
+  )
 })
 
 test_that("printing", {
@@ -290,25 +292,25 @@ test_that("empty selections", {
 
 test_that("case weights", {
   wts_int <- rep(c(0, 1), times = c(100, 400))
-  
+
   ex_dat_cw <- ex_dat %>%
     mutate(wts = importance_weights(wts_int))
-  
+
   class_test <- recipe(x2 ~ ., data = ex_dat_cw) %>%
     step_lencode_glm(x3, outcome = vars(x2), id = "id") %>%
     prep(training = ex_dat_cw, retain = TRUE)
-  
+
   ref_mod <- glm(
     x2 ~ 0 + x3,
     data = ex_dat_cw,
     family = binomial,
     na.action = na.omit, weights = ex_dat_cw$wts
   )
-  
+
   expect_equal(
     -unname(coef(ref_mod)),
     slice_head(class_test$steps[[1]]$mapping$x3, n = -1)$..value
   )
-  
+
   expect_snapshot(class_test)
 })
