@@ -78,7 +78,7 @@ library(tibble)
 data0 <- tibble(
   x1 = c("a", "b", "d", "e", "sfgsfgsd", "hjhgfgjgr"),
   x2 = c("ak", "b", "djj", "e", "hjhgfgjgr", "hjhgfgjgr")
- )
+)
 
 rec <- recipe(~., data = data0) \%>\%
   step_collapse_stringdist(all_predictors(), distance = 1) \%>\%
