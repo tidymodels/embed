@@ -48,7 +48,6 @@ test_that("step_pca_sparse_bayes", {
   expect_snapshot(rec)
 })
 
-
 # ------------------------------------------------------------------------------
 
 test_that("step_pca_sparse", {

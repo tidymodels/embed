@@ -262,7 +262,6 @@ is_tf_2 <- function() {
   compareVersion("2.0", as.character(tensorflow::tf_version())) <= 0
 }
 
-
 tf_coefs2 <- function(x, y, z, opt, num, lab, h, seeds = sample.int(10000, 4), ...) {
   vars <- names(x)
   p <- length(vars)
@@ -389,7 +388,6 @@ tf_coefs2 <- function(x, y, z, opt, num, lab, h, seeds = sample.int(10000, 4), .
   list(layer_values = layer_values, history = history)
 }
 
-
 map_tf_coef2 <- function(dat, mapping, prefix) {
   new_val <- mapping %>%
     dplyr::filter(..level == "..new") %>%
@@ -407,7 +405,6 @@ map_tf_coef2 <- function(dat, mapping, prefix) {
   dat
 }
 
-
 #' @export
 bake.step_embed <- function(object, new_data, ...) {
   check_new_data(names(object$mapping), object, new_data)
@@ -421,7 +418,6 @@ bake.step_embed <- function(object, new_data, ...) {
 
   new_data
 }
-
 
 #' @rdname tidy.recipe
 #' @param x A `step_embed` object.
@@ -452,9 +448,6 @@ print.step_embed <-
     print_step(names(x$mapping), x$terms, x$trained, title, width)
     invisible(x)
   }
-
-
-
 
 #' @export
 #' @rdname step_embed
@@ -505,8 +498,6 @@ tf_options_check <- function(opt) {
   }
   opt
 }
-
-
 
 class2ind <- function(x) {
   if (!is.factor(x)) {

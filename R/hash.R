@@ -227,7 +227,6 @@ print.step_feature_hash <-
     invisible(x)
   }
 
-
 #' @rdname tidy.recipe
 #' @param x A `step_feature_hash` object.
 #' @export

@@ -294,7 +294,6 @@ test_that("character encoded predictor", {
 
 # ------------------------------------------------------------------------------
 
-
 test_that("Works with passing family ", {
   skip_on_cran()
   skip_if_not_installed("rstanarm")

@@ -3,7 +3,6 @@ source(testthat::test_path("test_helpers.R"))
 
 # ------------------------------------------------------------------------------
 
-
 test_that("factor encoded predictor", {
   class_test <- recipe(x2 ~ ., data = ex_dat) %>%
     step_lencode_glm(x3, outcome = vars(x2), id = "id") %>%
@@ -233,7 +232,6 @@ test_that("character encoded predictor", {
   )
 })
 
-
 # ------------------------------------------------------------------------------
 
 test_that("bad args", {
@@ -269,7 +267,6 @@ test_that("printing", {
   expect_snapshot(print_test)
   expect_snapshot(prep(print_test))
 })
-
 
 # ------------------------------------------------------------------------------
 

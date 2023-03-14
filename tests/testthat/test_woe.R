@@ -10,7 +10,6 @@ in_training <- sample(1:nrow(credit_data), 2000)
 credit_tr <- credit_data[in_training, ]
 credit_te <- credit_data[-in_training, ]
 
-
 set.seed(1)
 df <- data.frame(
   x1 = sample(c("A", "B", "C"), size = 20, replace = TRUE) %>% factor(),
@@ -81,7 +80,6 @@ test_that("Laplace works", {
   expect_false(all(is.finite(embed:::woe_table(c("A", "A", "B", "B"), c(0, 0, 0, 1), Laplace = 0)$woe)))
 })
 
-
 #------------------------------------
 # dictionary
 
@@ -109,7 +107,6 @@ test_that("dictionary returns no messages nor warnings nor errors", {
   expect_silent(dictionary(df, "y", x1))
   expect_silent(dictionary(df %>% mutate(x3 = rep(c(TRUE, FALSE), 10)), "y", x3))
 })
-
 
 #------------------------------------
 # add_woe
@@ -196,7 +193,6 @@ test_that("step_woe", {
   #
   expect_snapshot(prep(rec_all_nominal, training = credit_tr, verbose = TRUE))
 
-
   rec_all_numeric <- recipe(Status ~ ., data = credit_tr) %>%
     step_woe(all_predictors(), outcome = vars(Status))
 
@@ -241,7 +237,6 @@ test_that("printing", {
   expect_snapshot(woe_extract)
   expect_snapshot(prep(woe_extract))
 })
-
 
 test_that("2-level factors", {
   iris3 <- iris

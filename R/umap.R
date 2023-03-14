@@ -183,8 +183,6 @@ umap_fit_call <- function(obj, y = NULL) {
   cl
 }
 
-
-
 #' @export
 prep.step_umap <- function(x, training, info = NULL, ...) {
   col_names <- recipes::recipes_eval_select(x$terms, training, info)
@@ -279,7 +277,6 @@ tidy.step_umap <- function(x, ...) {
   res$id <- x$id
   res
 }
-
 
 #' @rdname required_pkgs.embed
 #' @export

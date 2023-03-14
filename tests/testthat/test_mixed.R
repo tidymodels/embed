@@ -234,7 +234,6 @@ test_that("character encoded predictor", {
   )
 })
 
-
 ###################################################################
 
 test_that("bad args", {

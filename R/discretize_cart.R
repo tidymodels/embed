@@ -130,7 +130,6 @@ step_discretize_cart_new <-
     )
   }
 
-
 cart_binning <- function(predictor, term, outcome, cost_complexity, tree_depth,
                          min_n, wts = NULL) {
   df <- data.frame(y = outcome, x = predictor)
@@ -216,7 +215,6 @@ prep.step_discretize_cart <- function(x, training, info = NULL, ...) {
   } else {
     rules <- list()
   }
-
 
   step_discretize_cart_new(
     terms = x$terms,

@@ -103,7 +103,6 @@ test_that("step function for classification", {
   expect_true(is.numeric(cart_pred$z))
 })
 
-
 test_that("step function for regression", {
   expect_snapshot({
     cart_rec <-
@@ -197,7 +196,6 @@ test_that("printing", {
   expect_snapshot(cart_rec)
   expect_snapshot(prep(cart_rec))
 })
-
 
 # ------------------------------------------------------------------------------
 

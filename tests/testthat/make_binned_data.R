@@ -34,7 +34,6 @@ sim_data_3class <- function(n = 300) {
   dat
 }
 
-
 sim_data_reg <- function(n = 300) {
   xf <- function(x) {
     case_when(

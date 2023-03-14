@@ -22,7 +22,6 @@ tunable.step_embed <- function(x, ...) {
   )
 }
 
-
 #' @export
 #' @rdname tunable_embed
 tunable.step_umap <- function(x, ...) {

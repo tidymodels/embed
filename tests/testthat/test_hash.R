@@ -55,7 +55,6 @@ test_that("basic usage", {
   }
 })
 
-
 test_that("basic usage - character strings", {
   skip_on_cran()
   skip_if_not_installed("keras")

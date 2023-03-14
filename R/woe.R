@@ -230,7 +230,6 @@ woe_table <- function(predictor, outcome, Laplace = 1e-6) {
   return(woe_tbl)
 }
 
-
 #' Weight of evidence dictionary
 #'
 #' Builds the woe dictionary of a set of predictor variables upon a given binary outcome.
@@ -269,7 +268,6 @@ dictionary <- function(.data, outcome, ..., Laplace = 1e-6) {
     dplyr::bind_rows(.id = "variable") %>%
     mutate(outcome = outcome)
 }
-
 
 #' Add WoE in a data frame
 #'
@@ -364,7 +362,6 @@ add_woe <- function(.data, outcome, ..., dictionary = NULL, prefix = "woe") {
   output
 }
 
-
 #' @export
 prep.step_woe <- function(x, training, info = NULL, ...) {
   col_names <- recipes::recipes_eval_select(x$terms, training, info)
@@ -444,7 +441,6 @@ print.step_woe <- function(x, width = max(20, options()$width - 29), ...) {
   invisible(x)
 }
 
-
 #' @rdname tidy.recipe
 #' @param x A `step_woe` object.
 #' @export
@@ -472,12 +468,9 @@ tidy.step_woe <- function(x, ...) {
 
 # ------------------------------------------------------------------------------
 
-
 tidyr_new_interface <- function() {
   utils::packageVersion("tidyr") > "0.8.99"
 }
-
-
 
 #' @rdname required_pkgs.embed
 #' @export

@@ -118,7 +118,6 @@ step_lencode_glm_new <-
     )
   }
 
-
 #' @export
 prep.step_lencode_glm <- function(x, training, info = NULL, ...) {
   col_names <- recipes::recipes_eval_select(x$terms, training, info)
@@ -152,7 +151,6 @@ prep.step_lencode_glm <- function(x, training, info = NULL, ...) {
     case_weights = were_weights_used
   )
 }
-
 
 glm_coefs <- function(x, y, wts = NULL, ...) {
   fam <- if (is.factor(y[[1]])) binomial else gaussian
@@ -188,8 +186,6 @@ glm_coefs <- function(x, y, wts = NULL, ...) {
   )
 }
 
-
-
 map_glm_coef <- function(dat, mapping) {
   new_val <- mapping$..value[mapping$..level == "..new"]
   dat <- dat %>%
@@ -202,7 +198,6 @@ map_glm_coef <- function(dat, mapping) {
   dat$..value[is.na(dat$..value)] <- new_val
   dat$..value
 }
-
 
 #' @export
 bake.step_lencode_glm <- function(object, new_data, ...) {
@@ -226,7 +221,6 @@ print.step_lencode_glm <-
     invisible(x)
   }
 
-
 #' @rdname tidy.recipe
 #' @param x A `step_lencode_glm` object.
 #' @export
@@ -248,7 +242,6 @@ tidy.step_lencode_glm <- function(x, ...) {
   res$id <- x$id
   res
 }
-
 
 #' @rdname required_pkgs.embed
 #' @export

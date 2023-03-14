@@ -152,7 +152,6 @@ step_lencode_bayes_new <-
     )
   }
 
-
 #' @export
 prep.step_lencode_bayes <- function(x, training, info = NULL, ...) {
   col_names <- recipes::recipes_eval_select(x$terms, training, info)
@@ -258,7 +257,6 @@ bake.step_lencode_bayes <- function(object, new_data, ...) {
   new_data
 }
 
-
 #' @export
 print.step_lencode_bayes <-
   function(x, width = max(20, options()$width - 31), ...) {
@@ -269,7 +267,6 @@ print.step_lencode_bayes <-
     )
     invisible(x)
   }
-
 
 #' @rdname tidy.recipe
 #' @param x A `step_lencode_bayes` object.

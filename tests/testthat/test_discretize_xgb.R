@@ -267,7 +267,6 @@ test_that("xgb_binning for regression", {
   expect_true(length(xgb_binning) > 1)
   expect_type(xgb_binning, "double")
 
-
   # Algorithm runs on a too small training set/ insufficient variation in data
 
   expect_snapshot(
@@ -372,7 +371,6 @@ test_that("step_discretize_xgb for multi-classification", {
       step_discretize_xgb(all_predictors(), outcome = "class") %>%
       prep()
   )
-
 
   # No numeric variables present
   predictors_non_numeric <- c(
@@ -506,7 +504,6 @@ test_that("empty selections", {
     ad_data %>% select(Genotype, tau, Class)
   )
 })
-
 
 test_that("case weights step_discretize_xgb", {
   sim_tr_cls_cw <- sim_tr_cls %>%

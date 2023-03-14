@@ -228,7 +228,6 @@ lme_coefs <- function(x, y, wts = NULL, ...) {
   )
 }
 
-
 map_lme_coef <- function(dat, mapping) {
   new_val <- mapping$..value[mapping$..level == "..new"]
   dat <- dat %>%
@@ -241,7 +240,6 @@ map_lme_coef <- function(dat, mapping) {
   dat$..value[is.na(dat$..value)] <- new_val
   dat$..value
 }
-
 
 #' @export
 bake.step_lencode_mixed <- function(object, new_data, ...) {
@@ -265,7 +263,6 @@ print.step_lencode_mixed <-
     invisible(x)
   }
 
-
 #' @rdname tidy.recipe
 #' @param x A `step_lencode_mixed` object.
 #' @export
@@ -287,7 +284,6 @@ tidy.step_lencode_mixed <- function(x, ...) {
   res$id <- x$id
   res
 }
-
 
 #' @rdname required_pkgs.embed
 #' @export

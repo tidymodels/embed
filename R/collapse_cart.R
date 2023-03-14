@@ -183,7 +183,6 @@ tidy.step_collapse_cart <- function(x, ...) {
   res
 }
 
-
 #' @rdname required_pkgs.embed
 #' @export
 required_pkgs.step_collapse_cart <- function(x, ...) {

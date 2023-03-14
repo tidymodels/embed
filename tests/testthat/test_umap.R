@@ -56,8 +56,6 @@ test_that("factor outcome", {
   )
 })
 
-
-
 test_that("numeric outcome", {
   set.seed(11)
   supervised <-
@@ -101,7 +99,6 @@ test_that("numeric outcome", {
     ignore_attr = TRUE
   )
 })
-
 
 test_that("no outcome", {
   set.seed(11)
@@ -155,7 +152,6 @@ test_that("keep_original_cols works", {
       keep_original_cols = TRUE
     ) %>%
     prep(training = tr[, -5])
-
 
   umap_pred <- bake(unsupervised, new_data = te[, -5], composition = "matrix", all_predictors())
 

@@ -148,7 +148,6 @@ prep.step_pca_sparse <- function(x, training, info = NULL, ...) {
     x$predictor_prop <- min(x$predictor_prop, 1)
     num_dense <- prop2int(x$predictor_prop, p)
 
-
     if (x$num_comp > 0) {
       cl <-
         rlang::call2(
