@@ -364,10 +364,10 @@ add_woe <- function(.data, outcome, ..., dictionary = NULL, prefix = "woe") {
 
 #' @export
 prep.step_woe <- function(x, training, info = NULL, ...) {
-  col_names <- recipes::recipes_eval_select(x$terms, training, info)
+  col_names <- recipes_eval_select(x$terms, training, info)
 
   if (length(col_names) > 0) {
-    outcome_name <- recipes::recipes_eval_select(x$outcome, training, info)
+    outcome_name <- recipes_eval_select(x$outcome, training, info)
 
     col_names <- col_names[!(col_names %in% outcome_name)]
     check_type(training[, col_names], types = c("string", "factor", "ordered"))

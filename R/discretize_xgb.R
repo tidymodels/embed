@@ -107,7 +107,7 @@ step_discretize_xgb <-
       rlang::abort("`outcome` should select at least one column.")
     }
 
-    recipes::recipes_pkg_check(required_pkgs.step_discretize_xgb())
+    recipes_pkg_check(required_pkgs.step_discretize_xgb())
 
     add_step(
       recipe,
@@ -358,10 +358,10 @@ xgb_binning <- function(df, outcome, predictor, sample_val, learn_rate, num_brea
 
 #' @export
 prep.step_discretize_xgb <- function(x, training, info = NULL, ...) {
-  col_names <- recipes::recipes_eval_select(x$terms, training, info)
+  col_names <- recipes_eval_select(x$terms, training, info)
 
-  wts <- recipes::get_case_weights(info, training)
-  were_weights_used <- recipes::are_weights_used(wts)
+  wts <- get_case_weights(info, training)
+  were_weights_used <- are_weights_used(wts)
   if (isFALSE(were_weights_used) || is.null(wts)) {
     wts <- NULL
   }
@@ -369,7 +369,7 @@ prep.step_discretize_xgb <- function(x, training, info = NULL, ...) {
   if (length(col_names) > 0) {
     check_type(training[, col_names], types = c("double", "integer"))
 
-    y_name <- recipes::recipes_eval_select(x$outcome, training, info)
+    y_name <- recipes_eval_select(x$outcome, training, info)
 
     col_names <- col_names[col_names != y_name]
 
@@ -464,7 +464,7 @@ bake.step_discretize_xgb <- function(object, new_data, ...) {
         dig.lab = 4
       )
 
-      recipes::check_name(binned_data, new_data, object)
+      check_name(binned_data, new_data, object)
       new_data <- binned_data
     }
   }
@@ -485,7 +485,7 @@ print.step_discretize_xgb <- function(x, width = max(20, options()$width - 30), 
 #' @param x A `step_discretize_xgb` object.
 #' @export
 tidy.step_discretize_xgb <- function(x, ...) {
-  if (recipes::is_trained(x)) {
+  if (is_trained(x)) {
     num_splits <- purrr::map_int(x$rules, length)
 
     res <- tibble(
@@ -493,7 +493,7 @@ tidy.step_discretize_xgb <- function(x, ...) {
       values = unlist(x$rules, use.names = FALSE)
     )
   } else {
-    term_names <- recipes::sel2char(x$terms)
+    term_names <- sel2char(x$terms)
     res <- tibble(
       variable = term_names,
       values = rlang::na_chr

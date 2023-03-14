@@ -125,7 +125,7 @@ step_feature_hash_new <-
 
 #' @export
 prep.step_feature_hash <- function(x, training, info = NULL, ...) {
-  col_names <- recipes::recipes_eval_select(x$terms, training, info)
+  col_names <- recipes_eval_select(x$terms, training, info)
 
   if (length(col_names) > 0) {
     check_type(training[, col_names], types = c("string", "factor", "ordered"))
@@ -138,7 +138,7 @@ prep.step_feature_hash <- function(x, training, info = NULL, ...) {
     num_hash = x$num_hash,
     preserve = x$preserve,
     columns = col_names,
-    keep_original_cols = recipes::get_keep_original_cols(x),
+    keep_original_cols = get_keep_original_cols(x),
     skip = x$skip,
     id = x$id
   )
@@ -164,7 +164,7 @@ make_hash_vars <- function(x, prefix, num_hash = 2^8) {
     )
   column_int[is.na(uni_x)] <- NA
 
-  nms <- recipes::names0(num_hash, prefix)
+  nms <- names0(num_hash, prefix)
   make_hash_tbl(column_int, nms) %>%
     dplyr::mutate(data = uni_x) %>%
     dplyr::left_join(tmp, by = "data", multiple = "all") %>%

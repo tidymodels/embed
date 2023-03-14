@@ -76,9 +76,9 @@ step_collapse_cart <-
            results = NULL,
            skip = FALSE,
            id = rand_id("step_collapse_cart")) {
-    recipes::recipes_pkg_check(required_pkgs.step_discretize_cart())
+    recipes_pkg_check(required_pkgs.step_discretize_cart())
 
-    recipes::add_step(
+    add_step(
       recipe,
       step_collapse_cart_new(
         terms = rlang::enquos(...),
@@ -95,7 +95,7 @@ step_collapse_cart <-
   }
 step_collapse_cart_new <-
   function(terms, role, trained, outcome, cost_complexity, min_n, results, skip, id) {
-    recipes::step(
+    step(
       subclass = "collapse_cart",
       terms = terms,
       role = role,
@@ -111,9 +111,9 @@ step_collapse_cart_new <-
 
 #' @export
 prep.step_collapse_cart <- function(x, training, info = NULL, ...) {
-  col_names <- recipes::recipes_eval_select(x$terms, training, info)
-  y_name <- recipes::recipes_eval_select(x$outcome, training, info)
-  recipes::check_type(training[, col_names], types = c("string", "factor", "ordered"))
+  col_names <- recipes_eval_select(x$terms, training, info)
+  y_name <- recipes_eval_select(x$outcome, training, info)
+  check_type(training[, col_names], types = c("string", "factor", "ordered"))
 
   if (length(col_names) > 0) {
     keys <- purrr::map2(
@@ -158,7 +158,7 @@ bake.step_collapse_cart <- function(object, new_data, ...) {
 print.step_collapse_cart <-
   function(x, width = max(20, options()$width - 30), ...) {
     title <- "Collapsing factor levels using CART "
-    recipes::print_step(names(x$results), x$terms, x$trained, title, width)
+    print_step(names(x$results), x$terms, x$trained, title, width)
     invisible(x)
   }
 
@@ -166,14 +166,14 @@ print.step_collapse_cart <-
 #' @param x A `step_collapse_cart` object.
 #' @export
 tidy.step_collapse_cart <- function(x, ...) {
-  if (recipes::is_trained(x)) {
+  if (is_trained(x)) {
     if (length(x$results) == 0) {
       res <- tibble(terms = character(), value = double())
     } else {
       res <- purrr::map2_dfr(x$results, names(x$results), format_collapse_keys)
     }
   } else {
-    term_names <- recipes::sel2char(x$terms)
+    term_names <- sel2char(x$terms)
     res <- tibble(
       terms = term_names,
       value = na_dbl

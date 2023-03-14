@@ -108,7 +108,7 @@ step_umap <-
       keep_original_cols <- retain
     }
 
-    recipes::recipes_pkg_check(required_pkgs.step_umap())
+    recipes_pkg_check(required_pkgs.step_umap())
     if (is.numeric(seed) & !is.integer(seed)) {
       seed <- as.integer(seed)
     }
@@ -185,11 +185,11 @@ umap_fit_call <- function(obj, y = NULL) {
 
 #' @export
 prep.step_umap <- function(x, training, info = NULL, ...) {
-  col_names <- recipes::recipes_eval_select(x$terms, training, info)
+  col_names <- recipes_eval_select(x$terms, training, info)
 
   if (length(col_names) > 0) {
     if (length(x$outcome) > 0) {
-      y_name <- recipes::recipes_eval_select(x$outcome, training, info)
+      y_name <- recipes_eval_select(x$outcome, training, info)
     } else {
       y_name <- NULL
     }
@@ -245,10 +245,10 @@ bake.step_umap <- function(object, new_data, ...) {
 
   if (is.null(object$prefix)) object$prefix <- "UMAP"
 
-  res <- recipes::check_name(res, new_data, object)
+  res <- check_name(res, new_data, object)
   new_data <- bind_cols(new_data, as_tibble(res))
 
-  keep_original_cols <- recipes::get_keep_original_cols(object)
+  keep_original_cols <- get_keep_original_cols(object)
   if (!keep_original_cols) {
     new_data <- new_data[, !(colnames(new_data) %in% object$object$xnames), drop = FALSE]
   }

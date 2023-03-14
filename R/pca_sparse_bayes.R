@@ -160,7 +160,7 @@ step_pca_sparse_bayes_new <-
 
 #' @export
 prep.step_pca_sparse_bayes <- function(x, training, info = NULL, ...) {
-  col_names <- recipes::recipes_eval_select(x$terms, training, info)
+  col_names <- recipes_eval_select(x$terms, training, info)
 
   if (length(col_names) > 0) {
     check_type(training[, col_names], types = c("double", "integer"))

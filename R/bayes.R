@@ -154,17 +154,17 @@ step_lencode_bayes_new <-
 
 #' @export
 prep.step_lencode_bayes <- function(x, training, info = NULL, ...) {
-  col_names <- recipes::recipes_eval_select(x$terms, training, info)
+  col_names <- recipes_eval_select(x$terms, training, info)
 
-  wts <- recipes::get_case_weights(info, training)
-  were_weights_used <- recipes::are_weights_used(wts)
+  wts <- get_case_weights(info, training)
+  were_weights_used <- are_weights_used(wts)
   if (isFALSE(were_weights_used) || is.null(wts)) {
     wts <- NULL
   }
 
   if (length(col_names) > 0) {
     check_type(training[, col_names], types = c("string", "factor", "ordered"))
-    y_name <- recipes::recipes_eval_select(x$outcome, training, info)
+    y_name <- recipes_eval_select(x$outcome, training, info)
     res <-
       purrr::map(training[, col_names], stan_coefs,
         y = training[, y_name],
