@@ -139,9 +139,9 @@ woe_dict_custom[4, "woe"] <- 1.23 # tweak
 # passing custom dict to step_woe()
 rec_custom <- recipe(Status ~ ., data = credit_tr) \%>\%
   step_woe(
-    Job, Home, 
+    Job, Home,
     outcome = vars(Status), dictionary = woe_dict_custom
-   ) \%>\%
+  ) \%>\%
   prep()
 
 rec_custom_baked <- bake(rec_custom, new_data = credit_te)

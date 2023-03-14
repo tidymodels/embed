@@ -42,7 +42,8 @@ xgb_credit_test <- xgboost::xgb.DMatrix(
 
 # Data for multi-classification problem testing
 set.seed(42)
-attrition <- attrition %>% mutate(EducationField = as.integer(EducationField) - 1)
+attrition <- attrition %>%
+  mutate(EducationField = as.integer(EducationField) - 1)
 attrition_data_split <- initial_split(attrition, strata = "EducationField")
 attrition_data_train <- training(attrition_data_split)
 attrition_data_test <- testing(attrition_data_split)

@@ -26,7 +26,9 @@ test_that("collapsing factors", {
   )
 
   expect_false(
-    isTRUE(all.equal(bake(rec_1, new_data = NULL)$MS_SubClass, ames$MS_SubClass))
+    isTRUE(
+      all.equal(bake(rec_1, new_data = NULL)$MS_SubClass, ames$MS_SubClass)
+    )
   )
 
   expect_error(
@@ -40,7 +42,10 @@ test_that("collapsing factors", {
   )
 
   expect_true(length(rec_2$steps[[1]]$results) == 2)
-  expect_equal(names(rec_2$steps[[1]]$results), c("MS_SubClass", "Overall_Cond"))
+  expect_equal(
+    names(rec_2$steps[[1]]$results),
+    c("MS_SubClass", "Overall_Cond")
+  )
 
   expect_true(
     length(rec_2$steps[[1]]$results$MS_SubClass) <

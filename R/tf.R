@@ -116,7 +116,7 @@
 #'
 #' "Concatenate Embeddings for Categorical Variables with Keras"
 #' \url{https://flovv.github.io/Embeddings_with_keras_part2/}
-#' 
+#'
 #' @examplesIf is_tf_available() && rlang::is_installed("modeldata")
 #' data(grants, package = "modeldata")
 #'
@@ -221,7 +221,11 @@ prep.step_embed <- function(x, training, info = NULL, ...) {
       tidyr::pivot_longer(c(-epochs), names_to = "type", values_to = "loss")
   } else {
     res <- NULL
-    .hist <- tibble::tibble(epochs = integer(0), type = character(0), loss = numeric(0))
+    .hist <- tibble::tibble(
+      epochs = integer(0),
+      type = character(0),
+      loss = numeric(0)
+    )
   }
 
   step_embed_new(
@@ -252,7 +256,8 @@ is_tf_2 <- function() {
   compareVersion("2.0", as.character(tensorflow::tf_version())) <= 0
 }
 
-tf_coefs2 <- function(x, y, z, opt, num, lab, h, seeds = sample.int(10000, 4), ...) {
+tf_coefs2 <- function(x, y, z, opt, num, lab, h, seeds = sample.int(10000, 4),
+                      ...) {
   vars <- names(x)
   p <- length(vars)
 
@@ -383,7 +388,7 @@ map_tf_coef2 <- function(dat, mapping, prefix) {
     dplyr::filter(..level == "..new") %>%
     dplyr::select(-..level)
   dat <- dat %>%
-    mutate(..order = 1:nrow(dat)) %>%
+    mutate(..order = seq_len(nrow(dat))) %>%
     set_names(c("..level", "..order")) %>%
     mutate(..level = as.character(..level))
   mapping <- mapping %>% dplyr::filter(..level != "..new")
@@ -442,7 +447,8 @@ print.step_embed <-
 #' @export
 #' @rdname step_embed
 #' @param optimizer,loss,metrics Arguments to pass to [keras::compile()]
-#' @param epochs,validation_split,batch_size,verbose,callbacks Arguments to pass to [keras::fit()]
+#' @param epochs,validation_split,batch_size,verbose,callbacks Arguments to pass
+#'   to [keras::fit()]
 embed_control <- function(loss = "mse",
                           metrics = NULL,
                           optimizer = "sgd",
@@ -457,7 +463,7 @@ embed_control <- function(loss = "mse",
   if (epochs < 1) {
     rlang::abort("`epochs` should be a positive integer")
   }
-  if (validation_split < 0 | validation_split > 1) {
+  if (validation_split < 0 || validation_split > 1) {
     rlang::abort("`validation_split` should be on [0, 1)")
   }
   list(
@@ -507,8 +513,11 @@ class2ind <- function(x) {
 #' is_tf_available()
 #' @export
 is_tf_available <- function() {
-  capture.output(res <- try(tensorflow::tf_config(), silent = TRUE), file = NULL)
-  if (inherits(res, "try-error") | all(is.null(res))) {
+  capture.output(
+    res <- try(tensorflow::tf_config(), silent = TRUE),
+    file = NULL
+  )
+  if (inherits(res, "try-error") || all(is.null(res))) {
     return(FALSE)
   } else {
     if (!(any(names(res) == "available"))) {

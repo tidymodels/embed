@@ -25,7 +25,12 @@ test_that("step_pca_sparse_bayes", {
     ) %>%
     prep()
 
-  direct_mod <- VBsparsePCA::VBsparsePCA(as.matrix(tr), lambda = 1 / 2, r = 4, threshold = 1 / 15)
+  direct_mod <- VBsparsePCA::VBsparsePCA(
+    as.matrix(tr),
+    lambda = 1 / 2,
+    r = 4,
+    threshold = 1 / 15
+  )
   direct_coef <- svd(direct_mod$loadings)$u
   embed_coef <- rec$steps[[1]]$res
   vars <- rownames(embed_coef)
@@ -36,12 +41,16 @@ test_that("step_pca_sparse_bayes", {
   tidy_coef <- tidy(rec, number = 1)
   # test a few values
   expect_equal(
-    tidy_coef$value[tidy_coef$terms == "angle_ch_1" & tidy_coef$component == "PC1"],
+    tidy_coef$value[
+      tidy_coef$terms == "angle_ch_1" & tidy_coef$component == "PC1"
+    ],
     embed_coef[which(vars == "angle_ch_1"), 1]
   )
 
   expect_equal(
-    tidy_coef$value[tidy_coef$terms == "total_inten_ch_3" & tidy_coef$component == "PC3"],
+    tidy_coef$value[
+      tidy_coef$terms == "total_inten_ch_3" & tidy_coef$component == "PC3"
+    ],
     embed_coef[which(vars == "total_inten_ch_3"), 3]
   )
 
@@ -74,12 +83,16 @@ test_that("step_pca_sparse", {
   tidy_coef <- tidy(rec, number = 1)
   # test a few values
   expect_equal(
-    tidy_coef$value[tidy_coef$terms == "angle_ch_1" & tidy_coef$component == "PC1"],
+    tidy_coef$value[
+      tidy_coef$terms == "angle_ch_1" & tidy_coef$component == "PC1"
+    ],
     embed_coef[which(vars == "angle_ch_1"), 1]
   )
 
   expect_equal(
-    tidy_coef$value[tidy_coef$terms == "total_inten_ch_3" & tidy_coef$component == "PC3"],
+    tidy_coef$value[
+      tidy_coef$terms == "total_inten_ch_3" & tidy_coef$component == "PC3"
+    ],
     embed_coef[which(vars == "total_inten_ch_3"), 3]
   )
 

@@ -61,7 +61,7 @@
 #'
 #' "How UMAP Works"
 #' \url{https://umap-learn.readthedocs.io/en/latest/how_umap_works.html}
-#' 
+#'
 #' @examples
 #' library(recipes)
 #' library(ggplot2)
@@ -113,7 +113,7 @@ step_umap <-
     }
 
     recipes_pkg_check(required_pkgs.step_umap())
-    if (is.numeric(seed) & !is.integer(seed)) {
+    if (is.numeric(seed) && !is.integer(seed)) {
       seed <- as.integer(seed)
     }
     if (length(seed) != 2) {
@@ -171,7 +171,11 @@ step_umap_new <-
   }
 
 umap_fit_call <- function(obj, y = NULL) {
-  cl <- rlang::call2("umap", .ns = "uwot", X = rlang::expr(training[, col_names]))
+  cl <- rlang::call2(
+    "umap",
+    .ns = "uwot",
+    X = rlang::expr(training[, col_names])
+  )
   if (!is.null(y)) {
     cl$y <- rlang::expr(training[[y_name]])
   }
@@ -254,7 +258,8 @@ bake.step_umap <- function(object, new_data, ...) {
 
   keep_original_cols <- get_keep_original_cols(object)
   if (!keep_original_cols) {
-    new_data <- new_data[, !(colnames(new_data) %in% object$object$xnames), drop = FALSE]
+    keep_cols <- !(colnames(new_data) %in% object$object$xnames)
+    new_data <- new_data[, keep_cols, drop = FALSE]
   }
 
   new_data

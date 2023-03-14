@@ -11,21 +11,24 @@ add_woe(.data, outcome, ..., dictionary = NULL, prefix = "woe")
 
 \item{outcome}{The bare name of the outcome variable.}
 
-\item{...}{Bare names of predictor variables, passed as you would pass variables to
-\code{dplyr::select()}. This means that you can use all the helpers like \code{starts_with()}
-and \code{matches()}.}
+\item{...}{Bare names of predictor variables, passed as you would pass
+variables to \code{dplyr::select()}. This means that you can use all the
+helpers like \code{starts_with()} and \code{matches()}.}
 
-\item{dictionary}{A tbl. If NULL the function will build a dictionary with those variables
-passed to \code{...}. You can pass a custom dictionary too, see \code{\link[=dictionary]{dictionary()}} for details.}
+\item{dictionary}{A tbl. If NULL the function will build a dictionary with
+those variables passed to \code{...}. You can pass a custom dictionary too,
+see \code{\link[=dictionary]{dictionary()}} for details.}
 
-\item{prefix}{A character string that will be the prefix to the resulting new variables.}
+\item{prefix}{A character string that will be the prefix to the resulting new
+variables.}
 }
 \value{
-A tibble with the original columns of .data plus the woe columns wanted.
+A tibble with the original columns of .data plus the woe columns
+wanted.
 }
 \description{
-A tidyverse friendly way to plug WoE versions of a set of predictor variables against a
-given binary outcome.
+A tidyverse friendly way to plug WoE versions of a set of predictor variables
+against a given binary outcome.
 }
 \details{
 You can pass a custom dictionary to \code{\link[=add_woe]{add_woe()}}. It must have the exactly the

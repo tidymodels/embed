@@ -57,7 +57,7 @@
 #'
 #' Zumel N and Mount J (2017) "vtreat: a data.frame Processor for Predictive
 #' Modeling," arXiv:1611.09477
-#' 
+#'
 #' @examples
 #' library(recipes)
 #' library(dplyr)
@@ -152,7 +152,7 @@ glm_coefs <- function(x, y, wts = NULL, ...) {
   fam <- if (is.factor(y[[1]])) binomial else gaussian
   form <- as.formula(paste0(names(y), "~ 0 + value"))
 
-  if (is.vector(x) | is.factor(x)) {
+  if (is.vector(x) || is.factor(x)) {
     x <- tibble(value = x)
   } else {
     x <- as_tibble(x)
@@ -185,7 +185,7 @@ glm_coefs <- function(x, y, wts = NULL, ...) {
 map_glm_coef <- function(dat, mapping) {
   new_val <- mapping$..value[mapping$..level == "..new"]
   dat <- dat %>%
-    mutate(..order = 1:nrow(dat)) %>%
+    mutate(..order = seq_len(nrow(dat))) %>%
     set_names(c("..level", "..order")) %>%
     mutate(..level = as.character(..level))
   mapping <- mapping %>% dplyr::filter(..level != "..new")

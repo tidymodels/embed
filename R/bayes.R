@@ -83,7 +83,7 @@
 #'
 #' "Estimating Generalized (Non-)Linear Models with Group-Specific Terms with
 #' `rstanarm`" \url{https://tinyurl.com/stan-glm-grouped}
-#' 
+#'
 #' @examples
 #' library(recipes)
 #' library(dplyr)
@@ -198,7 +198,7 @@ stan_coefs <- function(x, y, options, verbose, wts = NULL, ...) {
 
   form <- as.formula(paste0(names(y), "~ (1|value)"))
 
-  if (is.vector(x) | is.factor(x)) {
+  if (is.vector(x) || is.factor(x)) {
     x <- tibble(value = x)
   } else {
     x <- as_tibble(x)

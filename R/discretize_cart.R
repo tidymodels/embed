@@ -50,7 +50,7 @@
 #' (the columns that is selected), `values` is returned.
 #'
 #' @template case-weights-supervised
-#' 
+#'
 #' @examples
 #' library(modeldata)
 #' data(ad_data)
@@ -63,7 +63,10 @@
 #'
 #' cart_rec <-
 #'   recipe(Class ~ ., data = ad_data_tr) %>%
-#'   step_discretize_cart(tau, age, p_tau, Ab_42, outcome = "Class", id = "cart splits")
+#'   step_discretize_cart(
+#'     tau, age, p_tau, Ab_42,
+#'     outcome = "Class", id = "cart splits"
+#'   )
 #'
 #' cart_rec <- prep(cart_rec, training = ad_data_tr)
 #'
@@ -256,7 +259,8 @@ bake.step_discretize_cart <- function(object, new_data, ...) {
 }
 
 #' @export
-print.step_discretize_cart <- function(x, width = max(20, options()$width - 30), ...) {
+print.step_discretize_cart <- function(x, width = max(20, options()$width - 30),
+                                       ...) {
   title <- "Discretizing variables using CART "
   print_step(
     names(x$rules), x$terms, x$trained, title, width,

@@ -78,7 +78,7 @@
 #'
 #' Good, I. J. (1985), "Weight of evidence: A brief survey", _Bayesian
 #' Statistics_, 2, pp.249-270.
-#' 
+#'
 #' @examples
 #' library(modeldata)
 #' data("credit_data")
@@ -111,9 +111,9 @@
 #' # passing custom dict to step_woe()
 #' rec_custom <- recipe(Status ~ ., data = credit_tr) %>%
 #'   step_woe(
-#'     Job, Home, 
+#'     Job, Home,
 #'     outcome = vars(Status), dictionary = woe_dict_custom
-#'    ) %>%
+#'   ) %>%
 #'   prep()
 #'
 #' rec_custom_baked <- bake(rec_custom, new_data = credit_te)
@@ -152,7 +152,8 @@ step_woe <- function(recipe,
 }
 
 ## Initializes a new object
-step_woe_new <- function(terms, role, trained, outcome, dictionary, Laplace, prefix, skip, id) {
+step_woe_new <- function(terms, role, trained, outcome, dictionary, Laplace,
+                         prefix, skip, id) {
   step(
     subclass = "woe",
     terms = terms,
@@ -173,20 +174,24 @@ step_woe_new <- function(terms, role, trained, outcome, dictionary, Laplace, pre
 #' outcome and a given predictor variable. Used to biuld the dictionary.
 #'
 #' @param predictor A atomic vector, usualy with few distinct values.
-#' @param outcome The dependent variable. A atomic vector with exactly 2 distinct values.
+#' @param outcome The dependent variable. A atomic vector with exactly 2
+#'   distinct values.
 #' @param Laplace The `pseudocount` parameter of the Laplace Smoothing
-#' estimator. Default to 1e-6. Value to avoid -Inf/Inf from predictor category with only
-#' one outcome class. Set to 0 to allow Inf/-Inf.
+#'   estimator. Default to 1e-6. Value to avoid -Inf/Inf from predictor category
+#'   with only one outcome class. Set to 0 to allow Inf/-Inf.
 #'
-#' @return a tibble with counts, proportions and woe.
-#'  Warning: woe can possibly be -Inf. Use 'Laplace' arg to avoid that.
+#' @return a tibble with counts, proportions and woe. Warning: woe can possibly
+#'   be -Inf. Use 'Laplace' arg to avoid that.
 #'
+#' @references
 #'
-#' @references Kullback, S. (1959). *Information Theory and Statistics.* Wiley, New York.
+#' Kullback, S. (1959). *Information Theory and Statistics.* Wiley, New York.
 #'
-#' Hastie, T., Tibshirani, R. and Friedman, J. (1986). *Elements of Statistical Learning*, Second Edition, Springer, 2009.
+#' Hastie, T., Tibshirani, R. and Friedman, J. (1986). *Elements of Statistical
+#' Learning*, Second Edition, Springer, 2009.
 #'
-#' Good, I. J. (1985), "Weight of evidence: A brief survey", _Bayesian Statistics_, 2, pp.249-270.
+#' Good, I. J. (1985), "Weight of evidence: A brief survey", _Bayesian
+#' Statistics_, 2, pp.249-270.
 woe_table <- function(predictor, outcome, Laplace = 1e-6) {
   if (is.factor(outcome)) {
     outcome_original_labels <- levels(outcome)
@@ -207,7 +212,8 @@ woe_table <- function(predictor, outcome, Laplace = 1e-6) {
 
   woe_expr <- parse(
     text = sprintf(
-      "log(((n_%s + Laplace)/(sum(n_%s) + 2 * Laplace))/((n_%s + Laplace)/(sum(n_%s) + 2 * Laplace)))",
+      "log(((n_%s + Laplace)/(sum(n_%s) + 2 * Laplace))
+      /((n_%s + Laplace)/(sum(n_%s) + 2 * Laplace)))",
       outcome_original_labels[1],
       outcome_original_labels[1],
       outcome_original_labels[2],
@@ -236,35 +242,41 @@ woe_table <- function(predictor, outcome, Laplace = 1e-6) {
 
 #' Weight of evidence dictionary
 #'
-#' Builds the woe dictionary of a set of predictor variables upon a given binary outcome.
-#' Convenient to make a woe version of the given set of predictor variables and also to allow
-#' one to tweak some woe values by hand.
+#' Builds the woe dictionary of a set of predictor variables upon a given binary
+#' outcome. Convenient to make a woe version of the given set of predictor
+#' variables and also to allow one to tweak some woe values by hand.
 #'
 #' @param .data A tbl. The data.frame where the variables come from.
-#' @param outcome The bare name of the outcome variable with exactly 2 distinct values.
-#' @param ... bare names of predictor variables or selectors accepted by \code{dplyr::select()}.
-#' @param Laplace Default to 1e-6. The `pseudocount` parameter of the Laplace Smoothing
-#' estimator. Value to avoid -Inf/Inf from predictor category with only one outcome class.
-#' Set to 0 to allow Inf/-Inf.
+#' @param outcome The bare name of the outcome variable with exactly 2 distinct
+#'   values.
+#' @param ... bare names of predictor variables or selectors accepted by
+#'   \code{dplyr::select()}.
+#' @param Laplace Default to 1e-6. The `pseudocount` parameter of the Laplace
+#'   Smoothing estimator. Value to avoid -Inf/Inf from predictor category with
+#'   only one outcome class. Set to 0 to allow Inf/-Inf.
 #'
-#' @return a tibble with summaries and woe for every given predictor variable stacked up.
+#' @return a tibble with summaries and woe for every given predictor variable
+#'   stacked up.
 #'
 #' @details
 #'
 #' You can pass a custom dictionary to \code{step_woe()}. It must have the
 #' exactly the same structure of the output of [dictionary()]. One easy way to
 #' do this is by tweaking an output returned from it.
-#' 
+#'
 #' @examples
 #'
 #' mtcars %>% dictionary("am", cyl, gear:carb)
-#' @references Kullback, S. (1959). *Information Theory and Statistics.* Wiley, New York.
+#' @references
 #'
-#' Hastie, T., Tibshirani, R. and Friedman, J. (1986). *Elements of Statistical Learning*, Second Edition, Springer, 2009.
+#' Kullback, S. (1959). *Information Theory and Statistics.* Wiley, New York.
 #'
-#' Good, I. J. (1985), "Weight of evidence: A brief survey", _Bayesian Statistics_, 2, pp.249-270.
+#' Hastie, T., Tibshirani, R. and Friedman, J. (1986). *Elements of Statistical
+#' Learning*, Second Edition, Springer, 2009.
 #'
-
+#' Good, I. J. (1985), "Weight of evidence: A brief survey", _Bayesian
+#' Statistics_, 2, pp.249-270.
+#'
 #' @export
 dictionary <- function(.data, outcome, ..., Laplace = 1e-6) {
   outcome_vector <- .data %>% dplyr::pull(!!outcome)
@@ -277,26 +289,29 @@ dictionary <- function(.data, outcome, ..., Laplace = 1e-6) {
 
 #' Add WoE in a data frame
 #'
-#' A tidyverse friendly way to plug WoE versions of a set of predictor variables against a
-#' given binary outcome.
+#' A tidyverse friendly way to plug WoE versions of a set of predictor variables
+#' against a given binary outcome.
 #'
 #' @param .data A tbl. The data.frame to plug the new woe version columns.
 #' @param outcome The bare name of the outcome variable.
-#' @param ... Bare names of predictor variables, passed as you would pass variables to
-#'  \code{dplyr::select()}. This means that you can use all the helpers like \code{starts_with()}
-#'  and \code{matches()}.
-#' @param dictionary A tbl. If NULL the function will build a dictionary with those variables
-#'  passed to \code{...}. You can pass a custom dictionary too, see [dictionary()] for details.
-#' @param prefix A character string that will be the prefix to the resulting new variables.
+#' @param ... Bare names of predictor variables, passed as you would pass
+#'   variables to \code{dplyr::select()}. This means that you can use all the
+#'   helpers like \code{starts_with()} and \code{matches()}.
+#' @param dictionary A tbl. If NULL the function will build a dictionary with
+#'   those variables passed to \code{...}. You can pass a custom dictionary too,
+#'   see [dictionary()] for details.
+#' @param prefix A character string that will be the prefix to the resulting new
+#'   variables.
 #'
-#' @return A tibble with the original columns of .data plus the woe columns wanted.
+#' @return A tibble with the original columns of .data plus the woe columns
+#'   wanted.
 #'
 #' @details
 #'
 #' You can pass a custom dictionary to [add_woe()]. It must have the exactly the
 #' same structure of the output of [dictionary()]. One easy way to do this is to
 #' tweak a output returned from it.
-#' 
+#'
 #' @examples
 #'
 #' mtcars %>% add_woe("am", cyl, gear:carb)
@@ -379,7 +394,10 @@ prep.step_woe <- function(x, training, info = NULL, ...) {
 
     col_names <- col_names[!(col_names %in% outcome_name)]
     check_type(training[, col_names], types = c("string", "factor", "ordered"))
-    check_type(training[, outcome_name], types = c("string", "factor", "ordered"))
+    check_type(
+      training[, outcome_name],
+      types = c("string", "factor", "ordered")
+    )
 
     if (is.null(x$dictionary)) {
       x$dictionary <- dictionary(

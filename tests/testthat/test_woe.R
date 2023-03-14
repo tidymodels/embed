@@ -5,7 +5,7 @@ source(testthat::test_path("test_helpers.R"))
 data("credit_data", package = "modeldata")
 
 set.seed(342)
-in_training <- sample(1:nrow(credit_data), 2000)
+in_training <- sample(seq_len(nrow(credit_data)), 2000)
 
 credit_tr <- credit_data[in_training, ]
 credit_te <- credit_data[-in_training, ]
@@ -127,10 +127,18 @@ test_that("add_woe ruturns no messages nor warnings nor errors", {
 })
 
 test_that("add_woe accepts numeric, logical and character predictor variables", {
-  expect_equal(add_woe(df %>% mutate(
-    x3 = rep(c(TRUE, FALSE), 10),
-    x4 = rep(c(20, 30), 10)
-  ), "y") %>% dim(), c(20, 9))
+  expect_equal(
+    add_woe(
+      df %>%
+        mutate(
+          x3 = rep(c(TRUE, FALSE), 10),
+          x4 = rep(c(20, 30), 10)
+        ),
+      "y"
+    ) %>%
+      dim(),
+    c(20, 9)
+  )
 })
 
 test_that("add_woe returns woe only for those variables that exists in both data and dictionary", {

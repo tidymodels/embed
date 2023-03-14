@@ -73,7 +73,7 @@
 #' (the selectors or variables selected), `value` and `component` is returned.
 #'
 #' @template case-weights-not-supported
-#' 
+#'
 #' @seealso [step_pca_sparse()]
 #' @examples
 #' library(recipes)

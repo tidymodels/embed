@@ -78,7 +78,8 @@ processing the outcome variable(s)). Care should be taken when using \code{skip 
 
 \item{optimizer, loss, metrics}{Arguments to pass to \code{\link[keras:reexports]{keras::compile()}}}
 
-\item{epochs, validation_split, batch_size, verbose, callbacks}{Arguments to pass to \code{\link[keras:reexports]{keras::fit()}}}
+\item{epochs, validation_split, batch_size, verbose, callbacks}{Arguments to pass
+to \code{\link[keras:reexports]{keras::fit()}}}
 }
 \value{
 An updated version of \code{recipe} with the new step added to the

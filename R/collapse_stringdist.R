@@ -28,7 +28,7 @@
 #' levels), and `"id"`.
 #'
 #' @template case-weights-not-supported
-#' 
+#'
 #' @examples
 #' library(recipes)
 #' library(tibble)

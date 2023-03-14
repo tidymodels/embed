@@ -25,7 +25,7 @@ test_that("basic usage", {
       filters = "",
       lower = FALSE
     )
-  for (j in 1:ncol(res_tr)) {
+  for (j in seq_len(ncol(res_tr))) {
     if (j == check_1) {
       expect_true(res_tr[1, j][[1]] == 1)
     } else {
@@ -46,7 +46,7 @@ test_that("basic usage", {
     res_te <- bake(rec_tr, te_dat, dplyr::starts_with("x3"))
   )
 
-  for (j in 1:ncol(res_te)) {
+  for (j in seq_len(ncol(res_te))) {
     if (j == check_2) {
       expect_true(res_te[1, j][[1]] == 1)
     } else {
@@ -79,7 +79,7 @@ test_that("basic usage - character strings", {
       filters = "",
       lower = FALSE
     )
-  for (j in 1:ncol(res_tr)) {
+  for (j in seq_len(ncol(res_tr))) {
     if (j == check_1) {
       expect_true(res_tr[1, j][[1]] == 1)
     } else {
@@ -98,7 +98,7 @@ test_that("basic usage - character strings", {
 
   res_te <- bake(rec_tr, te_dat, dplyr::starts_with("x3"))
 
-  for (j in 1:ncol(res_te)) {
+  for (j in seq_len(ncol(res_te))) {
     if (j == check_2) {
       expect_true(res_te[1, j][[1]] == 1)
     } else {

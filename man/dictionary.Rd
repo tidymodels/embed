@@ -9,21 +9,24 @@ dictionary(.data, outcome, ..., Laplace = 1e-06)
 \arguments{
 \item{.data}{A tbl. The data.frame where the variables come from.}
 
-\item{outcome}{The bare name of the outcome variable with exactly 2 distinct values.}
+\item{outcome}{The bare name of the outcome variable with exactly 2 distinct
+values.}
 
-\item{...}{bare names of predictor variables or selectors accepted by \code{dplyr::select()}.}
+\item{...}{bare names of predictor variables or selectors accepted by
+\code{dplyr::select()}.}
 
-\item{Laplace}{Default to 1e-6. The \code{pseudocount} parameter of the Laplace Smoothing
-estimator. Value to avoid -Inf/Inf from predictor category with only one outcome class.
-Set to 0 to allow Inf/-Inf.}
+\item{Laplace}{Default to 1e-6. The \code{pseudocount} parameter of the Laplace
+Smoothing estimator. Value to avoid -Inf/Inf from predictor category with
+only one outcome class. Set to 0 to allow Inf/-Inf.}
 }
 \value{
-a tibble with summaries and woe for every given predictor variable stacked up.
+a tibble with summaries and woe for every given predictor variable
+stacked up.
 }
 \description{
-Builds the woe dictionary of a set of predictor variables upon a given binary outcome.
-Convenient to make a woe version of the given set of predictor variables and also to allow
-one to tweak some woe values by hand.
+Builds the woe dictionary of a set of predictor variables upon a given binary
+outcome. Convenient to make a woe version of the given set of predictor
+variables and also to allow one to tweak some woe values by hand.
 }
 \details{
 You can pass a custom dictionary to \code{step_woe()}. It must have the
@@ -37,7 +40,9 @@ mtcars \%>\% dictionary("am", cyl, gear:carb)
 \references{
 Kullback, S. (1959). \emph{Information Theory and Statistics.} Wiley, New York.
 
-Hastie, T., Tibshirani, R. and Friedman, J. (1986). \emph{Elements of Statistical Learning}, Second Edition, Springer, 2009.
+Hastie, T., Tibshirani, R. and Friedman, J. (1986). \emph{Elements of Statistical
+Learning}, Second Edition, Springer, 2009.
 
-Good, I. J. (1985), "Weight of evidence: A brief survey", \emph{Bayesian Statistics}, 2, pp.249-270.
+Good, I. J. (1985), "Weight of evidence: A brief survey", \emph{Bayesian
+Statistics}, 2, pp.249-270.
 }

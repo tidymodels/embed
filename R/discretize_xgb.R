@@ -67,7 +67,7 @@
 #' (the columns that is selected), `values` is returned.
 #'
 #' @template case-weights-supervised
-#' 
+#'
 #' @examplesIf rlang::is_installed(c("xgboost", "modeldata"))
 #' library(rsample)
 #' library(recipes)
@@ -150,8 +150,10 @@ step_discretize_xgb_new <-
     )
   }
 
-run_xgboost <- function(.train, .test, .learn_rate, .num_breaks, .tree_depth, .min_n, .objective, .num_class) {
-  # Need to set an additional parameter (num_class) when perfoming multi-classification
+run_xgboost <- function(.train, .test, .learn_rate, .num_breaks, .tree_depth,
+                        .min_n, .objective, .num_class) {
+  # Need to set an additional parameter (num_class) when perfoming
+  # multi-classification
   if (.objective == "multi:softprob") {
     .params <- list(
       eta = .learn_rate,
@@ -185,7 +187,8 @@ run_xgboost <- function(.train, .test, .learn_rate, .num_breaks, .tree_depth, .m
   )
 }
 
-xgb_binning <- function(df, outcome, predictor, sample_val, learn_rate, num_breaks, tree_depth, min_n, wts = NULL) {
+xgb_binning <- function(df, outcome, predictor, sample_val, learn_rate,
+                        num_breaks, tree_depth, min_n, wts = NULL) {
   # Assuring correct types
   if (is.character(df[[outcome]])) {
     df[[outcome]] <- as.factor(df[[outcome]])
@@ -203,17 +206,21 @@ xgb_binning <- function(df, outcome, predictor, sample_val, learn_rate, num_brea
     df[[outcome]] <- as.integer(df[[outcome]]) - 1
   }
 
-  # Changes: sample_val now is a parameter with 0.20 as default. If sample_val is equal
-  # to 0 then rsample returns it standard error: Error: `prop` must be a number on (0, 1).
-  # If there are less than 2 observations in the test set then an error is given
+  # Changes: sample_val now is a parameter with 0.20 as default. If sample_val
+  # is equal to 0 then rsample returns it standard error: Error: `prop` must be
+  # a number on (0, 1). If there are less than 2 observations in the test set
+  # then an error is given
 
-  # Changes: I also realized that results for a single column are not reproducible given a training set
-  # because sampling is not persistent, therefore I added a specific random seed here
-  # which makes the results much more stable and not so much dependent on inner sampling
+  # Changes: I also realized that results for a single column are not
+  # reproducible given a training set because sampling is not persistent,
+  # therefore I added a specific random seed here which makes the results much
+  # more stable and not so much dependent on inner sampling
   split <- withr::with_seed(
     sample.int(10^6, 1),
     # suppressing rsample messages regarding stratification (regression)
-    suppressWarnings(rsample::initial_split(df, prop = (1 - sample_val), strata = outcome))
+    suppressWarnings(
+      rsample::initial_split(df, prop = (1 - sample_val), strata = outcome)
+    )
   )
 
   train <- rsample::training(split)
@@ -273,7 +280,9 @@ xgb_binning <- function(df, outcome, predictor, sample_val, learn_rate, num_brea
         weight = wts_test
       )
     } else {
-      rlang::abort("Outcome variable doesn't conform to regresion or classification task.")
+      rlang::abort(
+        "Outcome variable doesn't conform to regresion or classification task."
+      )
     }
   }
 
@@ -306,9 +315,9 @@ xgb_binning <- function(df, outcome, predictor, sample_val, learn_rate, num_brea
     return(numeric(0))
   }
 
-  # Changes: if there is insufficient training data/ variation then xgboost model is constant
-  # and no splits will be returned. Additional check will inform the user
-  # that the dataset is insufficient for this particular case
+  # Changes: if there is insufficient training data/ variation then xgboost
+  # model is constant and no splits will be returned. Additional check will
+  # inform the user that the dataset is insufficient for this particular case
   # https://github.com/dmlc/xgboost/issues/2876
   # https://stackoverflow.com/questions/42670033/r-getting-non-tree-model-detected-this-function-can-only-be-used-with-tree-mo
   xgb_tree <- try(
@@ -385,8 +394,8 @@ prep.step_discretize_xgb <- function(x, training, info = NULL, ...) {
     }
 
     # Changes: check for the minimum number of unique data points in the column
-    # in order to run the step. Otherwise, take it out of col_names. I think that
-    # num_unique = 20 is probably a good default
+    # in order to run the step. Otherwise, take it out of col_names. I think
+    # that num_unique = 20 is probably a good default
     num_unique <- purrr::map_int(training[, col_names], ~ length(unique(.x)))
     too_few <- num_unique < 20
     if (any(too_few)) {
@@ -472,7 +481,8 @@ bake.step_discretize_xgb <- function(object, new_data, ...) {
 }
 
 #' @export
-print.step_discretize_xgb <- function(x, width = max(20, options()$width - 30), ...) {
+print.step_discretize_xgb <- function(x, width = max(20, options()$width - 30),
+                                      ...) {
   title <- "Discretizing variables using xgboost "
   print_step(
     names(x$rules), x$terms, x$trained, title, width,

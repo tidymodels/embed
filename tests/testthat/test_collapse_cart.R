@@ -7,7 +7,10 @@ test_that("collapsing factors", {
     {
       rec_1 <-
         recipe(Sale_Price ~ ., data = ames) %>%
-        step_collapse_cart(Neighborhood, Central_Air, outcome = vars(Sale_Price)) %>%
+        step_collapse_cart(
+          Neighborhood, Central_Air,
+          outcome = vars(Sale_Price)
+        ) %>%
         prep()
     },
     regex = NA
@@ -27,7 +30,9 @@ test_that("collapsing factors", {
   )
 
   expect_false(
-    isTRUE(all.equal(bake(rec_1, new_data = NULL)$Neighborhood, ames$Neighborhood))
+    isTRUE(
+      all.equal(bake(rec_1, new_data = NULL)$Neighborhood, ames$Neighborhood)
+    )
   )
 
   expect_error(
@@ -59,7 +64,10 @@ test_that("failed collapsing", {
     {
       rec_3 <-
         recipe(Sale_Price2 ~ ., data = ames) %>%
-        step_collapse_cart(Neighborhood, Central_Air, outcome = vars(Sale_Price2)) %>%
+        step_collapse_cart(
+          Neighborhood, Central_Air,
+          outcome = vars(Sale_Price2)
+        ) %>%
         prep()
     },
     regex = NA
@@ -72,7 +80,11 @@ test_that("failed collapsing", {
     {
       rec_4 <-
         recipe(Sale_Price ~ ., data = ames) %>%
-        step_collapse_cart(Neighborhood, outcome = vars(Sale_Price), cost_complexity = 0, min_n = 1) %>%
+        step_collapse_cart(
+          Neighborhood,
+          outcome = vars(Sale_Price),
+          cost_complexity = 0, min_n = 1
+        ) %>%
         prep()
     },
     regex = NA

@@ -388,7 +388,10 @@ test_that("printing", {
       options = opts
     )
   expect_snapshot(print_test)
-  expect_snapshot(prep(print_test), transform = omit_warning("^(Bulk Effective|Tail Effective|The largest)"))
+  expect_snapshot(
+    prep(print_test),
+    transform = omit_warning("^(Bulk Effective|Tail Effective|The largest)")
+  )
 })
 
 # ------------------------------------------------------------------------------

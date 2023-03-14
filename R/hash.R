@@ -54,7 +54,10 @@
 #' data(grants, package = "modeldata")
 #' rec <-
 #'   recipe(class ~ sponsor_code, data = grants_other) %>%
-#'   step_feature_hash(sponsor_code, num_hash = 2^6, keep_original_cols = TRUE) %>%
+#'   step_feature_hash(
+#'     sponsor_code,
+#'     num_hash = 2^6, keep_original_cols = TRUE
+#'   ) %>%
 #'   prep()
 #'
 #' # How many of the 298 locations ended up in each hash column?

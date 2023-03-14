@@ -302,7 +302,12 @@ test_that("bake method errors when needed non-standard role columns are missing"
   skip_on_cran()
   skip_if(!is_tf_available())
   rec <- recipe(x2 ~ ., data = ex_dat) %>%
-    step_embed(x3, outcome = vars(x2), options = embed_control(verbose = 0), id = "id") %>%
+    step_embed(
+      x3,
+      outcome = vars(x2),
+      options = embed_control(verbose = 0),
+      id = "id"
+    ) %>%
     update_role(x3, new_role = "potato") %>%
     update_role_requirements(role = "potato", bake = FALSE)
 

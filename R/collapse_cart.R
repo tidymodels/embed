@@ -48,7 +48,7 @@
 #' the requested predictor will not be in the results.
 #'
 #' @template case-weights-not-supported
-#' 
+#'
 #' @examplesIf rlang::is_installed(c("modeldata", "rpart"))
 #' data(ames, package = "modeldata")
 #' ames$Sale_Price <- log10(ames$Sale_Price)
@@ -91,7 +91,8 @@ step_collapse_cart <-
     )
   }
 step_collapse_cart_new <-
-  function(terms, role, trained, outcome, cost_complexity, min_n, results, skip, id) {
+  function(terms, role, trained, outcome, cost_complexity, min_n, results, skip,
+           id) {
     step(
       subclass = "collapse_cart",
       terms = terms,
@@ -205,10 +206,12 @@ collapse_rpart <- function(x, feature_name, y, prefix = feature_name, ...) {
   term_nodes_ind <- as.numeric(rownames(term_nodes))
 
   lvls <- attr(split_model, "xlevels")[[1]]
-  split_ints <- split_model$csplit
 
   groups <-
-    purrr::map(term_nodes_ind, ~ rpart::path.rpart(split_model, .x, print.it = FALSE)[[1]]) %>%
+    purrr::map(
+      term_nodes_ind,
+      ~ rpart::path.rpart(split_model, .x, print.it = FALSE)[[1]]
+    ) %>%
     purrr::map(~ .x[length(.x)]) %>%
     purrr::map(~ strsplit(.x, "=")[[1]]) %>%
     purrr::map(~ .x[length(.x)]) %>%
