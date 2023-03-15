@@ -125,6 +125,30 @@ test_that("method argument", {
   )
 })
 
+test_that("options argument", {
+  data0 <- tibble(
+    x1 = c("a", "b", "d", "e", "aaaaaa", "bbbbbb"),
+    x2 = c("ak", "b", "djj", "e", "aaaaaa", "aaaaaa")
+  )
+  
+  rec <- recipe(~., data = data0) %>%
+    step_collapse_stringdist(
+      all_predictors(), 
+      distance = 1, 
+      options = list(weight = c(d = 0.1, i = 1, s = 1, t = 1))
+    ) %>%
+    prep()
+  
+  exp_result <- tibble(
+    x1 = factor(c("a", "a", "a", "a", "a", "b")),
+    x2 = factor(c("ak", "b", "djj", "b", "aaaaaa", "aaaaaa"))
+  )
+  expect_equal(
+    bake(rec, new_data = NULL),
+    exp_result
+  )
+})
+
 
 test_that("failed collapsing", {
   skip_if_not_installed("modeldata")
