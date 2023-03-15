@@ -103,7 +103,6 @@ test_that("step function for classification", {
   expect_true(is.numeric(cart_pred$z))
 })
 
-
 test_that("step function for regression", {
   expect_snapshot({
     cart_rec <-
@@ -176,13 +175,15 @@ test_that("bake method errors when needed non-standard role columns are missing"
     step_discretize_cart(x, z, outcome = "class") %>%
     update_role(x, new_role = "potato") %>%
     update_role_requirements(role = "potato", bake = FALSE)
-  
+
   expect_warning(
     rec_trained <- prep(rec, training = sim_tr_cls, verbose = FALSE)
   )
- 
-  expect_error(bake(rec_trained, new_data = sim_tr_cls[, -1]),
-               class = "new_data_missing_column")
+
+  expect_error(
+    bake(rec_trained, new_data = sim_tr_cls[, -1]),
+    class = "new_data_missing_column"
+  )
 })
 
 # ------------------------------------------------------------------------------
@@ -195,7 +196,6 @@ test_that("printing", {
   expect_snapshot(cart_rec)
   expect_snapshot(prep(cart_rec))
 })
-
 
 # ------------------------------------------------------------------------------
 
@@ -217,10 +217,10 @@ test_that("empty selections", {
 test_that("case weights step functions", {
   sim_tr_cls_cw <- sim_tr_cls %>%
     mutate(weight = importance_weights(rep(0:1, each = 500)))
-  
+
   sim_tr_reg_cw <- sim_tr_reg %>%
     mutate(weight = importance_weights(rep(0:1, each = 500)))
-  
+
   mod_cw <- rpart(y ~ x, data = sim_tr_reg, weights = rep(0:1, each = 500))
   best_split_cw <- unname(mod_cw$splits[, "index"])
 
@@ -231,10 +231,10 @@ test_that("case weights step functions", {
       step_discretize_cart(all_predictors(), outcome = "class") %>%
       prep()
   })
-  
+
   expect_equal(names(cart_rec$steps[[1]]$rules), "x")
   expect_equal(cart_rec$steps[[1]]$rules$x, best_split_cw)
-  
+
   # Regression
   expect_snapshot({
     cart_rec <-
@@ -242,9 +242,9 @@ test_that("case weights step functions", {
       step_discretize_cart(all_predictors(), outcome = "y") %>%
       prep()
   })
-  
+
   expect_equal(names(cart_rec$steps[[1]]$rules), c("x", "z"))
   expect_equal(cart_rec$steps[[1]]$rules$x, best_split_cw)
-  
+
   expect_snapshot(cart_rec)
 })

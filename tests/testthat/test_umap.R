@@ -56,8 +56,6 @@ test_that("factor outcome", {
   )
 })
 
-
-
 test_that("numeric outcome", {
   set.seed(11)
   supervised <-
@@ -101,7 +99,6 @@ test_that("numeric outcome", {
     ignore_attr = TRUE
   )
 })
-
 
 test_that("no outcome", {
   set.seed(11)
@@ -156,7 +153,6 @@ test_that("keep_original_cols works", {
     ) %>%
     prep(training = tr[, -5])
 
-
   umap_pred <- bake(unsupervised, new_data = te[, -5], composition = "matrix", all_predictors())
 
   expect_equal(
@@ -187,15 +183,17 @@ test_that("can prep recipes with no keep_original_cols", {
 })
 
 test_that("bake method errors when needed non-standard role columns are missing", {
-  rec <- recipe(Species ~ ., data = tr) %>% 
+  rec <- recipe(Species ~ ., data = tr) %>%
     step_umap(Sepal.Length, Sepal.Width, Petal.Length, Petal.Width) %>%
     update_role(Petal.Width, new_role = "potato") %>%
     update_role_requirements(role = "potato", bake = FALSE)
-  
+
   rec_trained <- prep(rec, training = tr, verbose = FALSE)
-  
-  expect_error(bake(rec_trained, new_data = tr[, -4]),
-               class = "new_data_missing_column")
+
+  expect_error(
+    bake(rec_trained, new_data = tr[, -4]),
+    class = "new_data_missing_column"
+  )
 })
 
 test_that("printing", {

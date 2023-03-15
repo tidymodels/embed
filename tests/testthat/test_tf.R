@@ -73,7 +73,6 @@ test_that("factor encoded predictor", {
   )
 })
 
-
 test_that("character encoded predictor", {
   skip_on_cran()
   skip_if(!is_tf_available())
@@ -213,7 +212,6 @@ test_that("factor encoded predictor", {
   )
 })
 
-
 test_that("character encoded predictor", {
   skip_on_cran()
   skip_if(!is_tf_available())
@@ -282,7 +280,6 @@ test_that("character encoded predictor", {
   )
 })
 
-
 # ------------------------------------------------------------------------------
 
 test_that("bad args", {
@@ -293,7 +290,8 @@ test_that("bad args", {
   three_class$fac <- rep(letters[1:3], 50)
   three_class$logical <- rep(c(TRUE, FALSE), 75)
 
-  expect_snapshot(error = TRUE,
+  expect_snapshot(
+    error = TRUE,
     recipe(Species ~ ., data = three_class) %>%
       step_embed(Sepal.Length, outcome = vars(Species)) %>%
       prep(training = three_class, retain = TRUE)
@@ -304,14 +302,21 @@ test_that("bake method errors when needed non-standard role columns are missing"
   skip_on_cran()
   skip_if(!is_tf_available())
   rec <- recipe(x2 ~ ., data = ex_dat) %>%
-    step_embed(x3, outcome = vars(x2), options = embed_control(verbose = 0), id = "id") %>%
+    step_embed(
+      x3,
+      outcome = vars(x2),
+      options = embed_control(verbose = 0),
+      id = "id"
+    ) %>%
     update_role(x3, new_role = "potato") %>%
     update_role_requirements(role = "potato", bake = FALSE)
-  
+
   rec_trained <- prep(rec, training = ex_dat, verbose = FALSE)
-  
-  expect_error(bake(rec_trained, new_data = ex_dat[, -3]),
-               class = "new_data_missing_column")
+
+  expect_error(
+    bake(rec_trained, new_data = ex_dat[, -3]),
+    class = "new_data_missing_column"
+  )
 })
 
 test_that("printing", {
@@ -323,7 +328,6 @@ test_that("printing", {
   expect_snapshot(print_test)
   expect_snapshot(prep(print_test))
 })
-
 
 # ------------------------------------------------------------------------------
 

@@ -35,7 +35,7 @@ A tibble object.
 }
 \description{
 These functions define what parameters \emph{can} be tuned for specific steps.
-They also define the recommended objects from the \code{dials} package that can
-be used to generate new parameter values and other characteristics.
+They also define the recommended objects from the \code{dials} package that can be
+used to generate new parameter values and other characteristics.
 }
 \keyword{internal}

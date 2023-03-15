@@ -18,19 +18,17 @@ step_collapse_cart(
 )
 }
 \arguments{
-\item{recipe}{A recipe object. The step will be added to the
-sequence of operations for this recipe.}
+\item{recipe}{A recipe object. The step will be added to the sequence of
+operations for this recipe.}
 
-\item{...}{One or more selector functions to choose which
-variables are affected by the step. See \code{\link[=selections]{selections()}}
-for more details. For the \code{tidy} method, these are not
-currently used.}
+\item{...}{One or more selector functions to choose which variables are
+affected by the step. See \code{\link[=selections]{selections()}} for more details. For the \code{tidy}
+method, these are not currently used.}
 
-\item{role}{Not used by this step since no new variables are
-created.}
+\item{role}{Not used by this step since no new variables are created.}
 
-\item{trained}{A logical to indicate if the quantities for
-preprocessing have been estimated.}
+\item{trained}{A logical to indicate if the quantities for preprocessing have
+been estimated.}
 
 \item{outcome}{A call to \code{vars} to specify which variable is used as the
 outcome to train CART models in order to pool factor levels.}
@@ -39,18 +37,17 @@ outcome to train CART models in order to pool factor levels.}
 the tree when pruning occurs. Values near 0.1 usually correspond to a tree
 with a single splits. Values of zero correspond to unpruned tree.}
 
-\item{min_n}{An integer for how many data points are required to make
-further splits during the tree growing process. Larger values correspond to
-less complex trees.}
+\item{min_n}{An integer for how many data points are required to make further
+splits during the tree growing process. Larger values correspond to less
+complex trees.}
 
 \item{results}{A list of results to convert to new factor levels.}
 
-\item{skip}{A logical. Should the step be skipped when the
-recipe is baked by \code{\link[=bake]{bake()}}? While all operations are baked
-when \code{\link[=prep]{prep()}} is run, some operations may not be able to be
-conducted on new data (e.g. processing the outcome variable(s)).
-Care should be taken when using \code{skip = TRUE} as it may affect
-the computations for subsequent operations}
+\item{skip}{A logical. Should the step be skipped when the recipe is baked by
+\code{\link[=bake]{bake()}}? While all operations are baked when \code{\link[=prep]{prep()}} is run, some
+operations may not be able to be conducted on new data (e.g. processing the
+outcome variable(s)). Care should be taken when using \code{skip = TRUE} as it
+may affect the computations for subsequent operations}
 
 \item{id}{A character string that is unique to this step to identify it.}
 }
@@ -58,9 +55,8 @@ the computations for subsequent operations}
 An updated recipe step.
 }
 \description{
-\code{step_collapse_cart} creates a \emph{specification} of a recipe
-step that can collapse factor levels into a smaller set using a supervised
-tree.
+\code{step_collapse_cart} creates a \emph{specification} of a recipe step that can
+collapse factor levels into a smaller set using a supervised tree.
 }
 \details{
 This step uses a CART tree (classification or regression) to group the
@@ -92,10 +88,12 @@ The underlying operation does not allow for case weights.
 data(ames, package = "modeldata")
 ames$Sale_Price <- log10(ames$Sale_Price)
 
-rec <- 
-  recipe(Sale_Price ~ ., data = ames) \%>\% 
-  step_collapse_cart(Sale_Type, Garage_Type, Neighborhood, 
-                     outcome = vars(Sale_Price)) \%>\% 
+rec <-
+  recipe(Sale_Price ~ ., data = ames) \%>\%
+  step_collapse_cart(
+    Sale_Type, Garage_Type, Neighborhood,
+    outcome = vars(Sale_Price)
+  ) \%>\%
   prep()
 tidy(rec, number = 1)
 \dontshow{\}) # examplesIf}

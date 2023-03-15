@@ -1,59 +1,57 @@
 #' Sparse PCA Signal Extraction
 #'
-#' `step_pca_sparse()` creates a *specification* of a recipe step that will convert
-#'  numeric data into one or more principal components that can have some zero
-#'  coefficients.
+#' `step_pca_sparse()` creates a *specification* of a recipe step that will
+#' convert numeric data into one or more principal components that can have some
+#' zero coefficients.
 #'
 #' @inheritParams step_lencode_bayes
 #' @inherit step_lencode_bayes return
 #' @param ... One or more selector functions to choose which variables will be
-#'  used to compute the components. See [selections()] for more details. For the
-#'  `tidy` method, these are not currently used.
+#'   used to compute the components. See [selections()] for more details. For
+#'   the `tidy` method, these are not currently used.
 #' @param role For model terms created by this step, what analysis role should
-#'  they be assigned? By default, the function assumes that the new principal
-#'  component columns created by the original variables will be used as
-#'  predictors in a model.
-#' @param num_comp The number of PCA components to retain as new predictors.
-#'  If `num_comp` is greater than the number of columns or the number of
-#'  possible components, a smaller value will be used.
+#'   they be assigned? By default, the function assumes that the new principal
+#'   component columns created by the original variables will be used as
+#'   predictors in a model.
+#' @param num_comp The number of PCA components to retain as new predictors. If
+#'   `num_comp` is greater than the number of columns or the number of possible
+#'   components, a smaller value will be used.
 #' @param predictor_prop The maximum number of original predictors that can have
-#'  non-zero coefficients for each PCA component (via regularization).
+#'   non-zero coefficients for each PCA component (via regularization).
 #' @param keep_original_cols A logical to keep the original variables in the
-#'  output. Defaults to `FALSE`.
+#'   output. Defaults to `FALSE`.
 #' @param options A list of options to the default method for [irlba::ssvd()].
-#' @param res The rotation matrix once this
-#'  preprocessing step has be trained by [prep()].
-#' @param prefix A character string that will be the prefix to the resulting
-#'  new variables. See notes below.
+#' @param res The rotation matrix once this preprocessing step has be trained by
+#'   [prep()].
+#' @param prefix A character string that will be the prefix to the resulting new
+#'   variables. See notes below.
 #' @return An updated version of `recipe` with the new step added to the
-#'  sequence of existing steps (if any). For the `tidy` method, a tibble with
-#'  columns `terms` (the selectors or variables selected), `value` (the
-#'  loading), and `component`.
+#'   sequence of existing steps (if any). For the `tidy` method, a tibble with
+#'   columns `terms` (the selectors or variables selected), `value` (the
+#'   loading), and `component`.
 #' @keywords datagen
 #' @concept preprocessing
 #' @concept pca
 #' @concept projection_methods
-#' @export
 #' @details
-#' The `irlba` package is required for this step. If it is not installed, the user
-#'  will be prompted to do so when the step is defined. The [irlba::ssvd()] function is
-#'  used to encourage sparsity; that documentation has details about this method.
 #'
-#' The argument `num_comp` controls the number of components that
-#'  will be retained (per default the original variables that are used to derive
-#'  the components are removed from the data). The new components
-#'  will have names that begin with `prefix` and a sequence of
-#'  numbers. The variable names are padded with zeros. For example,
-#'  if `num_comp < 10`, their names will be `PC1` - `PC9`.
-#'  If `num_comp = 101`, the names would be `PC001` -
-#'  `PC101`.
-#'  
+#' The `irlba` package is required for this step. If it is not installed, the
+#' user will be prompted to do so when the step is defined. The [irlba::ssvd()]
+#' function is used to encourage sparsity; that documentation has details about
+#' this method.
+#'
+#' The argument `num_comp` controls the number of components that will be
+#' retained (per default the original variables that are used to derive the
+#' components are removed from the data). The new components will have names
+#' that begin with `prefix` and a sequence of numbers. The variable names are
+#' padded with zeros. For example, if `num_comp < 10`, their names will be `PC1`
+#' - `PC9`. If `num_comp = 101`, the names would be `PC001` - `PC101`.
+#'
 #' # Tidying
-#' 
-#' When you [`tidy()`][tidy.recipe()] this step, a tibble with columns
-#' `terms` (the selectors or variables selected), `value` and `component` is
-#' returned.
-#' 
+#'
+#' When you [`tidy()`][tidy.recipe()] this step, a tibble with columns `terms`
+#' (the selectors or variables selected), `value` and `component` is returned.
+#'
 #' @template case-weights-not-supported
 #'
 #' @seealso [step_pca_sparse_bayes()]
@@ -82,6 +80,7 @@
 #'   geom_tile() +
 #'   scale_fill_gradient2() +
 #'   theme(axis.text.y = element_blank())
+#' @export
 step_pca_sparse <- function(recipe,
                             ...,
                             role = "predictor",
@@ -135,7 +134,7 @@ step_pca_sparse_new <-
 
 #' @export
 prep.step_pca_sparse <- function(x, training, info = NULL, ...) {
-  col_names <- recipes::recipes_eval_select(x$terms, training, info)
+  col_names <- recipes_eval_select(x$terms, training, info)
 
   if (length(col_names) > 0) {
     check_type(training[, col_names], types = c("double", "integer"))
@@ -147,7 +146,6 @@ prep.step_pca_sparse <- function(x, training, info = NULL, ...) {
     x$predictor_prop <- max(x$predictor_prop, 0.00001)
     x$predictor_prop <- min(x$predictor_prop, 1)
     num_dense <- prop2int(x$predictor_prop, p)
-
 
     if (x$num_comp > 0) {
       cl <-
@@ -196,7 +194,7 @@ bake.step_pca_sparse <- function(object, new_data, ...) {
   if (!all(is.na(object$res))) {
     pca_vars <- rownames(object$res)
     check_new_data(pca_vars, object, new_data)
-    
+
     x <- as.matrix(new_data[, pca_vars])
     comps <- x %*% object$res
     comps <- check_name(comps, new_data, object)

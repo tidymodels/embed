@@ -1,44 +1,52 @@
-
 test_that("collapsing factors", {
   skip_if_not_installed("modeldata")
   data(ames, package = "modeldata")
-  
-  expect_error({
-    rec_1 <- 
-      recipe(Sale_Price ~ ., data = ames) %>% 
-      step_collapse_stringdist(MS_SubClass, distance = 5) %>% 
-      prep()
-  }, 
-  regex = NA)
-  
+
+  expect_error(
+    {
+      rec_1 <-
+        recipe(Sale_Price ~ ., data = ames) %>%
+        step_collapse_stringdist(MS_SubClass, distance = 5) %>%
+        prep()
+    },
+    regex = NA
+  )
+
   expect_true(length(rec_1$steps[[1]]$results) == 1)
   expect_equal(names(rec_1$steps[[1]]$results), "MS_SubClass")
-  
+
   expect_true(
     length(unique(rec_1$steps[[1]]$results$Neighborhood$.group)) <
       length(levels(ames$Neighborhood))
   )
-  
+
   expect_equal(
     ames %>% select(-MS_SubClass, -Sale_Price),
     bake(rec_1, new_data = NULL) %>% select(-MS_SubClass, -Sale_Price)
   )
-  
+
   expect_false(
-    isTRUE(all.equal(bake(rec_1, new_data = NULL)$MS_SubClass, ames$MS_SubClass))
+    isTRUE(
+      all.equal(bake(rec_1, new_data = NULL)$MS_SubClass, ames$MS_SubClass)
+    )
   )
-  
-  expect_error({
-    rec_2 <- 
-      recipe(Sale_Price ~ ., data = ames) %>% 
-      step_collapse_stringdist(MS_SubClass, Overall_Cond, distance = 10) %>% 
-      prep()
-  }, 
-  regex = NA)
-  
+
+  expect_error(
+    {
+      rec_2 <-
+        recipe(Sale_Price ~ ., data = ames) %>%
+        step_collapse_stringdist(MS_SubClass, Overall_Cond, distance = 10) %>%
+        prep()
+    },
+    regex = NA
+  )
+
   expect_true(length(rec_2$steps[[1]]$results) == 2)
-  expect_equal(names(rec_2$steps[[1]]$results), c("MS_SubClass", "Overall_Cond"))
-  
+  expect_equal(
+    names(rec_2$steps[[1]]$results),
+    c("MS_SubClass", "Overall_Cond")
+  )
+
   expect_true(
     length(rec_2$steps[[1]]$results$MS_SubClass) <
       length(rec_1$steps[[1]]$results$MS_SubClass)
@@ -50,11 +58,11 @@ test_that("collapsing factors manual test", {
     x1 = c("a", "b", "d", "e", "aaaaaa", "bbbbbb"),
     x2 = c("ak", "b", "djj", "e", "aaaaaa", "aaaaaa")
   )
-  
+
   rec <- recipe(~., data = data0) %>%
     step_collapse_stringdist(all_predictors(), distance = 1) %>%
     prep()
-  
+
   exp_result <- tibble(
     x1 = factor(c("a", "a", "a", "a", "aaaaaa", "bbbbbb")),
     x2 = factor(c("ak", "b", "djj", "b", "aaaaaa", "aaaaaa"))
@@ -63,11 +71,11 @@ test_that("collapsing factors manual test", {
     bake(rec, new_data = NULL),
     exp_result
   )
-  
+
   rec <- recipe(~., data = data0) %>%
     step_collapse_stringdist(all_predictors(), distance = 2) %>%
     prep()
-  
+
   exp_result <- tibble(
     x1 = factor(c("a", "a", "a", "a", "aaaaaa", "bbbbbb")),
     x2 = factor(c("ak", "ak", "djj", "ak", "aaaaaa", "aaaaaa"))
@@ -81,30 +89,34 @@ test_that("collapsing factors manual test", {
 test_that("failed collapsing", {
   skip_if_not_installed("modeldata")
   data(ames, package = "modeldata")
-  
+
   # too many splits
-  expect_error({
-    rec_4 <- 
-      recipe(Sale_Price ~ ., data = ames) %>% 
-      step_collapse_stringdist(MS_SubClass, distance = 0) %>% 
-      prep()
-  }, 
-  regex = NA)
-  
+  expect_error(
+    {
+      rec_4 <-
+        recipe(Sale_Price ~ ., data = ames) %>%
+        step_collapse_stringdist(MS_SubClass, distance = 0) %>%
+        prep()
+    },
+    regex = NA
+  )
+
   expect_equal(
     length(rec_4$steps[[1]]$results$MS_SubClass),
     length(levels(ames$MS_SubClass))
   )
-  
+
   # too few splits
-  expect_error({
-    rec_5 <- 
-      recipe(Sale_Price ~ ., data = ames) %>% 
-      step_collapse_stringdist(MS_SubClass, distance = 10000) %>% 
-      prep()
-  }, 
-  regex = NA)
-  
+  expect_error(
+    {
+      rec_5 <-
+        recipe(Sale_Price ~ ., data = ames) %>%
+        step_collapse_stringdist(MS_SubClass, distance = 10000) %>%
+        prep()
+    },
+    regex = NA
+  )
+
   expect_equal(
     length(rec_5$steps[[1]]$results$MS_SubClass),
     1
@@ -112,23 +124,25 @@ test_that("failed collapsing", {
 })
 
 test_that("bake method errors when needed non-standard role columns are missing", {
-  rec <- recipe(Sale_Price ~ ., data = ames) %>% 
+  rec <- recipe(Sale_Price ~ ., data = ames) %>%
     step_collapse_stringdist(MS_SubClass, distance = 2) %>%
     update_role(MS_SubClass, new_role = "potato") %>%
     update_role_requirements(role = "potato", bake = FALSE)
-  
+
   rec_trained <- prep(rec, training = ames, verbose = FALSE)
-  
-  expect_error(bake(rec_trained, new_data = ames[, -1]),
-               class = "new_data_missing_column")
+
+  expect_error(
+    bake(rec_trained, new_data = ames[, -1]),
+    class = "new_data_missing_column"
+  )
 })
 
 test_that("printing", {
   skip_if_not_installed("modeldata")
   data(ames, package = "modeldata")
-  
-  rec <- 
-    recipe(Sale_Price ~ ., data = ames) %>% 
+
+  rec <-
+    recipe(Sale_Price ~ ., data = ames) %>%
     step_collapse_stringdist(MS_SubClass, distance = 5)
   expect_snapshot(print(rec))
   expect_snapshot(prep(rec))
@@ -137,26 +151,26 @@ test_that("printing", {
 test_that("empty selection prep/bake is a no-op", {
   rec1 <- recipe(mpg ~ ., mtcars)
   rec2 <- step_collapse_stringdist(rec1, distance = 1)
-  
+
   rec1 <- prep(rec1, mtcars)
   rec2 <- prep(rec2, mtcars)
-  
+
   baked1 <- bake(rec1, mtcars)
   baked2 <- bake(rec2, mtcars)
-  
+
   expect_identical(baked1, baked2)
 })
 
 test_that("empty selection tidy method works", {
   rec <- recipe(mpg ~ ., mtcars)
   rec <- step_collapse_stringdist(rec, distance = 1)
-  
+
   expect <- tibble(terms = character(), id = character())
-  
+
   expect_identical(tidy(rec, number = 1), expect)
-  
+
   rec <- prep(rec, mtcars)
-  
+
   expect_identical(tidy(rec, number = 1), expect)
 })
 
@@ -164,10 +178,10 @@ test_that("empty printing", {
   skip_if(packageVersion("rlang") < "1.0.0")
   rec <- recipe(mpg ~ ., mtcars)
   rec <- step_collapse_stringdist(rec, distance = 1)
-  
+
   expect_snapshot(rec)
-  
+
   rec <- prep(rec, mtcars)
-  
+
   expect_snapshot(rec)
 })

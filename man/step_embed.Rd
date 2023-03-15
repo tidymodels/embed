@@ -33,95 +33,85 @@ embed_control(
 )
 }
 \arguments{
-\item{recipe}{A recipe object. The step will be added to the
-sequence of operations for this recipe.}
+\item{recipe}{A recipe object. The step will be added to the sequence of
+operations for this recipe.}
 
-\item{...}{One or more selector functions to choose variables.
-For \code{step_embed}, this indicates the variables to be encoded
-into a numeric format. See \code{\link[recipes:selections]{recipes::selections()}} for more
-details. For the \code{tidy} method, these are not currently used.}
+\item{...}{One or more selector functions to choose variables. For
+\code{step_embed}, this indicates the variables to be encoded into a numeric
+format. See \code{\link[recipes:selections]{recipes::selections()}} for more details. For the \code{tidy}
+method, these are not currently used.}
 
-\item{role}{For model terms created by this step, what analysis
-role should they be assigned?. By default, the function assumes
-that the embedding variables created will be used as predictors in a model.}
+\item{role}{For model terms created by this step, what analysis role should
+they be assigned?. By default, the function assumes that the embedding
+variables created will be used as predictors in a model.}
 
-\item{trained}{A logical to indicate if the quantities for
-preprocessing have been estimated.}
+\item{trained}{A logical to indicate if the quantities for preprocessing have
+been estimated.}
 
-\item{outcome}{A call to \code{vars} to specify which variable is
-used as the outcome in the neural network.}
+\item{outcome}{A call to \code{vars} to specify which variable is used as the
+outcome in the neural network.}
 
-\item{predictors}{An optional call to \code{vars} to specify any
-variables to be added as additional predictors in the neural
-network. These variables should be numeric and perhaps centered
-and scaled.}
+\item{predictors}{An optional call to \code{vars} to specify any variables to be
+added as additional predictors in the neural network. These variables
+should be numeric and perhaps centered and scaled.}
 
 \item{num_terms}{An integer for the number of resulting variables.}
 
-\item{hidden_units}{An integer for the number of hidden units
-in a dense ReLu layer between the embedding and output later.
-Use a value of zero for no intermediate layer (see Details
-below).}
+\item{hidden_units}{An integer for the number of hidden units in a dense ReLu
+layer between the embedding and output later. Use a value of zero for no
+intermediate layer (see Details below).}
 
 \item{options}{A list of options for the model fitting process.}
 
-\item{mapping}{A list of tibble results that define the
-encoding. This is \code{NULL} until the step is trained by
-\code{\link[recipes:prep]{recipes::prep()}}.}
+\item{mapping}{A list of tibble results that define the encoding. This is
+\code{NULL} until the step is trained by \code{\link[recipes:prep]{recipes::prep()}}.}
 
-\item{history}{A tibble with the convergence statistics for
-each term. This is \code{NULL} until the step is trained by
-\code{\link[recipes:prep]{recipes::prep()}}.}
+\item{history}{A tibble with the convergence statistics for each term. This
+is \code{NULL} until the step is trained by \code{\link[recipes:prep]{recipes::prep()}}.}
 
-\item{skip}{A logical. Should the step be skipped when the
-recipe is baked by \code{\link[recipes:bake]{recipes::bake()}}? While all
-operations are baked when \code{\link[recipes:prep]{recipes::prep()}} is run, some
-operations may not be able to be conducted on new data (e.g.
-processing the outcome variable(s)). Care should be taken when
-using \code{skip = TRUE} as it may affect the computations for
-subsequent operations.}
+\item{skip}{A logical. Should the step be skipped when the recipe is baked by
+\code{\link[recipes:bake]{recipes::bake()}}? While all operations are baked when \code{\link[recipes:prep]{recipes::prep()}} is
+run, some operations may not be able to be conducted on new data (e.g.
+processing the outcome variable(s)). Care should be taken when using \code{skip = TRUE} as it may affect the computations for subsequent operations.}
 
 \item{id}{A character string that is unique to this step to identify it.}
 
 \item{optimizer, loss, metrics}{Arguments to pass to \code{\link[keras:reexports]{keras::compile()}}}
 
-\item{epochs, validation_split, batch_size, verbose, callbacks}{Arguments to pass to \code{\link[keras:reexports]{keras::fit()}}}
+\item{epochs, validation_split, batch_size, verbose, callbacks}{Arguments to pass
+to \code{\link[keras:reexports]{keras::fit()}}}
 }
 \value{
-An updated version of \code{recipe} with the new step added
-to the sequence of existing steps (if any). For the \code{tidy}
-method, a tibble with columns \code{terms} (the selectors or
-variables for encoding), \code{level} (the factor levels), and
-several columns containing \code{embed} in the name.
+An updated version of \code{recipe} with the new step added to the
+sequence of existing steps (if any). For the \code{tidy} method, a tibble with
+columns \code{terms} (the selectors or variables for encoding), \code{level} (the
+factor levels), and several columns containing \code{embed} in the name.
 }
 \description{
-\code{step_embed} creates a \emph{specification} of a recipe step that
-will convert a nominal (i.e. factor) predictor into a set of
-scores derived from a tensorflow model via a word-embedding model.
-\code{embed_control} is a simple wrapper for setting default options.
+\code{step_embed} creates a \emph{specification} of a recipe step that will convert a
+nominal (i.e. factor) predictor into a set of scores derived from a
+tensorflow model via a word-embedding model. \code{embed_control} is a simple
+wrapper for setting default options.
 }
 \details{
-Factor levels are initially assigned at random to the
-new variables and these variables are used in a neural network
-to optimize both the allocation of levels to new columns as well
-as estimating a model to predict the outcome. See Section 6.1.2
-of Francois and Allaire (2018) for more details.
+Factor levels are initially assigned at random to the new variables and these
+variables are used in a neural network to optimize both the allocation of
+levels to new columns as well as estimating a model to predict the outcome.
+See Section 6.1.2 of Francois and Allaire (2018) for more details.
 
-The new variables are mapped to the specific levels seen at the
-time of model training and an extra instance of the variables
-are used for new levels of the factor.
+The new variables are mapped to the specific levels seen at the time of model
+training and an extra instance of the variables are used for new levels of
+the factor.
 
-One model is created for each call to \code{step_embed}. All terms
-given to the step are estimated and encoded in the same model
-which would also contain predictors give in \code{predictors} (if
-any).
+One model is created for each call to \code{step_embed}. All terms given to the
+step are estimated and encoded in the same model which would also contain
+predictors give in \code{predictors} (if any).
 
-When the outcome is numeric, a linear activation function is
-used in the last layer while softmax is used for factor outcomes
-(with any number of levels).
+When the outcome is numeric, a linear activation function is used in the last
+layer while softmax is used for factor outcomes (with any number of levels).
 
-For example, the \code{keras} code for a numeric outcome, one
-categorical predictor, and no hidden units used here would be
+For example, the \code{keras} code for a numeric outcome, one categorical
+predictor, and no hidden units used here would be
 
 \if{html}{\out{<div class="sourceCode">}}\preformatted{  keras_model_sequential() \%>\%
   layer_embedding(
@@ -133,8 +123,8 @@ categorical predictor, and no hidden units used here would be
   layer_dense(units = 1, activation = 'linear')
 }\if{html}{\out{</div>}}
 
-If a factor outcome is used and hidden units were requested, the code
-would be
+If a factor outcome is used and hidden units were requested, the code would
+be
 
 \if{html}{\out{<div class="sourceCode">}}\preformatted{  keras_model_sequential() \%>\%
   layer_embedding(
@@ -147,23 +137,20 @@ would be
   layer_dense(units = num_factor_levels_y, activation = 'softmax')
 }\if{html}{\out{</div>}}
 
-Other variables specified by \code{predictors} are added as an
-additional dense layer after \code{layer_flatten} and before the
-hidden layer.
+Other variables specified by \code{predictors} are added as an additional dense
+layer after \code{layer_flatten} and before the hidden layer.
 
-Also note that it may be difficult to obtain reproducible
-results using this step due to the nature of Tensorflow (see
-link in References).
+Also note that it may be difficult to obtain reproducible results using this
+step due to the nature of Tensorflow (see link in References).
 
-tensorflow models cannot be run in parallel within the same
-session (via \code{foreach} or \code{futures}) or the \code{parallel} package.
-If using a recipes with this step with \code{caret}, avoid parallel
-processing.
+tensorflow models cannot be run in parallel within the same session (via
+\code{foreach} or \code{futures}) or the \code{parallel} package. If using a recipes with
+this step with \code{caret}, avoid parallel processing.
 }
 \section{Tidying}{
-When you \code{\link[=tidy.recipe]{tidy()}} this step, a tibble with columns
-\code{terms} (the selectors or variables selected), \code{levels} (levels in variable),
-and a number of columns with embedding information are returned.
+When you \code{\link[=tidy.recipe]{tidy()}} this step, a tibble with columns \code{terms}
+(the selectors or variables selected), \code{levels} (levels in variable), and a
+number of columns with embedding information are returned.
 }
 
 \section{Case weights}{
@@ -187,11 +174,10 @@ rec <- recipe(class ~ num_ci + sponsor_code, data = grants_other) \%>\%
 \dontshow{\}) # examplesIf}
 }
 \references{
-Francois C and Allaire JJ (2018)
-\emph{Deep Learning with R}, Manning
+Francois C and Allaire JJ (2018) \emph{Deep Learning with R}, Manning
 
-"How can I obtain reproducible results using Keras during
-development?" \url{https://tinyurl.com/keras-repro}
+"How can I obtain reproducible results using Keras during development?"
+\url{https://tinyurl.com/keras-repro}
 
 "Concatenate Embeddings for Categorical Variables with Keras"
 \url{https://flovv.github.io/Embeddings_with_keras_part2/}

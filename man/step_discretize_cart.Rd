@@ -27,12 +27,11 @@ affected by the step. See \code{\link[=selections]{selections()}} for more detai
 
 \item{role}{Defaults to \code{"predictor"}.}
 
-\item{trained}{A logical to indicate if the quantities for preprocessing
-have been estimated.}
+\item{trained}{A logical to indicate if the quantities for preprocessing have
+been estimated.}
 
 \item{outcome}{A call to \code{vars} to specify which variable is used as the
-outcome to train CART models in order to discretize explanatory
-variables.}
+outcome to train CART models in order to discretize explanatory variables.}
 
 \item{cost_complexity}{The regularization parameter. Any split that does not
 decrease the overall lack of fit by a factor of \code{cost_complexity} is not
@@ -44,15 +43,13 @@ attempted. Corresponds to \code{cp} in \code{\link[rpart:rpart]{rpart::rpart()}}
 \item{min_n}{The number of data points in a node required to continue
 splitting. Corresponds to \code{minsplit} in  \code{\link[rpart:rpart]{rpart::rpart()}}. Defaults to 20.}
 
-\item{rules}{The splitting rules of the best CART tree to retain for
-each variable. If length zero, splitting could not be used on that column.}
+\item{rules}{The splitting rules of the best CART tree to retain for each
+variable. If length zero, splitting could not be used on that column.}
 
-\item{skip}{A logical. Should the step be skipped when the
-recipe is baked by \code{\link[recipes:bake]{recipes::bake()}}? While all operations are baked
-when \code{\link[recipes:prep]{recipes::prep()}} is run, some operations may not be able to be
-conducted on new data (e.g. processing the outcome variable(s)).
-Care should be taken when using \code{skip = TRUE} as it may affect
-the computations for subsequent operations}
+\item{skip}{A logical. Should the step be skipped when the recipe is baked by
+\code{\link[recipes:bake]{recipes::bake()}}? While all operations are baked when \code{\link[recipes:prep]{recipes::prep()}} is
+run, some operations may not be able to be conducted on new data (e.g.
+processing the outcome variable(s)). Care should be taken when using \code{skip = TRUE} as it may affect the computations for subsequent operations}
 
 \item{id}{A character string that is unique to this step to identify it.}
 }
@@ -62,26 +59,26 @@ sequence of any existing operations.
 }
 \description{
 \code{step_discretize_cart} creates a \emph{specification} of a recipe step that will
-discretize numeric data (e.g. integers or doubles) into bins in a
-supervised way using a CART model.
+discretize numeric data (e.g. integers or doubles) into bins in a supervised
+way using a CART model.
 }
 \details{
-\code{step_discretize_cart()} creates non-uniform bins from numerical
-variables by utilizing the information about the outcome variable and
-applying a CART model.
+\code{step_discretize_cart()} creates non-uniform bins from numerical variables by
+utilizing the information about the outcome variable and applying a CART
+model.
 
-The best selection of buckets for each variable is selected using
-the standard cost-complexity pruning of CART, which makes this
-discretization method resistant to overfitting.
+The best selection of buckets for each variable is selected using the
+standard cost-complexity pruning of CART, which makes this discretization
+method resistant to overfitting.
 
-This step requires the \pkg{rpart} package. If not installed, the
-step will stop with a note about installing the package.
+This step requires the \pkg{rpart} package. If not installed, the step will
+stop with a note about installing the package.
 
 Note that the original data will be replaced with the new bins.
 }
 \section{Tidying}{
-When you \code{\link[=tidy.recipe]{tidy()}} this step, a tibble with columns
-\code{terms} (the columns that is selected), \code{values} is returned.
+When you \code{\link[=tidy.recipe]{tidy()}} this step, a tibble with columns \code{terms}
+(the columns that is selected), \code{values} is returned.
 }
 
 \section{Case weights}{
@@ -104,7 +101,10 @@ ad_data_te <- testing(split)
 
 cart_rec <-
   recipe(Class ~ ., data = ad_data_tr) \%>\%
-  step_discretize_cart(tau, age, p_tau, Ab_42, outcome = "Class", id = "cart splits")
+  step_discretize_cart(
+    tau, age, p_tau, Ab_42,
+    outcome = "Class", id = "cart splits"
+  )
 
 cart_rec <- prep(cart_rec, training = ad_data_tr)
 

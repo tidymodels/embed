@@ -1,79 +1,77 @@
 #' Sparse Bayesian PCA Signal Extraction
 #'
-#' `step_pca_sparse_bayes()` creates a *specification* of a recipe step that will convert
-#'  numeric data into one or more principal components that can have some zero
-#'  coefficients.
+#' `step_pca_sparse_bayes()` creates a *specification* of a recipe step that
+#' will convert numeric data into one or more principal components that can have
+#' some zero coefficients.
 #'
 #' @inheritParams step_lencode_bayes
 #' @inherit step_lencode_bayes return
 #' @param ... One or more selector functions to choose which variables will be
-#'  used to compute the components. See [selections()] for more details. For the
-#'  `tidy` method, these are not currently used.
+#'   used to compute the components. See [selections()] for more details. For
+#'   the `tidy` method, these are not currently used.
 #' @param role For model terms created by this step, what analysis role should
-#'  they be assigned? By default, the function assumes that the new principal
-#'  component columns created by the original variables will be used as
-#'  predictors in a model.
-#' @param num_comp The number of PCA components to retain as new predictors.
-#'  If `num_comp` is greater than the number of columns or the number of
-#'  possible components, a smaller value will be used. A value of zero indicates
-#'  that PCA will _not_ be used on the data.
-#' @param prior_slab_dispersion This value is proportional to the dispersion
-#' (or scale) parameter for the slab portion of the prior. Smaller values result
-#' in an increase in zero coefficients.
+#'   they be assigned? By default, the function assumes that the new principal
+#'   component columns created by the original variables will be used as
+#'   predictors in a model.
+#' @param num_comp The number of PCA components to retain as new predictors. If
+#'   `num_comp` is greater than the number of columns or the number of possible
+#'   components, a smaller value will be used. A value of zero indicates that
+#'   PCA will _not_ be used on the data.
+#' @param prior_slab_dispersion This value is proportional to the dispersion (or
+#'   scale) parameter for the slab portion of the prior. Smaller values result
+#'   in an increase in zero coefficients.
 #' @param prior_mixture_threshold The parameter that defines the trade-off
-#' between the spike and slab components of the prior. Increasing this parameter
-#' increases the number of zero coefficients.
+#'   between the spike and slab components of the prior. Increasing this
+#'   parameter increases the number of zero coefficients.
 #' @param keep_original_cols A logical to keep the original variables in the
-#'  output. Defaults to `FALSE`.
+#'   output. Defaults to `FALSE`.
 #' @param options A list of options to the default method for
-#' [VBsparsePCA::VBsparsePCA()].
+#'   [VBsparsePCA::VBsparsePCA()].
 #' @param res The rotation matrix once this preprocessing step has been trained
-#' by [prep()].
-#' @param prefix A character string that will be the prefix to the resulting
-#'  new variables. See notes below.
+#'   by [prep()].
+#' @param prefix A character string that will be the prefix to the resulting new
+#'   variables. See notes below.
 #' @return An updated version of `recipe` with the new step added to the
-#'  sequence of existing steps (if any). For the `tidy` method, a tibble with
-#'  columns `terms` (the selectors or variables selected), `value` (the
-#'  loading), and `component`.
+#'   sequence of existing steps (if any). For the `tidy` method, a tibble with
+#'   columns `terms` (the selectors or variables selected), `value` (the
+#'   loading), and `component`.
 #' @keywords datagen
 #' @concept preprocessing
 #' @concept pca
 #' @concept projection_methods
 #' @references Ning, B. (2021). Spike and slab Bayesian sparse principal
-#' component analysis. arXiv:2102.00305.
-#' @export
+#'   component analysis. arXiv:2102.00305.
 #' @details
+#'
 #' The `VBsparsePCA` package is required for this step. If it is not installed,
 #' the user will be prompted to do so when the step is defined.
 #'
-#' A spike-and-slab prior is a mixture of two priors. One (the "spike") has
-#'  all of its mass at zero and represents a variable that has no contribution
-#'  to the PCA coefficients. The other prior is a broader distribution that
-#'  reflects the coefficient distribution of variables that do affect the PCA
-#'  analysis. This is the "slab". The narrower the slab, the more likely that a
-#'  coefficient will be zero (or are regularized to be closer to zero). The
-#'  mixture of these two priors is governed by a mixing parameter, which itself
-#'  has a prior distribution and a hyper-parameter prior.
+#' A spike-and-slab prior is a mixture of two priors. One (the "spike") has all
+#' of its mass at zero and represents a variable that has no contribution to the
+#' PCA coefficients. The other prior is a broader distribution that reflects the
+#' coefficient distribution of variables that do affect the PCA analysis. This
+#' is the "slab". The narrower the slab, the more likely that a coefficient will
+#' be zero (or are regularized to be closer to zero). The mixture of these two
+#' priors is governed by a mixing parameter, which itself has a prior
+#' distribution and a hyper-parameter prior.
 #'
-#' PCA coefficients and their resulting scores are unique only up to the sign. This
-#' step will attempt to make the sign of the components more consistent from
-#' run-to-run. However, the sparsity constraint may interfere with this goal.
+#' PCA coefficients and their resulting scores are unique only up to the sign.
+#' This step will attempt to make the sign of the components more consistent
+#' from run-to-run. However, the sparsity constraint may interfere with this
+#' goal.
 #'
-#' The argument `num_comp` controls the number of components that
-#'  will be retained (per default the original variables that are used to derive
-#'  the components are removed from the data). The new components
-#'  will have names that begin with `prefix` and a sequence of
-#'  numbers. The variable names are padded with zeros. For example,
-#'  if `num_comp < 10`, their names will be `PC1` - `PC9`.
-#'  If `num_comp = 101`, the names would be `PC001` -
-#'  `PC101`.
-#' 
+#' The argument `num_comp` controls the number of components that will be
+#' retained (per default the original variables that are used to derive the
+#' components are removed from the data). The new components will have names
+#' that begin with `prefix` and a sequence of numbers. The variable names are
+#' padded with zeros. For example, if `num_comp < 10`, their names will be `PC1`
+#' - `PC9`. If `num_comp = 101`, the names would be `PC001` - `PC101`.
+#'
 #' # Tidying
 #'
-#' When you [`tidy()`][tidy.recipe()] this step, a tibble with columns
-#' `terms` (the selectors or variables selected), `value` and `component` is
-#' returned.
-#'  
+#' When you [`tidy()`][tidy.recipe()] this step, a tibble with columns `terms`
+#' (the selectors or variables selected), `value` and `component` is returned.
+#'
 #' @template case-weights-not-supported
 #'
 #' @seealso [step_pca_sparse()]
@@ -103,6 +101,7 @@
 #'   geom_tile() +
 #'   scale_fill_gradient2() +
 #'   theme(axis.text.y = element_blank())
+#' @export
 step_pca_sparse_bayes <- function(recipe,
                                   ...,
                                   role = "predictor",
@@ -160,7 +159,7 @@ step_pca_sparse_bayes_new <-
 
 #' @export
 prep.step_pca_sparse_bayes <- function(x, training, info = NULL, ...) {
-  col_names <- recipes::recipes_eval_select(x$terms, training, info)
+  col_names <- recipes_eval_select(x$terms, training, info)
 
   if (length(col_names) > 0) {
     check_type(training[, col_names], types = c("double", "integer"))
@@ -218,7 +217,7 @@ bake.step_pca_sparse_bayes <- function(object, new_data, ...) {
   if (!all(is.na(object$res))) {
     pca_vars <- rownames(object$res)
     check_new_data(pca_vars, object, new_data)
-    
+
     x <- as.matrix(new_data[, pca_vars])
     comps <- x %*% object$res
     comps <- check_name(comps, new_data, object)

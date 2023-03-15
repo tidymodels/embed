@@ -1,55 +1,54 @@
 #' Discretize numeric variables with CART
 #'
 #' `step_discretize_cart` creates a *specification* of a recipe step that will
-#'  discretize numeric data (e.g. integers or doubles) into bins in a
-#'  supervised way using a CART model.
+#' discretize numeric data (e.g. integers or doubles) into bins in a supervised
+#' way using a CART model.
 #'
 #' @param recipe A recipe object. The step will be added to the sequence of
 #'   operations for this recipe.
 #' @param ... One or more selector functions to choose which variables are
 #'   affected by the step. See [selections()] for more details.
 #' @param role Defaults to `"predictor"`.
-#' @param trained A logical to indicate if the quantities for preprocessing
-#'   have been estimated.
+#' @param trained A logical to indicate if the quantities for preprocessing have
+#'   been estimated.
 #' @param outcome A call to `vars` to specify which variable is used as the
-#'  outcome to train CART models in order to discretize explanatory
-#'  variables.
+#'   outcome to train CART models in order to discretize explanatory variables.
 #' @param cost_complexity The regularization parameter. Any split that does not
-#'  decrease the overall lack of fit by a factor of `cost_complexity` is not
-#'  attempted. Corresponds to `cp` in [rpart::rpart()]. Defaults to 0.01.
+#'   decrease the overall lack of fit by a factor of `cost_complexity` is not
+#'   attempted. Corresponds to `cp` in [rpart::rpart()]. Defaults to 0.01.
 #' @param tree_depth The _maximum_ depth in the final tree. Corresponds to
-#'  `maxdepth` in  [rpart::rpart()]. Defaults to 10.
+#'   `maxdepth` in  [rpart::rpart()]. Defaults to 10.
 #' @param min_n The number of data points in a node required to continue
-#'  splitting. Corresponds to `minsplit` in  [rpart::rpart()]. Defaults to 20.
-#' @param rules The splitting rules of the best CART tree to retain for
-#'  each variable. If length zero, splitting could not be used on that column.
+#'   splitting. Corresponds to `minsplit` in  [rpart::rpart()]. Defaults to 20.
+#' @param rules The splitting rules of the best CART tree to retain for each
+#'   variable. If length zero, splitting could not be used on that column.
 #' @param id A character string that is unique to this step to identify it.
-#' @param skip A logical. Should the step be skipped when the
-#'  recipe is baked by [recipes::bake()]? While all operations are baked
-#'  when [recipes::prep()] is run, some operations may not be able to be
-#'  conducted on new data (e.g. processing the outcome variable(s)).
-#'  Care should be taken when using `skip = TRUE` as it may affect
-#'  the computations for subsequent operations
+#' @param skip A logical. Should the step be skipped when the recipe is baked by
+#'   [recipes::bake()]? While all operations are baked when [recipes::prep()] is
+#'   run, some operations may not be able to be conducted on new data (e.g.
+#'   processing the outcome variable(s)). Care should be taken when using `skip
+#'   = TRUE` as it may affect the computations for subsequent operations
 #' @template step-return
-#' @export
-#' @details `step_discretize_cart()` creates non-uniform bins from numerical
-#'  variables by utilizing the information about the outcome variable and
-#'  applying a CART model.
+#' @details
 #'
-#'  The best selection of buckets for each variable is selected using
-#'  the standard cost-complexity pruning of CART, which makes this
-#'  discretization method resistant to overfitting.
+#' `step_discretize_cart()` creates non-uniform bins from numerical variables by
+#' utilizing the information about the outcome variable and applying a CART
+#' model.
 #'
-#' This step requires the \pkg{rpart} package. If not installed, the
-#'  step will stop with a note about installing the package.
+#' The best selection of buckets for each variable is selected using the
+#' standard cost-complexity pruning of CART, which makes this discretization
+#' method resistant to overfitting.
+#'
+#' This step requires the \pkg{rpart} package. If not installed, the step will
+#' stop with a note about installing the package.
 #'
 #' Note that the original data will be replaced with the new bins.
-#' 
+#'
 #' # Tidying
 #'
-#' When you [`tidy()`][tidy.recipe()] this step, a tibble with columns
-#' `terms` (the columns that is selected), `values` is returned.
-#' 
+#' When you [`tidy()`][tidy.recipe()] this step, a tibble with columns `terms`
+#' (the columns that is selected), `values` is returned.
+#'
 #' @template case-weights-supervised
 #'
 #' @examples
@@ -64,7 +63,10 @@
 #'
 #' cart_rec <-
 #'   recipe(Class ~ ., data = ad_data_tr) %>%
-#'   step_discretize_cart(tau, age, p_tau, Ab_42, outcome = "Class", id = "cart splits")
+#'   step_discretize_cart(
+#'     tau, age, p_tau, Ab_42,
+#'     outcome = "Class", id = "cart splits"
+#'   )
 #'
 #' cart_rec <- prep(cart_rec, training = ad_data_tr)
 #'
@@ -74,7 +76,7 @@
 #' bake(cart_rec, ad_data_te, tau)
 #' @seealso [embed::step_discretize_xgb()], [recipes::recipe()],
 #' [recipes::prep()], [recipes::bake()]
-#'
+#' @export
 step_discretize_cart <-
   function(recipe,
            ...,
@@ -87,7 +89,7 @@ step_discretize_cart <-
            rules = NULL,
            skip = FALSE,
            id = rand_id("discretize_cart")) {
-    recipes::recipes_pkg_check(required_pkgs.step_discretize_cart())
+    recipes_pkg_check(required_pkgs.step_discretize_cart())
 
     if (is.null(outcome)) {
       rlang::abort("`outcome` should select at least one column.")
@@ -130,8 +132,7 @@ step_discretize_cart_new <-
     )
   }
 
-
-cart_binning <- function(predictor, term, outcome, cost_complexity, tree_depth, 
+cart_binning <- function(predictor, term, outcome, cost_complexity, tree_depth,
                          min_n, wts = NULL) {
   df <- data.frame(y = outcome, x = predictor)
   if (is.null(wts)) {
@@ -143,7 +144,7 @@ cart_binning <- function(predictor, term, outcome, cost_complexity, tree_depth,
         y ~ x,
         data = df,
         weights = as.double(wts),
-        cp  = cost_complexity,
+        cp = cost_complexity,
         minsplit = min_n,
         maxdepth = tree_depth,
         maxcompete = 0,
@@ -179,18 +180,18 @@ cart_binning <- function(predictor, term, outcome, cost_complexity, tree_depth,
 
 #' @export
 prep.step_discretize_cart <- function(x, training, info = NULL, ...) {
-  col_names <- recipes::recipes_eval_select(x$terms, training, info)
+  col_names <- recipes_eval_select(x$terms, training, info)
 
-  wts <- recipes::get_case_weights(info, training)
-  were_weights_used <- recipes::are_weights_used(wts)
+  wts <- get_case_weights(info, training)
+  were_weights_used <- are_weights_used(wts)
   if (isFALSE(were_weights_used)) {
     wts <- rep(1, nrow(training))
   }
-  
+
   if (length(col_names) > 0) {
     check_type(training[, col_names], types = c("double", "integer"))
 
-    y_name <- recipes::recipes_eval_select(x$outcome, training, info)
+    y_name <- recipes_eval_select(x$outcome, training, info)
 
     col_names <- col_names[col_names != y_name]
 
@@ -217,7 +218,6 @@ prep.step_discretize_cart <- function(x, training, info = NULL, ...) {
     rules <- list()
   }
 
-
   step_discretize_cart_new(
     terms = x$terms,
     role = x$role,
@@ -237,7 +237,7 @@ prep.step_discretize_cart <- function(x, training, info = NULL, ...) {
 bake.step_discretize_cart <- function(object, new_data, ...) {
   vars <- object$rules
   check_new_data(names(vars), object, new_data)
-  
+
   for (i in seq_along(vars)) {
     if (length(vars[[i]]) > 0) {
       var <- names(vars)[[i]]
@@ -251,7 +251,7 @@ bake.step_discretize_cart <- function(object, new_data, ...) {
         dig.lab = 4
       )
 
-      recipes::check_name(binned_data, new_data, object)
+      check_name(binned_data, new_data, object)
       new_data <- binned_data
     }
   }
@@ -259,10 +259,13 @@ bake.step_discretize_cart <- function(object, new_data, ...) {
 }
 
 #' @export
-print.step_discretize_cart <- function(x, width = max(20, options()$width - 30), ...) {
+print.step_discretize_cart <- function(x, width = max(20, options()$width - 30),
+                                       ...) {
   title <- "Discretizing variables using CART "
-  print_step(names(x$rules), x$terms, x$trained, title, width,
-             case_weights = x$case_weights)
+  print_step(
+    names(x$rules), x$terms, x$trained, title, width,
+    case_weights = x$case_weights
+  )
   invisible(x)
 }
 
@@ -270,7 +273,7 @@ print.step_discretize_cart <- function(x, width = max(20, options()$width - 30),
 #' @param x A `step_discretize_cart` object.
 #' @export
 tidy.step_discretize_cart <- function(x, ...) {
-  if (recipes::is_trained(x)) {
+  if (is_trained(x)) {
     num_splits <- purrr::map_int(x$rules, length)
 
     res <- tibble(
@@ -278,7 +281,7 @@ tidy.step_discretize_cart <- function(x, ...) {
       values = unlist(x$rules, use.names = FALSE)
     )
   } else {
-    term_names <- recipes::sel2char(x$terms)
+    term_names <- sel2char(x$terms)
     res <- tibble(
       variable = term_names,
       values = rlang::na_chr

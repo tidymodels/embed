@@ -5,11 +5,10 @@ source(testthat::test_path("test_helpers.R"))
 data("credit_data", package = "modeldata")
 
 set.seed(342)
-in_training <- sample(1:nrow(credit_data), 2000)
+in_training <- sample(seq_len(nrow(credit_data)), 2000)
 
 credit_tr <- credit_data[in_training, ]
 credit_te <- credit_data[-in_training, ]
-
 
 set.seed(1)
 df <- data.frame(
@@ -81,7 +80,6 @@ test_that("Laplace works", {
   expect_false(all(is.finite(embed:::woe_table(c("A", "A", "B", "B"), c(0, 0, 0, 1), Laplace = 0)$woe)))
 })
 
-
 #------------------------------------
 # dictionary
 
@@ -110,7 +108,6 @@ test_that("dictionary returns no messages nor warnings nor errors", {
   expect_silent(dictionary(df %>% mutate(x3 = rep(c(TRUE, FALSE), 10)), "y", x3))
 })
 
-
 #------------------------------------
 # add_woe
 
@@ -130,10 +127,18 @@ test_that("add_woe ruturns no messages nor warnings nor errors", {
 })
 
 test_that("add_woe accepts numeric, logical and character predictor variables", {
-  expect_equal(add_woe(df %>% mutate(
-    x3 = rep(c(TRUE, FALSE), 10),
-    x4 = rep(c(20, 30), 10)
-  ), "y") %>% dim(), c(20, 9))
+  expect_equal(
+    add_woe(
+      df %>%
+        mutate(
+          x3 = rep(c(TRUE, FALSE), 10),
+          x4 = rep(c(20, 30), 10)
+        ),
+      "y"
+    ) %>%
+      dim(),
+    c(20, 9)
+  )
 })
 
 test_that("add_woe returns woe only for those variables that exists in both data and dictionary", {
@@ -196,7 +201,6 @@ test_that("step_woe", {
   #
   expect_snapshot(prep(rec_all_nominal, training = credit_tr, verbose = TRUE))
 
-
   rec_all_numeric <- recipe(Status ~ ., data = credit_tr) %>%
     step_woe(all_predictors(), outcome = vars(Status))
 
@@ -222,15 +226,17 @@ test_that("step_woe", {
 })
 
 test_that("bake method errors when needed non-standard role columns are missing", {
-  rec <- recipe(Status ~ ., data = credit_tr) %>% 
+  rec <- recipe(Status ~ ., data = credit_tr) %>%
     step_discretize(Price) %>%
     update_role(Price, new_role = "potato") %>%
     update_role_requirements(role = "potato", bake = FALSE)
-  
+
   rec_trained <- prep(rec, training = credit_tr, verbose = FALSE)
-  
-  expect_error(bake(rec_trained, new_data = credit_tr[, -14]),
-               class = "new_data_missing_column")
+
+  expect_error(
+    bake(rec_trained, new_data = credit_tr[, -14]),
+    class = "new_data_missing_column"
+  )
 })
 
 test_that("printing", {
@@ -240,12 +246,12 @@ test_that("printing", {
   expect_snapshot(prep(woe_extract))
 })
 
-
 test_that("2-level factors", {
   iris3 <- iris
   iris3$group <- factor(rep(letters[1:5], each = 30))
 
-  expect_snapshot(error = TRUE,
+  expect_snapshot(
+    error = TRUE,
     recipe(Species ~ ., data = iris3) %>%
       step_woe(group, outcome = vars(Species)) %>%
       prep()
@@ -254,17 +260,17 @@ test_that("2-level factors", {
 
 test_that("woe_table respects factor levels", {
   dat <- tibble(
-    predictor  = sample(0:1, 100, TRUE),
+    predictor = sample(0:1, 100, TRUE),
     target = factor(predictor == 0, levels = c(TRUE, FALSE), labels = 0:1),
     target0 = relevel(target, ref = "0"),
     target1 = relevel(target, ref = "1")
-  ) 
-  
+  )
+
   expect_equal(
     woe_table(dat$predictor, dat$target0)$woe,
     -woe_table(dat$predictor, dat$target1)$woe
   )
-  
+
   expect_identical(
     woe_table(dat$predictor, dat$target0) %>% select(-woe),
     woe_table(dat$predictor, dat$target1) %>% select(-woe)
@@ -287,4 +293,3 @@ test_that("empty selections", {
     ad_data %>% select(Genotype, tau, Class)
   )
 })
-

@@ -25,7 +25,7 @@ test_that("basic usage", {
       filters = "",
       lower = FALSE
     )
-  for (j in 1:ncol(res_tr)) {
+  for (j in seq_len(ncol(res_tr))) {
     if (j == check_1) {
       expect_true(res_tr[1, j][[1]] == 1)
     } else {
@@ -46,7 +46,7 @@ test_that("basic usage", {
     res_te <- bake(rec_tr, te_dat, dplyr::starts_with("x3"))
   )
 
-  for (j in 1:ncol(res_te)) {
+  for (j in seq_len(ncol(res_te))) {
     if (j == check_2) {
       expect_true(res_te[1, j][[1]] == 1)
     } else {
@@ -54,7 +54,6 @@ test_that("basic usage", {
     }
   }
 })
-
 
 test_that("basic usage - character strings", {
   skip_on_cran()
@@ -80,7 +79,7 @@ test_that("basic usage - character strings", {
       filters = "",
       lower = FALSE
     )
-  for (j in 1:ncol(res_tr)) {
+  for (j in seq_len(ncol(res_tr))) {
     if (j == check_1) {
       expect_true(res_tr[1, j][[1]] == 1)
     } else {
@@ -99,7 +98,7 @@ test_that("basic usage - character strings", {
 
   res_te <- bake(rec_tr, te_dat, dplyr::starts_with("x3"))
 
-  for (j in 1:ncol(res_te)) {
+  for (j in seq_len(ncol(res_te))) {
     if (j == check_2) {
       expect_true(res_te[1, j][[1]] == 1)
     } else {
@@ -156,11 +155,13 @@ test_that("bake method errors when needed non-standard role columns are missing"
     step_feature_hash(x3) %>%
     update_role(x3, new_role = "potato") %>%
     update_role_requirements(role = "potato", bake = FALSE)
-  
+
   rec_trained <- prep(rec, training = ex_dat, verbose = FALSE)
-  
-  expect_error(bake(rec_trained, new_data = ex_dat[, -3]),
-               class = "new_data_missing_column")
+
+  expect_error(
+    bake(rec_trained, new_data = ex_dat[, -3]),
+    class = "new_data_missing_column"
+  )
 })
 
 test_that("printing", {
@@ -168,7 +169,7 @@ test_that("printing", {
   print_test <- recipe(x1 ~ x3, data = ex_dat) %>%
     step_feature_hash(x3)
   expect_snapshot(print_test)
-  
+
   skip_if_not_installed("keras")
   skip_if(is.null(tensorflow::tf_version()))
   expect_snapshot(prep(print_test))

@@ -2,7 +2,8 @@
 % Please edit documentation in R/bayes.R
 \name{step_lencode_bayes}
 \alias{step_lencode_bayes}
-\title{Supervised Factor Conversions into Linear Functions using Bayesian Likelihood Encodings}
+\title{Supervised Factor Conversions into Linear Functions using Bayesian Likelihood
+Encodings}
 \usage{
 step_lencode_bayes(
   recipe,
@@ -18,84 +19,75 @@ step_lencode_bayes(
 )
 }
 \arguments{
-\item{recipe}{A recipe object. The step will be added to the
-sequence of operations for this recipe.}
+\item{recipe}{A recipe object. The step will be added to the sequence of
+operations for this recipe.}
 
-\item{...}{One or more selector functions to choose variables.
-For \code{step_lencode_bayes}, this indicates the variables to be encoded
-into a numeric format. See \code{\link[recipes:selections]{recipes::selections()}} for more details. For
-the \code{tidy} method, these are not currently used.}
+\item{...}{One or more selector functions to choose variables. For
+\code{step_lencode_bayes}, this indicates the variables to be encoded into a
+numeric format. See \code{\link[recipes:selections]{recipes::selections()}} for more details. For the
+\code{tidy} method, these are not currently used.}
 
-\item{role}{Not used by this step since no new variables are
-created.}
+\item{role}{Not used by this step since no new variables are created.}
 
-\item{trained}{A logical to indicate if the quantities for
-preprocessing have been estimated.}
+\item{trained}{A logical to indicate if the quantities for preprocessing have
+been estimated.}
 
-\item{outcome}{A call to \code{vars} to specify which variable is
-used as the outcome in the generalized linear model. Only
-numeric and two-level factors are currently supported.}
+\item{outcome}{A call to \code{vars} to specify which variable is used as the
+outcome in the generalized linear model. Only numeric and two-level factors
+are currently supported.}
 
 \item{options}{A list of options to pass to \code{\link[rstanarm:stan_glmer]{rstanarm::stan_glmer()}}.}
 
 \item{verbose}{A logical to control the default printing by
 \code{\link[rstanarm:stan_glmer]{rstanarm::stan_glmer()}}.}
 
-\item{mapping}{A list of tibble results that define the
-encoding. This is \code{NULL} until the step is trained by
-\code{\link[recipes:prep]{recipes::prep()}}.}
+\item{mapping}{A list of tibble results that define the encoding. This is
+\code{NULL} until the step is trained by \code{\link[recipes:prep]{recipes::prep()}}.}
 
-\item{skip}{A logical. Should the step be skipped when the
-recipe is baked by \code{\link[recipes:bake]{recipes::bake()}}? While all operations are baked
-when \code{\link[recipes:prep]{recipes::prep()}} is run, some operations may not be able to be
-conducted on new data (e.g. processing the outcome variable(s)).
-Care should be taken when using \code{skip = TRUE} as it may affect
-the computations for subsequent operations}
+\item{skip}{A logical. Should the step be skipped when the recipe is baked by
+\code{\link[recipes:bake]{recipes::bake()}}? While all operations are baked when \code{\link[recipes:prep]{recipes::prep()}} is
+run, some operations may not be able to be conducted on new data (e.g.
+processing the outcome variable(s)). Care should be taken when using \code{skip = TRUE} as it may affect the computations for subsequent operations}
 
 \item{id}{A character string that is unique to this step to identify it.}
 }
 \value{
-An updated version of \code{recipe} with the new step added
-to the sequence of existing steps (if any). For the \code{tidy}
-method, a tibble with columns \code{terms} (the selectors or
-variables for encoding), \code{level} (the factor levels), and
-\code{value} (the encodings).
+An updated version of \code{recipe} with the new step added to the
+sequence of existing steps (if any). For the \code{tidy} method, a tibble with
+columns \code{terms} (the selectors or variables for encoding), \code{level} (the
+factor levels), and \code{value} (the encodings).
 }
 \description{
-\code{step_lencode_bayes} creates a \emph{specification} of a recipe step that
-will convert a nominal (i.e. factor) predictor into a single set of
-scores derived from a generalized linear model estimated using
-Bayesian analysis.
+\code{step_lencode_bayes} creates a \emph{specification} of a recipe step that will
+convert a nominal (i.e. factor) predictor into a single set of scores derived
+from a generalized linear model estimated using Bayesian analysis.
 }
 \details{
-For each factor predictor, a generalized linear model
-is fit to the outcome and the coefficients are returned as the
-encoding. These coefficients are on the linear predictor scale
-so, for factor outcomes, they are in log-odds units. The
-coefficients are created using a no intercept model and, when
-two factor outcomes are used, the log-odds reflect the event of
-interest being the \emph{first} level of the factor.
+For each factor predictor, a generalized linear model is fit to the outcome
+and the coefficients are returned as the encoding. These coefficients are on
+the linear predictor scale so, for factor outcomes, they are in log-odds
+units. The coefficients are created using a no intercept model and, when two
+factor outcomes are used, the log-odds reflect the event of interest being
+the \emph{first} level of the factor.
 
-For novel levels, a slightly timmed average of the coefficients
-is returned.
+For novel levels, a slightly timmed average of the coefficients is returned.
 
-A hierarchical generalized linear model is fit using
-\code{\link[rstanarm:stan_glmer]{rstanarm::stan_glmer()}} and no intercept via
+A hierarchical generalized linear model is fit using \code{\link[rstanarm:stan_glmer]{rstanarm::stan_glmer()}}
+and no intercept via
 
 \if{html}{\out{<div class="sourceCode">}}\preformatted{  stan_glmer(outcome ~ (1 | predictor), data = data, ...)
 }\if{html}{\out{</div>}}
 
-where the \code{...} include the \code{family} argument (automatically
-set by the step, unless passed in by \code{options}) as well as any arguments
-given to the \code{options} argument to the step. Relevant options include
-\code{chains}, \code{iter}, \code{cores}, and arguments for the priors (see the links
-in the References below). \code{prior_intercept} is the argument that has the
-most effect on the amount of shrinkage.
+where the \code{...} include the \code{family} argument (automatically set by the step,
+unless passed in by \code{options}) as well as any arguments given to the
+\code{options} argument to the step. Relevant options include \code{chains}, \code{iter},
+\code{cores}, and arguments for the priors (see the links in the References
+below). \code{prior_intercept} is the argument that has the most effect on the
+amount of shrinkage.
 }
 \section{Tidying}{
-When you \code{\link[=tidy.recipe]{tidy()}} this step, a tibble with columns
-\code{terms} (the selectors or variables selected), \code{value} and \code{component} is
-returned.
+When you \code{\link[=tidy.recipe]{tidy()}} this step, a tibble with columns \code{terms}
+(the selectors or variables selected), \code{value} and \code{component} is returned.
 }
 
 \section{Case weights}{
@@ -121,13 +113,12 @@ reencoded <- recipe(class ~ sponsor_code, data = grants_other) \%>\%
 }
 }
 \references{
-Micci-Barreca D (2001) "A preprocessing scheme for
-high-cardinality categorical attributes in classification and
-prediction problems," ACM SIGKDD Explorations Newsletter, 3(1),
-27-32.
+Micci-Barreca D (2001) "A preprocessing scheme for high-cardinality
+categorical attributes in classification and prediction problems," ACM SIGKDD
+Explorations Newsletter, 3(1), 27-32.
 
-Zumel N and Mount J (2017) "vtreat: a data.frame Processor for
-Predictive Modeling," arXiv:1611.09477
+Zumel N and Mount J (2017) "vtreat: a data.frame Processor for Predictive
+Modeling," arXiv:1611.09477
 
 "Hierarchical Partial Pooling for Repeated Binary Trials"
 \url{https://tinyurl.com/stan-pooling}
@@ -135,8 +126,8 @@ Predictive Modeling," arXiv:1611.09477
 "Prior Distributions for `rstanarm`` Models"
 \url{https://tinyurl.com/stan-priors}
 
-"Estimating Generalized (Non-)Linear Models with Group-Specific
-Terms with \code{rstanarm}" \url{https://tinyurl.com/stan-glm-grouped}
+"Estimating Generalized (Non-)Linear Models with Group-Specific Terms with
+\code{rstanarm}" \url{https://tinyurl.com/stan-glm-grouped}
 }
 \concept{preprocessing encoding}
 \keyword{datagen}

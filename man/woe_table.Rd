@@ -9,15 +9,16 @@ woe_table(predictor, outcome, Laplace = 1e-06)
 \arguments{
 \item{predictor}{A atomic vector, usualy with few distinct values.}
 
-\item{outcome}{The dependent variable. A atomic vector with exactly 2 distinct values.}
+\item{outcome}{The dependent variable. A atomic vector with exactly 2
+distinct values.}
 
 \item{Laplace}{The \code{pseudocount} parameter of the Laplace Smoothing
-estimator. Default to 1e-6. Value to avoid -Inf/Inf from predictor category with only
-one outcome class. Set to 0 to allow Inf/-Inf.}
+estimator. Default to 1e-6. Value to avoid -Inf/Inf from predictor category
+with only one outcome class. Set to 0 to allow Inf/-Inf.}
 }
 \value{
-a tibble with counts, proportions and woe.
-Warning: woe can possibly be -Inf. Use 'Laplace' arg to avoid that.
+a tibble with counts, proportions and woe. Warning: woe can possibly
+be -Inf. Use 'Laplace' arg to avoid that.
 }
 \description{
 Calculates some summaries and the WoE (Weight of Evidence) between a binary
@@ -26,7 +27,9 @@ outcome and a given predictor variable. Used to biuld the dictionary.
 \references{
 Kullback, S. (1959). \emph{Information Theory and Statistics.} Wiley, New York.
 
-Hastie, T., Tibshirani, R. and Friedman, J. (1986). \emph{Elements of Statistical Learning}, Second Edition, Springer, 2009.
+Hastie, T., Tibshirani, R. and Friedman, J. (1986). \emph{Elements of Statistical
+Learning}, Second Edition, Springer, 2009.
 
-Good, I. J. (1985), "Weight of evidence: A brief survey", \emph{Bayesian Statistics}, 2, pp.249-270.
+Good, I. J. (1985), "Weight of evidence: A brief survey", \emph{Bayesian
+Statistics}, 2, pp.249-270.
 }
