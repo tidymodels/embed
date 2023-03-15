@@ -11,6 +11,7 @@ step_collapse_stringdist(
   trained = FALSE,
   distance = NULL,
   method = "osa",
+  options = list(),
   results = NULL,
   columns = NULL,
   skip = FALSE,
@@ -36,6 +37,10 @@ that have a string distance between them of 2 or lower.}
 
 \item{method}{Character, method for distance calculation. The default is
 \code{"osa"}, see \link[stringdist:stringdist-metrics]{stringdist::stringdist-metrics}.}
+
+\item{options}{List, other arguments passed to
+\code{\link[stringdist:stringdist]{stringdist::stringdistmatrix()}} such as \code{weight}, \code{q}, \code{p}, and \code{bt}, that
+are used for different values of \code{method}.}
 
 \item{results}{A list denoting the way the labels should be collapses is
 stored here once this preprocessing step has be trained by \code{\link[=prep]{prep()}}.}
