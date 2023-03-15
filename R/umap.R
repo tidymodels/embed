@@ -12,6 +12,8 @@
 #' @param neighbors An integer for the number of nearest neighbors used to
 #'   construct the target simplicial set. If `neighbors` is greater than the
 #'   number of data points, the smaller value is used.
+#' @param metric Character, type of distance metric to use to find nearest 
+#'   neighbors. See [uwot::umap()] for more details. Default to `"euclidean"`.
 #' @param epochs Number of iterations for the neighbor optimization. See
 #'   [uwot::umap()] for more details.
 #' @param learn_rate Positive number of the learning rate for the optimization
@@ -93,6 +95,7 @@ step_umap <-
            neighbors = 15,
            num_comp = 2,
            min_dist = 0.01,
+           metric = "euclidean",
            learn_rate = 1,
            epochs = NULL,
            options = list(verbose = FALSE, n_threads = 1),
@@ -130,6 +133,7 @@ step_umap <-
         neighbors = neighbors,
         num_comp = num_comp,
         min_dist = min_dist,
+        metric = metric,
         learn_rate = learn_rate,
         epochs = epochs,
         options = options,
@@ -145,7 +149,7 @@ step_umap <-
   }
 
 step_umap_new <-
-  function(terms, role, trained, outcome, neighbors, num_comp, min_dist,
+  function(terms, role, trained, outcome, neighbors, num_comp, min_dist, metric,
            learn_rate, epochs, options, seed, prefix, keep_original_cols,
            retain, object, skip, id) {
     step(
@@ -157,6 +161,7 @@ step_umap_new <-
       neighbors = neighbors,
       num_comp = num_comp,
       min_dist = min_dist,
+      metric = metric,
       learn_rate = learn_rate,
       epochs = epochs,
       options = options,
@@ -184,6 +189,7 @@ umap_fit_call <- function(obj, y = NULL) {
   cl$n_epochs <- obj$epochs
   cl$learning_rate <- obj$learn_rate
   cl$min_dist <- obj$min_dist
+  cl$metric <- obj$metric
   if (length(obj$options) > 0) {
     cl <- rlang::call_modify(cl, !!!obj$options)
   }
@@ -221,6 +227,7 @@ prep.step_umap <- function(x, training, info = NULL, ...) {
     neighbors = x$neighbors,
     num_comp = x$num_comp,
     min_dist = x$min_dist,
+    metric = x$metric,
     learn_rate = x$learn_rate,
     epochs = x$epochs,
     options = x$options,
