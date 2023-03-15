@@ -2,7 +2,7 @@
 
 * All steps now have `required_pkgs()` methods.
 
-* `step_collapse_stringdist()` has gained `method` and `options` arguments to allow for different types of string distance calculations. (#619)
+* `step_collapse_stringdist()` has gained `method` and `options` arguments to allow for different types of string distance calculations. (#152)
 
 # embed 1.0.0
 
