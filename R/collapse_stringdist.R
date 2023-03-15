@@ -11,6 +11,11 @@
 #' @param distance Integer, value to determine which strings should be collapsed
 #'   with which. The value is being used inclusive, so `2` will collapse levels
 #'   that have a string distance between them of 2 or lower.
+#' @param method Character, method for distance calculation. The default is 
+#'   `"osa"`, see [stringdist::stringdist-metrics].
+#' @param options List, other arguments passed to
+#'   [stringdist::stringdistmatrix()] such as `weight`, `q`, `p`, and `bt`, that
+#'   are used for different values of `method`. 
 #' @param results A list denoting the way the labels should be collapses is
 #'   stored here once this preprocessing step has be trained by [prep()].
 #' @param columns A character string of variable names that will be populated
@@ -61,6 +66,8 @@ step_collapse_stringdist <-
            role = NA,
            trained = FALSE,
            distance = NULL,
+           method = "osa",
+           options = list(),
            results = NULL,
            columns = NULL,
            skip = FALSE,
@@ -76,6 +83,8 @@ step_collapse_stringdist <-
         role = role,
         trained = trained,
         distance = distance,
+        method = method,
+        options = options,
         results = results,
         columns = columns,
         skip = skip,
@@ -85,13 +94,16 @@ step_collapse_stringdist <-
   }
 
 step_collapse_stringdist_new <-
-  function(terms, role, trained, distance, results, columns, skip, id) {
+  function(terms, role, trained, distance, method, options, results, columns, 
+           skip, id) {
     step(
       subclass = "collapse_stringdist",
       terms = terms,
       role = role,
       trained = trained,
       distance = distance,
+      method = method,
+      options = options,
       results = results,
       columns = columns,
       skip = skip,
@@ -103,13 +115,21 @@ step_collapse_stringdist_new <-
 prep.step_collapse_stringdist <- function(x, training, info = NULL, ...) {
   col_names <- recipes_eval_select(x$terms, training, info)
 
-  values <- lapply(training[, col_names], collapse_stringdist_impl, x$distance)
+  values <- lapply(
+    training[, col_names],
+    collapse_stringdist_impl, 
+    dist = x$distance,
+    method = x$method,
+    options = x$options
+  )
 
   step_collapse_stringdist_new(
     terms = x$terms,
     role = x$role,
     trained = TRUE,
     distance = x$distance,
+    method = x$method,
+    options = x$options,
     results = values,
     columns = col_names,
     skip = x$skip,
@@ -117,13 +137,21 @@ prep.step_collapse_stringdist <- function(x, training, info = NULL, ...) {
   )
 }
 
-collapse_stringdist_impl <- function(x, dist) {
+collapse_stringdist_impl <- function(x, dist, method, options) {
   if (is.factor(x)) {
     x <- levels(x)
   } else {
     x <- unique(x)
   }
-  dists <- stringdist::stringdistmatrix(x, x)
+  
+  cl <- rlang::call2(
+    "stringdistmatrix",
+    .ns = "stringdist",
+    a = x, b = x, method = method,
+    !!!options
+  )
+  
+  dists <- rlang::eval_tidy(cl)
 
   pairs <- which(dists <= dist, arr.ind = TRUE)
 
