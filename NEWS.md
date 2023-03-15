@@ -4,6 +4,8 @@
 
 * Add `metric` argument to `step_umap()`. (#154)
 
+* `step_collapse_stringdist()` has gained `method` and `options` arguments to allow for different types of string distance calculations. (#152)
+
 # embed 1.0.0
 
 * `step_collapse_cart()` can pool a predictor's factor levels using a tree-based method. 
