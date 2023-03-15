@@ -351,12 +351,7 @@ add_woe <- function(.data, outcome, ..., dictionary = NULL, prefix = "woe") {
     dplyr::filter(variable %in% dots_vars) %>%
     dplyr::select(variable, predictor, woe)
 
-  # See https://tidyr.tidyverse.org/dev/articles/in-packages.html
-  if (tidyr_new_interface()) {
-    output <- tidyr::nest(output, woe_table = -dplyr::one_of("variable"))
-  } else {
-    output <- tidyr::nest(output, .key = "woe_table")
-  }
+  output <- tidyr::nest(output, woe_table = -dplyr::one_of("variable"))
 
   output <-
     output %>%
@@ -490,12 +485,6 @@ tidy.step_woe <- function(x, ...) {
   }
   res$id <- x$id
   res
-}
-
-# ------------------------------------------------------------------------------
-
-tidyr_new_interface <- function() {
-  utils::packageVersion("tidyr") > "0.8.99"
 }
 
 #' @rdname required_pkgs.embed
