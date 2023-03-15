@@ -10,6 +10,7 @@ step_collapse_stringdist(
   role = NA,
   trained = FALSE,
   distance = NULL,
+  method = "osa",
   results = NULL,
   columns = NULL,
   skip = FALSE,
@@ -32,6 +33,9 @@ preprocessing have been estimated.}
 \item{distance}{Integer, value to determine which strings should be collapsed
 with which. The value is being used inclusive, so \code{2} will collapse levels
 that have a string distance between them of 2 or lower.}
+
+\item{method}{Character, method for distance calculation. The default is
+\code{"osa"}, see \link[stringdist:stringdist-metrics]{stringdist::stringdist-metrics}.}
 
 \item{results}{A list denoting the way the labels should be collapses is
 stored here once this preprocessing step has be trained by \code{\link[=prep]{prep()}}.}
