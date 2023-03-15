@@ -56,8 +56,8 @@
 #' @references
 #'
 #' McInnes, L., & Healy, J. (2018). UMAP: Uniform Manifold
-#' Approximation and Projection for Dimension Reduction. \url{
-#' https://arxiv.org/abs/1802.03426}.
+#' Approximation and Projection for Dimension Reduction. 
+#' \url{https://arxiv.org/abs/1802.03426}.
 #'
 #' "How UMAP Works"
 #' \url{https://umap-learn.readthedocs.io/en/latest/how_umap_works.html}
