@@ -71,27 +71,30 @@ outcome and a given predictor variable. Used to biuld the dictionary.</p>
 
 
 <dt>outcome</dt>
-<dd><p>The dependent variable. A atomic vector with exactly 2 distinct values.</p></dd>
+<dd><p>The dependent variable. A atomic vector with exactly 2
+distinct values.</p></dd>
 
 
 <dt>Laplace</dt>
 <dd><p>The <code>pseudocount</code> parameter of the Laplace Smoothing
-estimator. Default to 1e-6. Value to avoid -Inf/Inf from predictor category with only
-one outcome class. Set to 0 to allow Inf/-Inf.</p></dd>
+estimator. Default to 1e-6. Value to avoid -Inf/Inf from predictor category
+with only one outcome class. Set to 0 to allow Inf/-Inf.</p></dd>
 
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     
 
-<p>a tibble with counts, proportions and woe.
-Warning: woe can possibly be -Inf. Use 'Laplace' arg to avoid that.</p>
+<p>a tibble with counts, proportions and woe. Warning: woe can possibly
+be -Inf. Use 'Laplace' arg to avoid that.</p>
     </div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
     <p>Kullback, S. (1959). <em>Information Theory and Statistics.</em> Wiley, New York.</p>
-<p>Hastie, T., Tibshirani, R. and Friedman, J. (1986). <em>Elements of Statistical Learning</em>, Second Edition, Springer, 2009.</p>
-<p>Good, I. J. (1985), "Weight of evidence: A brief survey", <em>Bayesian Statistics</em>, 2, pp.249-270.</p>
+<p>Hastie, T., Tibshirani, R. and Friedman, J. (1986). <em>Elements of Statistical
+Learning</em>, Second Edition, Springer, 2009.</p>
+<p>Good, I. J. (1985), "Weight of evidence: A brief survey", <em>Bayesian
+Statistics</em>, 2, pp.249-270.</p>
     </div>
 
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
