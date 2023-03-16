@@ -1,4 +1,4 @@
-source(testthat::test_path("test_helpers.R"))
+source(testthat::test_path("test-helpers.R"))
 
 # ------------------------------------------------------------------------------
 
