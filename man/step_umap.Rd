@@ -14,6 +14,7 @@ step_umap(
   neighbors = 15,
   num_comp = 2,
   min_dist = 0.01,
+  metric = "euclidean",
   learn_rate = 1,
   epochs = NULL,
   options = list(verbose = FALSE, n_threads = 1),
@@ -52,6 +53,9 @@ is greater than the number of selected columns minus one, the smaller value
 is used.}
 
 \item{min_dist}{The effective minimum distance between embedded points.}
+
+\item{metric}{Character, type of distance metric to use to find nearest
+neighbors. See \code{\link[uwot:umap]{uwot::umap()}} for more details. Default to \code{"euclidean"}.}
 
 \item{learn_rate}{Positive number of the learning rate for the optimization
 process.}
