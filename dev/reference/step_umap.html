@@ -73,6 +73,7 @@ set of features into a smaller space.</p>
 <span>  neighbors <span class="op">=</span> <span class="fl">15</span>,</span>
 <span>  num_comp <span class="op">=</span> <span class="fl">2</span>,</span>
 <span>  min_dist <span class="op">=</span> <span class="fl">0.01</span>,</span>
+<span>  metric <span class="op">=</span> <span class="st">"euclidean"</span>,</span>
 <span>  learn_rate <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  epochs <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  options <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>verbose <span class="op">=</span> <span class="cn">FALSE</span>, n_threads <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>,</span>
@@ -128,6 +129,11 @@ is used.</p></dd>
 
 <dt>min_dist</dt>
 <dd><p>The effective minimum distance between embedded points.</p></dd>
+
+
+<dt>metric</dt>
+<dd><p>Character, type of distance metric to use to find nearest
+neighbors. See <code><a href="https://rdrr.io/pkg/uwot/man/umap.html" class="external-link">uwot::umap()</a></code> for more details. Default to <code>"euclidean"</code>.</p></dd>
 
 
 <dt>learn_rate</dt>
