@@ -196,7 +196,7 @@ prep.step_embed <- function(x, training, info = NULL, ...) {
     check_type(training[, col_names], types = c("string", "factor", "ordered"))
     y_name <- recipes_eval_select(x$outcome, training, info)
     if (length(x$predictors) > 0) {
-      pred_names <- terms_select(x$predictors, info = info)
+      pred_names <- recipes_eval_select(x$predictors, training, info)
       check_type(training[, pred_names], types = c("double", "integer"))
     } else {
       pred_names <- NULL
