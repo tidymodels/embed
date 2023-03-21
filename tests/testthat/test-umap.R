@@ -1,4 +1,4 @@
-source(testthat::test_path("test_helpers.R"))
+source(testthat::test_path("test-helpers.R"))
 
 # ------------------------------------------------------------------------------
 
@@ -100,49 +100,6 @@ test_that("numeric outcome", {
   )
 })
 
-test_that("no outcome", {
-  set.seed(11)
-  unsupervised <-
-    recipe(~., data = tr[, -5]) %>%
-    step_umap(all_predictors(), num_comp = 3, min_dist = .2, learn_rate = .2) %>%
-    prep(training = tr[, -5])
-
-  direct_mod <-
-    withr::with_seed(
-      unsupervised$steps[[1]]$seed[1],
-      uwot::umap(
-        X = tr[, -5],
-        n_neighbors = 15,
-        n_components = 3,
-        learning_rate = .2,
-        min_dist = 0.2,
-        verbose = FALSE,
-        n_threads = 1,
-        ret_model = TRUE
-      )
-    )
-
-  expect_equal(
-    direct_mod$embedding,
-    unsupervised$steps[[1]]$object$embedding,
-    ignore_attr = TRUE
-  )
-
-  # predictions:
-
-  direct_pred <-
-    withr::with_seed(
-      unsupervised$steps[[1]]$seed[2],
-      uwot::umap_transform(model = direct_mod, X = te[, -5])
-    )
-  colnames(direct_pred) <- paste0("umap_", 1:3)
-  expect_equal(
-    direct_pred,
-    bake(unsupervised, new_data = te[, -5], composition = "matrix", all_predictors()),
-    ignore_attr = TRUE
-  )
-})
-
 test_that("metric argument works", {
   set.seed(11)
   unsupervised <-
@@ -177,6 +134,49 @@ test_that("metric argument works", {
   
   # predictions:
   
+  direct_pred <-
+    withr::with_seed(
+      unsupervised$steps[[1]]$seed[2],
+      uwot::umap_transform(model = direct_mod, X = te[, -5])
+    )
+  colnames(direct_pred) <- paste0("umap_", 1:3)
+  expect_equal(
+    direct_pred,
+    bake(unsupervised, new_data = te[, -5], composition = "matrix", all_predictors()),
+    ignore_attr = TRUE
+  )
+})
+
+test_that("no outcome", {
+  set.seed(11)
+  unsupervised <-
+    recipe(~., data = tr[, -5]) %>%
+    step_umap(all_predictors(), num_comp = 3, min_dist = .2, learn_rate = .2) %>%
+    prep(training = tr[, -5])
+
+  direct_mod <-
+    withr::with_seed(
+      unsupervised$steps[[1]]$seed[1],
+      uwot::umap(
+        X = tr[, -5],
+        n_neighbors = 15,
+        n_components = 3,
+        learning_rate = .2,
+        min_dist = 0.2,
+        verbose = FALSE,
+        n_threads = 1,
+        ret_model = TRUE
+      )
+    )
+
+  expect_equal(
+    direct_mod$embedding,
+    unsupervised$steps[[1]]$object$embedding,
+    ignore_attr = TRUE
+  )
+
+  # predictions:
+
   direct_pred <-
     withr::with_seed(
       unsupervised$steps[[1]]$seed[2],
