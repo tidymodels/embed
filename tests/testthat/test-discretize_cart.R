@@ -4,8 +4,6 @@ library(rpart)
 
 source(test_path("make_binned_data.R"))
 
-# ------------------------------------------------------------------------------
-
 set.seed(8497)
 sim_tr_cls <- sim_data_2class(1000)
 sim_te_cls <- sim_data_2class(100)
@@ -17,8 +15,6 @@ sim_te_reg <- sim_data_reg(100)
 mod <- rpart(y ~ x, data = sim_tr_reg)
 
 best_split <- unname(mod$splits[, "index"])
-
-# ------------------------------------------------------------------------------
 
 test_that("low-level binning for classification", {
   expect_error(
@@ -80,8 +76,6 @@ test_that("low-level binning for regression", {
   expect_equal(splits, numeric(0))
 })
 
-# ------------------------------------------------------------------------------
-
 test_that("step function for classification", {
   expect_snapshot({
     cart_rec <-
@@ -124,8 +118,6 @@ test_that("step function for regression", {
   expect_true(is.numeric(cart_pred$z))
 })
 
-# ------------------------------------------------------------------------------
-
 test_that("bad args", {
   tmp <- sim_tr_reg
   tmp$w <- sample(letters[1:4], nrow(tmp), replace = TRUE)
@@ -137,8 +129,6 @@ test_that("bad args", {
       prep()
   })
 })
-
-# ------------------------------------------------------------------------------
 
 test_that("tidy method", {
   cart_rec <-
@@ -186,8 +176,6 @@ test_that("bake method errors when needed non-standard role columns are missing"
   )
 })
 
-# ------------------------------------------------------------------------------
-
 test_that("printing", {
   cart_rec <-
     recipe(class ~ ., data = sim_tr_cls) %>%
@@ -196,8 +184,6 @@ test_that("printing", {
   expect_snapshot(cart_rec)
   expect_snapshot(prep(cart_rec))
 })
-
-# ------------------------------------------------------------------------------
 
 test_that("empty selections", {
   data(ad_data, package = "modeldata")

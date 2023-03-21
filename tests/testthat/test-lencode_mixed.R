@@ -1,8 +1,6 @@
 source(testthat::test_path("make_example_data.R"))
 source(testthat::test_path("test-helpers.R"))
 
-# ------------------------------------------------------------------------------
-
 test_that("factor encoded predictor", {
   skip_if_not_installed("lme4")
   class_test <- recipe(x2 ~ ., data = ex_dat) %>%
@@ -272,8 +270,6 @@ test_that("printing", {
   expect_snapshot(prep(print_test))
 })
 
-# ------------------------------------------------------------------------------
-
 test_that("empty selections", {
   data(ad_data, package = "modeldata")
   expect_error(
@@ -288,8 +284,6 @@ test_that("empty selections", {
     ad_data %>% select(Genotype, tau, Class)
   )
 })
-
-# ------------------------------------------------------------------------------
 
 test_that("case weights", {
   skip_if_not_installed("lme4")

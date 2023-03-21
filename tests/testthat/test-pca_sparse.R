@@ -1,7 +1,5 @@
 source(testthat::test_path("test-helpers.R"))
 
-# ------------------------------------------------------------------------------
-
 data(cells, package = "modeldata")
 cells$case <- cells$class <- NULL
 cells <- as.data.frame(scale(cells))
@@ -9,8 +7,6 @@ cells <- as.data.frame(scale(cells))
 split <- seq.int(1, 2019, by = 10)
 tr <- cells[-split, ]
 te <- cells[split, ]
-
-# ------------------------------------------------------------------------------
 
 test_that("step_pca_sparse", {
   skip_if_not_installed("irlba")
@@ -51,8 +47,6 @@ test_that("step_pca_sparse", {
 
   expect_snapshot(rec)
 })
-
-# ------------------------------------------------------------------------------
 
 test_that("empty selections", {
   data(ad_data, package = "modeldata")

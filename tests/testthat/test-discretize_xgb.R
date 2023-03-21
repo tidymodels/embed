@@ -11,8 +11,6 @@ data("credit_data", package = "modeldata")
 data("ames", package = "modeldata")
 data("attrition", package = "modeldata")
 
-# ------------------------------------------------------------------------------
-
 # Data for classification problem testing
 set.seed(42)
 credit_data_split <- initial_split(credit_data, strata = "Status")
@@ -37,8 +35,6 @@ xgb_credit_test <- xgboost::xgb.DMatrix(
   data = as.matrix(bake(rec_credit, new_data = credit_data_test)),
   label = ifelse(credit_data_test[["Status"]] == "bad", 0, 1)
 )
-
-# ------------------------------------------------------------------------------
 
 # Data for multi-classification problem testing
 set.seed(42)
@@ -67,8 +63,6 @@ xgb_attrition_test <- xgboost::xgb.DMatrix(
   label = attrition_data_test$EducationField
 )
 
-# ------------------------------------------------------------------------------
-
 ames$Sale_Price <- log10(ames$Sale_Price)
 # Data for regression problem testing (naive)
 set.seed(1773)
@@ -95,8 +89,6 @@ xgb_ames_test <- xgboost::xgb.DMatrix(
   label = ames_data_test[["Sale_Price"]]
 )
 
-# ------------------------------------------------------------------------------
-
 set.seed(8497)
 sim_tr_cls <- sim_data_2class(1000)
 sim_te_cls <- sim_data_2class(100)
@@ -108,8 +100,6 @@ sim_te_mcls <- sim_data_3class(100)
 set.seed(8497)
 sim_tr_reg <- sim_data_reg(1000)
 sim_te_reg <- sim_data_reg(100)
-
-# ------------------------------------------------------------------------------
 
 test_that("run_xgboost for classification", {
   xgboost <- embed:::run_xgboost(
@@ -488,8 +478,6 @@ test_that("printing", {
   expect_snapshot(xgb_rec)
   expect_snapshot(prep(xgb_rec))
 })
-
-# ------------------------------------------------------------------------------
 
 test_that("empty selections", {
   data(ad_data, package = "modeldata")

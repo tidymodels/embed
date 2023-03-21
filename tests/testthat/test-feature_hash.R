@@ -1,8 +1,6 @@
 source(testthat::test_path("make_example_data.R"))
 source(testthat::test_path("test-helpers.R"))
 
-# ------------------------------------------------------------------------------
-
 test_that("basic usage", {
   skip_on_cran()
   skip_if_not_installed("keras")
@@ -174,8 +172,6 @@ test_that("printing", {
   skip_if(is.null(tensorflow::tf_version()))
   expect_snapshot(prep(print_test))
 })
-
-# ------------------------------------------------------------------------------
 
 test_that("empty selections", {
   rlang::local_options(lifecycle_verbosity = "quiet")
