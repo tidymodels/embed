@@ -299,3 +299,21 @@ tidy.step_umap <- function(x, ...) {
 required_pkgs.step_umap <- function(x, ...) {
   c("uwot", "embed")
 }
+
+#' @export
+#' @rdname tunable_embed
+tunable.step_umap <- function(x, ...) {
+  tibble::tibble(
+    name = c("num_comp", "neighbors", "min_dist", "learn_rate", "epochs"),
+    call_info = list(
+      list(pkg = "dials", fun = "num_comp", range = c(1, 10)),
+      list(pkg = "dials", fun = "neighbors", range = c(5, 200)),
+      list(pkg = "dials", fun = "min_dist", range = c(-4, -0.69897)),
+      list(pkg = "dials", fun = "learn_rate"),
+      list(pkg = "dials", fun = "epochs", range = c(100, 700))
+    ),
+    source = "recipe",
+    component = "step_umap",
+    component_id = x$id
+  )
+}

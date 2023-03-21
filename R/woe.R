@@ -492,3 +492,17 @@ tidy.step_woe <- function(x, ...) {
 required_pkgs.step_woe <- function(x, ...) {
   c("embed")
 }
+
+#' @export
+#' @rdname tunable_embed
+tunable.step_woe <- function(x, ...) {
+  tibble::tibble(
+    name = "Laplace",
+    call_info = list(
+      list(pkg = "dials", fun = "Laplace")
+    ),
+    source = "recipe",
+    component = "step_woe",
+    component_id = x$id
+  )
+}

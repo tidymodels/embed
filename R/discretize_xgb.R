@@ -518,3 +518,21 @@ tidy.step_discretize_xgb <- function(x, ...) {
 required_pkgs.step_discretize_xgb <- function(x, ...) {
   c("xgboost", "embed")
 }
+
+#' @export
+#' @rdname tunable_embed
+tunable.step_discretize_xgb <- function(x, ...) {
+  tibble::tibble(
+    name = c("sample_val", "learn_rate", "num_breaks", "tree_depth", "min_n"),
+    call_info = list(
+      list(pkg = "dials", fun = "sample_val", range = c(0.05, 0.7)),
+      list(pkg = "dials", fun = "learn_rate", range = log10(c(0.05, 0.3))),
+      list(pkg = "dials", fun = "num_breaks", range = c(5, 30)),
+      list(pkg = "dials", fun = "tree_depth"),
+      list(pkg = "dials", fun = "min_n")
+    ),
+    source = "recipe",
+    component = "step_discretize_xgb",
+    component_id = x$id
+  )
+}

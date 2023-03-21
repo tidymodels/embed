@@ -258,3 +258,18 @@ tidy.step_pca_sparse <- function(x, ...) {
 required_pkgs.step_pca_sparse <- function(x, ...) {
   c("embed", "irlba")
 }
+
+#' @rdname tunable_embed
+#' @export
+tunable.step_pca_sparse <- function(x, ...) {
+  tibble::tibble(
+    name = c("num_comp", "predictor_prop"),
+    call_info = list(
+      list(pkg = "dials", fun = "num_comp", range = c(1L, 10L)),
+      list(pkg = "dials", fun = "predictor_prop")
+    ),
+    source = "recipe",
+    component = "step_pca_sparse",
+    component_id = x$id
+  )
+}
