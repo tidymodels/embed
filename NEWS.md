@@ -2,6 +2,8 @@
 
 * All steps now have `required_pkgs()` methods.
 
+* Add `metric` argument to `step_umap()`. (#154)
+
 * `step_collapse_stringdist()` has gained `method` and `options` arguments to allow for different types of string distance calculations. (#152)
 
 # embed 1.0.0
