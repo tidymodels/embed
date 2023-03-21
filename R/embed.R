@@ -532,3 +532,18 @@ is_tf_available <- function() {
 required_pkgs.step_embed <- function(x, ...) {
   c("keras", "embed")
 }
+
+#' @export
+#' @rdname tunable_embed
+tunable.step_embed <- function(x, ...) {
+  tibble::tibble(
+    name = c("num_terms", "hidden_units"),
+    call_info = list(
+      list(pkg = "dials", fun = "num_terms", range = c(2, 10)),
+      list(pkg = "dials", fun = "hidden_units", range = c(0, 10))
+    ),
+    source = "recipe",
+    component = "step_embed",
+    component_id = x$id
+  )
+}
