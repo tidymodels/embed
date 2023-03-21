@@ -612,3 +612,39 @@ test_that("case weights step_discretize_xgb", {
   # printing ------------------------------------------------------------------
   expect_snapshot(xgb_rec_cw)
 })
+
+test_that("tunable", {
+  rec <-
+    recipe(~., data = mtcars) %>%
+    step_discretize_xgb(all_predictors(), outcome = "mpg")
+  rec_param <- tunable.step_discretize_xgb(rec$steps[[1]])
+  expect_equal(
+    rec_param$name, 
+    c("sample_val", "learn_rate", "num_breaks", "tree_depth", "min_n")
+  )
+  expect_true(all(rec_param$source == "recipe"))
+  expect_true(is.list(rec_param$call_info))
+  expect_equal(nrow(rec_param), 5)
+  expect_equal(
+    names(rec_param),
+    c("name", "call_info", "source", "component", "component_id")
+  )
+})
+
+test_that("tunable is setup to works with extract_parameter_set_dials works", {
+  rec <- recipe(~., data = mtcars) %>%
+    step_discretize_xgb(
+      all_predictors(),
+      outcome = "mpg",
+      sample_val = hardhat::tune(),
+      learn_rate = hardhat::tune(),
+      num_breaks = hardhat::tune(),
+      tree_depth = hardhat::tune(),
+      min_n = hardhat::tune()
+    )
+  
+  params <- extract_parameter_set_dials(rec)
+  
+  expect_s3_class(params, "parameters")
+  expect_identical(nrow(params), 5L)
+})
