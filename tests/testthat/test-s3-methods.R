@@ -7,8 +7,6 @@ r4 <- r1 %>% step_discretize_xgb(disp, outcome = vars(mpg))
 r5 <- r1 %>% step_umap(disp, outcome = vars(mpg))
 r6 <- r1 %>% step_feature_hash(disp)
 
-# ------------------------------------------------------------------------------
-
 test_that("required packages", {
   expect_equal(required_pkgs(r1), "recipes")
   expect_equal(required_pkgs(r2), c("recipes", "rstanarm", "embed"))

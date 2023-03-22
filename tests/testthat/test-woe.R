@@ -1,7 +1,5 @@
 source(testthat::test_path("test-helpers.R"))
 
-# ------------------------------------------------------------------------------
-
 data("credit_data", package = "modeldata")
 
 set.seed(342)
@@ -19,8 +17,7 @@ df <- data.frame(
   mutate(y = rbinom(20, 1, prob = 1 / (1 + exp(-1 * (-4 + as.numeric(x1) + as.numeric(x2)))))) %>%
   mutate(y = if_else(y == 1, "A", "B"))
 
-#------------------------------------
-# woe_table
+# woe_table ---------------------------------------------------------------
 
 test_that("woe_table do not accept different length inputs", {
   expect_snapshot(
@@ -80,8 +77,7 @@ test_that("Laplace works", {
   expect_false(all(is.finite(embed:::woe_table(c("A", "A", "B", "B"), c(0, 0, 0, 1), Laplace = 0)$woe)))
 })
 
-#------------------------------------
-# dictionary
+# dictionary --------------------------------------------------------------
 
 test_that("dictionary returns a proper tibble", {
   expect_equal(dictionary(df, "y") %>% class(), c("tbl_df", "tbl", "data.frame"))
@@ -108,8 +104,7 @@ test_that("dictionary returns no messages nor warnings nor errors", {
   expect_silent(dictionary(df %>% mutate(x3 = rep(c(TRUE, FALSE), 10)), "y", x3))
 })
 
-#------------------------------------
-# add_woe
+# add_woe -----------------------------------------------------------------
 
 test_that("add_woe returns a proper tibble", {
   expect_equal(add_woe(df, "y") %>% class(), c("tbl_df", "tbl", "data.frame"))
@@ -163,8 +158,7 @@ test_that("add_woe do not accept dictionary with unexpected layout", {
 #   expect_warning(credit_data %>% add_woe("Status", Expenses))
 # })
 
-#------------------------------------
-# step_woe
+# step_woe ----------------------------------------------------------------
 
 test_that("step_woe", {
   rec <-
@@ -276,8 +270,6 @@ test_that("woe_table respects factor levels", {
     woe_table(dat$predictor, dat$target1) %>% select(-woe)
   )
 })
-
-# ------------------------------------------------------------------------------
 
 test_that("empty selections", {
   data(ad_data, package = "modeldata")

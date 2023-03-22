@@ -1,7 +1,5 @@
 source(testthat::test_path("test-helpers.R"))
 
-# ------------------------------------------------------------------------------
-
 iris_dat <- iris
 
 iris_dat[, 1:4] <- scale(iris_dat[, 1:4])
@@ -9,8 +7,6 @@ iris_dat[, 1:4] <- scale(iris_dat[, 1:4])
 split <- seq.int(1, 150, by = 9)
 tr <- iris_dat[-split, ]
 te <- iris_dat[split, ]
-
-# ------------------------------------------------------------------------------
 
 test_that("factor outcome", {
   set.seed(11)
@@ -249,8 +245,6 @@ test_that("printing", {
   expect_snapshot(print_test)
   expect_snapshot(prep(print_test))
 })
-
-# ------------------------------------------------------------------------------
 
 test_that("empty selections", {
   data(ad_data, package = "modeldata")

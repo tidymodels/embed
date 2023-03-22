@@ -1,7 +1,5 @@
 source(testthat::test_path("test-helpers.R"))
 
-# ------------------------------------------------------------------------------
-
 data(cells, package = "modeldata")
 cells$case <- cells$class <- NULL
 cells <- as.data.frame(scale(cells))
@@ -9,8 +7,6 @@ cells <- as.data.frame(scale(cells))
 split <- seq.int(1, 2019, by = 10)
 tr <- cells[-split, ]
 te <- cells[split, ]
-
-# ------------------------------------------------------------------------------
 
 test_that("step_pca_sparse_bayes", {
   skip_if_not_installed("VBsparsePCA")
@@ -57,8 +53,6 @@ test_that("step_pca_sparse_bayes", {
   expect_snapshot(rec)
 })
 
-# ------------------------------------------------------------------------------
-
 test_that("bake method errors when needed non-standard role columns are missing", {
   rec <- recipe(~., data = tr) %>%
     step_pca_sparse_bayes(
@@ -84,8 +78,6 @@ test_that("printing", {
   expect_snapshot(print_test)
   expect_snapshot(prep(print_test))
 })
-
-# ------------------------------------------------------------------------------
 
 test_that("empty selections", {
   expect_error(

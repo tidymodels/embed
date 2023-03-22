@@ -1,12 +1,9 @@
 source(testthat::test_path("make_example_data.R"))
 source(testthat::test_path("test-helpers.R"))
 
-
 # Uncomment to make stuff run on M1
 # tensorflow::tf$config$get_visible_devices("CPU") %>% 
 #   tensorflow::tf$config$set_visible_devices()
-
-# ------------------------------------------------------------------------------
 
 test_that("factor encoded predictor", {
   skip_on_cran()
@@ -146,8 +143,6 @@ test_that("character encoded predictor", {
   )
 })
 
-# ------------------------------------------------------------------------------
-
 test_that("factor encoded predictor", {
   skip_on_cran()
   skip_if(!is_tf_available())
@@ -285,8 +280,6 @@ test_that("character encoded predictor", {
   )
 })
 
-# ------------------------------------------------------------------------------
-
 test_that("bad args", {
   skip_on_cran()
   skip_if(!is_tf_available())
@@ -333,8 +326,6 @@ test_that("printing", {
   expect_snapshot(print_test)
   expect_snapshot(prep(print_test))
 })
-
-# ------------------------------------------------------------------------------
 
 test_that("empty selections", {
   data(ad_data, package = "modeldata")

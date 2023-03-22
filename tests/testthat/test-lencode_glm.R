@@ -1,8 +1,6 @@
 source(testthat::test_path("make_example_data.R"))
 source(testthat::test_path("test-helpers.R"))
 
-# ------------------------------------------------------------------------------
-
 test_that("factor encoded predictor", {
   class_test <- recipe(x2 ~ ., data = ex_dat) %>%
     step_lencode_glm(x3, outcome = vars(x2), id = "id") %>%
@@ -117,8 +115,6 @@ test_that("character encoded predictor", {
   )
 })
 
-# ------------------------------------------------------------------------------
-
 test_that("factor encoded predictor", {
   reg_test <- recipe(x1 ~ ., data = ex_dat) %>%
     step_lencode_glm(x3, outcome = vars(x1)) %>%
@@ -232,8 +228,6 @@ test_that("character encoded predictor", {
   )
 })
 
-# ------------------------------------------------------------------------------
-
 test_that("bad args", {
   three_class <- iris
   three_class$fac <- rep(letters[1:3], 50)
@@ -268,8 +262,6 @@ test_that("printing", {
   expect_snapshot(prep(print_test))
 })
 
-# ------------------------------------------------------------------------------
-
 test_that("empty selections", {
   data(ad_data, package = "modeldata")
   expect_error(
@@ -284,8 +276,6 @@ test_that("empty selections", {
     ad_data %>% select(Genotype, tau, Class)
   )
 })
-
-# ------------------------------------------------------------------------------
 
 test_that("case weights", {
   wts_int <- rep(c(0, 1), times = c(100, 400))
