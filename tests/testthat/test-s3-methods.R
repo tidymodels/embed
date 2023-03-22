@@ -16,8 +16,6 @@ nothing <-
     component_id = character(0)
   )
 
-# ------------------------------------------------------------------------------
-
 test_that("required packages", {
   expect_equal(required_pkgs(r1), "recipes")
   expect_equal(required_pkgs(r2), c("recipes", "rstanarm", "embed"))

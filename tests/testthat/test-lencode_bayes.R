@@ -12,8 +12,6 @@ omit_warning <- function(pattern) {
   }
 }
 
-# ------------------------------------------------------------------------------
-
 test_that("factor encoded predictor", {
   skip_on_cran()
   skip_if_not_installed("rstanarm")
@@ -150,8 +148,6 @@ test_that("character encoded predictor", {
     key$x3$..value
   )
 })
-
-# ------------------------------------------------------------------------------
 
 test_that("factor encoded predictor", {
   skip_on_cran()
@@ -292,8 +288,6 @@ test_that("character encoded predictor", {
   )
 })
 
-# ------------------------------------------------------------------------------
-
 test_that("Works with passing family ", {
   skip_on_cran()
   skip_if_not_installed("rstanarm")
@@ -394,8 +388,6 @@ test_that("printing", {
   )
 })
 
-# ------------------------------------------------------------------------------
-
 test_that("empty selections", {
   data(ad_data, package = "modeldata")
   expect_error(
@@ -410,8 +402,6 @@ test_that("empty selections", {
     ad_data %>% select(Genotype, tau, Class)
   )
 })
-
-# ------------------------------------------------------------------------------
 
 test_that("case weights", {
   skip_on_cran()
