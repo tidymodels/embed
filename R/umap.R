@@ -126,7 +126,7 @@ step_umap <-
     add_step(
       recipe,
       step_umap_new(
-        terms = ellipse_check(...),
+        terms = enquos(...),
         role = role,
         trained = trained,
         outcome = outcome,

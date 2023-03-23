@@ -120,7 +120,7 @@ step_pca_sparse_bayes <- function(recipe,
   add_step(
     recipe,
     step_pca_sparse_bayes_new(
-      terms = ellipse_check(...),
+      terms = enquos(...),
       role = role,
       trained = trained,
       num_comp = num_comp,

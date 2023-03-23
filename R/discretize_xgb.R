@@ -112,7 +112,7 @@ step_discretize_xgb <-
     add_step(
       recipe,
       step_discretize_xgb_new(
-        terms = ellipse_check(...),
+        terms = enquos(...),
         role = role,
         trained = trained,
         outcome = outcome,

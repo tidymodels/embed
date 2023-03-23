@@ -115,7 +115,7 @@ step_lencode_bayes <-
     add_step(
       recipe,
       step_lencode_bayes_new(
-        terms = ellipse_check(...),
+        terms = enquos(...),
         role = role,
         trained = trained,
         outcome = outcome,

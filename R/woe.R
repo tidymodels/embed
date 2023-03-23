@@ -138,7 +138,7 @@ step_woe <- function(recipe,
   add_step(
     recipe,
     step_woe_new(
-      terms = ellipse_check(...),
+      terms = enquos(...),
       role = role,
       trained = trained,
       outcome = outcome,

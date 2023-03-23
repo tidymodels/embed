@@ -87,7 +87,7 @@ step_lencode_glm <-
     add_step(
       recipe,
       step_lencode_glm_new(
-        terms = ellipse_check(...),
+        terms = enquos(...),
         role = role,
         trained = trained,
         outcome = outcome,
