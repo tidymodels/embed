@@ -260,6 +260,15 @@
       Caused by error in `prep()`:
       ! Too few observations in the early stopping validation set.Consider increasing the `sample_val` parameter.
 
+# xgb_binning() errors if only one class in outcome
+
+    Code
+      embed:::xgb_binning(const_outcome, "outcome", "predictor", sample_val = 0.2,
+        learn_rate = 0.3, num_breaks = 10, tree_depth = 1, min_n = 5)
+    Condition
+      Error:
+      ! Outcome variable only has less than 2 levels. Doesn't conform to regresion or classification task.
+
 # printing
 
     Code

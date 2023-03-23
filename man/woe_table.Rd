@@ -4,7 +4,7 @@
 \alias{woe_table}
 \title{Crosstable with woe between a binary outcome and a predictor variable.}
 \usage{
-woe_table(predictor, outcome, Laplace = 1e-06)
+woe_table(predictor, outcome, Laplace = 1e-06, call = rlang::caller_env(0))
 }
 \arguments{
 \item{predictor}{A atomic vector, usualy with few distinct values.}
@@ -15,6 +15,11 @@ distinct values.}
 \item{Laplace}{The \code{pseudocount} parameter of the Laplace Smoothing
 estimator. Default to 1e-6. Value to avoid -Inf/Inf from predictor category
 with only one outcome class. Set to 0 to allow Inf/-Inf.}
+
+\item{call}{The execution environment of a currently running function, e.g.
+\code{caller_env()}. The function will be mentioned in error messages as the
+source of the error. See the call argument of \code{\link[rlang:abort]{rlang::abort()}} for more
+information.}
 }
 \value{
 a tibble with counts, proportions and woe. Warning: woe can possibly

@@ -188,7 +188,8 @@ run_xgboost <- function(.train, .test, .learn_rate, .num_breaks, .tree_depth,
 }
 
 xgb_binning <- function(df, outcome, predictor, sample_val, learn_rate,
-                        num_breaks, tree_depth, min_n, wts = NULL) {
+                        num_breaks, tree_depth, min_n, wts = NULL,
+                        call = caller_env()) {
   # Assuring correct types
   if (is.character(df[[outcome]])) {
     df[[outcome]] <- as.factor(df[[outcome]])
@@ -281,7 +282,11 @@ xgb_binning <- function(df, outcome, predictor, sample_val, learn_rate,
       )
     } else {
       rlang::abort(
-        "Outcome variable doesn't conform to regresion or classification task."
+        paste0(
+          "Outcome variable only has less than 2 levels. ",
+          "Doesn't conform to regresion or classification task."
+        ),
+        call = call
       )
     }
   }

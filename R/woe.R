@@ -179,6 +179,10 @@ step_woe_new <- function(terms, role, trained, outcome, dictionary, Laplace,
 #' @param Laplace The `pseudocount` parameter of the Laplace Smoothing
 #'   estimator. Default to 1e-6. Value to avoid -Inf/Inf from predictor category
 #'   with only one outcome class. Set to 0 to allow Inf/-Inf.
+#' @param call The execution environment of a currently running function, e.g.
+#'   `caller_env()`. The function will be mentioned in error messages as the
+#'   source of the error. See the call argument of [rlang::abort()] for more
+#'   information.
 #'
 #' @return a tibble with counts, proportions and woe. Warning: woe can possibly
 #'   be -Inf. Use 'Laplace' arg to avoid that.
@@ -192,7 +196,10 @@ step_woe_new <- function(terms, role, trained, outcome, dictionary, Laplace,
 #'
 #' Good, I. J. (1985), "Weight of evidence: A brief survey", _Bayesian
 #' Statistics_, 2, pp.249-270.
-woe_table <- function(predictor, outcome, Laplace = 1e-6) {
+woe_table <- function(predictor,
+                      outcome,
+                      Laplace = 1e-6,
+                      call = rlang::caller_env(0)) {
   if (is.factor(outcome)) {
     outcome_original_labels <- levels(outcome)
   } else {
@@ -203,7 +210,7 @@ woe_table <- function(predictor, outcome, Laplace = 1e-6) {
     rlang::abort(sprintf(
       "'outcome' must have exactly 2 categories (has %s)",
       length(outcome_original_labels)
-    ))
+    ), call = call)
   }
 
   if (is.factor(predictor)) {
@@ -280,11 +287,16 @@ woe_table <- function(predictor, outcome, Laplace = 1e-6) {
 #' @export
 dictionary <- function(.data, outcome, ..., Laplace = 1e-6) {
   outcome_vector <- .data %>% dplyr::pull(!!outcome)
-  .data %>%
-    dplyr::select(..., -!!outcome) %>%
-    purrr::map(woe_table, outcome = outcome_vector, Laplace = Laplace) %>%
-    dplyr::bind_rows(.id = "variable") %>%
-    mutate(outcome = outcome)
+  res <- dplyr::select(.data, ..., -!!outcome) 
+  res <- lapply(
+    res, woe_table, 
+    outcome = outcome_vector,
+    Laplace = Laplace,
+    call = caller_env(0)
+  )
+  res <- dplyr::bind_rows(res, .id = "variable")
+  res <- mutate(res, outcome = outcome)
+  res
 }
 
 #' Add WoE in a data frame
