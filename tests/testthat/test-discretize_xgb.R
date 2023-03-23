@@ -287,8 +287,8 @@ test_that("step_discretize_xgb for classification", {
   xgb_train_bins <- bake(xgb_rec, sim_tr_cls)
   xgb_test_bins <- bake(xgb_rec, sim_te_cls)
 
-  expect_snapshot(xgb_train_bins)
-  expect_snapshot(xgb_test_bins)
+  expect_snapshot(xgb_train_bins[1:10, ])
+  expect_snapshot(xgb_test_bins[1:10, ])
   expect_true(length(levels(xgb_train_bins$x)) > 1)
   expect_true(length(levels(xgb_train_bins$z)) > 1)
 
@@ -341,8 +341,8 @@ test_that("step_discretize_xgb for multi-classification", {
   xgb_train_bins <- bake(xgb_rec, sim_tr_mcls)
   xgb_test_bins <- bake(xgb_rec, sim_te_mcls)
 
-  expect_snapshot(xgb_train_bins)
-  expect_snapshot(xgb_test_bins)
+  expect_snapshot(xgb_train_bins[1:10, ])
+  expect_snapshot(xgb_test_bins[1:10, ])
   expect_true(length(levels(xgb_train_bins$x)) > 0)
   expect_true(length(levels(xgb_train_bins$z)) > 0)
 
