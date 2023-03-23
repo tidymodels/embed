@@ -152,7 +152,7 @@ step_embed <-
     add_step(
       recipe,
       step_embed_new(
-        terms = ellipse_check(...),
+        terms = enquos(...),
         role = role,
         trained = trained,
         outcome = outcome,

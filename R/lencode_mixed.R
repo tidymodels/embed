@@ -101,7 +101,7 @@ step_lencode_mixed <-
     add_step(
       recipe,
       step_lencode_mixed_new(
-        terms = ellipse_check(...),
+        terms = enquos(...),
         role = role,
         trained = trained,
         outcome = outcome,
