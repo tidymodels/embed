@@ -143,9 +143,9 @@
 # step_discretize_xgb for classification
 
     Code
-      xgb_train_bins
+      xgb_train_bins[1:10, ]
     Output
-      # A tibble: 1,000 x 3
+      # A tibble: 10 x 3
          x               z               class
          <fct>           <fct>           <fct>
        1 [0.6808, Inf]   [0.4208,0.7999) a    
@@ -158,14 +158,13 @@
        8 [0.5749,0.6808) [-Inf,0.3327)   a    
        9 [0.2779,0.3687) [0.4208,0.7999) a    
       10 [0.3687,0.5749) [0.4208,0.7999) b    
-      # i 990 more rows
 
 ---
 
     Code
-      xgb_test_bins
+      xgb_test_bins[1:10, ]
     Output
-      # A tibble: 100 x 3
+      # A tibble: 10 x 3
          x               z               class
          <fct>           <fct>           <fct>
        1 [0.5749,0.6808) [-Inf,0.3327)   b    
@@ -178,7 +177,6 @@
        8 [0.6808, Inf]   [0.7999, Inf]   a    
        9 [0.3687,0.5749) [0.7999, Inf]   b    
       10 [0.3687,0.5749) [0.4208,0.7999) b    
-      # i 90 more rows
 
 ---
 
@@ -217,9 +215,9 @@
 # step_discretize_xgb for multi-classification
 
     Code
-      xgb_train_bins
+      xgb_train_bins[1:10, ]
     Output
-      # A tibble: 1,000 x 3
+      # A tibble: 10 x 3
          x               z             class
          <fct>           <fct>         <fct>
        1 [0.6879, Inf]   [0.3274, Inf] c    
@@ -232,14 +230,13 @@
        8 [0.5863,0.6879) [-Inf,0.3274) c    
        9 [-Inf,0.2887)   [0.3274, Inf] a    
       10 [0.3821,0.5863) [0.3274, Inf] b    
-      # i 990 more rows
 
 ---
 
     Code
-      xgb_test_bins
+      xgb_test_bins[1:10, ]
     Output
-      # A tibble: 100 x 3
+      # A tibble: 10 x 3
          x               z             class
          <fct>           <fct>         <fct>
        1 [0.5863,0.6879) [-Inf,0.3274) b    
@@ -252,7 +249,6 @@
        8 [0.6879, Inf]   [0.3274, Inf] c    
        9 [0.3821,0.5863) [0.3274, Inf] b    
       10 [0.3821,0.5863) [0.3274, Inf] b    
-      # i 90 more rows
 
 ---
 
