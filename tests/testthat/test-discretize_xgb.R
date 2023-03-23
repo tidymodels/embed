@@ -456,6 +456,26 @@ test_that("step_discretize_xgb for regression", {
     step_discretize_xgb(all_predictors(), outcome = "Sale_Price")
 })
 
+test_that("xgb_binning() errors if only one class in outcome", {
+  const_outcome <- data.frame(
+    outcome = factor(rep("a", 1000)),
+    predictor = rep(1, 1000)
+  )
+  expect_snapshot(
+    error = TRUE,
+    embed:::xgb_binning(
+      const_outcome,
+      "outcome",
+      "predictor",
+      sample_val = 0.20,
+      learn_rate = 0.3,
+      num_breaks = 10,
+      tree_depth = 1,
+      min_n = 5
+    )
+  )
+})
+
 test_that("bake method errors when needed non-standard role columns are missing", {
   rec <- recipe(class ~ ., data = sim_tr_cls) %>%
     step_discretize_xgb(x, z, outcome = "class") %>%
