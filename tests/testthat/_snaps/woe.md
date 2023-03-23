@@ -35,10 +35,7 @@
     Code
       dictionary(df %>% filter(y %in% "B"), "y")
     Condition
-      Error in `purrr::map()`:
-      i In index: 1.
-      i With name: x1.
-      Caused by error in `.f()`:
+      Error in `dictionary()`:
       ! 'outcome' must have exactly 2 categories (has 1)
 
 # add_woe do not accept dictionary with unexpected layout
@@ -146,9 +143,6 @@
         prep()
     Condition
       Error in `step_woe()`:
-      Caused by error in `purrr::map()`:
-      i In index: 1.
-      i With name: group.
-      Caused by error in `.f()`:
+      Caused by error in `dictionary()`:
       ! 'outcome' must have exactly 2 categories (has 3)
 
