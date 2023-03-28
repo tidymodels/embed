@@ -45,12 +45,12 @@
 #' Jolliffe, I. T. (2010). *Principal Component Analysis*. Springer.
 #'
 #' @examples
-#' rec <- recipe(~., data = mtcars)
+#' rec <- recipe(~., data = USArrests)
 #' pca_trans <- rec %>%
 #'   step_normalize(all_numeric()) %>%
 #'   step_pca_truncated(all_numeric(), num_comp = 3)
-#' pca_estimates <- prep(pca_trans, training = mtcars)
-#' pca_data <- bake(pca_estimates, mtcars)
+#' pca_estimates <- prep(pca_trans, training = USArrests)
+#' pca_data <- bake(pca_estimates, USArrests)
 #'
 #' rng <- extendrange(c(pca_data$PC1, pca_data$PC2))
 #' plot(pca_data$PC1, pca_data$PC2,
