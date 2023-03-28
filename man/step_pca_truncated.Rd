@@ -2,7 +2,7 @@
 % Please edit documentation in R/pca_truncated.R
 \name{step_pca_truncated}
 \alias{step_pca_truncated}
-\title{PCA Signal Extraction}
+\title{Truncated PCA Signal Extraction}
 \usage{
 step_pca_truncated(
   recipe,
@@ -39,9 +39,10 @@ possible components, a smaller value will be used. If \code{num_comp = 0}
 is set then no transformation is done and selected variables will
 stay unchanged.}
 
-\item{options}{A list of options to the default method for \code{\link[stats:prcomp]{stats::prcomp()}}.
-Argument defaults are set to \code{retx = FALSE}, \code{center = FALSE}, \code{scale. = FALSE}, and \code{tol = NULL}. \strong{Note} that the argument \code{x} should not be
-passed here (or at all).}
+\item{options}{A list of options to the default method for
+\code{\link[irlba:prcomp_irlba]{irlba::prcomp_irlba()}}. Argument defaults are set to \code{retx = FALSE},
+\code{center = FALSE}, \code{scale. = FALSE}, and \code{tol = NULL}. \strong{Note} that the
+argument \code{x} should not be passed here (or at all).}
 
 \item{res}{The \code{\link[irlba:prcomp_irlba]{irlba::prcomp_irlba()}} object is stored here once this
 preprocessing step has be trained by \code{\link[=prep]{prep()}}.}
@@ -70,7 +71,9 @@ sequence of any existing operations.
 }
 \description{
 \code{step_pca_truncated} creates a \emph{specification} of a recipe step that will
-convert numeric data into one or more principal components.
+convert numeric data into one or more principal components. It is truncated
+as it only calculates the number of components it is asked instead of all of
+them as is done in \code{\link[recipes:step_pca]{recipes::step_pca()}}.
 }
 \details{
 Principal component analysis (PCA) is a transformation of a group of
