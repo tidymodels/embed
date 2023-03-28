@@ -135,6 +135,7 @@ prep.step_pca_truncated <- function(x, training, info = NULL, ...) {
       if (length(x$options) > 0) {
         prc_call <- rlang::call_modify(prc_call, !!!x$options)
       }
+      prc_call <- rlang::call_modify(prc_call, n = x$num_comp)
 
       prc_call$x <- expr(training[, col_names, drop = FALSE])
       prc_obj <- eval(prc_call)
@@ -191,6 +192,7 @@ bake.step_pca_truncated <- function(object, new_data, ...) {
   new_data
 }
 
+#' @export
 print.step_pca_truncated <-
   function(x, width = max(20, options()$width - 29), ...) {
     if (x$trained) {
@@ -199,14 +201,14 @@ print.step_pca_truncated <-
       }
 
       if (length(x$columns) == 0 || all(is.na(x$res$rotation))) {
-        title <- "No PCA components were extracted from "
+        title <- "No truncated PCA components were extracted from "
         columns <- names(x$columns)
       } else {
-        title <- glue("PCA extraction with ")
+        title <- glue("Truncated PCA extraction with ")
         columns <- rownames(x$res$rotation)
       }
     } else {
-      title <- "PCA extraction with "
+      title <- "Truncated PCA extraction with "
     }
     print_step(columns, x$terms, x$trained, title, width,
       case_weights = x$case_weights
