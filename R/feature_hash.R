@@ -99,7 +99,7 @@ step_feature_hash <-
     add_step(
       recipe,
       step_feature_hash_new(
-        terms = ellipse_check(...),
+        terms = enquos(...),
         role = role,
         trained = trained,
         num_hash = num_hash,

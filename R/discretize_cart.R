@@ -98,7 +98,7 @@ step_discretize_cart <-
     add_step(
       recipe,
       step_discretize_cart_new(
-        terms = ellipse_check(...),
+        terms = enquos(...),
         role = role,
         trained = trained,
         outcome = outcome,
