@@ -39,9 +39,9 @@ possible components, a smaller value will be used. If \code{num_comp = 0}
 is set then no transformation is done and selected variables will
 stay unchanged.}
 
-\item{options}{A list of options to the default method for
-\code{\link[stats:prcomp]{stats::prcomp()}}. Argument defaults are set to \code{retx = FALSE}, \code{center = FALSE}, \code{scale. = FALSE}, and \code{tol = NULL}. \strong{Note} that the argument \code{x}
-should not be passed here (or at all).}
+\item{options}{A list of options to the default method for \code{\link[stats:prcomp]{stats::prcomp()}}.
+Argument defaults are set to \code{retx = FALSE}, \code{center = FALSE}, \code{scale. = FALSE}, and \code{tol = NULL}. \strong{Note} that the argument \code{x} should not be
+passed here (or at all).}
 
 \item{res}{The \code{\link[irlba:prcomp_irlba]{irlba::prcomp_irlba()}} object is stored here once this
 preprocessing step has be trained by \code{\link[=prep]{prep()}}.}
@@ -69,37 +69,33 @@ An updated version of \code{recipe} with the new step added to the
 sequence of any existing operations.
 }
 \description{
-\code{step_pca_truncated} creates a \emph{specification} of a recipe step that will convert
-numeric data into one or more principal components.
+\code{step_pca_truncated} creates a \emph{specification} of a recipe step that will
+convert numeric data into one or more principal components.
 }
 \details{
-Principal component analysis (PCA) is a transformation of a
-group of variables that produces a new set of artificial
-features or components. These components are designed to capture
-the maximum amount of information (i.e. variance) in the
-original variables. Also, the components are statistically
-independent from one another. This means that they can be used
-to combat large inter-variables correlations in a data set.
+Principal component analysis (PCA) is a transformation of a group of
+variables that produces a new set of artificial features or components. These
+components are designed to capture the maximum amount of information (i.e.
+variance) in the original variables. Also, the components are statistically
+independent from one another. This means that they can be used to combat
+large inter-variables correlations in a data set.
 
-It is advisable to standardize the variables prior to running
-PCA. Here, each variable will be centered and scaled prior to
-the PCA calculation. This can be changed using the
-\code{options} argument or by using \code{\link[=step_center]{step_center()}}
-and \code{\link[=step_scale]{step_scale()}}.
+It is advisable to standardize the variables prior to running PCA. Here, each
+variable will be centered and scaled prior to the PCA calculation. This can
+be changed using the \code{options} argument or by using \code{\link[=step_center]{step_center()}} and
+\code{\link[=step_scale]{step_scale()}}.
 
-The argument \code{num_comp} controls the number of components that
-will be retained (the original variables that are used to derive
-the components are removed from the data). The new components
-will have names that begin with \code{prefix} and a sequence of
-numbers. The variable names are padded with zeros. For example,
-if \code{num_comp < 10}, their names will be \code{PC1} - \code{PC9}.
-If \code{num_comp = 101}, the names would be \code{PC001} -
-\code{PC101}.
+The argument \code{num_comp} controls the number of components that will be
+retained (the original variables that are used to derive the components are
+removed from the data). The new components will have names that begin with
+\code{prefix} and a sequence of numbers. The variable names are padded with zeros.
+For example, if \code{num_comp < 10}, their names will be \code{PC1} - \code{PC9}. If
+\code{num_comp = 101}, the names would be \code{PC001} - \code{PC101}.
 }
 \section{Tidying}{
-When you \code{\link[=tidy.recipe]{tidy()}} this step, use either \code{type = "coef"}
-for the variable loadings per component or \code{type = "variance"} for how
-much variance each component accounts for.
+When you \code{\link[=tidy.recipe]{tidy()}} this step, use either \code{type = "coef"} for
+the variable loadings per component or \code{type = "variance"} for how much
+variance each component accounts for.
 }
 
 \section{Case weights}{
@@ -112,12 +108,12 @@ information, see the documentation in \link{case_weights} and the examples on
 }
 
 \examples{
-rec <- recipe(~., data = USArrests)
+rec <- recipe(~., data = mtcars)
 pca_trans <- rec \%>\%
   step_normalize(all_numeric()) \%>\%
   step_pca_truncated(all_numeric(), num_comp = 3)
-pca_estimates <- prep(pca_trans, training = USArrests)
-pca_data <- bake(pca_estimates, USArrests)
+pca_estimates <- prep(pca_trans, training = mtcars)
+pca_data <- bake(pca_estimates, mtcars)
 
 rng <- extendrange(c(pca_data$PC1, pca_data$PC2))
 plot(pca_data$PC1, pca_data$PC2,
@@ -128,6 +124,5 @@ tidy(pca_trans, number = 2)
 tidy(pca_estimates, number = 2)
 }
 \references{
-Jolliffe, I. T. (2010). \emph{Principal Component
-Analysis}. Springer.
+Jolliffe, I. T. (2010). \emph{Principal Component Analysis}. Springer.
 }

@@ -1,51 +1,48 @@
 #' PCA Signal Extraction
 #'
-#' `step_pca_truncated` creates a *specification* of a recipe step that will convert
-#'  numeric data into one or more principal components.
+#' `step_pca_truncated` creates a *specification* of a recipe step that will
+#' convert numeric data into one or more principal components.
 #'
 #' @inheritParams recipes::step_pca
-#' @param options A list of options to the default method for
-#'  [stats::prcomp()]. Argument defaults are set to `retx = FALSE`, `center =
-#'  FALSE`, `scale. = FALSE`, and `tol = NULL`. **Note** that the argument `x`
-#'  should not be passed here (or at all).
+#' @param options A list of options to the default method for [stats::prcomp()].
+#'   Argument defaults are set to `retx = FALSE`, `center = FALSE`, `scale. =
+#'   FALSE`, and `tol = NULL`. **Note** that the argument `x` should not be
+#'   passed here (or at all).
 #' @param res The [irlba::prcomp_irlba()] object is stored here once this
-#'  preprocessing step has be trained by [prep()].
+#'   preprocessing step has be trained by [prep()].
 #' @template step-return
-#' @export
 #' @details
-#' Principal component analysis (PCA) is a transformation of a
-#'  group of variables that produces a new set of artificial
-#'  features or components. These components are designed to capture
-#'  the maximum amount of information (i.e. variance) in the
-#'  original variables. Also, the components are statistically
-#'  independent from one another. This means that they can be used
-#'  to combat large inter-variables correlations in a data set.
 #'
-#' It is advisable to standardize the variables prior to running
-#'  PCA. Here, each variable will be centered and scaled prior to
-#'  the PCA calculation. This can be changed using the
-#'  `options` argument or by using [step_center()]
-#'  and [step_scale()].
+#' Principal component analysis (PCA) is a transformation of a group of
+#' variables that produces a new set of artificial features or components. These
+#' components are designed to capture the maximum amount of information (i.e.
+#' variance) in the original variables. Also, the components are statistically
+#' independent from one another. This means that they can be used to combat
+#' large inter-variables correlations in a data set.
 #'
-#' The argument `num_comp` controls the number of components that
-#'  will be retained (the original variables that are used to derive
-#'  the components are removed from the data). The new components
-#'  will have names that begin with `prefix` and a sequence of
-#'  numbers. The variable names are padded with zeros. For example,
-#'  if `num_comp < 10`, their names will be `PC1` - `PC9`.
-#'  If `num_comp = 101`, the names would be `PC001` -
-#'  `PC101`.
+#' It is advisable to standardize the variables prior to running PCA. Here, each
+#' variable will be centered and scaled prior to the PCA calculation. This can
+#' be changed using the `options` argument or by using [step_center()] and
+#' [step_scale()].
+#'
+#' The argument `num_comp` controls the number of components that will be
+#' retained (the original variables that are used to derive the components are
+#' removed from the data). The new components will have names that begin with
+#' `prefix` and a sequence of numbers. The variable names are padded with zeros.
+#' For example, if `num_comp < 10`, their names will be `PC1` - `PC9`. If
+#' `num_comp = 101`, the names would be `PC001` - `PC101`.
 #'
 #' # Tidying
 #'
-#' When you [`tidy()`][tidy.recipe()] this step, use either `type = "coef"`
-#' for the variable loadings per component or `type = "variance"` for how
-#' much variance each component accounts for.
+#' When you [`tidy()`][tidy.recipe()] this step, use either `type = "coef"` for
+#' the variable loadings per component or `type = "variance"` for how much
+#' variance each component accounts for.
 #'
 #' @template case-weights-unsupervised
 #'
-#' @references Jolliffe, I. T. (2010). *Principal Component
-#'  Analysis*. Springer.
+#' @references
+#'
+#' Jolliffe, I. T. (2010). *Principal Component Analysis*. Springer.
 #'
 #' @examples
 #' rec <- recipe(~., data = mtcars)
@@ -62,6 +59,7 @@
 #'
 #' tidy(pca_trans, number = 2)
 #' tidy(pca_estimates, number = 2)
+#' @export
 step_pca_truncated <- function(recipe,
                      ...,
                      role = "predictor",
