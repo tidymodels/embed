@@ -212,23 +212,6 @@ print.step_pca_truncated <-
     invisible(x)
   }
 
-pca_coefs <- function(x) {
-  if (x$num_comp > 0 && length(x$columns) > 0) {
-    rot <- as.data.frame(x$res$rotation)
-    npc <- ncol(rot)
-    res <- utils::stack(rot)
-    colnames(res) <- c("value", "component")
-    res$component <- as.character(res$component)
-    res$terms <- rep(unname(x$columns), npc)
-    res <- as_tibble(res)[, c("terms", "value", "component")]
-  } else {
-    res <- tibble::tibble(
-      terms = unname(x$columns), value = rlang::na_dbl,
-      component = rlang::na_chr
-    )
-  }
-  res
-}
 
 pca_variances <- function(x) {
   if (x$num_comp > 0 && length(x$columns) > 0) {
