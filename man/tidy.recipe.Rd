@@ -54,9 +54,9 @@
 
 \item{...}{Not currently used.}
 
-\item{type}{For \code{step_pca_truncated}, either \code{"coef"} (for the variable loadings per
-component) or \code{"variance"} (how much variance does each component
-account for).}
+\item{type}{For \code{step_pca_truncated}, either \code{"coef"} (for the variable
+loadings per component) or \code{"variance"} (how much variance does each
+component account for).}
 }
 \description{
 \code{tidy} will return a data frame that contains information regarding a recipe

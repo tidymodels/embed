@@ -61,18 +61,17 @@
 #' tidy(pca_estimates, number = 2)
 #' @export
 step_pca_truncated <- function(recipe,
-                     ...,
-                     role = "predictor",
-                     trained = FALSE,
-                     num_comp = 5,
-                     options = list(),
-                     res = NULL,
-                     columns = NULL,
-                     prefix = "PC",
-                     keep_original_cols = FALSE,
-                     skip = FALSE,
-                     id = rand_id("pca_truncated")) {
-  
+                               ...,
+                               role = "predictor",
+                               trained = FALSE,
+                               num_comp = 5,
+                               options = list(),
+                               res = NULL,
+                               columns = NULL,
+                               prefix = "PC",
+                               keep_original_cols = FALSE,
+                               skip = FALSE,
+                               id = rand_id("pca_truncated")) {
   add_step(
     recipe,
     step_pca_truncated_new(
@@ -116,13 +115,13 @@ step_pca_truncated_new <-
 prep.step_pca_truncated <- function(x, training, info = NULL, ...) {
   col_names <- recipes_eval_select(x$terms, training, info)
   check_type(training[, col_names], types = c("double", "integer"))
-  
+
   wts <- get_case_weights(info, training)
   were_weights_used <- are_weights_used(wts, unsupervised = TRUE)
   if (isFALSE(were_weights_used)) {
     wts <- NULL
   }
-  
+
   if (x$num_comp > 0 && length(col_names) > 0) {
     if (is.null(wts)) {
       prc_call <-
@@ -134,7 +133,7 @@ prep.step_pca_truncated <- function(x, training, info = NULL, ...) {
       if (length(x$options) > 0) {
         prc_call <- rlang::call_modify(prc_call, !!!x$options)
       }
-      
+
       prc_call$x <- expr(training[, col_names, drop = FALSE])
       prc_obj <- eval(prc_call)
     } else {
@@ -143,13 +142,13 @@ prep.step_pca_truncated <- function(x, training, info = NULL, ...) {
   } else {
     prc_obj <- NULL
   }
-  
+
   rownames(prc_obj$rotation) <- col_names
-  
+
   if (is.null(prc_obj$center)) {
     prc_obj$center <- FALSE
   }
-  
+
   step_pca_truncated_new(
     terms = x$terms,
     role = x$role,
@@ -171,10 +170,10 @@ bake.step_pca_truncated <- function(object, new_data, ...) {
   if (is.null(object$columns)) {
     object$columns <- stats::setNames(nm = rownames(object$res$rotation))
   }
-  
+
   if (length(object$columns) > 0 && !all(is.na(object$res$rotation))) {
     check_new_data(object$columns, object, new_data)
-    
+
     pca_vars <- rownames(object$res$rotation)
     comps <- scale(new_data[, pca_vars], object$res$center, object$res$scale) %*%
       object$res$rotation
@@ -182,7 +181,7 @@ bake.step_pca_truncated <- function(object, new_data, ...) {
     comps <- check_name(comps, new_data, object)
     new_data <- bind_cols(new_data, as_tibble(comps))
     keep_original_cols <- get_keep_original_cols(object)
-    
+
     if (!keep_original_cols) {
       new_data <- new_data[, !(colnames(new_data) %in% pca_vars), drop = FALSE]
     }
@@ -196,7 +195,7 @@ print.step_pca_truncated <-
       if (is.null(x$columns)) {
         x$columns <- stats::setNames(nm = rownames(x$res$rotation))
       }
-      
+
       if (length(x$columns) == 0 || all(is.na(x$res$rotation))) {
         title <- "No PCA components were extracted from "
         columns <- names(x$columns)
@@ -208,7 +207,8 @@ print.step_pca_truncated <-
       title <- "PCA extraction with "
     }
     print_step(columns, x$terms, x$trained, title, width,
-               case_weights = x$case_weights)
+      case_weights = x$case_weights
+    )
     invisible(x)
   }
 
@@ -234,7 +234,7 @@ pca_variances <- function(x) {
         ),
         each = p
       )
-    
+
     res <- tibble::tibble(
       terms = x,
       value = y,
@@ -253,9 +253,9 @@ pca_variances <- function(x) {
 
 
 #' @rdname tidy.recipe
-#' @param type For `step_pca_truncated`, either `"coef"` (for the variable loadings per
-#' component) or `"variance"` (how much variance does each component
-#' account for).
+#' @param type For `step_pca_truncated`, either `"coef"` (for the variable
+#'   loadings per component) or `"variance"` (how much variance does each
+#'   component account for).
 #' @export
 tidy.step_pca_truncated <- function(x, type = "coef", ...) {
   if (!is_trained(x)) {
