@@ -47,12 +47,12 @@
 #' Jolliffe, I. T. (2010). *Principal Component Analysis*. Springer.
 #'
 #' @examples
-#' rec <- recipe(~., data = USArrests)
+#' rec <- recipe(~., data = mtcars)
 #' pca_trans <- rec %>%
 #'   step_normalize(all_numeric()) %>%
-#'   step_pca_truncated(all_numeric(), num_comp = 3)
-#' pca_estimates <- prep(pca_trans, training = USArrests)
-#' pca_data <- bake(pca_estimates, USArrests)
+#'   step_pca_truncated(all_numeric(), num_comp = 2)
+#' pca_estimates <- prep(pca_trans, training = mtcars)
+#' pca_data <- bake(pca_estimates, mtcars)
 #'
 #' rng <- extendrange(c(pca_data$PC1, pca_data$PC2))
 #' plot(pca_data$PC1, pca_data$PC2,
@@ -214,7 +214,6 @@ print.step_pca_truncated <-
     invisible(x)
   }
 
-
 pca_variances <- function(x) {
   if (x$num_comp > 0 && length(x$columns) > 0) {
     variances <- x$res$sdev^2
@@ -252,8 +251,6 @@ pca_variances <- function(x) {
   res
 }
 
-
-
 #' @rdname tidy.recipe
 #' @param type For `step_pca_truncated`, either `"coef"` (for the variable
 #'   loadings per component) or `"variance"` (how much variance does each
@@ -270,6 +267,7 @@ tidy.step_pca_truncated <- function(x, type = "coef", ...) {
   } else {
     type <- match.arg(type, c("coef", "variance"))
     if (type == "coef") {
+      x$res <- x$res$rotation
       res <- pca_coefs(x)
     } else {
       res <- pca_variances(x)
@@ -277,6 +275,12 @@ tidy.step_pca_truncated <- function(x, type = "coef", ...) {
   }
   res$id <- x$id
   res
+}
+
+#' @rdname required_pkgs.embed
+#' @export
+required_pkgs.step_pca_truncated <- function(x, ...) {
+  c("embed", "irlba")
 }
 
 #' @export

@@ -2,8 +2,8 @@ source(testthat::test_path("make_example_data.R"))
 source(testthat::test_path("test-helpers.R"))
 
 # Uncomment to make stuff run on M1
-# tensorflow::tf$config$get_visible_devices("CPU") %>% 
-#   tensorflow::tf$config$set_visible_devices()
+tensorflow::tf$config$get_visible_devices("CPU") %>%
+  tensorflow::tf$config$set_visible_devices()
 
 test_that("factor encoded predictor", {
   skip_on_cran()
