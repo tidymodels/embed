@@ -26,6 +26,7 @@ reference:
     - step_discretize_xgb
     - step_pca_sparse
     - step_pca_sparse_bayes
+    - step_pca_truncated
     - step_umap
 - title: Datasets
   contents:
