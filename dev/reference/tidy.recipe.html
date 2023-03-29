@@ -52,7 +52,7 @@ exists). See recipes::tidy.recipe for more information."><meta property="og:imag
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Tidy the Result of a Recipe</h1>
-      <small class="dont-index">Source: <a href="https://github.com/tidymodels/embed/blob/HEAD/R/collapse_cart.R" class="external-link"><code>R/collapse_cart.R</code></a>, <a href="https://github.com/tidymodels/embed/blob/HEAD/R/collapse_stringdist.R" class="external-link"><code>R/collapse_stringdist.R</code></a>, <a href="https://github.com/tidymodels/embed/blob/HEAD/R/discretize_cart.R" class="external-link"><code>R/discretize_cart.R</code></a>, and 11 more</small>
+      <small class="dont-index">Source: <a href="https://github.com/tidymodels/embed/blob/HEAD/R/collapse_cart.R" class="external-link"><code>R/collapse_cart.R</code></a>, <a href="https://github.com/tidymodels/embed/blob/HEAD/R/collapse_stringdist.R" class="external-link"><code>R/collapse_stringdist.R</code></a>, <a href="https://github.com/tidymodels/embed/blob/HEAD/R/discretize_cart.R" class="external-link"><code>R/discretize_cart.R</code></a>, and 12 more</small>
       <div class="d-none name"><code>tidy.recipe.Rd</code></div>
     </div>
 
@@ -97,6 +97,9 @@ exists). See <a href="https://recipes.tidymodels.org/reference/tidy.recipe.html"
 <span><span class="co"># S3 method for step_pca_sparse_bayes</span></span>
 <span><span class="fu"><a href="https://generics.r-lib.org/reference/tidy.html" class="external-link">tidy</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
+<span><span class="co"># S3 method for step_pca_truncated</span></span>
+<span><span class="fu"><a href="https://generics.r-lib.org/reference/tidy.html" class="external-link">tidy</a></span><span class="op">(</span><span class="va">x</span>, type <span class="op">=</span> <span class="st">"coef"</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
 <span><span class="co"># S3 method for step_umap</span></span>
 <span><span class="fu"><a href="https://generics.r-lib.org/reference/tidy.html" class="external-link">tidy</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
@@ -112,6 +115,12 @@ exists). See <a href="https://recipes.tidymodels.org/reference/tidy.recipe.html"
 
 <dt>...</dt>
 <dd><p>Not currently used.</p></dd>
+
+
+<dt>type</dt>
+<dd><p>For <code>step_pca_truncated</code>, either <code>"coef"</code> (for the variable
+loadings per component) or <code>"variance"</code> (how much variance does each
+component account for).</p></dd>
 
 </dl></div>
 

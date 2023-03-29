@@ -88,6 +88,9 @@
     <loc>https://embed.tidymodels.org/dev/reference/step_pca_sparse_bayes.html</loc>
   </url>
   <url>
+    <loc>https://embed.tidymodels.org/dev/reference/step_pca_truncated.html</loc>
+  </url>
+  <url>
     <loc>https://embed.tidymodels.org/dev/reference/step_umap.html</loc>
   </url>
   <url>
