@@ -8,6 +8,8 @@
 
 * `step_pca_truncated()` has been added. This step only calculates the components that are required, and will be a speedup in cases where it is used on many variables. (#82)
 
+* Steps with tunable arguments now have those arguments listed in the documentation.
+
 # embed 1.0.0
 
 * `step_collapse_cart()` can pool a predictor's factor levels using a tree-based method. 
