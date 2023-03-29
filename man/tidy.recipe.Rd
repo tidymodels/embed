@@ -2,7 +2,7 @@
 % Please edit documentation in R/collapse_cart.R, R/collapse_stringdist.R,
 %   R/discretize_cart.R, R/discretize_xgb.R, R/embed.R, R/feature_hash.R,
 %   R/lencode_bayes.R, R/lencode_glm.R, R/lencode_mixed.R, R/pca_sparse.R,
-%   R/pca_sparse_bayes.R, R/tidy.R, R/umap.R, R/woe.R
+%   R/pca_sparse_bayes.R, R/pca_truncated.R, R/tidy.R, R/umap.R, R/woe.R
 \name{tidy.step_collapse_cart}
 \alias{tidy.step_collapse_cart}
 \alias{tidy.step_collapse_stringdist}
@@ -15,6 +15,7 @@
 \alias{tidy.step_lencode_mixed}
 \alias{tidy.step_pca_sparse}
 \alias{tidy.step_pca_sparse_bayes}
+\alias{tidy.step_pca_truncated}
 \alias{tidy.recipe}
 \alias{tidy.step_umap}
 \alias{tidy.step_woe}
@@ -42,6 +43,8 @@
 
 \method{tidy}{step_pca_sparse_bayes}(x, ...)
 
+\method{tidy}{step_pca_truncated}(x, type = "coef", ...)
+
 \method{tidy}{step_umap}(x, ...)
 
 \method{tidy}{step_woe}(x, ...)
@@ -50,6 +53,10 @@
 \item{x}{A \code{step_woe} object.}
 
 \item{...}{Not currently used.}
+
+\item{type}{For \code{step_pca_truncated}, either \code{"coef"} (for the variable
+loadings per component) or \code{"variance"} (how much variance does each
+component account for).}
 }
 \description{
 \code{tidy} will return a data frame that contains information regarding a recipe

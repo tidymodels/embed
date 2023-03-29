@@ -6,6 +6,8 @@
 
 * `step_collapse_stringdist()` has gained `method` and `options` arguments to allow for different types of string distance calculations. (#152)
 
+* `step_pca_truncated()` has been added. This step only calculates the components that are required, and will be a speedup in cases where it is used on many variables. (#82)
+
 # embed 1.0.0
 
 * `step_collapse_cart()` can pool a predictor's factor levels using a tree-based method. 

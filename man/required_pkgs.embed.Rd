@@ -2,7 +2,7 @@
 % Please edit documentation in R/collapse_cart.R, R/collapse_stringdist.R,
 %   R/discretize_cart.R, R/discretize_xgb.R, R/embed.R, R/feature_hash.R,
 %   R/lencode_bayes.R, R/lencode_glm.R, R/lencode_mixed.R, R/pca_sparse.R,
-%   R/pca_sparse_bayes.R, R/umap.R, R/woe.R
+%   R/pca_sparse_bayes.R, R/pca_truncated.R, R/umap.R, R/woe.R
 \name{required_pkgs.step_collapse_cart}
 \alias{required_pkgs.step_collapse_cart}
 \alias{required_pkgs.step_collapse_stringdist}
@@ -15,6 +15,7 @@
 \alias{required_pkgs.step_lencode_mixed}
 \alias{required_pkgs.step_pca_sparse}
 \alias{required_pkgs.step_pca_sparse_bayes}
+\alias{required_pkgs.step_pca_truncated}
 \alias{required_pkgs.step_umap}
 \alias{required_pkgs.step_woe}
 \title{S3 methods for tracking which additional packages are needed for steps.}
@@ -40,6 +41,8 @@
 \method{required_pkgs}{step_pca_sparse}(x, ...)
 
 \method{required_pkgs}{step_pca_sparse_bayes}(x, ...)
+
+\method{required_pkgs}{step_pca_truncated}(x, ...)
 
 \method{required_pkgs}{step_umap}(x, ...)
 
