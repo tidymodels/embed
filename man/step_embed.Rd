@@ -153,6 +153,14 @@ When you \code{\link[=tidy.recipe]{tidy()}} this step, a tibble with columns \co
 number of columns with embedding information are returned.
 }
 
+\section{Tuning Parameters}{
+This step has 2 tuning parameters:
+\itemize{
+\item \code{num_terms}: # Model Terms (type: integer, default: 2)
+\item \code{hidden_units}: # Hidden Units (type: integer, default: 0)
+}
+}
+
 \section{Case weights}{
 
 

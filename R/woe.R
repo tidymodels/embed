@@ -66,6 +66,12 @@
 #' (the selectors or variables selected), `value`, `n_tot`, `n_bad`, `n_good`,
 #' `p_bad`, `p_good`, `woe` and `outcome` is returned.. See [dictionary()] for
 #' more information.
+#' 
+#' ```{r, echo = FALSE, results="asis"}
+#' step <- "step_woe"
+#' result <- knitr::knit_child("man/rmd/tunable-args.Rmd")
+#' cat(result)
+#' ```
 #'
 #' @template case-weights-not-supported
 #'

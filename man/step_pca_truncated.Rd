@@ -101,6 +101,13 @@ the variable loadings per component or \code{type = "variance"} for how much
 variance each component accounts for.
 }
 
+\section{Tuning Parameters}{
+This step has 1 tuning parameters:
+\itemize{
+\item \code{num_comp}: # Components (type: integer, default: 5)
+}
+}
+
 \section{Case weights}{
 
 

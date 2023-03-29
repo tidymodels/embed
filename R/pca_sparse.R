@@ -52,6 +52,12 @@
 #' When you [`tidy()`][tidy.recipe()] this step, a tibble with columns `terms`
 #' (the selectors or variables selected), `value` and `component` is returned.
 #'
+#' ```{r, echo = FALSE, results="asis"}
+#' step <- "step_pca_sparse"
+#' result <- knitr::knit_child("man/rmd/tunable-args.Rmd")
+#' cat(result)
+#' ```
+#' 
 #' @template case-weights-not-supported
 #'
 #' @seealso [step_pca_sparse_bayes()]

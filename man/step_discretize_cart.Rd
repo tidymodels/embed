@@ -81,6 +81,15 @@ When you \code{\link[=tidy.recipe]{tidy()}} this step, a tibble with columns \co
 (the columns that is selected), \code{values} is returned.
 }
 
+\section{Tuning Parameters}{
+This step has 3 tuning parameters:
+\itemize{
+\item \code{cost_complexity}: Cost-Complexity Parameter (type: double, default: 0.01)
+\item \code{tree_depth}: Tree Depth (type: integer, default: 10)
+\item \code{min_n}: Minimal Node Size (type: integer, default: 20)
+}
+}
+
 \section{Case weights}{
 
 

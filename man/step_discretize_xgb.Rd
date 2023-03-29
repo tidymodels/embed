@@ -102,6 +102,17 @@ When you \code{\link[=tidy.recipe]{tidy()}} this step, a tibble with columns \co
 (the columns that is selected), \code{values} is returned.
 }
 
+\section{Tuning Parameters}{
+This step has 5 tuning parameters:
+\itemize{
+\item \code{sample_val}: Proportion of data for validation (type: double, default: 0.2)
+\item \code{learn_rate}: Learning Rate (type: double, default: 0.3)
+\item \code{num_breaks}: Number of Cut Points (type: integer, default: 10)
+\item \code{tree_depth}: Tree Depth (type: integer, default: 1)
+\item \code{min_n}: Minimal Node Size (type: integer, default: 5)
+}
+}
+
 \section{Case weights}{
 
 

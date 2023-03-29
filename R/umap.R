@@ -50,6 +50,12 @@
 #'
 #' When you [`tidy()`][tidy.recipe()] this step, a tibble with columns `terms`
 #' (the selectors or variables selected) is returned.
+#' 
+#' ```{r, echo = FALSE, results="asis"}
+#' step <- "step_umap"
+#' result <- knitr::knit_child("man/rmd/tunable-args.Rmd")
+#' cat(result)
+#' ```
 #'
 #' @template case-weights-not-supported
 #'
