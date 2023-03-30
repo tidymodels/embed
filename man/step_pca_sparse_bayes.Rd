@@ -111,6 +111,15 @@ When you \code{\link[=tidy.recipe]{tidy()}} this step, a tibble with columns \co
 (the selectors or variables selected), \code{value} and \code{component} is returned.
 }
 
+\section{Tuning Parameters}{
+This step has 3 tuning parameters:
+\itemize{
+\item \code{num_comp}: # Components (type: integer, default: 5)
+\item \code{prior_slab_dispersion}: Dispersion of Slab Prior (type: double, default: 1)
+\item \code{prior_mixture_threshold}: Threshold for Mixture Prior (type: double, default: 0.1)
+}
+}
+
 \section{Case weights}{
 
 

@@ -118,6 +118,17 @@ When you \code{\link[=tidy.recipe]{tidy()}} this step, a tibble with columns \co
 (the selectors or variables selected) is returned.
 }
 
+\section{Tuning Parameters}{
+This step has 5 tuning parameters:
+\itemize{
+\item \code{num_comp}: # Components (type: integer, default: 2)
+\item \code{neighbors}: # Nearest Neighbors (type: integer, default: 15)
+\item \code{min_dist}: Min Distance between Points (type: double, default: 0.01)
+\item \code{learn_rate}: Learning Rate (type: double, default: 1)
+\item \code{epochs}: # Epochs (type: integer, default: NULL)
+}
+}
+
 \section{Case weights}{
 
 

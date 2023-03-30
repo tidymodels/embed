@@ -39,6 +39,12 @@
 #' When you [`tidy()`][tidy.recipe()] this step, use either `type = "coef"` for
 #' the variable loadings per component or `type = "variance"` for how much
 #' variance each component accounts for.
+#' 
+#' ```{r, echo = FALSE, results="asis"}
+#' step <- "step_pca_truncated"
+#' result <- knitr::knit_child("man/rmd/tunable-args.Rmd")
+#' cat(result)
+#' ```
 #'
 #' @template case-weights-unsupervised
 #'

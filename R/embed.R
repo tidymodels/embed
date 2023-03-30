@@ -105,6 +105,12 @@
 #' (the selectors or variables selected), `levels` (levels in variable), and a
 #' number of columns with embedding information are returned.
 #'
+#' ```{r, echo = FALSE, results="asis"}
+#' step <- "step_embed"
+#' result <- knitr::knit_child("man/rmd/tunable-args.Rmd")
+#' cat(result)
+#' ```
+#'
 #' @template case-weights-not-supported
 #'
 #' @references

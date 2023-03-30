@@ -66,6 +66,12 @@
 #' When you [`tidy()`][tidy.recipe()] this step, a tibble with columns `terms`
 #' (the columns that is selected), `values` is returned.
 #'
+#' ```{r, echo = FALSE, results="asis"}
+#' step <- "step_discretize_xgb"
+#' result <- knitr::knit_child("man/rmd/tunable-args.Rmd")
+#' cat(result)
+#' ```
+#'
 #' @template case-weights-supervised
 #'
 #' @examplesIf rlang::is_installed(c("xgboost", "modeldata"))
