@@ -28,6 +28,15 @@
       Caused by error in `prep()`:
       ! All columns selected for the step should be string, factor, or ordered.
 
+# check_name() is used
+
+    Code
+      prep(rec, training = dat)
+    Condition
+      Error in `step_embed()`:
+      Caused by error in `check_name()`:
+      ! Name collision occured in `step_embed`. The following variable names already exists: x3_embed_1.
+
 # printing
 
     Code

@@ -317,6 +317,22 @@ test_that("bake method errors when needed non-standard role columns are missing"
   )
 })
 
+test_that("check_name() is used", {
+  skip_on_cran()
+  skip_if(!is_tf_available())
+  
+  dat <- ex_dat
+  dat$x3_embed_1 <- dat$x3
+  
+  rec <- recipe(~., data = dat) %>%
+    step_embed(x3, outcome = vars(x2), options = embed_control(verbose = 0))
+  
+  expect_snapshot(
+    error = TRUE,
+    prep(rec, training = dat)
+  )
+})
+
 test_that("printing", {
   skip_on_cran()
   skip_if(!is_tf_available())

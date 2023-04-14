@@ -412,8 +412,10 @@ bake.step_embed <- function(object, new_data, ...) {
 
   for (col in names(object$mapping)) {
     tmp <- map_tf_coef2(new_data[, col], object$mapping[[col]], prefix = col)
+   
+    tmp <- check_name(tmp, new_data, object, names(tmp))
+    
     new_data <- bind_cols(new_data, tmp)
-    rm(tmp)
   }
   new_data <- new_data[, !(names(new_data) %in% names(object$mapping))]
 
