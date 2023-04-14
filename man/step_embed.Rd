@@ -17,6 +17,7 @@ step_embed(
   options = embed_control(),
   mapping = NULL,
   history = NULL,
+  keep_original_cols = FALSE,
   skip = FALSE,
   id = rand_id("embed")
 )
@@ -68,6 +69,9 @@ intermediate layer (see Details below).}
 
 \item{history}{A tibble with the convergence statistics for each term. This
 is \code{NULL} until the step is trained by \code{\link[recipes:prep]{recipes::prep()}}.}
+
+\item{keep_original_cols}{A logical to keep the original variables in the
+output. Defaults to \code{FALSE}.}
 
 \item{skip}{A logical. Should the step be skipped when the recipe is baked by
 \code{\link[recipes:bake]{recipes::bake()}}? While all operations are baked when \code{\link[recipes:prep]{recipes::prep()}} is
