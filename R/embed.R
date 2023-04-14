@@ -119,9 +119,6 @@
 #'
 #' Francois C and Allaire JJ (2018) _Deep Learning with R_, Manning
 #'
-#' "How can I obtain reproducible results using Keras during development?"
-#' \url{https://tinyurl.com/keras-repro}
-#'
 #' "Concatenate Embeddings for Categorical Variables with Keras"
 #' \url{https://flovv.github.io/Embeddings_with_keras_part2/}
 #'
