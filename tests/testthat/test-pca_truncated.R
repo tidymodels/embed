@@ -45,6 +45,22 @@ test_that("step_pca_truncated", {
   )
 })
 
+test_that("check_name() is used", {
+  skip_if_not_installed("irlba")
+  
+  dat <- tr
+  dat$PC1 <- dat$var_inten_ch_1
+  
+  rec <- rec <-
+    recipe(~., data = dat) %>%
+    step_pca_truncated(all_predictors())
+  
+  expect_snapshot(
+    error = TRUE,
+    prep(rec, training = dat)
+  )
+})
+
 test_that("printing", {
   cart_rec <-
     recipe(mpg ~ ., data = mtcars) %>%
