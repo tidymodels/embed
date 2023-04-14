@@ -207,15 +207,16 @@ bake.step_feature_hash <- function(object, new_data, ...) {
 
   new_names <- paste0(object$columns, "_hash_")
 
-  new_data <-
-    new_data %>% dplyr::bind_cols(
-      purrr::map2_dfc(
-        new_data[, object$columns],
-        new_names, make_hash_vars,
-        num_hash =
-          object$num_hash
-      )
-    )
+  new_cols <- purrr::map2_dfc(
+    new_data[, object$columns],
+    new_names, make_hash_vars,
+    num_hash =
+      object$num_hash
+  )
+  
+  new_cols <- check_name(new_cols, new_data, object, names(new_cols))
+  
+  new_data <- bind_cols(new_data, new_cols)
 
   keep_original_cols <- get_keep_original_cols(object)
   if (!keep_original_cols) {

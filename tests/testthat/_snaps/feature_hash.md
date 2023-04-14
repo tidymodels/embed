@@ -17,6 +17,15 @@
       'keep_original_cols' was added to `step_feature_hash()` after this recipe was created.
       Regenerate your recipe to avoid this warning.
 
+# check_name() is used
+
+    Code
+      prep(rec, training = dat)
+    Condition
+      Error in `step_feature_hash()`:
+      Caused by error in `check_name()`:
+      ! Name collision occured in `step_feature_hash`. The following variable names already exists: x3_hash_01.
+
 # printing
 
     Code

@@ -162,6 +162,24 @@ test_that("bake method errors when needed non-standard role columns are missing"
   )
 })
 
+test_that("check_name() is used", {
+  skip_on_cran()
+  skip_if_not_installed("keras")
+  skip_if(is.null(tensorflow::tf_version()))
+  rlang::local_options(lifecycle_verbosity = "quiet")
+  
+  dat <- ex_dat
+  dat$x3_hash_01 <- dat$x3
+  
+  rec <- recipe(~., data = dat) %>%
+    step_feature_hash(x3)
+  
+  expect_snapshot(
+    error = TRUE,
+    prep(rec, training = dat)
+  )
+})
+
 test_that("printing", {
   rlang::local_options(lifecycle_verbosity = "quiet")
   print_test <- recipe(x1 ~ x3, data = ex_dat) %>%
