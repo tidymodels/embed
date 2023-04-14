@@ -1,18 +1,21 @@
 # embed (development version)
 
-* All steps now have `required_pkgs()` methods.
-
-* Add `metric` argument to `step_umap()`. (#154)
-
-* `step_collapse_stringdist()` has gained `method` and `options` arguments to allow for different types of string distance calculations. (#152)
+## New Steps
 
 * `step_pca_truncated()` has been added. This step only calculates the components that are required, and will be a speedup in cases where it is used on many variables. (#82)
+
+## Improvements
+
+* `step_collapse_stringdist()` has gained `method` and `options` arguments to allow for different types of string distance calculations. (#152)
+* `step_umap()` has gained the argument `metric`. (#154)
+
+* `step_embed()` has gained the `keep_original_cols` argument. (#176)
+
+* All steps now have `required_pkgs()` methods.
 
 * Steps with tunable arguments now have those arguments listed in the documentation.
 
 * All steps that add new columns will now informatively error if name collision occurs.
-
-* `step_embed()` has gained the `keep_original_cols` argument. (#176)
 
 # embed 1.0.0
 
