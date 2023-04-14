@@ -63,6 +63,26 @@ test_that("empty selections", {
   )
 })
 
+test_that("check_name() is used", {
+  skip_if_not_installed("irlba")
+  
+  dat <- tr
+  dat$PC1 <- dat$var_inten_ch_1
+  
+  rec <- rec <-
+    recipe(~., data = dat) %>%
+    step_pca_sparse(
+      all_predictors(),
+      num_comp = 4,
+      predictor_prop = 1 / 2
+    )
+  
+  expect_snapshot(
+    error = TRUE,
+    prep(rec, training = dat)
+  )
+})
+
 test_that("tunable", {
   rec <-
     recipe(~., data = mtcars) %>%
