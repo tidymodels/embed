@@ -72,6 +72,27 @@ test_that("bake method errors when needed non-standard role columns are missing"
   )
 })
 
+test_that("check_name() is used", {
+  skip_if_not_installed("VBsparsePCA")
+  
+  dat <- tr
+  dat$PC1 <- dat$var_inten_ch_1
+  
+  rec <- rec <-
+    recipe(~., data = dat) %>%
+    step_pca_sparse_bayes(
+      all_predictors(),
+      num_comp = 4,
+      prior_slab_dispersion = 1 / 2,
+      prior_mixture_threshold = 1 / 15
+    )
+  
+  expect_snapshot(
+    error = TRUE,
+    prep(rec, training = dat)
+  )
+})
+
 test_that("printing", {
   print_test <- recipe(~., data = tr[, -5]) %>%
     step_pca_sparse_bayes(all_predictors())
