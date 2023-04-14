@@ -7,6 +7,15 @@
       'keep_original_cols' was added to `step_umap()` after this recipe was created.
       Regenerate your recipe to avoid this warning.
 
+# check_name() is used
+
+    Code
+      prep(rec, training = dat)
+    Condition
+      Error in `step_umap()`:
+      Caused by error in `check_name()`:
+      ! Name collision occured in `step_umap`. The following variable names already exists: UMAP1.
+
 # printing
 
     Code

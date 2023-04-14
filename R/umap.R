@@ -266,8 +266,11 @@ bake.step_umap <- function(object, new_data, ...) {
 
   if (is.null(object$prefix)) object$prefix <- "UMAP"
 
-  res <- check_name(res, new_data, object)
-  new_data <- bind_cols(new_data, as_tibble(res))
+  colnames(res) <- names0(object$num_comp, prefix = object$prefix)
+  res <- as_tibble(res)
+  
+  res <- check_name(res, new_data, object, names(res))
+  new_data <- bind_cols(new_data, res)
 
   keep_original_cols <- get_keep_original_cols(object)
   if (!keep_original_cols) {

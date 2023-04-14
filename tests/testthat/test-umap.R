@@ -239,6 +239,19 @@ test_that("bake method errors when needed non-standard role columns are missing"
   )
 })
 
+test_that("check_name() is used", {
+  dat <- tr
+  dat$UMAP1 <- dat$Species
+  
+  rec <- recipe(Species ~ ., data = dat) %>%
+    step_umap(all_predictors(), num_comp = 2)
+  
+  expect_snapshot(
+    error = TRUE,
+    prep(rec, training = dat)
+  )
+})
+
 test_that("printing", {
   print_test <- recipe(~., data = tr[, -5]) %>%
     step_umap(all_predictors())
