@@ -10,6 +10,8 @@
 
 * Steps with tunable arguments now have those arguments listed in the documentation.
 
+* All steps that add new columns will now informatively error if name collision occurs.
+
 # embed 1.0.0
 
 * `step_collapse_cart()` can pool a predictor's factor levels using a tree-based method. 
