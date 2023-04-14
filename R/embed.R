@@ -28,6 +28,8 @@
 #'   `NULL` until the step is trained by [recipes::prep()].
 #' @param history A tibble with the convergence statistics for each term. This
 #'   is `NULL` until the step is trained by [recipes::prep()].
+#' @param keep_original_cols A logical to keep the original variables in the
+#'   output. Defaults to `FALSE`.
 #' @param skip A logical. Should the step be skipped when the recipe is baked by
 #'   [recipes::bake()]? While all operations are baked when [recipes::prep()] is
 #'   run, some operations may not be able to be conducted on new data (e.g.
@@ -147,6 +149,7 @@ step_embed <-
            options = embed_control(),
            mapping = NULL,
            history = NULL,
+           keep_original_cols = FALSE,
            skip = FALSE,
            id = rand_id("embed")) {
     # warm start for tf to avoid a bug in tensorflow
@@ -168,6 +171,7 @@ step_embed <-
         options = options,
         mapping = mapping,
         history = history,
+        keep_original_cols = keep_original_cols,
         skip = skip,
         id = id
       )
@@ -176,7 +180,7 @@ step_embed <-
 
 step_embed_new <-
   function(terms, role, trained, outcome, predictors, num_terms, hidden_units,
-           options, mapping, history, skip, id) {
+           options, mapping, history, keep_original_cols, skip, id) {
     step(
       subclass = "embed",
       terms = terms,
@@ -189,6 +193,7 @@ step_embed_new <-
       predictors = predictors,
       mapping = mapping,
       history = history,
+      keep_original_cols = keep_original_cols,
       skip = skip,
       id = id
     )
@@ -245,6 +250,7 @@ prep.step_embed <- function(x, training, info = NULL, ...) {
     options = x$options,
     mapping = res$layer_values,
     history = .hist,
+    keep_original_cols = get_keep_original_cols(x),
     skip = x$skip,
     id = x$id
   )
@@ -417,7 +423,11 @@ bake.step_embed <- function(object, new_data, ...) {
     
     new_data <- bind_cols(new_data, tmp)
   }
-  new_data <- new_data[, !(names(new_data) %in% names(object$mapping))]
+  
+  keep_original_cols <- get_keep_original_cols(object)
+  if (!keep_original_cols) {
+    new_data <- new_data[, !(names(new_data) %in% names(object$mapping))]
+  }
 
   new_data
 }

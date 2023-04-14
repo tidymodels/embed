@@ -343,6 +343,22 @@ test_that("printing", {
   expect_snapshot(prep(print_test))
 })
 
+test_that("keep_original_cols works", {
+  skip_on_cran()
+  skip_if(!is_tf_available())
+  
+  rec <- recipe(x2 ~ x3, data = ex_dat_ch) %>%
+    step_embed(x3, outcome = vars(x2), keep_original_cols = TRUE)
+  
+  rec_trained <- prep(rec, training = ex_dat_ch, verbose = FALSE)
+  preds <- bake(rec_trained, new_data = ex_dat_ch, all_predictors())
+  
+  expect_equal(
+    colnames(preds),
+    c("x3", paste0("x3_embed_", 1:2))
+  )
+})
+
 test_that("empty selections", {
   data(ad_data, package = "modeldata")
   expect_error(
