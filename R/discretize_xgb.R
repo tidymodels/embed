@@ -79,7 +79,8 @@
 #' library(recipes)
 #' data(credit_data, package = "modeldata")
 #'
-#' split <- initial_split(credit_data, strata = "Status")
+#' set.seed(1234)
+#' split <- initial_split(credit_data[1:1000, ], strata = "Status")
 #'
 #' credit_data_tr <- training(split)
 #' credit_data_te <- testing(split)
