@@ -1,4 +1,4 @@
-# embed (development version)
+# embed 1.1.0
 
 ## New Steps
 
