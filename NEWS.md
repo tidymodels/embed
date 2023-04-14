@@ -12,6 +12,8 @@
 
 * All steps that add new columns will now informatively error if name collision occurs.
 
+* `step_embed()` has gained the `keep_original_cols` argument. (#176)
+
 # embed 1.0.0
 
 * `step_collapse_cart()` can pool a predictor's factor levels using a tree-based method. 
