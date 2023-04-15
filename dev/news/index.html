@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">embed</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.0.0.9000</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.1.0.9000</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -53,14 +53,24 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="embed-development-version">embed (development version)<a class="anchor" aria-label="anchor" href="#embed-development-version"></a></h2>
-<ul><li><p>All steps now have <code><a href="https://generics.r-lib.org/reference/required_pkgs.html" class="external-link">required_pkgs()</a></code> methods.</p></li>
-<li><p>Add <code>metric</code> argument to <code><a href="../reference/step_umap.html">step_umap()</a></code>. (<a href="https://github.com/tidymodels/embed/issues/154" class="external-link">#154</a>)</p></li>
-<li><p><code><a href="../reference/step_collapse_stringdist.html">step_collapse_stringdist()</a></code> has gained <code>method</code> and <code>options</code> arguments to allow for different types of string distance calculations. (<a href="https://github.com/tidymodels/embed/issues/152" class="external-link">#152</a>)</p></li>
-<li><p><code><a href="../reference/step_pca_truncated.html">step_pca_truncated()</a></code> has been added. This step only calculates the components that are required, and will be a speedup in cases where it is used on many variables. (<a href="https://github.com/tidymodels/embed/issues/82" class="external-link">#82</a>)</p></li>
+</div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.1.0" id="embed-110">embed 1.1.0<a class="anchor" aria-label="anchor" href="#embed-110"></a></h2><p class="text-muted">CRAN release: 2023-04-14</p>
+<div class="section level3">
+<h3 id="new-steps-1-1-0">New Steps<a class="anchor" aria-label="anchor" href="#new-steps-1-1-0"></a></h3>
+<ul><li>
+<code><a href="../reference/step_pca_truncated.html">step_pca_truncated()</a></code> has been added. This step only calculates the components that are required, and will be a speedup in cases where it is used on many variables. (<a href="https://github.com/tidymodels/embed/issues/82" class="external-link">#82</a>)</li>
+</ul></div>
+<div class="section level3">
+<h3 id="improvements-1-1-0">Improvements<a class="anchor" aria-label="anchor" href="#improvements-1-1-0"></a></h3>
+<ul><li><p><code><a href="../reference/step_collapse_stringdist.html">step_collapse_stringdist()</a></code> has gained <code>method</code> and <code>options</code> arguments to allow for different types of string distance calculations. (<a href="https://github.com/tidymodels/embed/issues/152" class="external-link">#152</a>)</p></li>
+<li><p><code><a href="../reference/step_umap.html">step_umap()</a></code> has gained the argument <code>metric</code>. (<a href="https://github.com/tidymodels/embed/issues/154" class="external-link">#154</a>)</p></li>
+<li><p><code><a href="../reference/step_embed.html">step_embed()</a></code> has gained the <code>keep_original_cols</code> argument. (<a href="https://github.com/tidymodels/embed/issues/176" class="external-link">#176</a>)</p></li>
+<li><p>All steps now have <code><a href="https://generics.r-lib.org/reference/required_pkgs.html" class="external-link">required_pkgs()</a></code> methods.</p></li>
 <li><p>Steps with tunable arguments now have those arguments listed in the documentation.</p></li>
 <li><p>All steps that add new columns will now informatively error if name collision occurs.</p></li>
-<li><p><code><a href="../reference/step_embed.html">step_embed()</a></code> has gained the <code>keep_original_cols</code> argument. (<a href="https://github.com/tidymodels/embed/issues/176" class="external-link">#176</a>)</p></li>
 </ul></div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.0.0" id="embed-100">embed 1.0.0<a class="anchor" aria-label="anchor" href="#embed-100"></a></h2><p class="text-muted">CRAN release: 2022-07-02</p>
 <ul><li><p><code><a href="../reference/step_collapse_cart.html">step_collapse_cart()</a></code> can pool a predictor’s factor levels using a tree-based method.</p></li>
