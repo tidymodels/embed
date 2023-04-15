@@ -4,4 +4,4 @@
 
 ## Downstream dependencies
 
-1 downstream dependencies was tested with no errors.
+2 downstream dependencies was tested with no errors.

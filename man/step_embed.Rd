@@ -188,9 +188,6 @@ rec <- recipe(class ~ num_ci + sponsor_code, data = grants_other) \%>\%
 \references{
 Francois C and Allaire JJ (2018) \emph{Deep Learning with R}, Manning
 
-"How can I obtain reproducible results using Keras during development?"
-\url{https://tinyurl.com/keras-repro}
-
 "Concatenate Embeddings for Categorical Variables with Keras"
 \url{https://flovv.github.io/Embeddings_with_keras_part2/}
 }
