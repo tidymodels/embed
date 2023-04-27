@@ -143,18 +143,6 @@ test_that("empty selection tidy method works", {
   expect_identical(tidy(rec, number = 1), expect)
 })
 
-test_that("empty printing", {
-  skip_if(packageVersion("rlang") < "1.0.0")
-  rec <- recipe(mpg ~ ., mtcars)
-  rec <- step_collapse_cart(rec)
-
-  expect_snapshot(rec)
-
-  rec <- prep(rec, mtcars)
-
-  expect_snapshot(rec)
-})
-
 # Infrastructure ---------------------------------------------------------------
 
 test_that("bake method errors when needed non-standard role columns are missing", {
@@ -169,4 +157,15 @@ test_that("bake method errors when needed non-standard role columns are missing"
     bake(rec_trained, new_data = ames[, -1]),
     class = "new_data_missing_column"
   )
+})
+
+test_that("empty printing", {
+  rec <- recipe(mpg ~ ., mtcars)
+  rec <- step_collapse_cart(rec)
+  
+  expect_snapshot(rec)
+  
+  rec <- prep(rec, mtcars)
+  
+  expect_snapshot(rec)
 })
