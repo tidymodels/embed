@@ -23,8 +23,9 @@
       prep(rec, training = dat)
     Condition
       Error in `step_feature_hash()`:
-      Caused by error in `check_name()`:
-      ! Name collision occured in `step_feature_hash`. The following variable names already exists: x3_hash_01.
+      Caused by error in `bake()`:
+      ! Name collision occured. The following variable names already exists:
+      i  x3_hash_01
 
 # printing
 
