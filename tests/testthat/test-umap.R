@@ -238,13 +238,6 @@ test_that("check_name() is used", {
   )
 })
 
-test_that("printing", {
-  print_test <- recipe(~., data = tr[, -5]) %>%
-    step_umap(all_predictors())
-  expect_snapshot(print_test)
-  expect_snapshot(prep(print_test))
-})
-
 test_that("tunable", {
   rec <-
     recipe(~., data = mtcars) %>%
@@ -294,4 +287,12 @@ test_that("bake method errors when needed non-standard role columns are missing"
     bake(rec_trained, new_data = tr[, -4]),
     class = "new_data_missing_column"
   )
+})
+
+test_that("printing", {
+  rec <- recipe(~., data = tr[, -5]) %>%
+    step_umap(all_predictors())
+  
+  expect_snapshot(print(rec))
+  expect_snapshot(prep(rec))
 })

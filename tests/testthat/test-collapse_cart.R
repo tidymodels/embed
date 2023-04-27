@@ -106,17 +106,6 @@ test_that("failed collapsing", {
   expect_true(length(rec_5$steps[[1]]$results) == 0)
 })
 
-test_that("printing", {
-  skip_if_not_installed("modeldata")
-  data(ames, package = "modeldata")
-
-  rec <-
-    recipe(Sale_Price ~ ., data = ames) %>%
-    step_collapse_cart(Neighborhood, Central_Air, outcome = vars(Sale_Price))
-  expect_snapshot(print(rec))
-  expect_snapshot(prep(rec))
-})
-
 # Infrastructure ---------------------------------------------------------------
 
 test_that("bake method errors when needed non-standard role columns are missing", {
@@ -168,4 +157,15 @@ test_that("empty selection tidy method works", {
   rec <- prep(rec, mtcars)
   
   expect_identical(tidy(rec, number = 1), expect)
+})
+
+test_that("printing", {
+  skip_if_not_installed("modeldata")
+  data(ames, package = "modeldata")
+  
+  rec <- recipe(Sale_Price ~ ., data = ames) %>%
+    step_collapse_cart(Neighborhood, Central_Air, outcome = vars(Sale_Price))
+  
+  expect_snapshot(print(rec))
+  expect_snapshot(prep(rec))
 })

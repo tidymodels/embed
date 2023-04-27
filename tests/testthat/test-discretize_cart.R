@@ -160,15 +160,6 @@ test_that("tidy method", {
   )
 })
 
-test_that("printing", {
-  cart_rec <-
-    recipe(class ~ ., data = sim_tr_cls) %>%
-    step_discretize_cart(all_predictors(), outcome = "class")
-
-  expect_snapshot(cart_rec)
-  expect_snapshot(prep(cart_rec))
-})
-
 test_that("case weights step functions", {
   sim_tr_cls_cw <- sim_tr_cls %>%
     mutate(weight = importance_weights(rep(0:1, each = 500)))
@@ -251,4 +242,12 @@ test_that("bake method errors when needed non-standard role columns are missing"
     bake(rec_trained, new_data = sim_tr_cls[, -1]),
     class = "new_data_missing_column"
   )
+})
+
+test_that("printing", {
+  rec <- recipe(class ~ ., data = sim_tr_cls) %>%
+    step_discretize_cart(all_predictors(), outcome = "class")
+  
+  expect_snapshot(print(rec))
+  expect_snapshot(prep(rec))
 })

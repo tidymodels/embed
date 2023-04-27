@@ -312,16 +312,6 @@ test_that("check_name() is used", {
   )
 })
 
-test_that("printing", {
-  skip_on_cran()
-  skip_if(!is_tf_available())
-
-  print_test <- recipe(x2 ~ ., data = ex_dat_ch) %>%
-    step_embed(x3, outcome = vars(x2))
-  expect_snapshot(print_test)
-  expect_snapshot(prep(print_test))
-})
-
 test_that("keep_original_cols works", {
   skip_on_cran()
   skip_if(!is_tf_available())
@@ -389,4 +379,15 @@ test_that("bake method errors when needed non-standard role columns are missing"
     bake(rec_trained, new_data = ex_dat[, -3]),
     class = "new_data_missing_column"
   )
+})
+
+test_that("printing", {
+  skip_on_cran()
+  skip_if(!is_tf_available())
+  
+  rec <- recipe(x2 ~ ., data = ex_dat_ch) %>%
+    step_embed(x3, outcome = vars(x2))
+  
+  expect_snapshot(print(rec))
+  expect_snapshot(prep(rec))
 })

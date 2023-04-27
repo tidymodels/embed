@@ -248,14 +248,6 @@ test_that("bad args", {
   )
 })
 
-test_that("printing", {
-  skip_if_not_installed("lme4")
-  print_test <- recipe(x2 ~ ., data = ex_dat_ch) %>%
-    step_lencode_mixed(x3, outcome = vars(x2))
-  expect_snapshot(print_test)
-  expect_snapshot(prep(print_test))
-})
-
 test_that("case weights", {
   skip_if_not_installed("lme4")
 
@@ -299,4 +291,14 @@ test_that("bake method errors when needed non-standard role columns are missing"
     bake(rec_trained, new_data = ex_dat[, -3]),
     class = "new_data_missing_column"
   )
+})
+
+test_that("printing", {
+  skip_if_not_installed("lme4")
+  
+  rec <- recipe(x2 ~ ., data = ex_dat_ch) %>%
+    step_lencode_mixed(x3, outcome = vars(x2))
+
+  expect_snapshot(print(rec))
+  expect_snapshot(prep(rec))
 })

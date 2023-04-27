@@ -360,20 +360,6 @@ test_that("Works with passing family ", {
   )
 })
 
-test_that("printing", {
-  print_test <- recipe(x2 ~ ., data = ex_dat) %>%
-    step_lencode_bayes(x3,
-      outcome = vars(x2),
-      verbose = FALSE,
-      options = opts
-    )
-  expect_snapshot(print_test)
-  expect_snapshot(
-    prep(print_test),
-    transform = omit_warning("^(Bulk Effective|Tail Effective|The largest)")
-  )
-})
-
 test_that("case weights", {
   skip_on_cran()
   skip_if_not_installed("rstanarm")
@@ -430,5 +416,20 @@ test_that("bake method errors when needed non-standard role columns are missing"
   expect_error(
     bake(rec_trained, new_data = ex_dat[, -3]),
     class = "new_data_missing_column"
+  )
+})
+
+test_that("printing", {
+  rec <- recipe(x2 ~ ., data = ex_dat) %>%
+    step_lencode_bayes(x3,
+                       outcome = vars(x2),
+                       verbose = FALSE,
+                       options = opts
+    )
+  
+  expect_snapshot(print(rec))
+  expect_snapshot(
+    prep(rec),
+    transform = omit_warning("^(Bulk Effective|Tail Effective|The largest)")
   )
 })

@@ -162,17 +162,6 @@ test_that("check_name() is used", {
   )
 })
 
-test_that("printing", {
-  rlang::local_options(lifecycle_verbosity = "quiet")
-  print_test <- recipe(x1 ~ x3, data = ex_dat) %>%
-    step_feature_hash(x3)
-  expect_snapshot(print_test)
-
-  skip_if_not_installed("keras")
-  skip_if(is.null(tensorflow::tf_version()))
-  expect_snapshot(prep(print_test))
-})
-
 # Infrastructure ---------------------------------------------------------------
 
 test_that("bake method errors when needed non-standard role columns are missing", {
@@ -191,4 +180,16 @@ test_that("bake method errors when needed non-standard role columns are missing"
     bake(rec_trained, new_data = ex_dat[, -3]),
     class = "new_data_missing_column"
   )
+})
+
+test_that("printing", {
+  skip_if_not_installed("keras")
+  skip_if(is.null(tensorflow::tf_version()))
+  rlang::local_options(lifecycle_verbosity = "quiet")
+  
+  rec <- recipe(x1 ~ x3, data = ex_dat) %>%
+    step_feature_hash(x3)
+  
+  expect_snapshot(print(rec))
+  expect_snapshot(prep(rec))
 })
