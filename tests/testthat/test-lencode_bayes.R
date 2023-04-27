@@ -360,20 +360,6 @@ test_that("Works with passing family ", {
   )
 })
 
-test_that("bake method errors when needed non-standard role columns are missing", {
-  rec <- recipe(x2 ~ ., data = ex_dat) %>%
-    step_lencode_bayes(x3, outcome = vars(x2)) %>%
-    update_role(x3, new_role = "potato") %>%
-    update_role_requirements(role = "potato", bake = FALSE)
-
-  rec_trained <- prep(rec, training = ex_dat, verbose = FALSE)
-
-  expect_error(
-    bake(rec_trained, new_data = ex_dat[, -3]),
-    class = "new_data_missing_column"
-  )
-})
-
 test_that("printing", {
   print_test <- recipe(x2 ~ ., data = ex_dat) %>%
     step_lencode_bayes(x3,
@@ -447,3 +433,17 @@ test_that("case weights", {
 })
 
 # Infrastructure ---------------------------------------------------------------
+
+test_that("bake method errors when needed non-standard role columns are missing", {
+  rec <- recipe(x2 ~ ., data = ex_dat) %>%
+    step_lencode_bayes(x3, outcome = vars(x2)) %>%
+    update_role(x3, new_role = "potato") %>%
+    update_role_requirements(role = "potato", bake = FALSE)
+  
+  rec_trained <- prep(rec, training = ex_dat, verbose = FALSE)
+  
+  expect_error(
+    bake(rec_trained, new_data = ex_dat[, -3]),
+    class = "new_data_missing_column"
+  )
+})

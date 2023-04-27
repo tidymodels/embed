@@ -476,20 +476,6 @@ test_that("xgb_binning() errors if only one class in outcome", {
   )
 })
 
-test_that("bake method errors when needed non-standard role columns are missing", {
-  rec <- recipe(class ~ ., data = sim_tr_cls) %>%
-    step_discretize_xgb(x, z, outcome = "class") %>%
-    update_role(x, new_role = "potato") %>%
-    update_role_requirements(role = "potato", bake = FALSE)
-
-  rec_trained <- prep(rec, training = sim_tr_cls, verbose = FALSE)
-
-  expect_error(
-    bake(rec_trained, new_data = sim_tr_cls[, -1]),
-    class = "new_data_missing_column"
-  )
-})
-
 test_that("printing", {
   xgb_rec <-
     recipe(class ~ ., data = sim_tr_cls) %>%
@@ -658,3 +644,17 @@ test_that("tunable is setup to works with extract_parameter_set_dials works", {
 })
 
 # Infrastructure ---------------------------------------------------------------
+
+test_that("bake method errors when needed non-standard role columns are missing", {
+  rec <- recipe(class ~ ., data = sim_tr_cls) %>%
+    step_discretize_xgb(x, z, outcome = "class") %>%
+    update_role(x, new_role = "potato") %>%
+    update_role_requirements(role = "potato", bake = FALSE)
+  
+  rec_trained <- prep(rec, training = sim_tr_cls, verbose = FALSE)
+  
+  expect_error(
+    bake(rec_trained, new_data = sim_tr_cls[, -1]),
+    class = "new_data_missing_column"
+  )
+})

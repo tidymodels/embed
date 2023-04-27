@@ -225,20 +225,6 @@ test_that("can prep recipes with no keep_original_cols", {
   )
 })
 
-test_that("bake method errors when needed non-standard role columns are missing", {
-  rec <- recipe(Species ~ ., data = tr) %>%
-    step_umap(Sepal.Length, Sepal.Width, Petal.Length, Petal.Width) %>%
-    update_role(Petal.Width, new_role = "potato") %>%
-    update_role_requirements(role = "potato", bake = FALSE)
-
-  rec_trained <- prep(rec, training = tr, verbose = FALSE)
-
-  expect_error(
-    bake(rec_trained, new_data = tr[, -4]),
-    class = "new_data_missing_column"
-  )
-})
-
 test_that("check_name() is used", {
   dat <- tr
   dat$UMAP1 <- dat$Species
@@ -310,3 +296,17 @@ test_that("tunable is setup to works with extract_parameter_set_dials works", {
 })
 
 # Infrastructure ---------------------------------------------------------------
+
+test_that("bake method errors when needed non-standard role columns are missing", {
+  rec <- recipe(Species ~ ., data = tr) %>%
+    step_umap(Sepal.Length, Sepal.Width, Petal.Length, Petal.Width) %>%
+    update_role(Petal.Width, new_role = "potato") %>%
+    update_role_requirements(role = "potato", bake = FALSE)
+  
+  rec_trained <- prep(rec, training = tr, verbose = FALSE)
+  
+  expect_error(
+    bake(rec_trained, new_data = tr[, -4]),
+    class = "new_data_missing_column"
+  )
+})

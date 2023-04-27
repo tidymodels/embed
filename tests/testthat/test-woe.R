@@ -219,20 +219,6 @@ test_that("step_woe", {
   )
 })
 
-test_that("bake method errors when needed non-standard role columns are missing", {
-  rec <- recipe(Status ~ ., data = credit_tr) %>%
-    step_discretize(Price) %>%
-    update_role(Price, new_role = "potato") %>%
-    update_role_requirements(role = "potato", bake = FALSE)
-
-  rec_trained <- prep(rec, training = credit_tr, verbose = FALSE)
-
-  expect_error(
-    bake(rec_trained, new_data = credit_tr[, -14]),
-    class = "new_data_missing_column"
-  )
-})
-
 test_that("printing", {
   woe_extract <- recipe(Status ~ ., data = credit_tr) %>%
     step_woe(Job, Home, outcome = vars(Status))
@@ -316,3 +302,17 @@ test_that("tunable is setup to works with extract_parameter_set_dials works", {
 })
 
 # Infrastructure ---------------------------------------------------------------
+
+test_that("bake method errors when needed non-standard role columns are missing", {
+  rec <- recipe(Status ~ ., data = credit_tr) %>%
+    step_discretize(Price) %>%
+    update_role(Price, new_role = "potato") %>%
+    update_role_requirements(role = "potato", bake = FALSE)
+  
+  rec_trained <- prep(rec, training = credit_tr, verbose = FALSE)
+  
+  expect_error(
+    bake(rec_trained, new_data = credit_tr[, -14]),
+    class = "new_data_missing_column"
+  )
+})
