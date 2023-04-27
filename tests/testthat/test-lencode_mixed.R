@@ -313,3 +313,5 @@ test_that("case weights", {
 
   expect_snapshot(class_test)
 })
+
+# Infrastructure ---------------------------------------------------------------

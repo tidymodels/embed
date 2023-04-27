@@ -69,3 +69,5 @@ test_that("printing", {
   expect_snapshot(cart_rec)
   expect_snapshot(prep(cart_rec))
 })
+
+# Infrastructure ---------------------------------------------------------------

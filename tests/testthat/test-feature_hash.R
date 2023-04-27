@@ -206,3 +206,5 @@ test_that("empty selections", {
     ad_data %>% select(Genotype, tau, Class)
   )
 })
+
+# Infrastructure ---------------------------------------------------------------
