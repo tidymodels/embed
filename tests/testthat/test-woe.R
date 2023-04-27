@@ -257,21 +257,6 @@ test_that("woe_table respects factor levels", {
   )
 })
 
-test_that("empty selections", {
-  data(ad_data, package = "modeldata")
-  expect_error(
-    rec <-
-      recipe(Class ~ Genotype + tau, data = ad_data) %>%
-      step_woe(starts_with("potato"), outcome = "Class") %>%
-      prep(),
-    regexp = NA
-  )
-  expect_equal(
-    bake(rec, new_data = NULL),
-    ad_data %>% select(Genotype, tau, Class)
-  )
-})
-
 test_that("tunable", {
   rec <-
     recipe(~., data = mtcars) %>%

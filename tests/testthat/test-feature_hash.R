@@ -173,22 +173,6 @@ test_that("printing", {
   expect_snapshot(prep(print_test))
 })
 
-test_that("empty selections", {
-  rlang::local_options(lifecycle_verbosity = "quiet")
-  data(ad_data, package = "modeldata")
-  expect_error(
-    rec <-
-      recipe(Class ~ Genotype + tau, data = ad_data) %>%
-      step_feature_hash(starts_with("potato")) %>%
-      prep(),
-    regexp = NA
-  )
-  expect_equal(
-    bake(rec, new_data = NULL),
-    ad_data %>% select(Genotype, tau, Class)
-  )
-})
-
 # Infrastructure ---------------------------------------------------------------
 
 test_that("bake method errors when needed non-standard role columns are missing", {

@@ -81,20 +81,6 @@ test_that("printing", {
   expect_snapshot(prep(print_test))
 })
 
-test_that("empty selections", {
-  expect_error(
-    rec <-
-      recipe(Class ~ Genotype + tau, data = ad_data) %>%
-      step_pca_sparse_bayes(starts_with("potato")) %>%
-      prep(),
-    regexp = NA
-  )
-  expect_equal(
-    bake(rec, new_data = NULL),
-    ad_data %>% select(Genotype, tau, Class)
-  )
-})
-
 test_that("tunable", {
   rec <-
     recipe(~., data = mtcars) %>%
