@@ -34,8 +34,9 @@
       prep(rec, training = dat)
     Condition
       Error in `step_embed()`:
-      Caused by error in `check_name()`:
-      ! Name collision occured in `step_embed`. The following variable names already exists: x3_embed_1.
+      Caused by error in `bake()`:
+      ! Name collision occured. The following variable names already exists:
+      i  x3_embed_1
 
 # printing
 

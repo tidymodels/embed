@@ -4,8 +4,9 @@
       prep(rec, training = dat)
     Condition
       Error in `step_pca_truncated()`:
-      Caused by error in `check_name()`:
-      ! Name collision occured in `step_pca_truncated`. The following variable names already exists: PC1.
+      Caused by error in `bake()`:
+      ! Name collision occured. The following variable names already exists:
+      i  PC1
 
 # printing
 
