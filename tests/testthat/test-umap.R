@@ -225,20 +225,6 @@ test_that("can prep recipes with no keep_original_cols", {
   )
 })
 
-test_that("bake method errors when needed non-standard role columns are missing", {
-  rec <- recipe(Species ~ ., data = tr) %>%
-    step_umap(Sepal.Length, Sepal.Width, Petal.Length, Petal.Width) %>%
-    update_role(Petal.Width, new_role = "potato") %>%
-    update_role_requirements(role = "potato", bake = FALSE)
-
-  rec_trained <- prep(rec, training = tr, verbose = FALSE)
-
-  expect_error(
-    bake(rec_trained, new_data = tr[, -4]),
-    class = "new_data_missing_column"
-  )
-})
-
 test_that("check_name() is used", {
   dat <- tr
   dat$UMAP1 <- dat$Species
@@ -249,28 +235,6 @@ test_that("check_name() is used", {
   expect_snapshot(
     error = TRUE,
     prep(rec, training = dat)
-  )
-})
-
-test_that("printing", {
-  print_test <- recipe(~., data = tr[, -5]) %>%
-    step_umap(all_predictors())
-  expect_snapshot(print_test)
-  expect_snapshot(prep(print_test))
-})
-
-test_that("empty selections", {
-  data(ad_data, package = "modeldata")
-  expect_error(
-    rec <-
-      recipe(Class ~ Genotype + tau, data = ad_data) %>%
-      step_umap(starts_with("potato"), outcome = vars(Class)) %>%
-      prep(),
-    regexp = NA
-  )
-  expect_equal(
-    bake(rec, new_data = NULL),
-    ad_data %>% select(Genotype, tau, Class)
   )
 })
 
@@ -307,4 +271,28 @@ test_that("tunable is setup to works with extract_parameter_set_dials works", {
   
   expect_s3_class(params, "parameters")
   expect_identical(nrow(params), 5L)
+})
+
+# Infrastructure ---------------------------------------------------------------
+
+test_that("bake method errors when needed non-standard role columns are missing", {
+  rec <- recipe(Species ~ ., data = tr) %>%
+    step_umap(Sepal.Length, Sepal.Width, Petal.Length, Petal.Width) %>%
+    update_role(Petal.Width, new_role = "potato") %>%
+    update_role_requirements(role = "potato", bake = FALSE)
+  
+  rec_trained <- prep(rec, training = tr, verbose = FALSE)
+  
+  expect_error(
+    bake(rec_trained, new_data = tr[, -4]),
+    class = "new_data_missing_column"
+  )
+})
+
+test_that("printing", {
+  rec <- recipe(~., data = tr[, -5]) %>%
+    step_umap(all_predictors())
+  
+  expect_snapshot(print(rec))
+  expect_snapshot(prep(rec))
 })

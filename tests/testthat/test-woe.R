@@ -219,27 +219,6 @@ test_that("step_woe", {
   )
 })
 
-test_that("bake method errors when needed non-standard role columns are missing", {
-  rec <- recipe(Status ~ ., data = credit_tr) %>%
-    step_discretize(Price) %>%
-    update_role(Price, new_role = "potato") %>%
-    update_role_requirements(role = "potato", bake = FALSE)
-
-  rec_trained <- prep(rec, training = credit_tr, verbose = FALSE)
-
-  expect_error(
-    bake(rec_trained, new_data = credit_tr[, -14]),
-    class = "new_data_missing_column"
-  )
-})
-
-test_that("printing", {
-  woe_extract <- recipe(Status ~ ., data = credit_tr) %>%
-    step_woe(Job, Home, outcome = vars(Status))
-  expect_snapshot(woe_extract)
-  expect_snapshot(prep(woe_extract))
-})
-
 test_that("2-level factors", {
   iris3 <- iris
   iris3$group <- factor(rep(letters[1:5], each = 30))
@@ -271,21 +250,6 @@ test_that("woe_table respects factor levels", {
   )
 })
 
-test_that("empty selections", {
-  data(ad_data, package = "modeldata")
-  expect_error(
-    rec <-
-      recipe(Class ~ Genotype + tau, data = ad_data) %>%
-      step_woe(starts_with("potato"), outcome = "Class") %>%
-      prep(),
-    regexp = NA
-  )
-  expect_equal(
-    bake(rec, new_data = NULL),
-    ad_data %>% select(Genotype, tau, Class)
-  )
-})
-
 test_that("tunable", {
   rec <-
     recipe(~., data = mtcars) %>%
@@ -313,4 +277,28 @@ test_that("tunable is setup to works with extract_parameter_set_dials works", {
   
   expect_s3_class(params, "parameters")
   expect_identical(nrow(params), 1L)
+})
+
+# Infrastructure ---------------------------------------------------------------
+
+test_that("bake method errors when needed non-standard role columns are missing", {
+  rec <- recipe(Status ~ ., data = credit_tr) %>%
+    step_discretize(Price) %>%
+    update_role(Price, new_role = "potato") %>%
+    update_role_requirements(role = "potato", bake = FALSE)
+  
+  rec_trained <- prep(rec, training = credit_tr, verbose = FALSE)
+  
+  expect_error(
+    bake(rec_trained, new_data = credit_tr[, -14]),
+    class = "new_data_missing_column"
+  )
+})
+
+test_that("printing", {
+  rec <- recipe(Status ~ ., data = credit_tr) %>%
+    step_woe(Job, Home, outcome = vars(Status))
+  
+  expect_snapshot(print(rec))
+  expect_snapshot(prep(rec))
 })

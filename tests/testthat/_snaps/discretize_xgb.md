@@ -269,41 +269,6 @@
       Error:
       ! Outcome variable only has less than 2 levels. Doesn't conform to regresion or classification task.
 
-# printing
-
-    Code
-      xgb_rec
-    Message
-      
-      -- Recipe ----------------------------------------------------------------------
-      
-      -- Inputs 
-      Number of variables by role
-      outcome:   1
-      predictor: 2
-      
-      -- Operations 
-      * Discretizing variables using xgboost: all_predictors()
-
----
-
-    Code
-      prep(xgb_rec)
-    Message
-      
-      -- Recipe ----------------------------------------------------------------------
-      
-      -- Inputs 
-      Number of variables by role
-      outcome:   1
-      predictor: 2
-      
-      -- Training information 
-      Training data contained 1000 data points and no incomplete rows.
-      
-      -- Operations 
-      * Discretizing variables using xgboost: x, z | Trained
-
 # case weights step_discretize_xgb
 
     Code
@@ -323,4 +288,39 @@
       
       -- Operations 
       * Discretizing variables using xgboost: x, z | Trained, weighted
+
+# printing
+
+    Code
+      print(rec)
+    Message
+      
+      -- Recipe ----------------------------------------------------------------------
+      
+      -- Inputs 
+      Number of variables by role
+      outcome:   1
+      predictor: 2
+      
+      -- Operations 
+      * Discretizing variables using xgboost: all_predictors()
+
+---
+
+    Code
+      prep(rec)
+    Message
+      
+      -- Recipe ----------------------------------------------------------------------
+      
+      -- Inputs 
+      Number of variables by role
+      outcome:   1
+      predictor: 2
+      
+      -- Training information 
+      Training data contained 1000 data points and no incomplete rows.
+      
+      -- Operations 
+      * Discretizing variables using xgboost: x, z | Trained
 

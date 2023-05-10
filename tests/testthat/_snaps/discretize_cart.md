@@ -52,44 +52,6 @@
       Warning:
       `step_discretize_cart()` failed to find any meaningful splits for predictor 'z', which will not be binned.
 
-# printing
-
-    Code
-      cart_rec
-    Message
-      
-      -- Recipe ----------------------------------------------------------------------
-      
-      -- Inputs 
-      Number of variables by role
-      outcome:   1
-      predictor: 2
-      
-      -- Operations 
-      * Discretizing variables using CART: all_predictors()
-
----
-
-    Code
-      prep(cart_rec)
-    Condition
-      Warning:
-      `step_discretize_cart()` failed to find any meaningful splits for predictor 'z', which will not be binned.
-    Message
-      
-      -- Recipe ----------------------------------------------------------------------
-      
-      -- Inputs 
-      Number of variables by role
-      outcome:   1
-      predictor: 2
-      
-      -- Training information 
-      Training data contained 1000 data points and no incomplete rows.
-      
-      -- Operations 
-      * Discretizing variables using CART: x | Trained
-
 # case weights step functions
 
     Code
@@ -124,4 +86,42 @@
       
       -- Operations 
       * Discretizing variables using CART: x, z | Trained, weighted
+
+# printing
+
+    Code
+      print(rec)
+    Message
+      
+      -- Recipe ----------------------------------------------------------------------
+      
+      -- Inputs 
+      Number of variables by role
+      outcome:   1
+      predictor: 2
+      
+      -- Operations 
+      * Discretizing variables using CART: all_predictors()
+
+---
+
+    Code
+      prep(rec)
+    Condition
+      Warning:
+      `step_discretize_cart()` failed to find any meaningful splits for predictor 'z', which will not be binned.
+    Message
+      
+      -- Recipe ----------------------------------------------------------------------
+      
+      -- Inputs 
+      Number of variables by role
+      outcome:   1
+      predictor: 2
+      
+      -- Training information 
+      Training data contained 1000 data points and no incomplete rows.
+      
+      -- Operations 
+      * Discretizing variables using CART: x | Trained
 

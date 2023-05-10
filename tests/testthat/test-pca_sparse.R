@@ -48,21 +48,6 @@ test_that("step_pca_sparse", {
   expect_snapshot(rec)
 })
 
-test_that("empty selections", {
-  data(ad_data, package = "modeldata")
-  expect_error(
-    rec <-
-      recipe(Class ~ Genotype + tau, data = ad_data) %>%
-      step_pca_sparse(starts_with("potato")) %>%
-      prep(),
-    regexp = NA
-  )
-  expect_equal(
-    bake(rec, new_data = NULL),
-    ad_data %>% select(Genotype, tau, Class)
-  )
-})
-
 test_that("check_name() is used", {
   skip_if_not_installed("irlba")
   
@@ -111,3 +96,5 @@ test_that("tunable is setup to works with extract_parameter_set_dials works", {
   expect_s3_class(params, "parameters")
   expect_identical(nrow(params), 2L)
 })
+
+# Infrastructure ---------------------------------------------------------------

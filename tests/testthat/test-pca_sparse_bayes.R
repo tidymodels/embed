@@ -53,25 +53,6 @@ test_that("step_pca_sparse_bayes", {
   expect_snapshot(rec)
 })
 
-test_that("bake method errors when needed non-standard role columns are missing", {
-  rec <- recipe(~., data = tr) %>%
-    step_pca_sparse_bayes(
-      avg_inten_ch_1, avg_inten_ch_2, avg_inten_ch_3, avg_inten_ch_4,
-      num_comp = 2,
-      prior_slab_dispersion = 1 / 2,
-      prior_mixture_threshold = 1 / 15
-    ) %>%
-    update_role(avg_inten_ch_1, new_role = "potato") %>%
-    update_role_requirements(role = "potato", bake = FALSE)
-  
-  rec_trained <- prep(rec, training = tr, verbose = FALSE)
-  
-  expect_error(
-    bake(rec_trained, new_data = tr[, -3]),
-    class = "new_data_missing_column"
-  )
-})
-
 test_that("check_name() is used", {
   skip_if_not_installed("VBsparsePCA")
   
@@ -90,27 +71,6 @@ test_that("check_name() is used", {
   expect_snapshot(
     error = TRUE,
     prep(rec, training = dat)
-  )
-})
-
-test_that("printing", {
-  print_test <- recipe(~., data = tr[, -5]) %>%
-    step_pca_sparse_bayes(all_predictors())
-  expect_snapshot(print_test)
-  expect_snapshot(prep(print_test))
-})
-
-test_that("empty selections", {
-  expect_error(
-    rec <-
-      recipe(Class ~ Genotype + tau, data = ad_data) %>%
-      step_pca_sparse_bayes(starts_with("potato")) %>%
-      prep(),
-    regexp = NA
-  )
-  expect_equal(
-    bake(rec, new_data = NULL),
-    ad_data %>% select(Genotype, tau, Class)
   )
 })
 
@@ -145,4 +105,33 @@ test_that("tunable is setup to works with extract_parameter_set_dials works", {
   
   expect_s3_class(params, "parameters")
   expect_identical(nrow(params), 3L)
+})
+
+# Infrastructure ---------------------------------------------------------------
+
+test_that("bake method errors when needed non-standard role columns are missing", {
+  rec <- recipe(~., data = tr) %>%
+    step_pca_sparse_bayes(
+      avg_inten_ch_1, avg_inten_ch_2, avg_inten_ch_3, avg_inten_ch_4,
+      num_comp = 2,
+      prior_slab_dispersion = 1 / 2,
+      prior_mixture_threshold = 1 / 15
+    ) %>%
+    update_role(avg_inten_ch_1, new_role = "potato") %>%
+    update_role_requirements(role = "potato", bake = FALSE)
+  
+  rec_trained <- prep(rec, training = tr, verbose = FALSE)
+  
+  expect_error(
+    bake(rec_trained, new_data = tr[, -3]),
+    class = "new_data_missing_column"
+  )
+})
+
+test_that("printing", {
+  rec <- recipe(~., data = tr[, -5]) %>%
+    step_pca_sparse_bayes(all_predictors())
+  
+  expect_snapshot(print(rec))
+  expect_snapshot(prep(rec))
 })

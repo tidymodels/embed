@@ -28,41 +28,6 @@
       Caused by error in `prep()`:
       ! All columns selected for the step should be string, factor, or ordered.
 
-# printing
-
-    Code
-      print_test
-    Message
-      
-      -- Recipe ----------------------------------------------------------------------
-      
-      -- Inputs 
-      Number of variables by role
-      outcome:   1
-      predictor: 3
-      
-      -- Operations 
-      * Linear embedding for factors via mixed effects for: x3
-
----
-
-    Code
-      prep(print_test)
-    Message
-      
-      -- Recipe ----------------------------------------------------------------------
-      
-      -- Inputs 
-      Number of variables by role
-      outcome:   1
-      predictor: 3
-      
-      -- Training information 
-      Training data contained 500 data points and no incomplete rows.
-      
-      -- Operations 
-      * Linear embedding for factors via mixed effects for: x3 | Trained
-
 # case weights
 
     Code
@@ -82,4 +47,39 @@
       
       -- Operations 
       * Linear embedding for factors via mixed effects for: x3 | Trained, weighted
+
+# printing
+
+    Code
+      print(rec)
+    Message
+      
+      -- Recipe ----------------------------------------------------------------------
+      
+      -- Inputs 
+      Number of variables by role
+      outcome:   1
+      predictor: 3
+      
+      -- Operations 
+      * Linear embedding for factors via mixed effects for: x3
+
+---
+
+    Code
+      prep(rec)
+    Message
+      
+      -- Recipe ----------------------------------------------------------------------
+      
+      -- Inputs 
+      Number of variables by role
+      outcome:   1
+      predictor: 3
+      
+      -- Training information 
+      Training data contained 500 data points and no incomplete rows.
+      
+      -- Operations 
+      * Linear embedding for factors via mixed effects for: x3 | Trained
 

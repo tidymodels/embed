@@ -61,11 +61,12 @@ test_that("check_name() is used", {
   )
 })
 
+# Infrastructure ---------------------------------------------------------------
+
 test_that("printing", {
-  cart_rec <-
-    recipe(mpg ~ ., data = mtcars) %>%
+  rec <- recipe(mpg ~ ., data = mtcars) %>%
     step_pca_truncated(all_predictors(), num_comp = 2)
   
-  expect_snapshot(cart_rec)
-  expect_snapshot(prep(cart_rec))
+  expect_snapshot(print(rec))
+  expect_snapshot(prep(rec))
 })

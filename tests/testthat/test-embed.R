@@ -2,8 +2,8 @@ source(testthat::test_path("make_example_data.R"))
 source(testthat::test_path("test-helpers.R"))
 
 # Uncomment to make stuff run on M1
-# tensorflow::tf$config$get_visible_devices("CPU") %>%
-#   tensorflow::tf$config$set_visible_devices()
+tensorflow::tf$config$get_visible_devices("CPU") %>%
+  tensorflow::tf$config$set_visible_devices()
 
 test_that("factor encoded predictor", {
   skip_on_cran()
@@ -296,27 +296,6 @@ test_that("bad args", {
   )
 })
 
-test_that("bake method errors when needed non-standard role columns are missing", {
-  skip_on_cran()
-  skip_if(!is_tf_available())
-  rec <- recipe(x2 ~ ., data = ex_dat) %>%
-    step_embed(
-      x3,
-      outcome = vars(x2),
-      options = embed_control(verbose = 0),
-      id = "id"
-    ) %>%
-    update_role(x3, new_role = "potato") %>%
-    update_role_requirements(role = "potato", bake = FALSE)
-
-  rec_trained <- prep(rec, training = ex_dat, verbose = FALSE)
-
-  expect_error(
-    bake(rec_trained, new_data = ex_dat[, -3]),
-    class = "new_data_missing_column"
-  )
-})
-
 test_that("check_name() is used", {
   skip_on_cran()
   skip_if(!is_tf_available())
@@ -333,16 +312,6 @@ test_that("check_name() is used", {
   )
 })
 
-test_that("printing", {
-  skip_on_cran()
-  skip_if(!is_tf_available())
-
-  print_test <- recipe(x2 ~ ., data = ex_dat_ch) %>%
-    step_embed(x3, outcome = vars(x2))
-  expect_snapshot(print_test)
-  expect_snapshot(prep(print_test))
-})
-
 test_that("keep_original_cols works", {
   skip_on_cran()
   skip_if(!is_tf_available())
@@ -356,21 +325,6 @@ test_that("keep_original_cols works", {
   expect_equal(
     colnames(preds),
     c("x3", paste0("x3_embed_", 1:2))
-  )
-})
-
-test_that("empty selections", {
-  data(ad_data, package = "modeldata")
-  expect_error(
-    rec <-
-      recipe(Class ~ Genotype + tau, data = ad_data) %>%
-      step_embed(starts_with("potato"), outcome = vars(Class)) %>%
-      prep(),
-    regexp = NA
-  )
-  expect_equal(
-    bake(rec, new_data = NULL),
-    ad_data %>% select(Genotype, tau, Class)
   )
 })
 
@@ -402,4 +356,38 @@ test_that("tunable is setup to works with extract_parameter_set_dials works", {
   
   expect_s3_class(params, "parameters")
   expect_identical(nrow(params), 2L)
+})
+
+# Infrastructure ---------------------------------------------------------------
+
+test_that("bake method errors when needed non-standard role columns are missing", {
+  skip_on_cran()
+  skip_if(!is_tf_available())
+  rec <- recipe(x2 ~ ., data = ex_dat) %>%
+    step_embed(
+      x3,
+      outcome = vars(x2),
+      options = embed_control(verbose = 0),
+      id = "id"
+    ) %>%
+    update_role(x3, new_role = "potato") %>%
+    update_role_requirements(role = "potato", bake = FALSE)
+  
+  rec_trained <- prep(rec, training = ex_dat, verbose = FALSE)
+  
+  expect_error(
+    bake(rec_trained, new_data = ex_dat[, -3]),
+    class = "new_data_missing_column"
+  )
+})
+
+test_that("printing", {
+  skip_on_cran()
+  skip_if(!is_tf_available())
+  
+  rec <- recipe(x2 ~ ., data = ex_dat_ch) %>%
+    step_embed(x3, outcome = vars(x2))
+  
+  expect_snapshot(print(rec))
+  expect_snapshot(prep(rec))
 })

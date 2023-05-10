@@ -98,10 +98,20 @@
       Caused by error in `prep()`:
       ! All columns selected for the step should be string, factor, or ordered.
 
+# 2-level factors
+
+    Code
+      recipe(Species ~ ., data = iris3) %>% step_woe(group, outcome = vars(Species)) %>%
+        prep()
+    Condition
+      Error in `step_woe()`:
+      Caused by error in `dictionary()`:
+      ! 'outcome' must have exactly 2 categories (has 3)
+
 # printing
 
     Code
-      woe_extract
+      print(rec)
     Message
       
       -- Recipe ----------------------------------------------------------------------
@@ -117,7 +127,7 @@
 ---
 
     Code
-      prep(woe_extract)
+      prep(rec)
     Condition
       Warning:
       Some columns used by `step_woe()` have categories with less than 10 values: 'Home', 'Job'
@@ -135,14 +145,4 @@
       
       -- Operations 
       * WoE version against outcome Status for: Job, Home | Trained
-
-# 2-level factors
-
-    Code
-      recipe(Species ~ ., data = iris3) %>% step_woe(group, outcome = vars(Species)) %>%
-        prep()
-    Condition
-      Error in `step_woe()`:
-      Caused by error in `dictionary()`:
-      ! 'outcome' must have exactly 2 categories (has 3)
 

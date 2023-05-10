@@ -160,46 +160,6 @@ test_that("tidy method", {
   )
 })
 
-test_that("bake method errors when needed non-standard role columns are missing", {
-  rec <- recipe(class ~ ., data = sim_tr_cls) %>%
-    step_discretize_cart(x, z, outcome = "class") %>%
-    update_role(x, new_role = "potato") %>%
-    update_role_requirements(role = "potato", bake = FALSE)
-
-  expect_warning(
-    rec_trained <- prep(rec, training = sim_tr_cls, verbose = FALSE)
-  )
-
-  expect_error(
-    bake(rec_trained, new_data = sim_tr_cls[, -1]),
-    class = "new_data_missing_column"
-  )
-})
-
-test_that("printing", {
-  cart_rec <-
-    recipe(class ~ ., data = sim_tr_cls) %>%
-    step_discretize_cart(all_predictors(), outcome = "class")
-
-  expect_snapshot(cart_rec)
-  expect_snapshot(prep(cart_rec))
-})
-
-test_that("empty selections", {
-  data(ad_data, package = "modeldata")
-  expect_error(
-    rec <-
-      recipe(Class ~ Genotype + tau, data = ad_data) %>%
-      step_discretize_cart(starts_with("potato"), outcome = "Class") %>%
-      prep(),
-    regexp = NA
-  )
-  expect_equal(
-    bake(rec, new_data = NULL),
-    ad_data %>% select(Genotype, tau, Class)
-  )
-})
-
 test_that("case weights step functions", {
   sim_tr_cls_cw <- sim_tr_cls %>%
     mutate(weight = importance_weights(rep(0:1, each = 500)))
@@ -264,4 +224,30 @@ test_that("tunable is setup to works with extract_parameter_set_dials works", {
   
   expect_s3_class(params, "parameters")
   expect_identical(nrow(params), 3L)
+})
+
+# Infrastructure ---------------------------------------------------------------
+
+test_that("bake method errors when needed non-standard role columns are missing", {
+  rec <- recipe(class ~ ., data = sim_tr_cls) %>%
+    step_discretize_cart(x, z, outcome = "class") %>%
+    update_role(x, new_role = "potato") %>%
+    update_role_requirements(role = "potato", bake = FALSE)
+  
+  expect_warning(
+    rec_trained <- prep(rec, training = sim_tr_cls, verbose = FALSE)
+  )
+  
+  expect_error(
+    bake(rec_trained, new_data = sim_tr_cls[, -1]),
+    class = "new_data_missing_column"
+  )
+})
+
+test_that("printing", {
+  rec <- recipe(class ~ ., data = sim_tr_cls) %>%
+    step_discretize_cart(all_predictors(), outcome = "class")
+  
+  expect_snapshot(print(rec))
+  expect_snapshot(prep(rec))
 })

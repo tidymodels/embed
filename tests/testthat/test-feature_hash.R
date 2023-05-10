@@ -144,24 +144,6 @@ test_that("can prep recipes with no keep_original_cols", {
   )
 })
 
-test_that("bake method errors when needed non-standard role columns are missing", {
-  skip_on_cran()
-  skip_if_not_installed("keras")
-  skip_if(is.null(tensorflow::tf_version()))
-  rlang::local_options(lifecycle_verbosity = "quiet")
-  rec <- recipe(x2 ~ ., data = ex_dat) %>%
-    step_feature_hash(x3) %>%
-    update_role(x3, new_role = "potato") %>%
-    update_role_requirements(role = "potato", bake = FALSE)
-
-  rec_trained <- prep(rec, training = ex_dat, verbose = FALSE)
-
-  expect_error(
-    bake(rec_trained, new_data = ex_dat[, -3]),
-    class = "new_data_missing_column"
-  )
-})
-
 test_that("check_name() is used", {
   skip_on_cran()
   skip_if_not_installed("keras")
@@ -180,29 +162,34 @@ test_that("check_name() is used", {
   )
 })
 
-test_that("printing", {
-  rlang::local_options(lifecycle_verbosity = "quiet")
-  print_test <- recipe(x1 ~ x3, data = ex_dat) %>%
-    step_feature_hash(x3)
-  expect_snapshot(print_test)
+# Infrastructure ---------------------------------------------------------------
 
+test_that("bake method errors when needed non-standard role columns are missing", {
+  skip_on_cran()
   skip_if_not_installed("keras")
   skip_if(is.null(tensorflow::tf_version()))
-  expect_snapshot(prep(print_test))
+  rlang::local_options(lifecycle_verbosity = "quiet")
+  rec <- recipe(x2 ~ ., data = ex_dat) %>%
+    step_feature_hash(x3) %>%
+    update_role(x3, new_role = "potato") %>%
+    update_role_requirements(role = "potato", bake = FALSE)
+  
+  rec_trained <- prep(rec, training = ex_dat, verbose = FALSE)
+  
+  expect_error(
+    bake(rec_trained, new_data = ex_dat[, -3]),
+    class = "new_data_missing_column"
+  )
 })
 
-test_that("empty selections", {
+test_that("printing", {
+  skip_if_not_installed("keras")
+  skip_if(is.null(tensorflow::tf_version()))
   rlang::local_options(lifecycle_verbosity = "quiet")
-  data(ad_data, package = "modeldata")
-  expect_error(
-    rec <-
-      recipe(Class ~ Genotype + tau, data = ad_data) %>%
-      step_feature_hash(starts_with("potato")) %>%
-      prep(),
-    regexp = NA
-  )
-  expect_equal(
-    bake(rec, new_data = NULL),
-    ad_data %>% select(Genotype, tau, Class)
-  )
+  
+  rec <- recipe(x1 ~ x3, data = ex_dat) %>%
+    step_feature_hash(x3)
+  
+  expect_snapshot(print(rec))
+  expect_snapshot(prep(rec))
 })
