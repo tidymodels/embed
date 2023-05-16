@@ -289,6 +289,17 @@ test_that("bake method errors when needed non-standard role columns are missing"
   )
 })
 
+test_that("empty printing", {
+  rec <- recipe(mpg ~ ., mtcars)
+  rec <- step_umap(rec)
+  
+  expect_snapshot(rec)
+  
+  rec <- prep(rec, mtcars)
+  
+  expect_snapshot(rec)
+})
+
 test_that("printing", {
   rec <- recipe(~., data = tr[, -5]) %>%
     step_umap(all_predictors())

@@ -297,6 +297,17 @@ test_that("bake method errors when needed non-standard role columns are missing"
   )
 })
 
+test_that("empty printing", {
+  rec <- recipe(mpg ~ ., mtcars)
+  rec <- step_woe(rec, outcome = vars(mpg))
+  
+  expect_snapshot(rec)
+  
+  rec <- prep(rec, mtcars)
+  
+  expect_snapshot(rec)
+})
+
 test_that("printing", {
   rec <- recipe(Status ~ ., data = credit_tr) %>%
     step_woe(Job, Home, outcome = vars(Status))

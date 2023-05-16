@@ -419,6 +419,17 @@ test_that("bake method errors when needed non-standard role columns are missing"
   )
 })
 
+test_that("empty printing", {
+  rec <- recipe(mpg ~ ., mtcars)
+  rec <- step_lencode_bayes(rec, outcome = vars(mpg))
+  
+  expect_snapshot(rec)
+  
+  rec <- prep(rec, mtcars)
+  
+  expect_snapshot(rec)
+})
+
 test_that("printing", {
   rec <- recipe(x2 ~ ., data = ex_dat) %>%
     step_lencode_bayes(x3,

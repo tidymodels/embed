@@ -182,6 +182,22 @@ test_that("bake method errors when needed non-standard role columns are missing"
   )
 })
 
+test_that("empty printing", {
+  skip_on_cran()
+  skip_if_not_installed("keras")
+  skip_if(is.null(tensorflow::tf_version()))
+  rlang::local_options(lifecycle_verbosity = "quiet")
+  
+  rec <- recipe(mpg ~ ., mtcars)
+  rec <- step_feature_hash(rec)
+  
+  expect_snapshot(rec)
+  
+  rec <- prep(rec, mtcars)
+  
+  expect_snapshot(rec)
+})
+
 test_that("printing", {
   skip_if_not_installed("keras")
   skip_if(is.null(tensorflow::tf_version()))

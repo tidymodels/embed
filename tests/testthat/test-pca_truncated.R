@@ -80,6 +80,17 @@ test_that("bake method errors when needed non-standard role columns are missing"
   )
 })
 
+test_that("empty printing", {
+  rec <- recipe(mpg ~ ., mtcars)
+  rec <- step_pca_truncated(rec)
+  
+  expect_snapshot(rec)
+  
+  rec <- prep(rec, mtcars)
+  
+  expect_snapshot(rec)
+})
+
 test_that("printing", {
   rec <- recipe(mpg ~ ., data = mtcars) %>%
     step_pca_truncated(all_predictors(), num_comp = 2)

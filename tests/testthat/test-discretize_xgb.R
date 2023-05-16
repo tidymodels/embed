@@ -635,6 +635,17 @@ test_that("bake method errors when needed non-standard role columns are missing"
   )
 })
 
+test_that("empty printing", {
+  rec <- recipe(mpg ~ ., mtcars)
+  rec <- step_discretize_xgb(rec, outcome = "mpg")
+  
+  expect_snapshot(rec)
+  
+  rec <- prep(rec, mtcars)
+  
+  expect_snapshot(rec)
+})
+
 test_that("printing", {
   rec <- recipe(class ~ ., data = sim_tr_cls) %>%
     step_discretize_xgb(all_predictors(), outcome = "class")
