@@ -98,3 +98,21 @@ test_that("tunable is setup to works with extract_parameter_set_dials works", {
 })
 
 # Infrastructure ---------------------------------------------------------------
+
+test_that("bake method errors when needed non-standard role columns are missing", {
+  rec <- recipe(tr) %>%
+    step_pca_sparse(
+      avg_inten_ch_1, avg_inten_ch_2, avg_inten_ch_3, avg_inten_ch_4,
+      num_comp = 1,
+      predictor_prop = 1 / 2
+    ) %>%
+    update_role(avg_inten_ch_1, new_role = "potato") %>%
+    update_role_requirements(role = "potato", bake = FALSE)
+  
+  rec_trained <- prep(rec, training = tr, verbose = FALSE)
+  
+  expect_error(
+    bake(rec_trained, new_data = tr[, -3]),
+    class = "new_data_missing_column"
+  )
+})
