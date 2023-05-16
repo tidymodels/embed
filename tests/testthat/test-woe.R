@@ -308,6 +308,19 @@ test_that("empty printing", {
   expect_snapshot(rec)
 })
 
+test_that("empty selection prep/bake is a no-op", {
+  rec1 <- recipe(mpg ~ ., mtcars)
+  rec2 <- step_woe(rec1, outcome = vars(mpg))
+  
+  rec1 <- prep(rec1, mtcars)
+  rec2 <- prep(rec2, mtcars)
+  
+  baked1 <- bake(rec1, mtcars)
+  baked2 <- bake(rec2, mtcars)
+  
+  expect_identical(baked1, baked2)
+})
+
 test_that("printing", {
   rec <- recipe(Status ~ ., data = credit_tr) %>%
     step_woe(Job, Home, outcome = vars(Status))
