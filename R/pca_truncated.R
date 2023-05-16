@@ -150,6 +150,7 @@ prep.step_pca_truncated <- function(x, training, info = NULL, ...) {
     }
   } else {
     prc_obj <- NULL
+    prc_obj$rotation <- matrix(nrow = 0, ncol = 0)
   }
 
   rownames(prc_obj$rotation) <- col_names

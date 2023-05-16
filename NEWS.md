@@ -1,5 +1,7 @@
 # embed (development version)
 
+* Fixed bug where `step_pca_truncated()` didn't work with zero selection. (#181)
+
 # embed 1.1.0
 
 ## New Steps
