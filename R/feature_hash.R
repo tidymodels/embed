@@ -216,7 +216,7 @@ bake.step_feature_hash <- function(object, new_data, ...) {
   
   new_cols <- check_name(new_cols, new_data, object, names(new_cols))
   
-  new_data <- bind_cols(new_data, new_cols)
+  new_data <- vec_cbind(new_data, new_cols)
 
   keep_original_cols <- get_keep_original_cols(object)
   if (!keep_original_cols) {

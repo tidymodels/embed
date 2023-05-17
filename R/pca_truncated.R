@@ -189,7 +189,7 @@ bake.step_pca_truncated <- function(object, new_data, ...) {
     comps <- comps[, 1:object$num_comp, drop = FALSE]
     comps <- as_tibble(comps)
     comps <- check_name(comps, new_data, object)
-    new_data <- bind_cols(new_data, comps)
+    new_data <- vec_cbind(new_data, comps)
     keep_original_cols <- get_keep_original_cols(object)
 
     if (!keep_original_cols) {
