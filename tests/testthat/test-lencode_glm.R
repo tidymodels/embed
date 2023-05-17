@@ -306,6 +306,24 @@ test_that("empty selection prep/bake is a no-op", {
   expect_identical(baked1, baked2)
 })
 
+test_that("empty selection tidy method works", {
+  rec <- recipe(mpg ~ ., mtcars)
+  rec <- step_lencode_glm(rec, outcome = vars(mpg))
+  
+  expect <- tibble(
+    terms = character(),
+    level = character(),
+    value = double(),
+    id = character()
+  )
+  
+  expect_identical(tidy(rec, number = 1), expect)
+  
+  rec <- prep(rec, mtcars)
+  
+  expect_identical(tidy(rec, number = 1), expect)
+})
+
 test_that("printing", {
   rec <- recipe(x2 ~ ., data = ex_dat_ch) %>%
     step_lencode_glm(x3, outcome = vars(x2))

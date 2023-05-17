@@ -434,17 +434,25 @@ bake.step_embed <- function(object, new_data, ...) {
 #' @export
 tidy.step_embed <- function(x, ...) {
   if (is_trained(x)) {
-    for (i in seq_along(x$mapping)) {
-      x$mapping[[i]]$terms <- names(x$mapping)[i]
+    if (length(x$mapping) == 0) {
+      res <- tibble(
+        terms = character(),
+        level = character(),
+        value = double()
+      )
+    } else {
+      for (i in seq_along(x$mapping)) {
+        x$mapping[[i]]$terms <- names(x$mapping)[i]
+      }
+      res <- bind_rows(x$mapping)
+      names(res) <- gsub("^\\.\\.", "", names(res))
     }
-    res <- bind_rows(x$mapping)
-    names(res) <- gsub("^\\.\\.", "", names(res))
   } else {
     term_names <- sel2char(x$terms)
     res <- tibble(
+      terms = term_names,
       level = rep(na_chr, length(term_names)),
-      value = rep(na_dbl, length(term_names)),
-      terms = term_names
+      value = rep(na_dbl, length(term_names))
     )
   }
   res$id <- x$id

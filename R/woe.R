@@ -485,9 +485,21 @@ print.step_woe <- function(x, width = max(20, options()$width - 29), ...) {
 #' @export
 tidy.step_woe <- function(x, ...) {
   if (is_trained(x)) {
-    res <-
-      x$dictionary %>%
-      dplyr::rename(terms = variable, value = predictor)
+    if (length(x$terms) == 0) {
+      res <- tibble(
+        terms = character(),
+        value = character(),
+        n_tot = integer(),
+        n_bad = integer(),
+        n_good = integer(),
+        p_bad = double(),
+        p_good = double(),
+        woe = double()
+      )
+    } else {
+      res <- x$dictionary %>%
+        dplyr::rename(terms = variable, value = predictor)
+    }
   } else {
     term_names <- sel2char(x$terms)
     res <- tibble(

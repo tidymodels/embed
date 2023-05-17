@@ -294,7 +294,11 @@ print.step_umap <-
 #' @export
 tidy.step_umap <- function(x, ...) {
   if (is_trained(x)) {
-    res <- tibble(terms = x$object$xnames)
+    if (length(x$object$xnames) == 0) {
+      res <- tibble(terms = character())
+    } else {
+      res <- tibble(terms = x$object$xnames)
+    }
   } else {
     term_names <- sel2char(x$terms)
     res <- tibble(terms = term_names)

@@ -275,12 +275,20 @@ tidy.step_pca_truncated <- function(x, type = "coef", ...) {
       component = na_chr
     )
   } else {
-    type <- match.arg(type, c("coef", "variance"))
-    if (type == "coef") {
-      x$res <- x$res$rotation
-      res <- pca_coefs(x)
+    if (length(x$terms) == 0) {
+      res <- tibble(
+        terms = character(),
+        value = double(),
+        component = character()
+      )
     } else {
-      res <- pca_variances(x)
+      type <- match.arg(type, c("coef", "variance"))
+      if (type == "coef") {
+        x$res <- x$res$rotation
+        res <- pca_coefs(x)
+      } else {
+        res <- pca_variances(x)
+      }
     }
   }
   res$id <- x$id

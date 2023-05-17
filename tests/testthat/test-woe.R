@@ -321,6 +321,29 @@ test_that("empty selection prep/bake is a no-op", {
   expect_identical(baked1, baked2)
 })
 
+test_that("empty selection tidy method works", {
+  rec <- recipe(mpg ~ ., mtcars)
+  rec <- step_woe(rec, outcome = vars(mpg))
+  
+  expect <- res <- tibble(
+    terms = character(),
+    value = character(),
+    n_tot = integer(),
+    n_bad = integer(),
+    n_good = integer(),
+    p_bad = double(),
+    p_good = double(),
+    woe = double(),
+    id = character()
+  )
+  
+  expect_identical(tidy(rec, number = 1), expect)
+  
+  rec <- prep(rec, mtcars)
+  
+  expect_identical(tidy(rec, number = 1), expect)
+})
+
 test_that("printing", {
   rec <- recipe(Status ~ ., data = credit_tr) %>%
     step_woe(Job, Home, outcome = vars(Status))

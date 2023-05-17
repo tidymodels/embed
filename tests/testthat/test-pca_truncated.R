@@ -104,6 +104,24 @@ test_that("empty selection prep/bake is a no-op", {
   expect_identical(baked1, baked2)
 })
 
+test_that("empty selection tidy method works", {
+  rec <- recipe(mpg ~ ., mtcars)
+  rec <- step_pca_truncated(rec)
+  
+  expect <- tibble(
+    terms = character(),
+    value = double(),
+    component = character(),
+    id = character()
+  )
+  
+  expect_identical(tidy(rec, number = 1), expect)
+  
+  rec <- prep(rec, mtcars)
+  
+  expect_identical(tidy(rec, number = 1), expect)
+})
+
 test_that("printing", {
   rec <- recipe(mpg ~ ., data = mtcars) %>%
     step_pca_truncated(all_predictors(), num_comp = 2)

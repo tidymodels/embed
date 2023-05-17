@@ -137,12 +137,12 @@ test_that("tidy method", {
 
   res <- tidy(cart_rec, number = 1)
   expect_equal(
-    res$variable,
+    res$terms,
     "all_predictors()"
   )
   expect_equal(
-    res$values,
-    NA_character_
+    res$value,
+    NA_real_
   )
 
   expect_snapshot({
@@ -155,7 +155,7 @@ test_that("tidy method", {
     rep("x", 2)
   )
   expect_equal(
-    res$values,
+    res$value,
     best_split
   )
 })
@@ -268,6 +268,18 @@ test_that("empty selection prep/bake is a no-op", {
   expect_identical(baked1, baked2)
 })
 
+test_that("empty selection tidy method works", {
+  rec <- recipe(mpg ~ ., mtcars)
+  rec <- step_discretize_cart(rec, outcome = "mpg")
+  
+  expect <- tibble(terms = character(), value = double(), id = character())
+  
+  expect_identical(tidy(rec, number = 1), expect)
+  
+  rec <- prep(rec, mtcars)
+  
+  expect_identical(tidy(rec, number = 1), expect)
+})
 
 test_that("printing", {
   rec <- recipe(class ~ ., data = sim_tr_cls) %>%

@@ -509,16 +509,23 @@ print.step_discretize_xgb <- function(x, width = max(20, options()$width - 30),
 tidy.step_discretize_xgb <- function(x, ...) {
   if (is_trained(x)) {
     num_splits <- purrr::map_int(x$rules, length)
-
-    res <- tibble(
-      terms = rep(names(x$rules), num_splits),
-      values = unlist(x$rules, use.names = FALSE)
-    )
+    
+    if (length(num_splits) > 0) {
+      res <- tibble(
+        terms = rep(names(x$rules), num_splits),
+        value = unlist(x$rules, use.names = FALSE)
+      )
+    } else {
+      res <- tibble(
+        terms = character(),
+        value = double()
+      )
+    }
   } else {
     term_names <- sel2char(x$terms)
     res <- tibble(
-      variable = term_names,
-      values = rlang::na_chr
+      terms = term_names,
+      value = NA_real_
     )
   }
   res$id <- x$id

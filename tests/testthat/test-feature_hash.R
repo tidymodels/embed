@@ -216,6 +216,24 @@ test_that("empty selection prep/bake is a no-op", {
   expect_identical(baked1, baked2)
 })
 
+test_that("empty selection tidy method works", {
+  skip_on_cran()
+  skip_if_not_installed("keras")
+  skip_if(is.null(tensorflow::tf_version()))
+  rlang::local_options(lifecycle_verbosity = "quiet")
+  
+  rec <- recipe(mpg ~ ., mtcars)
+  rec <- step_feature_hash(rec)
+  
+  expect <- tibble(terms = character(), id = character())
+  
+  expect_identical(tidy(rec, number = 1), expect)
+  
+  rec <- prep(rec, mtcars)
+  
+  expect_identical(tidy(rec, number = 1), expect)
+})
+
 test_that("printing", {
   skip_if_not_installed("keras")
   skip_if(is.null(tensorflow::tf_version()))
