@@ -1,5 +1,9 @@
 # embed (development version)
 
+* Fixed bug where `step_pca_truncated()` didn't work with zero selection. (#181)
+
+* The tidy() methods for `step_discretize_cart()`, `step_discretize_xgb()`, `step_embed()`, `step_feature_hash()`, `step_lencode_bayes()`, `step_lencode_glm()`, `step_lencode_mixed()`, `step_pca_sparse()`, `step_pca_sparse_bayes()`, `step_pca_truncated()`, `step_umap()`, and `step_woe()` now correctly return zero-row tibbles when used with empty selections. (#181)
+
 # embed 1.1.0
 
 ## New Steps

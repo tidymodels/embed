@@ -108,6 +108,45 @@
       Caused by error in `dictionary()`:
       ! 'outcome' must have exactly 2 categories (has 3)
 
+# empty printing
+
+    Code
+      rec
+    Message
+      
+      -- Recipe ----------------------------------------------------------------------
+      
+      -- Inputs 
+      Number of variables by role
+      outcome:    1
+      predictor: 10
+      
+      -- Operations 
+      * WoE version against outcome mpg for: <none>
+
+---
+
+    Code
+      rec
+    Message
+      
+      -- Recipe ----------------------------------------------------------------------
+      
+      -- Inputs 
+      Number of variables by role
+      outcome:    1
+      predictor: 10
+      
+      -- Training information 
+      Training data contained 32 data points and no incomplete rows.
+      
+      -- Operations 
+    Condition
+      Warning:
+      Unknown or uninitialised column: `variable`.
+    Message
+      * WoE version against outcome mpg for: <none> | Trained
+
 # printing
 
     Code

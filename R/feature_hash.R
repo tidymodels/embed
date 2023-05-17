@@ -239,7 +239,7 @@ print.step_feature_hash <-
 #' @export
 tidy.step_feature_hash <- function(x, ...) {
   if (is_trained(x)) {
-    res <- tibble(terms = x$columns)
+    res <- tibble(terms = unname(x$columns))
   } else {
     term_names <- sel2char(x$terms)
     res <- tibble(terms = term_names)

@@ -251,10 +251,18 @@ pca_coefs <- function(x) {
 #' @export
 tidy.step_pca_sparse <- function(x, ...) {
   if (!is_trained(x)) {
-    term_names <- sel2char(x$terms)
-    res <- tibble(terms = term_names, value = na_dbl, component = na_chr)
+    terms_names <- sel2char(x$terms)
+    res <- tibble(terms = terms_names, value = na_dbl, component = na_chr)
   } else {
-    res <- pca_coefs(x)
+    if (length(x$terms) == 0) {
+      res <- tibble(
+        terms = character(),
+        value = double(),
+        component = character()
+      )
+    } else {
+      res <- pca_coefs(x)
+    }
   }
   res$id <- x$id
   res
