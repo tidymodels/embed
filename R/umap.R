@@ -270,7 +270,7 @@ bake.step_umap <- function(object, new_data, ...) {
   res <- as_tibble(res)
   
   res <- check_name(res, new_data, object, names(res))
-  new_data <- bind_cols(new_data, res)
+  new_data <- vec_cbind(new_data, res)
 
   keep_original_cols <- get_keep_original_cols(object)
   if (!keep_original_cols) {

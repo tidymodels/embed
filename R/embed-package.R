@@ -6,7 +6,6 @@
 #' @import rlang
 #' @importFrom dplyr %>%
 #' @importFrom dplyr arrange
-#' @importFrom dplyr bind_cols
 #' @importFrom dplyr bind_rows
 #' @importFrom dplyr contains
 #' @importFrom dplyr ends_with
@@ -47,6 +46,7 @@
 #' @importFrom utils stack
 #' @importFrom uwot umap
 #' @importFrom uwot umap_transform
+#' @importFrom vctrs vec_cbind
 #' @importFrom withr with_seed
 ## usethis namespace: end
 NULL

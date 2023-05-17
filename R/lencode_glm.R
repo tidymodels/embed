@@ -161,7 +161,7 @@ glm_coefs <- function(x, y, wts = NULL, ...) {
   mod <-
     glm(
       form,
-      data = bind_cols(x, y),
+      data = vec_cbind(x, y),
       family = fam,
       weights = wts,
       na.action = na.omit,

@@ -207,7 +207,7 @@ stan_coefs <- function(x, y, options, verbose, wts = NULL, ...) {
   args <-
     list(
       form,
-      data = bind_cols(x, y),
+      data = vec_cbind(x, y),
       family = fam,
       na.action = na.omit
     )

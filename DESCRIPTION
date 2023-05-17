@@ -34,7 +34,8 @@ Imports:
     tidyr,
     utils,
     uwot,
-    withr
+    withr,
+    vctrs
 Suggests: 
     covr,
     dials (>= 1.2.0),
