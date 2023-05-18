@@ -106,6 +106,7 @@ The underlying operation does not allow for case weights.
 }
 
 \examples{
+\dontshow{if (rlang::is_installed("modeldata")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 library(recipes)
 library(ggplot2)
 
@@ -130,6 +131,7 @@ tidy(ad_rec, id = "sparse pca") \%>\%
   geom_tile() +
   scale_fill_gradient2() +
   theme(axis.text.y = element_blank())
+\dontshow{\}) # examplesIf}
 }
 \seealso{
 \code{\link[=step_pca_sparse_bayes]{step_pca_sparse_bayes()}}

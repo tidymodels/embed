@@ -61,7 +61,7 @@
 #' @template case-weights-not-supported
 #'
 #' @seealso [step_pca_sparse_bayes()]
-#' @examples
+#' @examplesIf rlang::is_installed("modeldata")
 #' library(recipes)
 #' library(ggplot2)
 #'

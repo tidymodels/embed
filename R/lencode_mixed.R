@@ -71,7 +71,7 @@
 #' Zumel N and Mount J (2017) "vtreat: a data.frame Processor for Predictive
 #' Modeling," arXiv:1611.09477
 #'
-#' @examples
+#' @examplesIf rlang::is_installed("modeldata")
 #' library(recipes)
 #' library(dplyr)
 #' library(modeldata)

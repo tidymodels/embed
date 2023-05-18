@@ -57,7 +57,7 @@
 #'
 #' @template case-weights-supervised
 #'
-#' @examples
+#' @examplesIf rlang::is_installed("modeldata")
 #' library(modeldata)
 #' data(ad_data)
 #' library(rsample)
