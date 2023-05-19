@@ -81,7 +81,7 @@
 #' @template case-weights-not-supported
 #'
 #' @seealso [step_pca_sparse()]
-#' @examplesIf rlang::is_installed("modeldata")
+#' @examplesIf rlang::is_installed(c("modeldata", "ggplot2"))
 #' library(recipes)
 #' library(ggplot2)
 #'

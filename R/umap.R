@@ -70,7 +70,7 @@
 #' "How UMAP Works"
 #' \url{https://umap-learn.readthedocs.io/en/latest/how_umap_works.html}
 #'
-#' @examples
+#' @examplesIf rlang::is_installed("ggplot2")
 #' library(recipes)
 #' library(ggplot2)
 #'
