@@ -1,5 +1,5 @@
 test_that("collapsing factors", {
-  skip_if_not_installed("modeldata")
+  skip_if_not_installed(c("stringdist", "modeldata"))
   data(ames, package = "modeldata")
 
   expect_error(
@@ -54,6 +54,8 @@ test_that("collapsing factors", {
 })
 
 test_that("collapsing factors manual test", {
+  skip_if_not_installed("stringdist")
+  
   data0 <- tibble(
     x1 = c("a", "b", "d", "e", "aaaaaa", "bbbbbb"),
     x2 = c("ak", "b", "djj", "e", "aaaaaa", "aaaaaa")
@@ -87,6 +89,8 @@ test_that("collapsing factors manual test", {
 })
 
 test_that("method argument", {
+  skip_if_not_installed("stringdist")
+  
   data0 <- tibble(
     x1 = c("a", "b", "d", "e", "aaaaaa", "bbbbbb"),
     x2 = c("ak", "b", "djj", "e", "aaaaaa", "aaaaaa")
@@ -126,6 +130,8 @@ test_that("method argument", {
 })
 
 test_that("options argument", {
+  skip_if_not_installed("stringdist")
+  
   data0 <- tibble(
     x1 = c("a", "b", "d", "e", "aaaaaa", "bbbbbb"),
     x2 = c("ak", "b", "djj", "e", "aaaaaa", "aaaaaa")
@@ -151,7 +157,7 @@ test_that("options argument", {
 
 
 test_that("failed collapsing", {
-  skip_if_not_installed("modeldata")
+  skip_if_not_installed(c("stringdist", "modeldata"))
   data(ames, package = "modeldata")
 
   # too many splits
@@ -190,6 +196,9 @@ test_that("failed collapsing", {
 # Infrastructure ---------------------------------------------------------------
 
 test_that("bake method errors when needed non-standard role columns are missing", {
+  skip_if_not_installed(c("stringdist", "modeldata"))
+  data(ames, package = "modeldata")
+  
   rec <- recipe(Sale_Price ~ ., data = ames) %>%
     step_collapse_stringdist(MS_SubClass, distance = 2) %>%
     update_role(MS_SubClass, new_role = "potato") %>%
@@ -241,7 +250,7 @@ test_that("empty selection tidy method works", {
 })
 
 test_that("printing", {
-  skip_if_not_installed("modeldata")
+  skip_if_not_installed(c("stringdist", "modeldata"))
   data(ames, package = "modeldata")
   
   rec <- recipe(Sale_Price ~ ., data = ames) %>%
