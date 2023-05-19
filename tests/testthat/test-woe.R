@@ -1,13 +1,5 @@
 source(testthat::test_path("test-helpers.R"))
 
-data("credit_data", package = "modeldata")
-
-set.seed(342)
-in_training <- sample(seq_len(nrow(credit_data)), 2000)
-
-credit_tr <- credit_data[in_training, ]
-credit_te <- credit_data[-in_training, ]
-
 set.seed(1)
 df <- data.frame(
   x1 = sample(c("A", "B", "C"), size = 20, replace = TRUE) %>% factor(),
@@ -161,6 +153,15 @@ test_that("add_woe do not accept dictionary with unexpected layout", {
 # step_woe ----------------------------------------------------------------
 
 test_that("step_woe", {
+  skip_if_not_installed("modeldata")
+  data("credit_data", package = "modeldata")
+  
+  set.seed(342)
+  in_training <- sample(seq_len(nrow(credit_data)), 2000)
+  
+  credit_tr <- credit_data[in_training, ]
+  credit_te <- credit_data[-in_training, ]
+  
   rec <-
     recipe(Status ~ ., data = credit_tr) %>%
     step_woe(Job, Home, outcome = vars(Status))
@@ -282,17 +283,20 @@ test_that("tunable is setup to works with extract_parameter_set_dials works", {
 # Infrastructure ---------------------------------------------------------------
 
 test_that("bake method errors when needed non-standard role columns are missing", {
-  rec <- recipe(credit_tr) %>%
+  skip_if_not_installed("modeldata")
+  data("credit_data", package = "modeldata")
+
+  rec <- recipe(credit_data) %>%
     step_woe(Job, Home, outcome = vars(Status)) %>%
     update_role(Job, new_role = "potato") %>%
     update_role_requirements(role = "potato", bake = FALSE)
   
   suppressWarnings(
-    rec_trained <- prep(rec, training = credit_tr, verbose = FALSE)
+    rec_trained <- prep(rec, training = credit_data, verbose = FALSE)
   )
   
   expect_error(
-    bake(rec_trained, new_data = credit_tr[, -8]),
+    bake(rec_trained, new_data = credit_data[, -8]),
     class = "new_data_missing_column"
   )
 })
@@ -345,7 +349,10 @@ test_that("empty selection tidy method works", {
 })
 
 test_that("printing", {
-  rec <- recipe(Status ~ ., data = credit_tr) %>%
+  skip_if_not_installed("modeldata")
+  data("credit_data", package = "modeldata")
+  
+  rec <- recipe(Status ~ ., data = credit_data) %>%
     step_woe(Job, Home, outcome = vars(Status))
   
   expect_snapshot(print(rec))
