@@ -121,7 +121,6 @@ step_pca_sparse_bayes <- function(recipe,
                                   keep_original_cols = FALSE,
                                   skip = FALSE,
                                   id = rand_id("pca_sparse_bayes")) {
-  rlang::check_installed("VBsparsePCA")
 
   add_step(
     recipe,
@@ -180,6 +179,8 @@ prep.step_pca_sparse_bayes <- function(x, training, info = NULL, ...) {
     scale_param <- 1 / x$prior_slab_dispersion
 
     if (x$num_comp > 0) {
+      rlang::check_installed("VBsparsePCA")
+      
       cl <-
         rlang::call2(
           "VBsparsePCA",
