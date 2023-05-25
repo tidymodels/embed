@@ -144,6 +144,7 @@ prepped recipes, see the \href{https://rstudio.github.io/bundle/}{bundle} packag
 }
 
 \examples{
+\dontshow{if (rlang::is_installed("ggplot2")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 library(recipes)
 library(ggplot2)
 
@@ -164,6 +165,7 @@ theme_set(theme_bw())
 bake(supervised, new_data = te, Species, starts_with("umap")) \%>\%
   ggplot(aes(x = UMAP1, y = UMAP2, col = Species)) +
   geom_point(alpha = .5)
+\dontshow{\}) # examplesIf}
 }
 \references{
 McInnes, L., & Healy, J. (2018). UMAP: Uniform Manifold

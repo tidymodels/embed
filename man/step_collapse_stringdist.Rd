@@ -79,6 +79,7 @@ The underlying operation does not allow for case weights.
 }
 
 \examples{
+\dontshow{if (rlang::is_installed("stringdist")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 library(recipes)
 library(tibble)
 data0 <- tibble(
@@ -103,4 +104,5 @@ rec \%>\%
   bake(new_data = NULL)
 
 tidy(rec, 1)
+\dontshow{\}) # examplesIf}
 }

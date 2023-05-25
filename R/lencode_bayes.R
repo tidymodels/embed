@@ -84,7 +84,7 @@
 #' "Estimating Generalized (Non-)Linear Models with Group-Specific Terms with
 #' `rstanarm`" \url{https://tinyurl.com/stan-glm-grouped}
 #'
-#' @examples
+#' @examplesIf rlang::is_installed("modeldata")
 #' library(recipes)
 #' library(dplyr)
 #' library(modeldata)

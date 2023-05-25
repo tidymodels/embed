@@ -536,6 +536,10 @@ class2ind <- function(x) {
 #' is_tf_available()
 #' @export
 is_tf_available <- function() {
+  if (!rlang::is_installed("tensorflow")) {
+    return(FALSE)
+  }
+  
   capture.output(
     res <- try(tensorflow::tf_config(), silent = TRUE),
     file = NULL

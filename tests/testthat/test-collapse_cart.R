@@ -109,6 +109,9 @@ test_that("failed collapsing", {
 # Infrastructure ---------------------------------------------------------------
 
 test_that("bake method errors when needed non-standard role columns are missing", {
+  skip_if_not_installed("modeldata")
+  data(ames, package = "modeldata")
+  
   rec <- recipe(Sale_Price ~ ., data = ames) %>%
     step_collapse_cart(MS_SubClass, outcome = vars(Sale_Price)) %>%
     update_role(MS_SubClass, new_role = "potato") %>%

@@ -115,6 +115,7 @@ The underlying operation does not allow for case weights.
 }
 
 \examples{
+\dontshow{if (rlang::is_installed("modeldata")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 library(modeldata)
 data("credit_data")
 
@@ -155,6 +156,7 @@ rec_custom_baked <- bake(rec_custom, new_data = credit_te)
 rec_custom_baked \%>\%
   dplyr::filter(woe_Job == 1.23) \%>\%
   head()
+\dontshow{\}) # examplesIf}
 }
 \references{
 Kullback, S. (1959). \emph{Information Theory and Statistics.} Wiley, New York.

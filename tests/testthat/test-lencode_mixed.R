@@ -280,6 +280,8 @@ test_that("case weights", {
 # Infrastructure ---------------------------------------------------------------
 
 test_that("bake method errors when needed non-standard role columns are missing", {
+  skip_if_not_installed("lme4")
+  
   rec <- recipe(x2 ~ ., data = ex_dat) %>%
     step_lencode_mixed(x3, outcome = vars(x2)) %>%
     update_role(x3, new_role = "potato") %>%

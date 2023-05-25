@@ -79,6 +79,7 @@ To use them, see the documentation in \link[recipes:case_weights]{recipes::case_
 }
 
 \examples{
+\dontshow{if (rlang::is_installed("modeldata")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 library(recipes)
 library(dplyr)
 library(modeldata)
@@ -91,6 +92,7 @@ grants_other <- sample_n(grants_other, 500)
 reencoded <- recipe(class ~ sponsor_code, data = grants_other) \%>\%
   step_lencode_glm(sponsor_code, outcome = vars(class))
 }
+\dontshow{\}) # examplesIf}
 }
 \references{
 Micci-Barreca D (2001) "A preprocessing scheme for high-cardinality

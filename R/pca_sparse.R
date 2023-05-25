@@ -61,7 +61,7 @@
 #' @template case-weights-not-supported
 #'
 #' @seealso [step_pca_sparse_bayes()]
-#' @examples
+#' @examplesIf rlang::is_installed(c("modeldata", "ggplot2"))
 #' library(recipes)
 #' library(ggplot2)
 #'
@@ -99,8 +99,6 @@ step_pca_sparse <- function(recipe,
                             keep_original_cols = FALSE,
                             skip = FALSE,
                             id = rand_id("pca_sparse")) {
-  rlang::check_installed("irlba")
-
   add_step(
     recipe,
     step_pca_sparse_new(
@@ -154,6 +152,8 @@ prep.step_pca_sparse <- function(x, training, info = NULL, ...) {
     num_dense <- prop2int(x$predictor_prop, p)
 
     if (x$num_comp > 0) {
+      rlang::check_installed("irlba")
+      
       cl <-
         rlang::call2(
           "ssvd",

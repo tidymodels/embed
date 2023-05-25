@@ -1,15 +1,16 @@
 source(testthat::test_path("test-helpers.R"))
 
-data(cells, package = "modeldata")
-cells$case <- cells$class <- NULL
-cells <- as.data.frame(scale(cells))
-
-split <- seq.int(1, 2019, by = 10)
-tr <- cells[-split, ]
-te <- cells[split, ]
-
 test_that("step_pca_sparse_bayes", {
   skip_if_not_installed("VBsparsePCA")
+  skip_if_not_installed("modeldata")
+  
+  data(cells, package = "modeldata")
+  cells$case <- cells$class <- NULL
+  cells <- as.data.frame(scale(cells))
+  
+  split <- seq.int(1, 2019, by = 10)
+  tr <- cells[-split, ]
+  te <- cells[split, ]
   
   rec <-
     recipe(~., data = tr) %>%
@@ -55,6 +56,15 @@ test_that("step_pca_sparse_bayes", {
 
 test_that("check_name() is used", {
   skip_if_not_installed("VBsparsePCA")
+  skip_if_not_installed("modeldata")
+  
+  data(cells, package = "modeldata")
+  cells$case <- cells$class <- NULL
+  cells <- as.data.frame(scale(cells))
+  
+  split <- seq.int(1, 2019, by = 10)
+  tr <- cells[-split, ]
+  te <- cells[split, ]
   
   dat <- tr
   dat$PC1 <- dat$var_inten_ch_1
@@ -93,6 +103,8 @@ test_that("tunable", {
 })
 
 test_that("tunable is setup to works with extract_parameter_set_dials works", {
+  skip_if_not_installed("dials")
+  
   rec <- recipe(~., data = mtcars) %>%
     step_pca_sparse_bayes(
       all_predictors(),
@@ -110,6 +122,16 @@ test_that("tunable is setup to works with extract_parameter_set_dials works", {
 # Infrastructure ---------------------------------------------------------------
 
 test_that("bake method errors when needed non-standard role columns are missing", {
+  skip_if_not_installed("modeldata")
+  
+  data(cells, package = "modeldata")
+  cells$case <- cells$class <- NULL
+  cells <- as.data.frame(scale(cells))
+  
+  split <- seq.int(1, 2019, by = 10)
+  tr <- cells[-split, ]
+  te <- cells[split, ]
+  
   rec <- recipe(~., data = tr) %>%
     step_pca_sparse_bayes(
       avg_inten_ch_1, avg_inten_ch_2, avg_inten_ch_3, avg_inten_ch_4,
@@ -171,6 +193,16 @@ test_that("empty selection tidy method works", {
 })
 
 test_that("printing", {
+  skip_if_not_installed("modeldata")
+  
+  data(cells, package = "modeldata")
+  cells$case <- cells$class <- NULL
+  cells <- as.data.frame(scale(cells))
+  
+  split <- seq.int(1, 2019, by = 10)
+  tr <- cells[-split, ]
+  te <- cells[split, ]
+  
   rec <- recipe(~., data = tr[, -5]) %>%
     step_pca_sparse_bayes(all_predictors())
   

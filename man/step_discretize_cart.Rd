@@ -99,6 +99,7 @@ To use them, see the documentation in \link[recipes:case_weights]{recipes::case_
 }
 
 \examples{
+\dontshow{if (rlang::is_installed("modeldata")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 library(modeldata)
 data(ad_data)
 library(rsample)
@@ -121,6 +122,7 @@ cart_rec <- prep(cart_rec, training = ad_data_tr)
 tidy(cart_rec, id = "cart splits")
 
 bake(cart_rec, ad_data_te, tau)
+\dontshow{\}) # examplesIf}
 }
 \seealso{
 \code{\link[=step_discretize_xgb]{step_discretize_xgb()}}, \code{\link[recipes:recipe]{recipes::recipe()}},

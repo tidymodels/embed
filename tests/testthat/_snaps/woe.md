@@ -180,7 +180,7 @@
       predictor: 13
       
       -- Training information 
-      Training data contained 2000 data points and 186 incomplete rows.
+      Training data contained 4454 data points and 415 incomplete rows.
       
       -- Operations 
       * WoE version against outcome Status for: Job, Home | Trained

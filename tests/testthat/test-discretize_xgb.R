@@ -4,6 +4,7 @@ library(rsample)
 
 skip_on_cran()
 skip_if_not_installed("xgboost")
+skip_if_not_installed("modeldata")
 
 source(test_path("make_binned_data.R"))
 
@@ -602,6 +603,8 @@ test_that("tunable", {
 })
 
 test_that("tunable is setup to works with extract_parameter_set_dials works", {
+  skip_if_not_installed("dials")
+  
   rec <- recipe(~., data = mtcars) %>%
     step_discretize_xgb(
       all_predictors(),

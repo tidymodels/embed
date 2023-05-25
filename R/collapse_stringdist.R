@@ -34,7 +34,7 @@
 #'
 #' @template case-weights-not-supported
 #'
-#' @examples
+#' @examplesIf rlang::is_installed("stringdist")
 #' library(recipes)
 #' library(tibble)
 #' data0 <- tibble(
