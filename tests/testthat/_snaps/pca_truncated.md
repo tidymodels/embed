@@ -1,13 +1,3 @@
-# check_name() is used
-
-    Code
-      prep(rec, training = dat)
-    Condition
-      Error in `step_pca_truncated()`:
-      Caused by error in `bake()`:
-      ! Name collision occured. The following variable names already exists:
-      i  PC1
-
 # empty printing
 
     Code

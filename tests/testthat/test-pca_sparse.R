@@ -1,7 +1,8 @@
 source(testthat::test_path("test-helpers.R"))
 
 test_that("step_pca_sparse", {
-  skip_if_not_installed(c("irlba", "modeldata"))
+  skip_if_not_installed("irlba")
+  skip_if_not_installed("modeldata")
   
   data(cells, package = "modeldata")
   cells$case <- cells$class <- NULL
@@ -49,7 +50,8 @@ test_that("step_pca_sparse", {
 })
 
 test_that("check_name() is used", {
-  skip_if_not_installed(c("irlba", "modeldata"))
+  skip_if_not_installed("irlba")
+  skip_if_not_installed("modeldata")
   
   data(cells, package = "modeldata")
   cells$case <- cells$class <- NULL
@@ -110,7 +112,8 @@ test_that("tunable is setup to works with extract_parameter_set_dials works", {
 # Infrastructure ---------------------------------------------------------------
 
 test_that("bake method errors when needed non-standard role columns are missing", {
-  skip_if_not_installed(c("irlba", "modeldata"))
+  skip_if_not_installed("irlba")
+  skip_if_not_installed("modeldata")
   
   data(cells, package = "modeldata")
   cells$case <- cells$class <- NULL
