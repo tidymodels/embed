@@ -256,25 +256,6 @@ test_that("tunable", {
   )
 })
 
-test_that("tunable is setup to works with extract_parameter_set_dials works", {
-  skip_if_not_installed("dials")
-  
-  rec <- recipe(~., data = mtcars) %>%
-    step_umap(
-      all_predictors(),
-      num_comp = hardhat::tune(),
-      neighbors = hardhat::tune(),
-      min_dist = hardhat::tune(),
-      learn_rate = hardhat::tune(),
-      epochs = hardhat::tune()
-    )
-  
-  params <- extract_parameter_set_dials(rec)
-  
-  expect_s3_class(params, "parameters")
-  expect_identical(nrow(params), 5L)
-})
-
 # Infrastructure ---------------------------------------------------------------
 
 test_that("bake method errors when needed non-standard role columns are missing", {
@@ -334,4 +315,22 @@ test_that("printing", {
   
   expect_snapshot(print(rec))
   expect_snapshot(prep(rec))
+})
+
+test_that("tunable is setup to works with extract_parameter_set_dials", {
+  skip_if_not_installed("dials")
+  rec <- recipe(~., data = mtcars) %>%
+    step_umap(
+      all_predictors(),
+      num_comp = hardhat::tune(),
+      neighbors = hardhat::tune(),
+      min_dist = hardhat::tune(),
+      learn_rate = hardhat::tune(),
+      epochs = hardhat::tune()
+    )
+  
+  params <- extract_parameter_set_dials(rec)
+  
+  expect_s3_class(params, "parameters")
+  expect_identical(nrow(params), 5L)
 })
