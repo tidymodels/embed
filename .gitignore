@@ -3,5 +3,7 @@
 .Rproj.user
 .DS_Store
 man/.Rapp.history
-revdep/problems.md
-revdep/README.md
+revdep/cloud.noindex/*
+revdep/checks.noindex
+revdep/library.noindex
+revdep/data.sqlite
