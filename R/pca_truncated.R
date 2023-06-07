@@ -181,22 +181,25 @@ bake.step_pca_truncated <- function(object, new_data, ...) {
     object$columns <- stats::setNames(nm = rownames(object$res$rotation))
   }
 
-  if (length(object$columns) > 0 && !all(is.na(object$res$rotation))) {
-    check_new_data(object$columns, object, new_data)
-
-    pca_vars <- rownames(object$res$rotation)
-    comps <- scale(new_data[, pca_vars], object$res$center, object$res$scale) %*%
-      object$res$rotation
-    comps <- comps[, 1:object$num_comp, drop = FALSE]
-    comps <- as_tibble(comps)
-    comps <- check_name(comps, new_data, object)
-    new_data <- vec_cbind(new_data, comps)
-    keep_original_cols <- get_keep_original_cols(object)
-
-    if (!keep_original_cols) {
-      new_data <- new_data[, !(colnames(new_data) %in% pca_vars), drop = FALSE]
-    }
+  if (length(object$columns) == 0 || all(is.na(object$res$rotation))) {
+    return(new_data)
   }
+  
+  check_new_data(object$columns, object, new_data)
+
+  pca_vars <- rownames(object$res$rotation)
+  comps <- scale(new_data[, pca_vars], object$res$center, object$res$scale) %*%
+    object$res$rotation
+  comps <- comps[, 1:object$num_comp, drop = FALSE]
+  comps <- as_tibble(comps)
+  comps <- check_name(comps, new_data, object)
+  new_data <- vec_cbind(new_data, comps)
+  keep_original_cols <- get_keep_original_cols(object)
+
+  if (!keep_original_cols) {
+    new_data <- new_data[, !(colnames(new_data) %in% pca_vars), drop = FALSE]
+  }
+  
   new_data
 }
 
