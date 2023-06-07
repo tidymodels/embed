@@ -197,21 +197,24 @@ prop2int <- function(x, p) {
 
 #' @export
 bake.step_pca_sparse <- function(object, new_data, ...) {
-  if (!all(is.na(object$res))) {
-    pca_vars <- rownames(object$res)
-    check_new_data(pca_vars, object, new_data)
-
-    x <- as.matrix(new_data[, pca_vars])
-    comps <- x %*% object$res
-    comps <- as_tibble(comps)
-    comps <- check_name(comps, new_data, object)
-    new_data <- vec_cbind(new_data, comps)
-    keep_original_cols <- get_keep_original_cols(object)
-
-    if (!keep_original_cols) {
-      new_data <- new_data[, !(colnames(new_data) %in% pca_vars), drop = FALSE]
-    }
+  if (all(is.na(object$res))) {
+    return(new_data) 
   }
+  
+  pca_vars <- rownames(object$res)
+  check_new_data(pca_vars, object, new_data)
+
+  x <- as.matrix(new_data[, pca_vars])
+  comps <- x %*% object$res
+  comps <- as_tibble(comps)
+  comps <- check_name(comps, new_data, object)
+  new_data <- vec_cbind(new_data, comps)
+  keep_original_cols <- get_keep_original_cols(object)
+
+  if (!keep_original_cols) {
+    new_data <- new_data[, !(colnames(new_data) %in% pca_vars), drop = FALSE]
+  }
+  
   new_data
 }
 
