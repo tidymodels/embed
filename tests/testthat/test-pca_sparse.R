@@ -95,7 +95,6 @@ test_that("tunable", {
 
 test_that("Do nothing for num_comps = 0 and keep_original_cols = FALSE", {
   # https://github.com/tidymodels/recipes/issues/1152
-  skip_if_not_installed("irlba")
   
   rec <- recipe(carb ~ ., data = mtcars) %>%
     step_pca_sparse(all_predictors(), 
