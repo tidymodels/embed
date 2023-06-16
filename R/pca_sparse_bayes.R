@@ -5,6 +5,7 @@
 #' some zero coefficients.
 #'
 #' @inheritParams step_lencode_bayes
+#' @inheritParams recipes::step_pca
 #' @inherit step_lencode_bayes return
 #' @param ... One or more selector functions to choose which variables will be
 #'   used to compute the components. See [selections()] for more details. For
@@ -13,10 +14,6 @@
 #'   they be assigned? By default, the function assumes that the new principal
 #'   component columns created by the original variables will be used as
 #'   predictors in a model.
-#' @param num_comp The number of PCA components to retain as new predictors. If
-#'   `num_comp` is greater than the number of columns or the number of possible
-#'   components, a smaller value will be used. A value of zero indicates that
-#'   PCA will _not_ be used on the data.
 #' @param prior_slab_dispersion This value is proportional to the dispersion (or
 #'   scale) parameter for the slab portion of the prior. Smaller values result
 #'   in an increase in zero coefficients.
