@@ -140,7 +140,7 @@ step_pca_sparse_new <-
 prep.step_pca_sparse <- function(x, training, info = NULL, ...) {
   col_names <- recipes_eval_select(x$terms, training, info)
 
-  if (length(col_names) > 0) {
+  if (length(col_names) > 0 && x$num_comp > 0) {
     check_type(training[, col_names], types = c("double", "integer"))
 
     p <- length(col_names)
