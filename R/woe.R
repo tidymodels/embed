@@ -1,6 +1,6 @@
 #' Weight of evidence transformation
 #'
-#' `step_woe` creates a *specification* of a recipe step that will transform
+#' `step_woe()` creates a *specification* of a recipe step that will transform
 #' nominal data into its numerical transformation based on weights of evidence
 #' against a binary outcome.
 #'

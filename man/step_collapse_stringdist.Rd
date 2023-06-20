@@ -63,7 +63,7 @@ sequence of existing steps (if any). For the \code{tidy} method, a tibble with
 columns \code{terms} (the columns that will be affected) and \code{base}.
 }
 \description{
-\code{step_collapse_stringdist} creates a \emph{specification} of a recipe step that
+\code{step_collapse_stringdist()} creates a \emph{specification} of a recipe step that
 will collapse factor levels that have a low stringdist between them.
 }
 \section{Tidying}{

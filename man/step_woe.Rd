@@ -61,7 +61,7 @@ sequence of existing steps (if any). For the \code{tidy} method, a tibble with
 the woe dictionary used to map categories with woe values.
 }
 \description{
-\code{step_woe} creates a \emph{specification} of a recipe step that will transform
+\code{step_woe()} creates a \emph{specification} of a recipe step that will transform
 nominal data into its numerical transformation based on weights of evidence
 against a binary outcome.
 }

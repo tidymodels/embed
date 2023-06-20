@@ -1,6 +1,6 @@
 #' collapse factor levels using stringdist
 #'
-#' `step_collapse_stringdist` creates a *specification* of a recipe step that
+#' `step_collapse_stringdist()` creates a *specification* of a recipe step that
 #' will collapse factor levels that have a low stringdist between them.
 #'
 #' @inheritParams recipes::step_center
