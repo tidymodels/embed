@@ -1,5 +1,7 @@
 # embed (development version)
 
+* `step_pca_sparse()`, `step_pca_truncated()` and `step_pca_sparse_bayes()` now returns data unaltered if `num_comp = 0`. This is done to be consistent with recipes steps of the same nature.
+
 # embed 1.1.1
 
 ## Bug Fixes

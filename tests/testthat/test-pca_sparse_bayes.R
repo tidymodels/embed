@@ -102,6 +102,19 @@ test_that("tunable", {
   )
 })
 
+test_that("Do nothing for num_comps = 0 and keep_original_cols = FALSE", {
+  # https://github.com/tidymodels/recipes/issues/1152
+
+  rec <- recipe(carb ~ ., data = mtcars) %>%
+    step_pca_sparse_bayes(all_predictors(), 
+                          num_comp = 0, keep_original_cols = FALSE) %>%
+    prep()
+  
+  res <- bake(rec, new_data = NULL)
+  
+  expect_identical(res, tibble::as_tibble(mtcars))
+})
+
 # Infrastructure ---------------------------------------------------------------
 
 test_that("bake method errors when needed non-standard role columns are missing", {

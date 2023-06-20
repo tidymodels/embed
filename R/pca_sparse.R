@@ -5,6 +5,7 @@
 #' zero coefficients.
 #'
 #' @inheritParams step_lencode_bayes
+#' @inheritParams recipes::step_pca
 #' @inherit step_lencode_bayes return
 #' @param ... One or more selector functions to choose which variables will be
 #'   used to compute the components. See [selections()] for more details. For
@@ -13,9 +14,6 @@
 #'   they be assigned? By default, the function assumes that the new principal
 #'   component columns created by the original variables will be used as
 #'   predictors in a model.
-#' @param num_comp The number of PCA components to retain as new predictors. If
-#'   `num_comp` is greater than the number of columns or the number of possible
-#'   components, a smaller value will be used.
 #' @param predictor_prop The maximum number of original predictors that can have
 #'   non-zero coefficients for each PCA component (via regularization).
 #' @param keep_original_cols A logical to keep the original variables in the
@@ -140,7 +138,7 @@ step_pca_sparse_new <-
 prep.step_pca_sparse <- function(x, training, info = NULL, ...) {
   col_names <- recipes_eval_select(x$terms, training, info)
 
-  if (length(col_names) > 0) {
+  if (length(col_names) > 0 && x$num_comp > 0) {
     check_type(training[, col_names], types = c("double", "integer"))
 
     p <- length(col_names)

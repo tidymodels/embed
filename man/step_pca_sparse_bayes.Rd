@@ -36,10 +36,11 @@ predictors in a model.}
 \item{trained}{A logical to indicate if the quantities for preprocessing have
 been estimated.}
 
-\item{num_comp}{The number of PCA components to retain as new predictors. If
-\code{num_comp} is greater than the number of columns or the number of possible
-components, a smaller value will be used. A value of zero indicates that
-PCA will \emph{not} be used on the data.}
+\item{num_comp}{The number of components to retain as new predictors.
+If \code{num_comp} is greater than the number of columns or the number of
+possible components, a smaller value will be used. If \code{num_comp = 0}
+is set then no transformation is done and selected variables will
+stay unchanged.}
 
 \item{prior_slab_dispersion}{This value is proportional to the dispersion (or
 scale) parameter for the slab portion of the prior. Smaller values result
