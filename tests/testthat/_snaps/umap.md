@@ -1,12 +1,3 @@
-# can prep recipes with no keep_original_cols
-
-    Code
-      umap_pred <- prep(unsupervised, training = tr[, -5], verbose = FALSE)
-    Condition
-      Warning:
-      'keep_original_cols' was added to `step_umap()` after this recipe was created.
-      Regenerate your recipe to avoid this warning.
-
 # check_name() is used
 
     Code
@@ -51,6 +42,15 @@
       
       -- Operations 
       * UMAP embedding for: <none> | Trained
+
+# keep_original_cols - can prep recipes with it missing
+
+    Code
+      rec <- prep(rec)
+    Condition
+      Warning:
+      'keep_original_cols' was added to `step_pca()` after this recipe was created.
+      Regenerate your recipe to avoid this warning.
 
 # printing
 
