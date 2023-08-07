@@ -1,7 +1,7 @@
 #' Supervised Factor Conversions into Linear Functions using Bayesian Likelihood
 #' Encodings
 #'
-#' `step_lencode_mixed` creates a *specification* of a recipe step that will
+#' `step_lencode_mixed()` creates a *specification* of a recipe step that will
 #' convert a nominal (i.e. factor) predictor into a single set of scores derived
 #' from a generalized linear mixed model.
 #'

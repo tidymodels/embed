@@ -69,7 +69,7 @@ An updated version of \code{recipe} with the new step added to the
 sequence of any existing operations.
 }
 \description{
-\code{step_discretize_xgb} creates a \emph{specification} of a recipe step that will
+\code{step_discretize_xgb()} creates a \emph{specification} of a recipe step that will
 discretize numeric data (e.g. integers or doubles) into bins in a supervised
 way using an XgBoost model.
 }

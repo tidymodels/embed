@@ -47,8 +47,8 @@ argument \code{x} should not be passed here (or at all).}
 \item{res}{The \code{\link[irlba:prcomp_irlba]{irlba::prcomp_irlba()}} object is stored here once this
 preprocessing step has be trained by \code{\link[=prep]{prep()}}.}
 
-\item{columns}{A character string of variable names that will
-be populated elsewhere.}
+\item{columns}{A character string of the selected variable names. This field
+is a placeholder and will be populated once \code{\link[recipes:prep]{prep()}} is used.}
 
 \item{prefix}{A character string for the prefix of the resulting new
 variables. See notes below.}
@@ -70,7 +70,7 @@ An updated version of \code{recipe} with the new step added to the
 sequence of any existing operations.
 }
 \description{
-\code{step_pca_truncated} creates a \emph{specification} of a recipe step that will
+\code{step_pca_truncated()} creates a \emph{specification} of a recipe step that will
 convert numeric data into one or more principal components. It is truncated
 as it only calculates the number of components it is asked instead of all of
 them as is done in \code{\link[recipes:step_pca]{recipes::step_pca()}}.

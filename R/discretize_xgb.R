@@ -1,6 +1,6 @@
 #' Discretize numeric variables with XgBoost
 #'
-#' `step_discretize_xgb` creates a *specification* of a recipe step that will
+#' `step_discretize_xgb()` creates a *specification* of a recipe step that will
 #' discretize numeric data (e.g. integers or doubles) into bins in a supervised
 #' way using an XgBoost model.
 #'

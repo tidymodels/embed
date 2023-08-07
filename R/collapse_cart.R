@@ -1,6 +1,6 @@
 #' Supervised Collapsing of Factor Levels
 #'
-#' `step_collapse_cart` creates a *specification* of a recipe step that can
+#' `step_collapse_cart()` creates a *specification* of a recipe step that can
 #' collapse factor levels into a smaller set using a supervised tree.
 #'
 #' @param recipe A recipe object. The step will be added to the sequence of

@@ -1,10 +1,10 @@
 #' Encoding Factors into Multiple Columns
 #'
-#' `step_embed` creates a *specification* of a recipe step that will convert a
+#' `step_embed()` creates a *specification* of a recipe step that will convert a
 #' nominal (i.e. factor) predictor into a set of scores derived from a
 #' tensorflow model via a word-embedding model. `embed_control` is a simple
 #' wrapper for setting default options.
-#'
+#' 
 #' @param recipe A recipe object. The step will be added to the sequence of
 #'   operations for this recipe.
 #' @param ... One or more selector functions to choose variables. For

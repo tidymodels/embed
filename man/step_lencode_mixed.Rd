@@ -55,7 +55,7 @@ columns \code{terms} (the selectors or variables for encoding), \code{level} (th
 factor levels), and \code{value} (the encodings).
 }
 \description{
-\code{step_lencode_mixed} creates a \emph{specification} of a recipe step that will
+\code{step_lencode_mixed()} creates a \emph{specification} of a recipe step that will
 convert a nominal (i.e. factor) predictor into a single set of scores derived
 from a generalized linear mixed model.
 }

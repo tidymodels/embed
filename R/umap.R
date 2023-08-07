@@ -1,7 +1,7 @@
 #' Supervised and unsupervised uniform manifold approximation and projection
 #' (UMAP)
 #'
-#' `step_umap` creates a *specification* of a recipe step that will project a
+#' `step_umap()` creates a *specification* of a recipe step that will project a
 #' set of features into a smaller space.
 #'
 #' @inheritParams recipes::step_pca
