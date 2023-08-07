@@ -14,7 +14,6 @@
 #'   components columns created by the original variables will be used as
 #'   predictors in a model.
 #' @param outcome The bare name of the binary outcome encased in `vars()`.
-#' @param outcome The bare name of the binary outcome encased in `vars()`.
 #' @param dictionary A tbl. A map of levels and woe values. It must have the
 #'   same layout than the output returned from [dictionary()]. If `NULL`` the
 #'   function will build a dictionary with those variables passed to \code{...}.
