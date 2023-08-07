@@ -250,9 +250,10 @@ prep.step_umap <- function(x, training, info = NULL, ...) {
 
 #' @export
 bake.step_umap <- function(object, new_data, ...) {
-  check_new_data(names(object$object$xnames), object, new_data)
+  col_names <- names(object$object$xnames)
+  check_new_data(col_names, object, new_data)
 
-  if (length(object$object) == 0) {
+  if (length(col_names) == 0) {
     return(new_data)
   }
 
@@ -261,11 +262,13 @@ bake.step_umap <- function(object, new_data, ...) {
     res <-
       uwot::umap_transform(
         model = object$object,
-        X = new_data[, object$object$xnames]
+        X = new_data[, col_names]
       )
   )
 
-  if (is.null(object$prefix)) object$prefix <- "UMAP"
+  if (is.null(object$prefix)) {
+    object$prefix <- "UMAP"
+  }
 
   colnames(res) <- names0(object$num_comp, prefix = object$prefix)
   res <- as_tibble(res)
@@ -275,7 +278,7 @@ bake.step_umap <- function(object, new_data, ...) {
 
   keep_original_cols <- get_keep_original_cols(object)
   if (!keep_original_cols) {
-    keep_cols <- !(colnames(new_data) %in% object$object$xnames)
+    keep_cols <- !(colnames(new_data) %in% col_names)
     new_data <- new_data[, keep_cols, drop = FALSE]
   }
 

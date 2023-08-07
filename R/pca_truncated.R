@@ -177,15 +177,14 @@ prep.step_pca_truncated <- function(x, training, info = NULL, ...) {
 
 #' @export
 bake.step_pca_truncated <- function(object, new_data, ...) {
-  if (is.null(object$columns)) {
-    object$columns <- stats::setNames(nm = rownames(object$res$rotation))
-  }
+  col_names <- names(object$columns) %||% 
+    stats::setNames(nm = rownames(object$res$rotation))
 
-  if (length(object$columns) == 0 || all(is.na(object$res$rotation))) {
+  if (length(col_names) == 0 || all(is.na(object$res$rotation))) {
     return(new_data)
   }
   
-  check_new_data(object$columns, object, new_data)
+  check_new_data(col_names, object, new_data)
 
   pca_vars <- rownames(object$res$rotation)
   comps <- scale(new_data[, pca_vars], object$res$center, object$res$scale) %*%
