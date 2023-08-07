@@ -98,14 +98,12 @@ This step will attempt to make the sign of the components more consistent
 from run-to-run. However, the sparsity constraint may interfere with this
 goal.
 
-The argument \code{num_comp} controls the number of components that will be
-retained (per default the original variables that are used to derive the
-components are removed from the data). The new components will have names
-that begin with \code{prefix} and a sequence of numbers. The variable names are
-padded with zeros. For example, if \code{num_comp < 10}, their names will be \code{PC1}
-\itemize{
-\item \code{PC9}. If \code{num_comp = 101}, the names would be \code{PC001} - \code{PC101}.
-}
+The argument \code{num_comp} controls the number of components that will be retained
+(the original variables that are used to derive the components are removed from
+the data). The new components will have names that begin with \code{prefix} and a
+sequence of numbers. The variable names are padded with zeros. For example, if
+\code{num_comp < 10}, their names will be \code{PC1} - \code{PC9}. If \code{num_comp = 101},
+the names would be \code{PC1} - \code{PC101}.
 }
 \section{Tidying}{
 When you \code{\link[=tidy.recipe]{tidy()}} this step, a tibble with columns \code{terms}

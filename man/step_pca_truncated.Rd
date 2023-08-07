@@ -47,8 +47,8 @@ argument \code{x} should not be passed here (or at all).}
 \item{res}{The \code{\link[irlba:prcomp_irlba]{irlba::prcomp_irlba()}} object is stored here once this
 preprocessing step has be trained by \code{\link[=prep]{prep()}}.}
 
-\item{columns}{A character string of the selected variable names. This field
-is a placeholder and will be populated once \code{\link[recipes:prep]{prep()}} is used.}
+\item{columns}{A character string of variable names that will
+be populated elsewhere.}
 
 \item{prefix}{A character string for the prefix of the resulting new
 variables. See notes below.}
@@ -88,12 +88,12 @@ variable will be centered and scaled prior to the PCA calculation. This can
 be changed using the \code{options} argument or by using \code{\link[=step_center]{step_center()}} and
 \code{\link[=step_scale]{step_scale()}}.
 
-The argument \code{num_comp} controls the number of components that will be
-retained (the original variables that are used to derive the components are
-removed from the data). The new components will have names that begin with
-\code{prefix} and a sequence of numbers. The variable names are padded with zeros.
-For example, if \code{num_comp < 10}, their names will be \code{PC1} - \code{PC9}. If
-\code{num_comp = 101}, the names would be \code{PC001} - \code{PC101}.
+The argument \code{num_comp} controls the number of components that will be retained
+(the original variables that are used to derive the components are removed from
+the data). The new components will have names that begin with \code{prefix} and a
+sequence of numbers. The variable names are padded with zeros. For example, if
+\code{num_comp < 10}, their names will be \code{PC1} - \code{PC9}. If \code{num_comp = 101},
+the names would be \code{PC1} - \code{PC101}.
 }
 \section{Tidying}{
 When you \code{\link[=tidy.recipe]{tidy()}} this step, use either \code{type = "coef"} for
