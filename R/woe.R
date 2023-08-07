@@ -5,6 +5,7 @@
 #' against a binary outcome.
 #'
 #' @inheritParams step_lencode_bayes
+#' @inheritParams recipes::step_pca
 #' @inherit step_center return
 #' @param ... One or more selector functions to choose which variables will be
 #'   used to compute the components. See [selections()] for more details. For
@@ -134,6 +135,7 @@ step_woe <- function(recipe,
                      dictionary = NULL,
                      Laplace = 1e-6,
                      prefix = "woe",
+                     keep_original_cols = FALSE,
                      skip = FALSE,
                      id = rand_id("woe")) {
   if (missing(outcome)) {
@@ -150,6 +152,7 @@ step_woe <- function(recipe,
       dictionary = dictionary,
       Laplace = Laplace,
       prefix = prefix,
+      keep_original_cols = keep_original_cols,
       skip = skip,
       id = id
     )
@@ -158,7 +161,7 @@ step_woe <- function(recipe,
 
 ## Initializes a new object
 step_woe_new <- function(terms, role, trained, outcome, dictionary, Laplace,
-                         prefix, skip, id) {
+                         prefix, keep_original_cols, skip, id) {
   step(
     subclass = "woe",
     terms = terms,
@@ -168,6 +171,7 @@ step_woe_new <- function(terms, role, trained, outcome, dictionary, Laplace,
     dictionary = dictionary,
     Laplace = Laplace,
     prefix = prefix,
+    keep_original_cols = keep_original_cols,
     skip = skip,
     id = id
   )
@@ -445,6 +449,7 @@ prep.step_woe <- function(x, training, info = NULL, ...) {
     dictionary = x$dictionary,
     Laplace = x$Laplace,
     prefix = x$prefix,
+    keep_original_cols = get_keep_original_cols(x),
     skip = x$skip,
     id = x$id
   )
@@ -467,7 +472,12 @@ bake.step_woe <- function(object, new_data, ...) {
     dictionary = dict,
     prefix = object$prefix
   )
-  new_data <- new_data[, !(colnames(new_data) %in% woe_vars), drop = FALSE]
+  
+  keep_original_cols <- get_keep_original_cols(object)
+  if (!keep_original_cols) {
+    new_data <- new_data[, !(colnames(new_data) %in% woe_vars), drop = FALSE]
+  }
+  
   new_data
 }
 

@@ -179,6 +179,64 @@ test_that("empty selection tidy method works", {
   expect_identical(tidy(rec, number = 1), expect)
 })
 
+test_that("keep_original_cols works", {
+  skip_if_not_installed("VBsparsePCA")
+  skip_if_not_installed("modeldata")
+  
+  data(cells, package = "modeldata")
+  cells$case <- cells$class <- NULL
+  cells <- as.data.frame(scale(cells))
+  
+  new_names <- c("PC1")
+  
+  rec <- recipe(~., data = cells) %>%
+    step_pca_sparse(all_predictors(), num_comp = 1, predictor_prop = 1 / 2,
+                    keep_original_cols = FALSE)
+  
+  rec <- prep(rec)
+  res <- bake(rec, new_data = NULL)
+  
+  expect_equal(
+    colnames(res),
+    new_names
+  )
+  
+  rec <- recipe(~., data = cells) %>%
+    step_pca_sparse(all_predictors(), num_comp = 1, predictor_prop = 1 / 2,
+                    keep_original_cols = TRUE)
+  
+  rec <- prep(rec)
+  res <- bake(rec, new_data = NULL)
+  
+  expect_equal(
+    colnames(res),
+    c(names(cells), new_names)
+  )
+})
+
+test_that("keep_original_cols - can prep recipes with it missing", {
+  skip_if_not_installed("VBsparsePCA")
+  skip_if_not_installed("modeldata")
+  
+  data(cells, package = "modeldata")
+  cells$case <- cells$class <- NULL
+  cells <- as.data.frame(scale(cells))
+  
+  rec <- recipe(~., data = cells) %>%
+    step_pca_sparse(all_predictors(), num_comp = 1, predictor_prop = 1 / 2)
+  
+  rec$steps[[1]]$keep_original_cols <- NULL
+  
+  expect_snapshot(
+    rec <- prep(rec)
+  )
+  
+  expect_error(
+    bake(rec, new_data = cells),
+    NA
+  )
+})
+
 test_that("printing", {
   skip_if_not_installed("irlba")
   

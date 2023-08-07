@@ -105,45 +105,6 @@ test_that("basic usage - character strings", {
   }
 })
 
-test_that("keep_original_cols works", {
-  skip_on_cran()
-  skip_if_not_installed("keras")
-  skip_if(is.null(tensorflow::tf_version()))
-  rlang::local_options(lifecycle_verbosity = "quiet")
-
-  rec <- recipe(x1 ~ x3, data = ex_dat) %>%
-    step_feature_hash(x3, num_hash = 9, keep_original_cols = TRUE)
-
-  rec_trained <- prep(rec, training = ex_dat, verbose = FALSE)
-  hash_pred <- bake(rec_trained, new_data = new_dat, all_predictors())
-
-  expect_equal(
-    colnames(hash_pred),
-    c("x3", paste0("x3_hash_", 1:9))
-  )
-})
-
-test_that("can prep recipes with no keep_original_cols", {
-  skip_on_cran()
-  skip_if_not_installed("keras")
-  skip_if(is.null(tensorflow::tf_version()))
-  rlang::local_options(lifecycle_verbosity = "quiet")
-
-  rec <- recipe(x1 ~ x3, data = ex_dat) %>%
-    step_feature_hash(x3, num_hash = 9, keep_original_cols = TRUE)
-
-  rec$steps[[1]]$keep_original_cols <- NULL
-
-  expect_snapshot(
-    rec_trained <- prep(rec, training = ex_dat, verbose = FALSE)
-  )
-
-  expect_error(
-    hash_pred <- bake(rec_trained, new_data = new_dat, all_predictors()),
-    NA
-  )
-})
-
 test_that("check_name() is used", {
   skip_on_cran()
   skip_if_not_installed("keras")
@@ -232,6 +193,58 @@ test_that("empty selection tidy method works", {
   rec <- prep(rec, mtcars)
   
   expect_identical(tidy(rec, number = 1), expect)
+})
+
+test_that("keep_original_cols works", {
+  skip_on_cran()
+  skip_if_not_installed("keras")
+  skip_if(is.null(tensorflow::tf_version()))
+  rlang::local_options(lifecycle_verbosity = "quiet")
+  
+  new_names <- paste0("x3_hash_", 1:9)
+  
+  rec <- recipe(~ x3, data = ex_dat) %>%
+    step_feature_hash(x3, num_hash = 9, keep_original_cols = FALSE)
+  
+  rec <- prep(rec)
+  res <- bake(rec, new_data = NULL)
+  
+  expect_equal(
+    colnames(res),
+    new_names
+  )
+  
+  rec <- recipe(~ x3, data = ex_dat) %>%
+    step_feature_hash(x3, num_hash = 9, keep_original_cols = TRUE)
+  
+  rec <- prep(rec)
+  res <- bake(rec, new_data = NULL)
+  
+  expect_equal(
+    colnames(res),
+    c("x3", new_names)
+  )
+})
+
+test_that("keep_original_cols - can prep recipes with it missing", {
+  skip_on_cran()
+  skip_if_not_installed("keras")
+  skip_if(is.null(tensorflow::tf_version()))
+  rlang::local_options(lifecycle_verbosity = "quiet")
+  
+  rec <- recipe(~ x3, data = ex_dat) %>%
+    step_feature_hash(x3)
+  
+  rec$steps[[1]]$keep_original_cols <- NULL
+  
+  expect_snapshot(
+    rec <- prep(rec)
+  )
+  
+  expect_error(
+    bake(rec, new_data = ex_dat),
+    NA
+  )
 })
 
 test_that("printing", {

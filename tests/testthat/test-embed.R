@@ -312,22 +312,6 @@ test_that("check_name() is used", {
   )
 })
 
-test_that("keep_original_cols works", {
-  skip_on_cran()
-  skip_if(!is_tf_available())
-  
-  rec <- recipe(x2 ~ x3, data = ex_dat_ch) %>%
-    step_embed(x3, outcome = vars(x2), keep_original_cols = TRUE)
-  
-  rec_trained <- prep(rec, training = ex_dat_ch, verbose = FALSE)
-  preds <- bake(rec_trained, new_data = ex_dat_ch, all_predictors())
-  
-  expect_equal(
-    colnames(preds),
-    c("x3", paste0("x3_embed_", 1:2))
-  )
-})
-
 test_that("tunable", {
   rec <-
     recipe(~., data = mtcars) %>%
@@ -409,6 +393,56 @@ test_that("empty selection tidy method works", {
   rec <- prep(rec, mtcars)
   
   expect_identical(tidy(rec, number = 1), expect)
+})
+
+test_that("keep_original_cols works", {
+  skip_on_cran()
+  skip_if(!is_tf_available())
+  
+  new_names <- c("x2", "x3_embed_1", "x3_embed_2")
+  
+  rec <- recipe(x2 ~ x3, data = ex_dat) %>%
+    step_embed(x3, outcome = vars(x2), options = embed_control(verbose = 0),
+               keep_original_cols = FALSE)
+  
+  rec <- prep(rec)
+  res <- bake(rec, new_data = NULL)
+  
+  expect_equal(
+    colnames(res),
+    new_names
+  )
+  
+  rec <- recipe(x2 ~ x3, data = ex_dat) %>%
+    step_embed(x3, outcome = vars(x2), options = embed_control(verbose = 0),
+               keep_original_cols = TRUE)
+  
+  rec <- prep(rec)
+  res <- bake(rec, new_data = NULL)
+  
+  expect_equal(
+    colnames(res),
+    c("x3", new_names)
+  )
+})
+
+test_that("keep_original_cols - can prep recipes with it missing", {
+  skip_on_cran()
+  skip_if(!is_tf_available())
+  
+  rec <- recipe(x2 ~ x3, data = ex_dat) %>%
+    step_embed(x3, outcome = vars(x2), options = embed_control(verbose = 0))
+  
+  rec$steps[[1]]$keep_original_cols <- NULL
+  
+  expect_snapshot(
+    rec <- prep(rec)
+  )
+  
+  expect_error(
+    bake(rec, new_data = ex_dat),
+    NA
+  )
 })
 
 test_that("printing", {
