@@ -55,7 +55,7 @@ may affect the computations for subsequent operations}
 An updated recipe step.
 }
 \description{
-\code{step_collapse_cart} creates a \emph{specification} of a recipe step that can
+\code{step_collapse_cart()} creates a \emph{specification} of a recipe step that can
 collapse factor levels into a smaller set using a supervised tree.
 }
 \details{

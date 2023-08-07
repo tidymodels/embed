@@ -2,7 +2,7 @@
 #'
 #' @description `r lifecycle::badge("soft-deprecated")`
 #'
-#'   `step_feature_hash` is being deprecated in favor of
+#'   `step_feature_hash()` is being deprecated in favor of
 #'   [textrecipes::step_dummy_hash()]. This function creates a *specification*
 #'   of a recipe step that will convert nominal data (e.g. character or factors)
 #'   into one or more numeric binary columns using the levels of the original

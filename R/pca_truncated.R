@@ -1,6 +1,6 @@
 #' Truncated PCA Signal Extraction
 #'
-#' `step_pca_truncated` creates a *specification* of a recipe step that will
+#' `step_pca_truncated()` creates a *specification* of a recipe step that will
 #' convert numeric data into one or more principal components. It is truncated
 #' as it only calculates the number of components it is asked instead of all of
 #' them as is done in [recipes::step_pca()].

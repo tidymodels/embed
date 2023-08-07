@@ -92,7 +92,7 @@ columns \code{terms} (the selectors or variables for encoding), \code{level} (th
 factor levels), and several columns containing \code{embed} in the name.
 }
 \description{
-\code{step_embed} creates a \emph{specification} of a recipe step that will convert a
+\code{step_embed()} creates a \emph{specification} of a recipe step that will convert a
 nominal (i.e. factor) predictor into a set of scores derived from a
 tensorflow model via a word-embedding model. \code{embed_control} is a simple
 wrapper for setting default options.

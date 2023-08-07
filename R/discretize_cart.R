@@ -1,6 +1,6 @@
 #' Discretize numeric variables with CART
 #'
-#' `step_discretize_cart` creates a *specification* of a recipe step that will
+#' `step_discretize_cart()` creates a *specification* of a recipe step that will
 #' discretize numeric data (e.g. integers or doubles) into bins in a supervised
 #' way using a CART model.
 #'

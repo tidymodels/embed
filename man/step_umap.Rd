@@ -100,7 +100,7 @@ An updated version of \code{recipe} with the new step added to the
 sequence of any existing operations.
 }
 \description{
-\code{step_umap} creates a \emph{specification} of a recipe step that will project a
+\code{step_umap()} creates a \emph{specification} of a recipe step that will project a
 set of features into a smaller space.
 }
 \details{
