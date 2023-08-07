@@ -41,10 +41,11 @@
 #' representations of the data. It can be run unsupervised or supervised with
 #' different types of outcome data (e.g. numeric, factor, etc).
 #'
-#' The new components will have names that begin with `prefix` and a sequence of
-#' numbers. The variable names are padded with zeros. For example, if `num_comp
-#' < 10`, their names will be `UMAP1` - `UMAP9`. If `num_comp = 101`, the names
-#' would be `UMAP001` - `UMAP101`.
+#' ```{r, echo = FALSE, results="asis"}
+#' prefix <- "UMAP"
+#' result <- knitr::knit_child("man/rmd/num_comp.Rmd")
+#' cat(result)
+#' ```
 #'
 #' # Tidying
 #'

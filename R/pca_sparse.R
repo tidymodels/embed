@@ -38,12 +38,11 @@
 #' function is used to encourage sparsity; that documentation has details about
 #' this method.
 #'
-#' The argument `num_comp` controls the number of components that will be
-#' retained (per default the original variables that are used to derive the
-#' components are removed from the data). The new components will have names
-#' that begin with `prefix` and a sequence of numbers. The variable names are
-#' padded with zeros. For example, if `num_comp < 10`, their names will be `PC1`
-#' - `PC9`. If `num_comp = 101`, the names would be `PC001` - `PC101`.
+#' ```{r, echo = FALSE, results="asis"}
+#' prefix <- "PC"
+#' result <- knitr::knit_child("man/rmd/num_comp.Rmd")
+#' cat(result)
+#' ```
 #'
 #' # Tidying
 #'
