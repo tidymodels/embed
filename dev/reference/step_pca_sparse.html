@@ -163,12 +163,13 @@ loading), and <code>component</code>.</p>
 user will be prompted to do so when the step is defined. The <code><a href="https://rdrr.io/pkg/irlba/man/ssvd.html" class="external-link">irlba::ssvd()</a></code>
 function is used to encourage sparsity; that documentation has details about
 this method.</p>
-<p>The argument <code>num_comp</code> controls the number of components that will be
-retained (per default the original variables that are used to derive the
-components are removed from the data). The new components will have names
-that begin with <code>prefix</code> and a sequence of numbers. The variable names are
-padded with zeros. For example, if <code>num_comp &lt; 10</code>, their names will be <code>PC1</code></p><ul><li><p><code>PC9</code>. If <code>num_comp = 101</code>, the names would be <code>PC001</code> - <code>PC101</code>.</p></li>
-</ul></div>
+<p>The argument <code>num_comp</code> controls the number of components that will be retained
+(the original variables that are used to derive the components are removed from
+the data). The new components will have names that begin with <code>prefix</code> and a
+sequence of numbers. The variable names are padded with zeros. For example, if
+<code>num_comp &lt; 10</code>, their names will be <code>PC1</code> - <code>PC9</code>. If <code>num_comp = 101</code>,
+the names would be <code>PC1</code> - <code>PC101</code>.</p>
+    </div>
     <div class="section level2">
     <h2 id="tidying">Tidying<a class="anchor" aria-label="anchor" href="#tidying"></a></h2>
     <p>When you <code><a href="tidy.recipe.html">tidy()</a></code> this step, a tibble with columns <code>terms</code>
