@@ -411,10 +411,15 @@ map_tf_coef2 <- function(dat, mapping, prefix) {
 
 #' @export
 bake.step_embed <- function(object, new_data, ...) {
-  check_new_data(names(object$mapping), object, new_data)
+  col_names <- names(object$mapping)
+  check_new_data(col_names, object, new_data)
 
-  for (col in names(object$mapping)) {
-    tmp <- map_tf_coef2(new_data[, col], object$mapping[[col]], prefix = col)
+  for (col_name in col_names) {
+    tmp <- map_tf_coef2(
+      dat = new_data[, col_name], # map_tf_coef2() expects a tibble
+      mapping = object$mapping[[col_name]], 
+      prefix = col_name
+    )
    
     tmp <- check_name(tmp, new_data, object, names(tmp))
     
@@ -423,7 +428,7 @@ bake.step_embed <- function(object, new_data, ...) {
   
   keep_original_cols <- get_keep_original_cols(object)
   if (!keep_original_cols) {
-    new_data <- new_data[, !(names(new_data) %in% names(object$mapping))]
+    new_data <- new_data[, !(names(new_data) %in% col_names)]
   }
 
   new_data

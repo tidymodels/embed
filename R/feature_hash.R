@@ -198,17 +198,18 @@ make_hash_tbl <- function(ind, nms) {
 
 #' @export
 bake.step_feature_hash <- function(object, new_data, ...) {
-  check_new_data(names(object$columns), object, new_data)
+  col_names <- names(object$columns)
+  check_new_data(col_names, object, new_data)
 
   # If no terms were selected
-  if (length(object$columns) == 0) {
+  if (length(col_names) == 0) {
     return(new_data)
   }
 
-  new_names <- paste0(object$columns, "_hash_")
+  new_names <- paste0(col_names, "_hash_")
 
   new_cols <- purrr::map2_dfc(
-    new_data[, object$columns],
+    new_data[, col_names],
     new_names, make_hash_vars,
     num_hash =
       object$num_hash
@@ -220,7 +221,7 @@ bake.step_feature_hash <- function(object, new_data, ...) {
 
   keep_original_cols <- get_keep_original_cols(object)
   if (!keep_original_cols) {
-    new_data <- new_data %>% dplyr::select(-one_of(!!!object$columns))
+    new_data <- new_data %>% dplyr::select(-one_of(!!!col_names))
   }
 
   new_data

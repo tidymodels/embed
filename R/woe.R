@@ -458,9 +458,9 @@ prep.step_woe <- function(x, training, info = NULL, ...) {
 #' @export
 bake.step_woe <- function(object, new_data, ...) {
   dict <- object$dictionary
-  woe_vars <- unique(dict[["variable"]])
+  col_names <- unique(dict[["variable"]])
 
-  check_new_data(woe_vars, object, new_data)
+  check_new_data(col_names, object, new_data)
 
   if (nrow(object$dictionary) == 0) {
     return(new_data)
@@ -475,7 +475,7 @@ bake.step_woe <- function(object, new_data, ...) {
   
   keep_original_cols <- get_keep_original_cols(object)
   if (!keep_original_cols) {
-    new_data <- new_data[, !(colnames(new_data) %in% woe_vars), drop = FALSE]
+    new_data <- new_data[, !(colnames(new_data) %in% col_names), drop = FALSE]
   }
   
   new_data

@@ -143,12 +143,13 @@ prep.step_collapse_cart <- function(x, training, info = NULL, ...) {
 
 #' @export
 bake.step_collapse_cart <- function(object, new_data, ...) {
-  nms <- names(object$results)
-  check_new_data(nms, object, new_data)
+  col_names <- names(object$results)
+  check_new_data(col_names, object, new_data)
 
-  for (i in seq_along(object$results)) {
-    new_data <- convert_keys(nms[i], object$results[[i]], new_data)
+  for (col_name in col_names) {
+    new_data <- convert_keys(col_name, object$results[[col_name]], new_data)
   }
+  
   new_data
 }
 

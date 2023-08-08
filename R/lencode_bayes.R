@@ -243,10 +243,14 @@ stan_coefs <- function(x, y, options, verbose, wts = NULL, ...) {
 
 #' @export
 bake.step_lencode_bayes <- function(object, new_data, ...) {
-  check_new_data(names(object$mapping), object, new_data)
+  col_names <- names(object$mapping)
+  check_new_data(col_names, object, new_data)
 
-  for (col in names(object$mapping)) {
-    new_data[, col] <- map_glm_coef(new_data[, col], object$mapping[[col]])
+  for (col_name in col_names) {
+    new_data[[col_name]] <- map_glm_coef(
+      new_data[, col_name], # map_glm_coef() expects a tibble
+      object$mapping[[col_name]]
+    )
   }
 
   new_data
