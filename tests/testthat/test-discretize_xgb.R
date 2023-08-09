@@ -1,6 +1,5 @@
 library(testthat)
 library(dplyr)
-library(rsample)
 
 skip_on_cran()
 skip_if_not_installed("xgboost")
@@ -14,9 +13,9 @@ data("attrition", package = "modeldata")
 
 # Data for classification problem testing
 set.seed(42)
-credit_data_split <- initial_split(credit_data, strata = "Status")
-credit_data_train <- training(credit_data_split)
-credit_data_test <- testing(credit_data_split)
+credit_data_split <- rsample::initial_split(credit_data, strata = "Status")
+credit_data_train <- rsample::training(credit_data_split)
+credit_data_test <- rsample::testing(credit_data_split)
 
 set.seed(2393)
 credit_data_small <- dplyr::sample_n(credit_data_train, 30)
@@ -41,9 +40,9 @@ xgb_credit_test <- xgboost::xgb.DMatrix(
 set.seed(42)
 attrition <- attrition %>%
   mutate(EducationField = as.integer(EducationField) - 1)
-attrition_data_split <- initial_split(attrition, strata = "EducationField")
-attrition_data_train <- training(attrition_data_split)
-attrition_data_test <- testing(attrition_data_split)
+attrition_data_split <- rsample::initial_split(attrition, strata = "EducationField")
+attrition_data_train <- rsample::training(attrition_data_split)
+attrition_data_test <- rsample::testing(attrition_data_split)
 
 set.seed(2393)
 attrition_data_small <- dplyr::sample_n(attrition_data_train, 10)
@@ -67,9 +66,9 @@ xgb_attrition_test <- xgboost::xgb.DMatrix(
 ames$Sale_Price <- log10(ames$Sale_Price)
 # Data for regression problem testing (naive)
 set.seed(1773)
-ames_data_split <- initial_split(ames, strata = "Sale_Price")
-ames_data_train <- training(ames_data_split)
-ames_data_test <- testing(ames_data_split)
+ames_data_split <- rsample::initial_split(ames, strata = "Sale_Price")
+ames_data_train <- rsample::training(ames_data_split)
+ames_data_test <- rsample::testing(ames_data_split)
 
 set.seed(8134)
 ames_data_small <- dplyr::sample_n(ames_data_train, 10)

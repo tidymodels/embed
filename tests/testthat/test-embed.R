@@ -5,6 +5,9 @@ source(testthat::test_path("test-helpers.R"))
 # tensorflow::tf$config$get_visible_devices("CPU") %>%
 #   tensorflow::tf$config$set_visible_devices()
 
+# Stops noisy tensorflow messages
+withr::local_envvar(TF_CPP_MIN_LOG_LEVEL = "2")
+
 test_that("factor encoded predictor", {
   skip_on_cran()
   skip_if(!is_tf_available())
