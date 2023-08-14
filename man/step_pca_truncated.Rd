@@ -37,7 +37,7 @@ preprocessing have been estimated.}
 If \code{num_comp} is greater than the number of columns or the number of
 possible components, a smaller value will be used. If \code{num_comp = 0}
 is set then no transformation is done and selected variables will
-stay unchanged.}
+stay unchanged, regardless of the value of \code{keep_original_cols}.}
 
 \item{options}{A list of options to the default method for
 \code{\link[irlba:prcomp_irlba]{irlba::prcomp_irlba()}}. Argument defaults are set to \code{retx = FALSE},
@@ -47,8 +47,8 @@ argument \code{x} should not be passed here (or at all).}
 \item{res}{The \code{\link[irlba:prcomp_irlba]{irlba::prcomp_irlba()}} object is stored here once this
 preprocessing step has be trained by \code{\link[=prep]{prep()}}.}
 
-\item{columns}{A character string of variable names that will
-be populated elsewhere.}
+\item{columns}{A character string of the selected variable names. This field
+is a placeholder and will be populated once \code{\link[recipes:prep]{prep()}} is used.}
 
 \item{prefix}{A character string for the prefix of the resulting new
 variables. See notes below.}

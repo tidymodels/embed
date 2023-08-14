@@ -40,7 +40,7 @@ been estimated.}
 If \code{num_comp} is greater than the number of columns or the number of
 possible components, a smaller value will be used. If \code{num_comp = 0}
 is set then no transformation is done and selected variables will
-stay unchanged.}
+stay unchanged, regardless of the value of \code{keep_original_cols}.}
 
 \item{prior_slab_dispersion}{This value is proportional to the dispersion (or
 scale) parameter for the slab portion of the prior. Smaller values result
