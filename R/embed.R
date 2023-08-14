@@ -426,11 +426,8 @@ bake.step_embed <- function(object, new_data, ...) {
     new_data <- vec_cbind(new_data, tmp)
   }
   
-  keep_original_cols <- get_keep_original_cols(object)
-  if (!keep_original_cols) {
-    new_data <- new_data[, !(names(new_data) %in% col_names)]
-  }
-
+  new_data <- remove_original_cols(new_data, object, col_names)
+  
   new_data
 }
 

@@ -473,10 +473,7 @@ bake.step_woe <- function(object, new_data, ...) {
     prefix = object$prefix
   )
   
-  keep_original_cols <- get_keep_original_cols(object)
-  if (!keep_original_cols) {
-    new_data <- new_data[, !(colnames(new_data) %in% col_names), drop = FALSE]
-  }
+  new_data <- remove_original_cols(new_data, object, col_names)
   
   new_data
 }
