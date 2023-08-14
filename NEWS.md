@@ -1,8 +1,14 @@
 # embed (development version)
 
-* `step_pca_sparse()`, `step_pca_truncated()` and `step_pca_sparse_bayes()` now returns data unaltered if `num_comp = 0`. This is done to be consistent with recipes steps of the same nature.
+## Improvements
 
 * The `keep_original_cols` argument has been added to `step_woe()`. This change should mean that every step that produces new columns has the `keep_original_cols` argument. (#194)
+
+* Many internal changes to improve consistency and slight speed increases.
+
+## Breaking Changes
+
+* `step_pca_sparse()`, `step_pca_truncated()` and `step_pca_sparse_bayes()` now returns data unaltered if `num_comp = 0`. This is done to be consistent with recipes steps of the same nature. (#190)
 
 # embed 1.1.1
 
