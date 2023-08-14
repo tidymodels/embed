@@ -26,6 +26,7 @@
 #' @importFrom keras layer_flatten
 #' @importFrom keras layer_input
 #' @importFrom lifecycle deprecated
+#' @importFrom recipes remove_original_cols
 #' @importFrom stats as.formula
 #' @importFrom stats binomial
 #' @importFrom stats coef

@@ -219,10 +219,7 @@ bake.step_feature_hash <- function(object, new_data, ...) {
   
   new_data <- vec_cbind(new_data, new_cols)
 
-  keep_original_cols <- get_keep_original_cols(object)
-  if (!keep_original_cols) {
-    new_data <- new_data %>% dplyr::select(-one_of(!!!col_names))
-  }
+  new_data <- remove_original_cols(new_data, object, col_names)
 
   new_data
 }

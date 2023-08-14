@@ -229,11 +229,8 @@ bake.step_pca_sparse_bayes <- function(object, new_data, ...) {
   comps <- as_tibble(comps)
   comps <- check_name(comps, new_data, object)
   new_data <- vec_cbind(new_data, comps)
-  keep_original_cols <- get_keep_original_cols(object)
 
-  if (!keep_original_cols) {
-    new_data <- new_data[, !(colnames(new_data) %in% pca_vars), drop = FALSE]
-  }
+  new_data <- remove_original_cols(new_data, object, pca_vars)
   
   new_data
 }
