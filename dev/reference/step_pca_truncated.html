@@ -111,7 +111,7 @@ preprocessing have been estimated.</p></dd>
 If <code>num_comp</code> is greater than the number of columns or the number of
 possible components, a smaller value will be used. If <code>num_comp = 0</code>
 is set then no transformation is done and selected variables will
-stay unchanged.</p></dd>
+stay unchanged, regardless of the value of <code>keep_original_cols</code>.</p></dd>
 
 
 <dt>options</dt>
@@ -127,8 +127,8 @@ preprocessing step has be trained by <code><a href="https://recipes.tidymodels.o
 
 
 <dt>columns</dt>
-<dd><p>A character string of variable names that will
-be populated elsewhere.</p></dd>
+<dd><p>A character string of the selected variable names. This field
+is a placeholder and will be populated once <code><a href="https://recipes.tidymodels.org/reference/prep.html" class="external-link">prep()</a></code> is used.</p></dd>
 
 
 <dt>prefix</dt>
