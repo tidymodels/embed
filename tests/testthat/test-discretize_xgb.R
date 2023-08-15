@@ -28,12 +28,14 @@ rec_credit <- credit_data_train %>%
 
 xgb_credit_train <- xgboost::xgb.DMatrix(
   data = as.matrix(bake(rec_credit, new_data = NULL)),
-  label = ifelse(credit_data_train[["Status"]] == "bad", 0, 1)
+  label = ifelse(credit_data_train[["Status"]] == "bad", 0, 1),
+  nthread = 1
 )
 
 xgb_credit_test <- xgboost::xgb.DMatrix(
   data = as.matrix(bake(rec_credit, new_data = credit_data_test)),
-  label = ifelse(credit_data_test[["Status"]] == "bad", 0, 1)
+  label = ifelse(credit_data_test[["Status"]] == "bad", 0, 1),
+  nthread = 1
 )
 
 # Data for multi-classification problem testing
@@ -55,12 +57,14 @@ rec_attrition <- attrition_data_train %>%
 
 xgb_attrition_train <- xgboost::xgb.DMatrix(
   data = as.matrix(bake(rec_attrition, new_data = NULL)),
-  label = attrition_data_train$EducationField
+  label = attrition_data_train$EducationField,
+  nthread = 1
 )
 
 xgb_attrition_test <- xgboost::xgb.DMatrix(
   data = as.matrix(bake(rec_attrition, new_data = attrition_data_test)),
-  label = attrition_data_test$EducationField
+  label = attrition_data_test$EducationField,
+  nthread = 1
 )
 
 ames$Sale_Price <- log10(ames$Sale_Price)
@@ -81,12 +85,14 @@ ames_rec <- ames_data_train %>%
 
 xgb_ames_train <- xgboost::xgb.DMatrix(
   data = as.matrix(bake(ames_rec, new_data = NULL)),
-  label = ames_data_train[["Sale_Price"]]
+  label = ames_data_train[["Sale_Price"]],
+  nthread = 1
 )
 
 xgb_ames_test <- xgboost::xgb.DMatrix(
   data = as.matrix(bake(ames_rec, new_data = ames_data_test)),
-  label = ames_data_test[["Sale_Price"]]
+  label = ames_data_test[["Sale_Price"]],
+  nthread = 1
 )
 
 set.seed(8497)
