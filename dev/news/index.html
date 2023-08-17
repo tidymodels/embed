@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">embed</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.1.1.9000</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.1.2.9000</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -53,9 +53,20 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="embed-development-version">embed (development version)<a class="anchor" aria-label="anchor" href="#embed-development-version"></a></h2>
-<ul><li><p><code><a href="../reference/step_pca_sparse.html">step_pca_sparse()</a></code>, <code><a href="../reference/step_pca_truncated.html">step_pca_truncated()</a></code> and <code><a href="../reference/step_pca_sparse_bayes.html">step_pca_sparse_bayes()</a></code> now returns data unaltered if <code>num_comp = 0</code>. This is done to be consistent with recipes steps of the same nature.</p></li>
-<li><p>The <code>keep_original_cols</code> argument has been added to <code><a href="../reference/step_woe.html">step_woe()</a></code>. This change should mean that every step that produces new columns has the <code>keep_original_cols</code> argument. (<a href="https://github.com/tidymodels/embed/issues/194" class="external-link">#194</a>)</p></li>
+</div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.1.2" id="embed-112">embed 1.1.2<a class="anchor" aria-label="anchor" href="#embed-112"></a></h2><p class="text-muted">CRAN release: 2023-08-17</p>
+<div class="section level3">
+<h3 id="improvements-1-1-2">Improvements<a class="anchor" aria-label="anchor" href="#improvements-1-1-2"></a></h3>
+<ul><li><p>The <code>keep_original_cols</code> argument has been added to <code><a href="../reference/step_woe.html">step_woe()</a></code>. This change should mean that every step that produces new columns has the <code>keep_original_cols</code> argument. (<a href="https://github.com/tidymodels/embed/issues/194" class="external-link">#194</a>)</p></li>
+<li><p>Many internal changes to improve consistency and slight speed increases.</p></li>
 </ul></div>
+<div class="section level3">
+<h3 id="breaking-changes-1-1-2">Breaking Changes<a class="anchor" aria-label="anchor" href="#breaking-changes-1-1-2"></a></h3>
+<ul><li>
+<code><a href="../reference/step_pca_sparse.html">step_pca_sparse()</a></code>, <code><a href="../reference/step_pca_truncated.html">step_pca_truncated()</a></code> and <code><a href="../reference/step_pca_sparse_bayes.html">step_pca_sparse_bayes()</a></code> now returns data unaltered if <code>num_comp = 0</code>. This is done to be consistent with recipes steps of the same nature. (<a href="https://github.com/tidymodels/embed/issues/190" class="external-link">#190</a>)</li>
+</ul></div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.1.1" id="embed-111">embed 1.1.1<a class="anchor" aria-label="anchor" href="#embed-111"></a></h2><p class="text-muted">CRAN release: 2023-05-30</p>
 <div class="section level3">
