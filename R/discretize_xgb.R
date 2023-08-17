@@ -249,13 +249,15 @@ xgb_binning <- function(df, outcome, predictor, sample_val, learn_rate,
     xgb_train <- xgboost::xgb.DMatrix(
       data = as.matrix(train[[predictor]], ncol = 1),
       label = train[[outcome]],
-      weight = wts_train
+      weight = wts_train,
+      nthread = 1
     )
 
     xgb_test <- xgboost::xgb.DMatrix(
       data = as.matrix(test[[predictor]], ncol = 1),
       label = test[[outcome]],
-      weight = wts_test
+      weight = wts_test,
+      nthread = 1
     )
   } else {
     if (length(levels) == 2) {
@@ -264,13 +266,15 @@ xgb_binning <- function(df, outcome, predictor, sample_val, learn_rate,
       xgb_train <- xgboost::xgb.DMatrix(
         data = as.matrix(train[[predictor]], ncol = 1),
         label = ifelse(train[[outcome]] == levels[[1]], 0, 1),
-        weight = wts_train
+        weight = wts_train,
+        nthread = 1
       )
 
       xgb_test <- xgboost::xgb.DMatrix(
         data = as.matrix(test[[predictor]], ncol = 1),
         label = ifelse(test[[outcome]] == levels[[1]], 0, 1),
-        weight = wts_test
+        weight = wts_test,
+        nthread = 1
       )
     } else if (length(levels) >= 3) {
       objective <- "multi:softprob" # returning estimated probability
@@ -279,13 +283,15 @@ xgb_binning <- function(df, outcome, predictor, sample_val, learn_rate,
       xgb_train <- xgboost::xgb.DMatrix(
         data = as.matrix(train[[predictor]], ncol = 1),
         label = train[[outcome]],
-        weight = wts_train
+        weight = wts_train,
+        nthread = 1
       )
 
       xgb_test <- xgboost::xgb.DMatrix(
         data = as.matrix(test[[predictor]], ncol = 1),
         label = test[[outcome]],
-        weight = wts_test
+        weight = wts_test,
+        nthread = 1
       )
     } else {
       rlang::abort(
