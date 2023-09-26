@@ -1,5 +1,7 @@
 # embed (development version)
 
+* `step_collapse_stringdist()` will now return predictors as factors.
+
 # embed 1.1.2
 
 ## Improvements
