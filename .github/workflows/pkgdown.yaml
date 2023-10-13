@@ -41,7 +41,7 @@ jobs:
       - name: Install TensorFlow
         run: |
           reticulate::conda_create('r-reticulate', packages = c('python==3.6.9'))
-          tensorflow::install_tensorflow(version='2.4.0')
+          tensorflow::install_tensorflow(version='2.11.0')
         shell: Rscript {0}
 
       - name: Build site
