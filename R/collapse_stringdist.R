@@ -194,7 +194,9 @@ bake.step_collapse_stringdist <- function(object, new_data, ...) {
 collapse_apply <- function(x, dict) {
   dict <- purrr::map_dfr(dict, ~ list(from = .x, to = .x[1]))
 
-  dict$to[match(x, dict$from)]
+  res <- dict$to[match(x, dict$from)]
+  
+  factor(res, levels = unique(dict$to))
 }
 
 #' @export
