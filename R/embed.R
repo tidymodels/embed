@@ -122,7 +122,7 @@
 #' "Concatenate Embeddings for Categorical Variables with Keras"
 #' \url{https://flovv.github.io/Embeddings_with_keras_part2/}
 #'
-#' @examplesIf is_tf_available() && rlang::is_installed("modeldata")
+#' @examplesIf embed:::is_tf_available() && rlang::is_installed("modeldata")
 #' data(grants, package = "modeldata")
 #'
 #' set.seed(1)
@@ -150,7 +150,7 @@ step_embed <-
            skip = FALSE,
            id = rand_id("embed")) {
     # warm start for tf to avoid a bug in tensorflow
-    is_tf_available()
+    embed:::is_tf_available()
 
     if (is.null(outcome)) {
       rlang::abort("Please list a variable in `outcome`")
@@ -254,7 +254,7 @@ prep.step_embed <- function(x, training, info = NULL, ...) {
 }
 
 is_tf_2 <- function() {
-  if (!is_tf_available()) {
+  if (!embed:::is_tf_available()) {
     rlang::abort(
       c(
         "tensorflow could now be found.",
@@ -531,12 +531,6 @@ class2ind <- function(x) {
   y
 }
 
-#' Test to see if tensorflow is available
-#'
-#' @return A logical
-#' @examples
-#' is_tf_available()
-#' @export
 is_tf_available <- function() {
   if (!rlang::is_installed("tensorflow")) {
     return(FALSE)
