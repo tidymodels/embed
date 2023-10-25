@@ -203,7 +203,7 @@ bake.step_lencode_glm <- function(object, new_data, ...) {
   for (col_name in col_names) {
     new_data[[col_name]] <- map_glm_coef(
       dat = new_data[, col_name], # map_glm_coef() expects a tibble
-      mapping = object$mapping[[col_names]]
+      mapping = object$mapping[[col_name]]
     )
   }
 

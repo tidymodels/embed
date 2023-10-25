@@ -2,6 +2,8 @@
 
 * `step_collapse_stringdist()` will now return predictors as factors. (#204)
 
+* Fixed regression from 1.1.2 in `step_lencode_glm()` where it couldn't be used on multiple columns.
+
 # embed 1.1.2
 
 ## Improvements
