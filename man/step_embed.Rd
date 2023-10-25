@@ -172,7 +172,7 @@ The underlying operation does not allow for case weights.
 }
 
 \examples{
-\dontshow{if (embed:::is_tf_available() && rlang::is_installed("modeldata")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (!embed:::is_cran_check() && rlang::is_installed("modeldata")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 data(grants, package = "modeldata")
 
 set.seed(1)
