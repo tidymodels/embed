@@ -50,7 +50,7 @@
 #' Approach for Predictive Models_. CRC/Chapman Hall
 #' \url{https://bookdown.org/max/FES/encoding-predictors-with-many-categories.html}
 #' @seealso [recipes::step_dummy()], [recipes::step_zv()]
-#' @examplesIf is_tf_available() && rlang::is_installed("modeldata")
+#' @examplesIf !embed:::is_cran_check() && rlang::is_installed("modeldata")
 #' data(grants, package = "modeldata")
 #' rec <-
 #'   recipe(class ~ sponsor_code, data = grants_other) %>%
