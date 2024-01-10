@@ -71,7 +71,7 @@
 #' "How UMAP Works"
 #' \url{https://umap-learn.readthedocs.io/en/latest/how_umap_works.html}
 #'
-#' @examplesIf rlang::is_installed("ggplot2")
+#' @examplesIf rlang::is_installed("ggplot2") && rlang::is_installed("irlba", version = "2.3.5.2")
 #' library(recipes)
 #' library(ggplot2)
 #'
