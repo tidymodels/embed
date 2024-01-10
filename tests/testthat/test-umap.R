@@ -9,6 +9,8 @@ tr <- iris_dat[-split, ]
 te <- iris_dat[split, ]
 
 test_that("factor outcome", {
+  skip_if_not_installed("irlba", "2.3.5.2")
+  
   set.seed(11)
   supervised <-
     recipe(Species ~ ., data = tr) %>%
@@ -53,6 +55,8 @@ test_that("factor outcome", {
 })
 
 test_that("numeric outcome", {
+  skip_if_not_installed("irlba", "2.3.5.2")
+  
   set.seed(11)
   supervised <-
     recipe(Sepal.Length ~ ., data = tr[, -5]) %>%
@@ -97,6 +101,8 @@ test_that("numeric outcome", {
 })
 
 test_that("metric argument works", {
+  skip_if_not_installed("irlba", "2.3.5.2")
+  
   set.seed(11)
   unsupervised <-
     recipe(~., data = tr[, -5]) %>%
@@ -144,6 +150,8 @@ test_that("metric argument works", {
 })
 
 test_that("no outcome", {
+  skip_if_not_installed("irlba", "2.3.5.2")
+  
   set.seed(11)
   unsupervised <-
     recipe(~., data = tr[, -5]) %>%
@@ -187,6 +195,8 @@ test_that("no outcome", {
 })
 
 test_that("check_name() is used", {
+  skip_if_not_installed("irlba", "2.3.5.2")
+  
   dat <- tr
   dat$UMAP1 <- dat$Species
   
@@ -220,6 +230,8 @@ test_that("tunable", {
 # Infrastructure ---------------------------------------------------------------
 
 test_that("bake method errors when needed non-standard role columns are missing", {
+  skip_if_not_installed("irlba", "2.3.5.2")
+  
   rec <- recipe(Species ~ ., data = tr) %>%
     step_umap(Sepal.Length, Sepal.Width, Petal.Length, Petal.Width) %>%
     update_role(Petal.Width, new_role = "potato") %>%
@@ -270,8 +282,9 @@ test_that("empty selection tidy method works", {
   expect_identical(tidy(rec, number = 1), expect)
 })
 
-
 test_that("keep_original_cols works", {
+  skip_if_not_installed("irlba", "2.3.5.2")
+  
   new_names <- c("UMAP1", "UMAP2", "UMAP3")
   
   rec <- recipe(~., data = tr[, -5]) %>%
@@ -302,8 +315,10 @@ test_that("keep_original_cols works", {
 })
 
 test_that("keep_original_cols - can prep recipes with it missing", {
+  skip_if_not_installed("irlba", "2.3.5.2")
+  
   rec <- recipe(~ mpg, mtcars) %>%
-    step_pca(all_predictors())
+    step_umap(all_predictors())
   
   rec$steps[[1]]$keep_original_cols <- NULL
   
@@ -318,6 +333,8 @@ test_that("keep_original_cols - can prep recipes with it missing", {
 })
 
 test_that("printing", {
+  skip_if_not_installed("irlba", "2.3.5.2")
+  
   rec <- recipe(~., data = tr[, -5]) %>%
     step_umap(all_predictors())
   
