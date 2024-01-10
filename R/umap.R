@@ -16,6 +16,10 @@
 #'   neighbors. See [uwot::umap()] for more details. Default to `"euclidean"`.
 #' @param epochs Number of iterations for the neighbor optimization. See
 #'   [uwot::umap()] for more details.
+#' @param initial Character, Type of initialization for the coordinates. Can be 
+#'   one of `"spectral"`, `"normlaplacian"`, `"random"`, `"lvrandom"`, 
+#'   `"laplacian"`, `"pca"`, `"spca"`, `"agspectral"`, or a matrix of initial
+#'   coordinates. See [uwot::umap()] for more details. Default to `"spectral"`.
 #' @param learn_rate Positive number of the learning rate for the optimization
 #'   process.
 #' @param outcome A call to `vars` to specify which variable is used as the
@@ -105,6 +109,7 @@ step_umap <-
            metric = "euclidean",
            learn_rate = 1,
            epochs = NULL,
+           initial = "spectral",
            options = list(verbose = FALSE, n_threads = 1),
            seed = sample(10^5, 2),
            prefix = "UMAP",
@@ -143,6 +148,7 @@ step_umap <-
         metric = metric,
         learn_rate = learn_rate,
         epochs = epochs,
+        initial = initial,
         options = options,
         seed = seed,
         prefix = prefix,
@@ -157,8 +163,8 @@ step_umap <-
 
 step_umap_new <-
   function(terms, role, trained, outcome, neighbors, num_comp, min_dist, metric,
-           learn_rate, epochs, options, seed, prefix, keep_original_cols,
-           retain, object, skip, id) {
+           learn_rate, epochs, initial, options, seed, prefix, 
+           keep_original_cols, retain, object, skip, id) {
     step(
       subclass = "umap",
       terms = terms,
@@ -171,6 +177,7 @@ step_umap_new <-
       metric = metric,
       learn_rate = learn_rate,
       epochs = epochs,
+      initial = initial,
       options = options,
       seed = seed,
       prefix = prefix,
@@ -194,6 +201,7 @@ umap_fit_call <- function(obj, y = NULL) {
   cl$n_neighbors <- obj$neighbors
   cl$n_components <- obj$num_comp
   cl$n_epochs <- obj$epochs
+  cl$init <- obj$initial
   cl$learning_rate <- obj$learn_rate
   cl$min_dist <- obj$min_dist
   cl$metric <- obj$metric
@@ -237,6 +245,7 @@ prep.step_umap <- function(x, training, info = NULL, ...) {
     metric = x$metric,
     learn_rate = x$learn_rate,
     epochs = x$epochs,
+    initial = x$initial,
     options = x$options,
     seed = x$seed,
     prefix = x$prefix,
