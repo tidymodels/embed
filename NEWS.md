@@ -1,5 +1,7 @@
 # embed (development version)
 
+* `step_umap()` has gained `initial` and `target_weight` arguments. (#213)
+
 # embed 1.1.3
 
 * `step_collapse_stringdist()` will now return predictors as factors. (#204)
