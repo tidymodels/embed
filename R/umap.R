@@ -20,6 +20,10 @@
 #'   one of `"spectral"`, `"normlaplacian"`, `"random"`, `"lvrandom"`, 
 #'   `"laplacian"`, `"pca"`, `"spca"`, `"agspectral"`, or a matrix of initial
 #'   coordinates. See [uwot::umap()] for more details. Default to `"spectral"`.
+#' @param target_weight Weighting factor between data topology and target 
+#'   topology. A value of 0.0 weights entirely on data, a value of 1.0 weights 
+#'   entirely on target. The default of 0.5 balances the weighting equally 
+#'   between data and target.
 #' @param learn_rate Positive number of the learning rate for the optimization
 #'   process.
 #' @param outcome A call to `vars` to specify which variable is used as the
@@ -110,6 +114,7 @@ step_umap <-
            learn_rate = 1,
            epochs = NULL,
            initial = "spectral",
+           target_weight = 0.5,
            options = list(verbose = FALSE, n_threads = 1),
            seed = sample(10^5, 2),
            prefix = "UMAP",
@@ -149,6 +154,7 @@ step_umap <-
         learn_rate = learn_rate,
         epochs = epochs,
         initial = initial,
+        target_weight = target_weight,
         options = options,
         seed = seed,
         prefix = prefix,
@@ -163,7 +169,7 @@ step_umap <-
 
 step_umap_new <-
   function(terms, role, trained, outcome, neighbors, num_comp, min_dist, metric,
-           learn_rate, epochs, initial, options, seed, prefix, 
+           learn_rate, epochs, initial, target_weight, options, seed, prefix, 
            keep_original_cols, retain, object, skip, id) {
     step(
       subclass = "umap",
@@ -178,6 +184,7 @@ step_umap_new <-
       learn_rate = learn_rate,
       epochs = epochs,
       initial = initial,
+      target_weight = target_weight,
       options = options,
       seed = seed,
       prefix = prefix,
@@ -205,6 +212,7 @@ umap_fit_call <- function(obj, y = NULL) {
   cl$learning_rate <- obj$learn_rate
   cl$min_dist <- obj$min_dist
   cl$metric <- obj$metric
+  cl$target_weight <- obj$target_weight
   if (length(obj$options) > 0) {
     cl <- rlang::call_modify(cl, !!!obj$options)
   }
@@ -246,6 +254,7 @@ prep.step_umap <- function(x, training, info = NULL, ...) {
     learn_rate = x$learn_rate,
     epochs = x$epochs,
     initial = x$initial,
+    target_weight = x$target_weight,
     options = x$options,
     seed = x$seed,
     prefix = x$prefix,
