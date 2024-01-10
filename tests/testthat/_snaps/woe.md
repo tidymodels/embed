@@ -87,7 +87,7 @@
       Training data contained 2000 data points and 186 incomplete rows.
       
       -- Operations 
-      * WoE version against outcome Status for: Home, Marital, Records, Job | Trained
+      * WoE version against outcome Status for: Home and Marital, ... | Trained
 
 ---
 
@@ -96,7 +96,8 @@
     Condition
       Error in `step_woe()`:
       Caused by error in `prep()`:
-      ! All columns selected for the step should be string, factor, or ordered.
+      x All columns selected for the step should be string, factor, or ordered.
+      * 9 integer variables found: `Seniority`, `Time`, `Age`, ...
 
 # 2-level factors
 
@@ -153,8 +154,8 @@
       rec <- prep(rec)
     Condition
       Warning:
-      'keep_original_cols' was added to `step_woe()` after this recipe was created.
-      Regenerate your recipe to avoid this warning.
+      `keep_original_cols` was added to `step_woe()` after this recipe was created.
+      i Regenerate your recipe to avoid this warning.
 
 # printing
 
@@ -170,7 +171,7 @@
       predictor: 13
       
       -- Operations 
-      * WoE version against outcome Status for: Job, Home
+      * WoE version against outcome Status for: Job and Home
 
 ---
 
@@ -192,5 +193,5 @@
       Training data contained 4454 data points and 415 incomplete rows.
       
       -- Operations 
-      * WoE version against outcome Status for: Job, Home | Trained
+      * WoE version against outcome Status for: Job and Home | Trained
 

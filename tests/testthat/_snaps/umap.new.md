@@ -3,10 +3,9 @@
     Code
       prep(rec, training = dat)
     Condition
-      Error in `step_pca_truncated()`:
-      Caused by error in `bake()`:
-      ! Name collision occurred. The following variable names already exist:
-      * `PC1`
+      Error in `step_umap()`:
+      Caused by error in `irlba::irlba()`:
+      ! function 'as_cholmod_sparse' not provided by package 'Matrix'
 
 # empty printing
 
@@ -22,7 +21,7 @@
       predictor: 10
       
       -- Operations 
-      * Truncated PCA extraction with: <none>
+      * UMAP embedding for: <none>
 
 ---
 
@@ -41,7 +40,7 @@
       Training data contained 32 data points and no incomplete rows.
       
       -- Operations 
-      * No truncated PCA components were extracted from: <none> | Trained
+      * UMAP embedding for: <none> | Trained
 
 # keep_original_cols - can prep recipes with it missing
 
@@ -49,7 +48,7 @@
       rec <- prep(rec)
     Condition
       Warning:
-      `keep_original_cols` was added to `step_pca_truncated()` after this recipe was created.
+      `keep_original_cols` was added to `step_pca()` after this recipe was created.
       i Regenerate your recipe to avoid this warning.
 
 # printing
@@ -62,28 +61,8 @@
       
       -- Inputs 
       Number of variables by role
-      outcome:    1
-      predictor: 10
+      predictor: 4
       
       -- Operations 
-      * Truncated PCA extraction with: all_predictors()
-
----
-
-    Code
-      prep(rec)
-    Message
-      
-      -- Recipe ----------------------------------------------------------------------
-      
-      -- Inputs 
-      Number of variables by role
-      outcome:    1
-      predictor: 10
-      
-      -- Training information 
-      Training data contained 32 data points and no incomplete rows.
-      
-      -- Operations 
-      * Truncated PCA extraction with: cyl, disp, hp, drat, wt, ... | Trained
+      * UMAP embedding for: all_predictors()
 

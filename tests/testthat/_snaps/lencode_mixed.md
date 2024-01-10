@@ -4,9 +4,9 @@
       new_values_ch <- bake(class_test, new_data = new_dat_ch)
     Condition
       Warning:
-       There was 1 column that was a factor when the recipe was prepped:
-       'x3'.
-       This may cause errors when processing new data.
+      ! There was 1 column that was a factor when the recipe was prepped:
+      * `x3`
+      i This may cause errors when processing new data.
 
 ---
 
@@ -14,9 +14,9 @@
       new_values_ch <- bake(reg_test, new_data = new_dat_ch)
     Condition
       Warning:
-       There was 1 column that was a factor when the recipe was prepped:
-       'x3'.
-       This may cause errors when processing new data.
+      ! There was 1 column that was a factor when the recipe was prepped:
+      * `x3`
+      i This may cause errors when processing new data.
 
 # bad args
 
@@ -26,7 +26,8 @@
     Condition
       Error in `step_lencode_mixed()`:
       Caused by error in `prep()`:
-      ! All columns selected for the step should be string, factor, or ordered.
+      x All columns selected for the step should be string, factor, or ordered.
+      * 1 double variable found: `Sepal.Length`
 
 # case weights
 
