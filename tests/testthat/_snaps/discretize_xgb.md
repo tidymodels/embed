@@ -4,7 +4,7 @@
       xgboost
     Output
       ##### xgb.Booster
-      raw: 69.1 Kb 
+      raw: 74.2 Kb 
       call:
         xgboost::xgb.train(params = .params, data = .train, nrounds = 100, 
           watchlist = list(train = .train, test = .test), verbose = 0, 
@@ -19,19 +19,19 @@
         cb.early.stop(stopping_rounds = early_stopping_rounds, maximize = maximize, 
           verbose = verbose)
       # of features: 13 
-      niter: 89
-      best_iteration : 79 
-      best_ntreelimit : 79 
-      best_score : 0.4442069 
-      best_msg : [79]	train-logloss:0.420000	test-logloss:0.444207 
+      niter: 96
+      best_iteration : 86 
+      best_ntreelimit : 86 
+      best_score : 0.4421503 
+      best_msg : [86]	train-logloss:0.417583	test-logloss:0.442150 
       nfeatures : 13 
       evaluation_log:
           iter train_logloss test_logloss
              1     0.6279229    0.6303495
              2     0.5869984    0.5894989
       ---                                
-            88     0.4180034    0.4449478
-            89     0.4178084    0.4446590
+            95     0.4157892    0.4425857
+            96     0.4156102    0.4432699
 
 # run_xgboost for multi-classification
 
@@ -287,7 +287,7 @@
       Training data contained 1000 data points and no incomplete rows.
       
       -- Operations 
-      * Discretizing variables using xgboost: x, z | Trained, weighted
+      * Discretizing variables using xgboost: x and z | Trained, weighted
 
 # empty printing
 
@@ -357,5 +357,5 @@
       Training data contained 1000 data points and no incomplete rows.
       
       -- Operations 
-      * Discretizing variables using xgboost: x, z | Trained
+      * Discretizing variables using xgboost: x and z | Trained
 

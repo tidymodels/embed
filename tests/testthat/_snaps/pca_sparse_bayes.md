@@ -14,7 +14,7 @@
       Training data contained 1817 data points and no incomplete rows.
       
       -- Operations 
-      * Sparse PCA extraction with: angle_ch_1, area_ch_1, ... | Trained
+      * Sparse PCA extraction with: angle_ch_1 and area_ch_1, ... | Trained
 
 # check_name() is used
 
@@ -23,8 +23,8 @@
     Condition
       Error in `step_pca_sparse_bayes()`:
       Caused by error in `bake()`:
-      ! Name collision occured. The following variable names already exists:
-      i  PC1
+      ! Name collision occurred. The following variable names already exist:
+      * `PC1`
 
 # empty printing
 
@@ -67,8 +67,8 @@
       rec <- prep(rec)
     Condition
       Warning:
-      'keep_original_cols' was added to `step_pca_sparse_bayes()` after this recipe was created.
-      Regenerate your recipe to avoid this warning.
+      `keep_original_cols` was added to `step_pca_sparse_bayes()` after this recipe was created.
+      i Regenerate your recipe to avoid this warning.
 
 # printing
 
@@ -101,5 +101,5 @@
       Training data contained 1817 data points and no incomplete rows.
       
       -- Operations 
-      * Sparse PCA extraction with: angle_ch_1, area_ch_1, ... | Trained
+      * Sparse PCA extraction with: angle_ch_1 and area_ch_1, ... | Trained
 

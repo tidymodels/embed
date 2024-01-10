@@ -4,9 +4,9 @@
       new_values_ch <- bake(class_test, new_data = new_dat_ch, contains("embed"))
     Condition
       Warning:
-       There was 1 column that was a factor when the recipe was prepped:
-       'x3'.
-       This may cause errors when processing new data.
+      ! There was 1 column that was a factor when the recipe was prepped:
+      * `x3`
+      i This may cause errors when processing new data.
 
 ---
 
@@ -14,9 +14,9 @@
       new_values_ch <- bake(class_test, new_data = new_dat_ch, contains("embed"))
     Condition
       Warning:
-       There was 1 column that was a factor when the recipe was prepped:
-       'x3'.
-       This may cause errors when processing new data.
+      ! There was 1 column that was a factor when the recipe was prepped:
+      * `x3`
+      i This may cause errors when processing new data.
 
 # bad args
 
@@ -26,7 +26,8 @@
     Condition
       Error in `step_embed()`:
       Caused by error in `prep()`:
-      ! All columns selected for the step should be string, factor, or ordered.
+      x All columns selected for the step should be string, factor, or ordered.
+      * 1 double variable found: `Sepal.Length`
 
 # check_name() is used
 
@@ -35,8 +36,8 @@
     Condition
       Error in `step_embed()`:
       Caused by error in `bake()`:
-      ! Name collision occured. The following variable names already exists:
-      i  x3_embed_1
+      ! Name collision occurred. The following variable names already exist:
+      * `x3_embed_1`
 
 # empty printing
 
@@ -79,8 +80,8 @@
       rec <- prep(rec)
     Condition
       Warning:
-      'keep_original_cols' was added to `step_embed()` after this recipe was created.
-      Regenerate your recipe to avoid this warning.
+      `keep_original_cols` was added to `step_embed()` after this recipe was created.
+      i Regenerate your recipe to avoid this warning.
 
 # printing
 

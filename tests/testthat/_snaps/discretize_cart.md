@@ -42,7 +42,8 @@
     Condition
       Error in `step_discretize_cart()`:
       Caused by error in `prep()`:
-      ! All columns selected for the step should be double, or integer.
+      x All columns selected for the step should be double or integer.
+      * 1 factor variable found: `w`
 
 # tidy method
 
@@ -85,7 +86,7 @@
       Training data contained 1000 data points and no incomplete rows.
       
       -- Operations 
-      * Discretizing variables using CART: x, z | Trained, weighted
+      * Discretizing variables using CART: x and z | Trained, weighted
 
 # empty printing
 

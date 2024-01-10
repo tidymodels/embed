@@ -4,9 +4,9 @@
       res_te <- bake(rec_tr, te_dat, dplyr::starts_with("x3"))
     Condition
       Warning:
-       There was 1 column that was a factor when the recipe was prepped:
-       'x3'.
-       This may cause errors when processing new data.
+      ! There was 1 column that was a factor when the recipe was prepped:
+      * `x3`
+      i This may cause errors when processing new data.
 
 # check_name() is used
 
@@ -15,8 +15,8 @@
     Condition
       Error in `step_feature_hash()`:
       Caused by error in `bake()`:
-      ! Name collision occured. The following variable names already exists:
-      i  x3_hash_01
+      ! Name collision occurred. The following variable names already exist:
+      * `x3_hash_01`
 
 # empty printing
 
@@ -59,8 +59,8 @@
       rec <- prep(rec)
     Condition
       Warning:
-      'keep_original_cols' was added to `step_feature_hash()` after this recipe was created.
-      Regenerate your recipe to avoid this warning.
+      `keep_original_cols` was added to `step_feature_hash()` after this recipe was created.
+      i Regenerate your recipe to avoid this warning.
 
 # printing
 
