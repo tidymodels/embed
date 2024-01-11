@@ -177,6 +177,11 @@ tidy(grants_glmer, number = 1) %>%
   dplyr::select(-terms, -id)
 ```
 
+```{r}
+# due to Matrix problems
+knitr::knit_exit()
+```
+
 ### Empirical Bayesian Methods/Mixed Models
 
 The same generalized linear model can be fit using mixed models via a random intercept. The `lme4` package can also be used to get pooled estimates via `step_lencode_mixed`.
