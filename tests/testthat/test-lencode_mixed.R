@@ -2,7 +2,9 @@ source(testthat::test_path("make_example_data.R"))
 source(testthat::test_path("test-helpers.R"))
 
 test_that("factor encoded predictor", {
-  skip_if_not_installed("lme4")
+  skip_if_not_installed("Matrix", "1.6-2")
+  skip_if_not_installed("lme4", "1.1-35.1")
+  
   class_test <- recipe(x2 ~ ., data = ex_dat) %>%
     step_lencode_mixed(x3, outcome = vars(x2), id = "id") %>%
     prep(training = ex_dat, retain = TRUE)
@@ -60,7 +62,9 @@ test_that("factor encoded predictor", {
 })
 
 test_that("character encoded predictor", {
-  skip_if_not_installed("lme4")
+  skip_if_not_installed("Matrix", "1.6-2")
+  skip_if_not_installed("lme4", "1.1-35.1")
+  
   class_test <- recipe(x2 ~ ., data = ex_dat_ch) %>%
     step_lencode_mixed(x3, outcome = vars(x2)) %>%
     prep(training = ex_dat_ch, retain = TRUE)
@@ -118,7 +122,9 @@ test_that("character encoded predictor", {
 ###################################################################
 
 test_that("factor encoded predictor", {
-  skip_if_not_installed("lme4")
+  skip_if_not_installed("Matrix", "1.6-2")
+  skip_if_not_installed("lme4", "1.1-35.1")
+  
   reg_test <- recipe(x1 ~ ., data = ex_dat) %>%
     step_lencode_mixed(x3, outcome = vars(x1)) %>%
     prep(training = ex_dat, retain = TRUE)
@@ -177,7 +183,9 @@ test_that("factor encoded predictor", {
 })
 
 test_that("character encoded predictor", {
-  skip_if_not_installed("lme4")
+  skip_if_not_installed("Matrix", "1.6-2")
+  skip_if_not_installed("lme4", "1.1-35.1")
+  
   reg_test <- recipe(x1 ~ ., data = ex_dat_ch) %>%
     step_lencode_mixed(x3, outcome = vars(x1)) %>%
     prep(training = ex_dat_ch, retain = TRUE)
@@ -235,7 +243,9 @@ test_that("character encoded predictor", {
 ###################################################################
 
 test_that("bad args", {
-  skip_if_not_installed("lme4")
+  skip_if_not_installed("Matrix", "1.6-2")
+  skip_if_not_installed("lme4", "1.1-35.1")
+  
   three_class <- iris
   three_class$fac <- rep(letters[1:3], 50)
   three_class$logical <- rep(c(TRUE, FALSE), 75)
@@ -249,7 +259,8 @@ test_that("bad args", {
 })
 
 test_that("case weights", {
-  skip_if_not_installed("lme4")
+  skip_if_not_installed("Matrix", "1.6-2")
+  skip_if_not_installed("lme4", "1.1-35.1")
 
   wts_int <- rep(c(0, 1), times = c(100, 400))
 
@@ -280,7 +291,8 @@ test_that("case weights", {
 # Infrastructure ---------------------------------------------------------------
 
 test_that("bake method errors when needed non-standard role columns are missing", {
-  skip_if_not_installed("lme4")
+  skip_if_not_installed("Matrix", "1.6-2")
+  skip_if_not_installed("lme4", "1.1-35.1")
   
   rec <- recipe(x2 ~ ., data = ex_dat) %>%
     step_lencode_mixed(x3, outcome = vars(x2)) %>%
@@ -338,7 +350,8 @@ test_that("empty selection tidy method works", {
 })
 
 test_that("printing", {
-  skip_if_not_installed("lme4")
+  skip_if_not_installed("Matrix", "1.6-2")
+  skip_if_not_installed("lme4", "1.1-35.1")
   
   rec <- recipe(x2 ~ ., data = ex_dat_ch) %>%
     step_lencode_mixed(x3, outcome = vars(x2))
