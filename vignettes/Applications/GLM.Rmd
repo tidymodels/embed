@@ -104,6 +104,11 @@ This method estimates the effects by using all of the sponsor codes at once usin
 
 Partial pooling estimates each effect as a combination of the separate empirical estimates of the log-odds and the prior distribution. For sponsor codes with small sample sizes, the final estimate is _shrunken_ towards the overall mean of the log-odds. This makes sense since we have poor information for estimating these sponsor codes. For sponsor codes with many data points, the estimates reply more on the empirical estimates. [This page](https://cran.r-project.org/web/packages/rstanarm/vignettes/glmer.html) has a good discussion of pooling using Bayesian models. 
  
+```{r}
+# due to Matrix problems
+knitr::knit_exit()
+```
+
 ### Bayesian Methods
 
 One appraoch to partial pooling is the function `step_lencode_bayes` uses the `stan_glmer` function in the `rstanarm` package. There are a number of options that can be used to control the model estimation routine, including:
