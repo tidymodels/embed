@@ -232,6 +232,14 @@ prep.step_umap <- function(x, training, info = NULL, ...) {
     }
     x$neighbors <- min(nrow(training) - 1, x$neighbors)
     x$num_comp <- min(length(col_names) - 1, x$num_comp)
+    
+    if (is.null(x$initial)) {
+      x$initial <- "spectral"
+    }
+    if (is.null(x$target_weight)) {
+      x$target_weight <- 0.5
+    }
+    
     withr::with_seed(
       x$seed[1],
       res <- rlang::eval_tidy(umap_fit_call(x, y = y_name))
