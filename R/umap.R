@@ -16,6 +16,14 @@
 #'   neighbors. See [uwot::umap()] for more details. Default to `"euclidean"`.
 #' @param epochs Number of iterations for the neighbor optimization. See
 #'   [uwot::umap()] for more details.
+#' @param initial Character, Type of initialization for the coordinates. Can be 
+#'   one of `"spectral"`, `"normlaplacian"`, `"random"`, `"lvrandom"`, 
+#'   `"laplacian"`, `"pca"`, `"spca"`, `"agspectral"`, or a matrix of initial
+#'   coordinates. See [uwot::umap()] for more details. Default to `"spectral"`.
+#' @param target_weight Weighting factor between data topology and target 
+#'   topology. A value of 0.0 weights entirely on data, a value of 1.0 weights 
+#'   entirely on target. The default of 0.5 balances the weighting equally 
+#'   between data and target.
 #' @param learn_rate Positive number of the learning rate for the optimization
 #'   process.
 #' @param outcome A call to `vars` to specify which variable is used as the
@@ -105,6 +113,8 @@ step_umap <-
            metric = "euclidean",
            learn_rate = 1,
            epochs = NULL,
+           initial = "spectral",
+           target_weight = 0.5,
            options = list(verbose = FALSE, n_threads = 1),
            seed = sample(10^5, 2),
            prefix = "UMAP",
@@ -143,6 +153,8 @@ step_umap <-
         metric = metric,
         learn_rate = learn_rate,
         epochs = epochs,
+        initial = initial,
+        target_weight = target_weight,
         options = options,
         seed = seed,
         prefix = prefix,
@@ -157,8 +169,8 @@ step_umap <-
 
 step_umap_new <-
   function(terms, role, trained, outcome, neighbors, num_comp, min_dist, metric,
-           learn_rate, epochs, options, seed, prefix, keep_original_cols,
-           retain, object, skip, id) {
+           learn_rate, epochs, initial, target_weight, options, seed, prefix, 
+           keep_original_cols, retain, object, skip, id) {
     step(
       subclass = "umap",
       terms = terms,
@@ -171,6 +183,8 @@ step_umap_new <-
       metric = metric,
       learn_rate = learn_rate,
       epochs = epochs,
+      initial = initial,
+      target_weight = target_weight,
       options = options,
       seed = seed,
       prefix = prefix,
@@ -194,9 +208,11 @@ umap_fit_call <- function(obj, y = NULL) {
   cl$n_neighbors <- obj$neighbors
   cl$n_components <- obj$num_comp
   cl$n_epochs <- obj$epochs
+  cl$init <- obj$initial
   cl$learning_rate <- obj$learn_rate
   cl$min_dist <- obj$min_dist
   cl$metric <- obj$metric
+  cl$target_weight <- obj$target_weight
   if (length(obj$options) > 0) {
     cl <- rlang::call_modify(cl, !!!obj$options)
   }
@@ -216,6 +232,14 @@ prep.step_umap <- function(x, training, info = NULL, ...) {
     }
     x$neighbors <- min(nrow(training) - 1, x$neighbors)
     x$num_comp <- min(length(col_names) - 1, x$num_comp)
+    
+    if (is.null(x$initial)) {
+      x$initial <- "spectral"
+    }
+    if (is.null(x$target_weight)) {
+      x$target_weight <- 0.5
+    }
+    
     withr::with_seed(
       x$seed[1],
       res <- rlang::eval_tidy(umap_fit_call(x, y = y_name))
@@ -237,6 +261,8 @@ prep.step_umap <- function(x, training, info = NULL, ...) {
     metric = x$metric,
     learn_rate = x$learn_rate,
     epochs = x$epochs,
+    initial = x$initial,
+    target_weight = x$target_weight,
     options = x$options,
     seed = x$seed,
     prefix = x$prefix,

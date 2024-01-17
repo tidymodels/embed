@@ -227,6 +227,24 @@ test_that("tunable", {
   )
 })
 
+test_that("backwards compatible for initial and target_weight args (#213)", {
+  skip_if_not_installed("irlba", "2.3.5.2")
+
+  rec <- recipe(Species ~ ., data = tr) %>%
+    step_umap(all_predictors(), num_comp = 2)
+  
+  exp_res <- prep(rec)
+  
+  rec$steps[[1]]$initial <- NULL
+  rec$steps[[1]]$target_weight <- NULL
+  
+  expect_identical(
+    prep(rec),
+    exp_res
+  )
+})
+
+
 # Infrastructure ---------------------------------------------------------------
 
 test_that("bake method errors when needed non-standard role columns are missing", {

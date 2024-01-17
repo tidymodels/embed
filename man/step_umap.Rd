@@ -17,6 +17,8 @@ step_umap(
   metric = "euclidean",
   learn_rate = 1,
   epochs = NULL,
+  initial = "spectral",
+  target_weight = 0.5,
   options = list(verbose = FALSE, n_threads = 1),
   seed = sample(10^5, 2),
   prefix = "UMAP",
@@ -62,6 +64,16 @@ process.}
 
 \item{epochs}{Number of iterations for the neighbor optimization. See
 \code{\link[uwot:umap]{uwot::umap()}} for more details.}
+
+\item{initial}{Character, Type of initialization for the coordinates. Can be
+one of \code{"spectral"}, \code{"normlaplacian"}, \code{"random"}, \code{"lvrandom"},
+\code{"laplacian"}, \code{"pca"}, \code{"spca"}, \code{"agspectral"}, or a matrix of initial
+coordinates. See \code{\link[uwot:umap]{uwot::umap()}} for more details. Default to \code{"spectral"}.}
+
+\item{target_weight}{Weighting factor between data topology and target
+topology. A value of 0.0 weights entirely on data, a value of 1.0 weights
+entirely on target. The default of 0.5 balances the weighting equally
+between data and target.}
 
 \item{options}{A list of options to pass to \code{\link[uwot:umap]{uwot::umap()}}. The arguments
 \code{X}, \code{n_neighbors}, \code{n_components}, \code{min_dist}, \code{n_epochs}, \code{ret_model},
