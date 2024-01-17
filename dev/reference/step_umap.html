@@ -76,6 +76,8 @@ set of features into a smaller space.</p>
 <span>  metric <span class="op">=</span> <span class="st">"euclidean"</span>,</span>
 <span>  learn_rate <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  epochs <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  initial <span class="op">=</span> <span class="st">"spectral"</span>,</span>
+<span>  target_weight <span class="op">=</span> <span class="fl">0.5</span>,</span>
 <span>  options <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>verbose <span class="op">=</span> <span class="cn">FALSE</span>, n_threads <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>,</span>
 <span>  seed <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fl">10</span><span class="op">^</span><span class="fl">5</span>, <span class="fl">2</span><span class="op">)</span>,</span>
 <span>  prefix <span class="op">=</span> <span class="st">"UMAP"</span>,</span>
@@ -144,6 +146,20 @@ process.</p></dd>
 <dt>epochs</dt>
 <dd><p>Number of iterations for the neighbor optimization. See
 <code><a href="https://rdrr.io/pkg/uwot/man/umap.html" class="external-link">uwot::umap()</a></code> for more details.</p></dd>
+
+
+<dt>initial</dt>
+<dd><p>Character, Type of initialization for the coordinates. Can be
+one of <code>"spectral"</code>, <code>"normlaplacian"</code>, <code>"random"</code>, <code>"lvrandom"</code>,
+<code>"laplacian"</code>, <code>"pca"</code>, <code>"spca"</code>, <code>"agspectral"</code>, or a matrix of initial
+coordinates. See <code><a href="https://rdrr.io/pkg/uwot/man/umap.html" class="external-link">uwot::umap()</a></code> for more details. Default to <code>"spectral"</code>.</p></dd>
+
+
+<dt>target_weight</dt>
+<dd><p>Weighting factor between data topology and target
+topology. A value of 0.0 weights entirely on data, a value of 1.0 weights
+entirely on target. The default of 0.5 balances the weighting equally
+between data and target.</p></dd>
 
 
 <dt>options</dt>
