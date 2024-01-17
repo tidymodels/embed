@@ -15,6 +15,7 @@ omit_warning <- function(pattern) {
 test_that("factor encoded predictor", {
   skip_on_cran()
   skip_if_not_installed("rstanarm")
+  skip_if_not_installed("Matrix", "1.6-2")
 
   expect_snapshot(
     transform = omit_warning("^(The largest R-hat is|Bulk Effective|Tail Effective)"),
@@ -84,6 +85,8 @@ test_that("factor encoded predictor", {
 test_that("character encoded predictor", {
   skip_on_cran()
   skip_if_not_installed("rstanarm")
+  skip_if_not_installed("Matrix", "1.6-2")
+  
   expect_snapshot(
     transform = omit_warning("^(The largest R-hat is|Bulk Effective|Tail Effective)"),
     class_test <- recipe(x2 ~ ., data = ex_dat_ch) %>%
@@ -152,6 +155,8 @@ test_that("character encoded predictor", {
 test_that("factor encoded predictor", {
   skip_on_cran()
   skip_if_not_installed("rstanarm")
+  skip_if_not_installed("Matrix", "1.6-2")
+  
   expect_snapshot(
     transform = omit_warning("^(The largest R-hat is|Bulk Effective|Tail Effective)"),
     {
@@ -223,6 +228,8 @@ test_that("factor encoded predictor", {
 test_that("character encoded predictor", {
   skip_on_cran()
   skip_if_not_installed("rstanarm")
+  skip_if_not_installed("Matrix", "1.6-2")
+  
   expect_snapshot(
     transform = omit_warning("^(The largest R-hat is|Bulk Effective|Tail Effective)"),
     {
@@ -291,6 +298,7 @@ test_that("character encoded predictor", {
 test_that("Works with passing family ", {
   skip_on_cran()
   skip_if_not_installed("rstanarm")
+  skip_if_not_installed("Matrix", "1.6-2")
 
   ex_dat_poisson <- ex_dat %>%
     mutate(outcome = rpois(n(), 5))
@@ -363,6 +371,7 @@ test_that("Works with passing family ", {
 test_that("case weights", {
   skip_on_cran()
   skip_if_not_installed("rstanarm")
+  skip_if_not_installed("Matrix", "1.6-2")
 
   wts_int <- rep(c(0, 1), times = c(100, 400))
 
@@ -407,6 +416,7 @@ test_that("case weights", {
 
 test_that("bake method errors when needed non-standard role columns are missing", {
   skip_if_not_installed("rstanarm")
+  skip_if_not_installed("Matrix", "1.6-2")
   
   rec <- recipe(x2 ~ ., data = ex_dat) %>%
     step_lencode_bayes(x3, outcome = vars(x2)) %>%
@@ -465,6 +475,7 @@ test_that("empty selection tidy method works", {
 
 test_that("printing", {
   skip_if_not_installed("rstanarm")
+  skip_if_not_installed("Matrix", "1.6-2")
   
   rec <- recipe(x2 ~ ., data = ex_dat) %>%
     step_lencode_bayes(x3,
