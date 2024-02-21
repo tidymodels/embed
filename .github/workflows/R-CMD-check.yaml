@@ -52,18 +52,10 @@ jobs:
           extra-packages: any::rcmdcheck
           needs: check
 
-      - name: Install Miniconda
-        run: |
-          reticulate::install_miniconda()
-        shell: Rscript {0}
- 
-      - name: Find Miniconda on macOS
-        if: runner.os == 'macOS'
-        run: echo "options(reticulate.conda_binary = reticulate:::miniconda_conda())" >> .Rprofile
-
       - name: Install TensorFlow
         run: |
-          reticulate::conda_create('r-reticulate', packages = c('python==3.11.7'))
+          reticulate::virtualenv_create('r-reticulate', python='3.11.7')
+          reticulate::use_virtualenv('r-reticulate')
           tensorflow::install_tensorflow(version='2.15.0')
         shell: Rscript {0}
         
