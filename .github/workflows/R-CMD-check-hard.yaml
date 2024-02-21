@@ -55,6 +55,7 @@ jobs:
 
       - name: Install TensorFlow
         run: |
+          reticulate::install_python(version='3.11.7')
           reticulate::virtualenv_create('r-reticulate', python='3.11.7')
           reticulate::use_virtualenv('r-reticulate')
           tensorflow::install_tensorflow(version='2.15.0')
