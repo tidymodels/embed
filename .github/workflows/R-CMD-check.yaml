@@ -63,8 +63,8 @@ jobs:
 
       - name: Install TensorFlow
         run: |
-          reticulate::conda_create('r-reticulate', packages = c('python==3.6.9'))
-          tensorflow::install_tensorflow(version='2.11.0')
+          reticulate::conda_create('r-reticulate', packages = c('python==3.11.7'))
+          tensorflow::install_tensorflow(version='2.15.0')
         shell: Rscript {0}
         
       - uses: r-lib/actions/check-r-package@v2
