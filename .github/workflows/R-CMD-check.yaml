@@ -52,10 +52,13 @@ jobs:
           extra-packages: any::rcmdcheck
           needs: check
 
+      - uses: actions/setup-python@v4
+        with:
+          python-version: 3.9
+
       - name: Install TensorFlow
         run: |
-          reticulate::install_python(version='3.6.9')
-          reticulate::virtualenv_create('r-reticulate', python='3.6.9')
+          reticulate::virtualenv_create('r-reticulate', python='3.9')
           reticulate::use_virtualenv('r-reticulate')
           tensorflow::install_tensorflow(version='2.11.0')
         shell: Rscript {0}
