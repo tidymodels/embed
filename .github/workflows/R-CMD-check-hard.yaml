@@ -55,10 +55,10 @@ jobs:
 
       - name: Install TensorFlow
         run: |
-          reticulate::install_python(version='3.9')
-          reticulate::virtualenv_create('r-reticulate', python='3.9')
+          reticulate::install_python(version='3.6.9')
+          reticulate::virtualenv_create('r-reticulate', python='3.6.9')
           reticulate::use_virtualenv('r-reticulate')
-          tensorflow::install_tensorflow(version='2.15.0')
+          tensorflow::install_tensorflow(version='2.11.0')
         shell: Rscript {0}
         
       - uses: r-lib/actions/check-r-package@v2
