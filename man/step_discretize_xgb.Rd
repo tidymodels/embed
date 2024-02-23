@@ -2,6 +2,7 @@
 % Please edit documentation in R/discretize_xgb.R
 \name{step_discretize_xgb}
 \alias{step_discretize_xgb}
+\alias{tidy.step_discretize_xgb}
 \title{Discretize numeric variables with XgBoost}
 \usage{
 step_discretize_xgb(

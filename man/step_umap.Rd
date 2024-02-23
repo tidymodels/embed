@@ -2,6 +2,7 @@
 % Please edit documentation in R/umap.R
 \name{step_umap}
 \alias{step_umap}
+\alias{tidy.step_umap}
 \title{Supervised and unsupervised uniform manifold approximation and projection
 (UMAP)}
 \usage{

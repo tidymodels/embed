@@ -2,6 +2,7 @@
 % Please edit documentation in R/pca_sparse_bayes.R
 \name{step_pca_sparse_bayes}
 \alias{step_pca_sparse_bayes}
+\alias{tidy.step_pca_sparse_bayes}
 \title{Sparse Bayesian PCA Signal Extraction}
 \usage{
 step_pca_sparse_bayes(

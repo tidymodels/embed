@@ -243,8 +243,8 @@ pca_coefs <- function(x) {
   res
 }
 
-#' @rdname tidy.recipe
-#' @param x A `step_pca_sparse` object.
+#' @rdname step_pca_sparse
+#' @usage NULL
 #' @export
 tidy.step_pca_sparse <- function(x, ...) {
   if (!is_trained(x)) {

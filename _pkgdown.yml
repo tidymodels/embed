@@ -41,9 +41,6 @@ reference:
 - title: miscellaneous
   contents:
     - dictionary
-- title: Tidy Methods
-  contents:
-    - tidy.recipe
 
 figures:
   fig.width: 8

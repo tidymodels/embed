@@ -2,6 +2,7 @@
 % Please edit documentation in R/embed.R
 \name{step_embed}
 \alias{step_embed}
+\alias{tidy.step_embed}
 \alias{embed_control}
 \title{Encoding Factors into Multiple Columns}
 \usage{

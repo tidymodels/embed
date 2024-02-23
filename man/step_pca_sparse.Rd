@@ -2,6 +2,7 @@
 % Please edit documentation in R/pca_sparse.R
 \name{step_pca_sparse}
 \alias{step_pca_sparse}
+\alias{tidy.step_pca_sparse}
 \title{Sparse PCA Signal Extraction}
 \usage{
 step_pca_sparse(

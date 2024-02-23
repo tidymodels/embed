@@ -2,6 +2,7 @@
 % Please edit documentation in R/feature_hash.R
 \name{step_feature_hash}
 \alias{step_feature_hash}
+\alias{tidy.step_feature_hash}
 \title{Dummy Variables Creation via Feature Hashing}
 \usage{
 step_feature_hash(

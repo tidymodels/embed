@@ -2,6 +2,7 @@
 % Please edit documentation in R/collapse_cart.R
 \name{step_collapse_cart}
 \alias{step_collapse_cart}
+\alias{tidy.step_collapse_cart}
 \title{Supervised Collapsing of Factor Levels}
 \usage{
 step_collapse_cart(
