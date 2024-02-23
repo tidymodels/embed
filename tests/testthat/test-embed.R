@@ -1,13 +1,6 @@
 source(testthat::test_path("make_example_data.R"))
 source(testthat::test_path("test-helpers.R"))
 
-if (tolower(Sys.info()[["sysname"]]) == "darwin" && 
-    R.version[["arch"]] == "aarch64") {
-  # To make stuff run on M1
-  tensorflow::tf$config$get_visible_devices("CPU") %>%
-    tensorflow::tf$config$set_visible_devices()
-}
-
 # Stops noisy tensorflow messages
 withr::local_envvar(TF_CPP_MIN_LOG_LEVEL = "2")
 

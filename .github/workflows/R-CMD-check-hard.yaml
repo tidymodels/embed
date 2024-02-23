@@ -53,18 +53,14 @@ jobs:
           needs: check
           pak-version: devel
 
-      - name: Install Miniconda
-        run: |
-          reticulate::install_miniconda()
-        shell: Rscript {0}
- 
-      - name: Find Miniconda on macOS
-        if: runner.os == 'macOS'
-        run: echo "options(reticulate.conda_binary = reticulate:::miniconda_conda())" >> .Rprofile
+      - uses: actions/setup-python@v4
+        with:
+          python-version: 3.9
 
       - name: Install TensorFlow
         run: |
-          reticulate::conda_create('r-reticulate', packages = c('python==3.6.9'))
+          reticulate::virtualenv_create('r-reticulate', python='3.9')
+          reticulate::use_virtualenv('r-reticulate')
           tensorflow::install_tensorflow(version='2.11.0')
         shell: Rscript {0}
         

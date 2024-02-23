@@ -26,12 +26,13 @@
       best_msg : [86]	train-logloss:0.417583	test-logloss:0.442150 
       nfeatures : 13 
       evaluation_log:
-          iter train_logloss test_logloss
-             1     0.6279229    0.6303495
-             2     0.5869984    0.5894989
-      ---                                
-            95     0.4157892    0.4425857
-            96     0.4156102    0.4432699
+           iter train_logloss test_logloss
+          <num>         <num>        <num>
+              1     0.6279229    0.6303495
+              2     0.5869984    0.5894989
+      ---                                 
+             95     0.4157892    0.4425857
+             96     0.4156102    0.4432699
 
 # run_xgboost for multi-classification
 
@@ -61,12 +62,13 @@
       best_msg : [23]	train-mlogloss:1.178121	test-mlogloss:1.246428 
       nfeatures : 30 
       evaluation_log:
-          iter train_mlogloss test_mlogloss
-             1       1.623174      1.631783
-             2       1.515108      1.531188
-      ---                                  
-            32       1.159813      1.249701
-            33       1.158088      1.250462
+           iter train_mlogloss test_mlogloss
+          <num>          <num>         <num>
+              1       1.623174      1.631783
+              2       1.515108      1.531188
+      ---                                   
+             32       1.159813      1.249701
+             33       1.158088      1.250462
 
 # run_xgboost for regression
 
@@ -96,12 +98,13 @@
       best_msg : [40]	train-rmse:0.064010	test-rmse:0.116534 
       nfeatures : 73 
       evaluation_log:
-          iter train_rmse test_rmse
-             1 3.31007782 3.3068878
-             2 2.31969213 2.3262197
-      ---                          
-            49 0.06207940 0.1175223
-            50 0.06191289 0.1188113
+           iter train_rmse test_rmse
+          <num>      <num>     <num>
+              1 3.31007782 3.3068878
+              2 2.31969213 2.3262197
+      ---                           
+             49 0.06207940 0.1175223
+             50 0.06191289 0.1188113
 
 # xgb_binning for classification
 
