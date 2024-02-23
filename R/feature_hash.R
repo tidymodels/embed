@@ -232,8 +232,8 @@ print.step_feature_hash <-
     invisible(x)
   }
 
-#' @rdname tidy.recipe
-#' @param x A `step_feature_hash` object.
+#' @rdname step_feature_hash
+#' @usage NULL
 #' @export
 tidy.step_feature_hash <- function(x, ...) {
   if (is_trained(x)) {

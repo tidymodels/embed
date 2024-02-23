@@ -267,9 +267,9 @@ print.step_lencode_bayes <-
     invisible(x)
   }
 
-#' @rdname tidy.recipe
-#' @param x A `step_lencode_bayes` object.
-#' @export
+  #' @rdname step_lencode_bayes
+  #' @usage NULL
+  #' @export
 tidy.step_lencode_bayes <- function(x, ...) {
   if (is_trained(x)) {
     if (length(x$mapping) == 0) {

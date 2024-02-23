@@ -247,8 +247,8 @@ print.step_pca_sparse_bayes <-
     invisible(x)
   }
 
-#' @rdname tidy.recipe
-#' @param x A `step_pca_sparse_bayes` object.
+#' @rdname step_pca_sparse_bayes
+#' @usage NULL
 #' @export
 tidy.step_pca_sparse_bayes <- function(x, ...) {
   if (!is_trained(x)) {

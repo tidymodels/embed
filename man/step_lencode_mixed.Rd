@@ -2,6 +2,7 @@
 % Please edit documentation in R/lencode_mixed.R
 \name{step_lencode_mixed}
 \alias{step_lencode_mixed}
+\alias{tidy.step_lencode_mixed}
 \title{Supervised Factor Conversions into Linear Functions using Bayesian Likelihood
 Encodings}
 \usage{

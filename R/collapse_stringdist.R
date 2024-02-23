@@ -207,8 +207,8 @@ print.step_collapse_stringdist <-
     invisible(x)
   }
 
-#' @rdname tidy.recipe
-#' @param x A `step_collapse_stringdist` object.
+#' @rdname step_collapse_stringdist
+#' @usage NULL
 #' @export
 tidy.step_collapse_stringdist <- function(x, ...) {
   if (is_trained(x)) {

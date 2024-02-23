@@ -8,6 +8,8 @@
 
 * Fixed regression from 1.1.2 in `step_lencode_glm()` where it couldn't be used on multiple columns.
 
+* Calling `?tidy.step_*()` now sends you to the documentation for `step_*()` where the outcome is documented. (#216)
+
 # embed 1.1.2
 
 ## Improvements

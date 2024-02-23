@@ -315,8 +315,8 @@ print.step_umap <-
     invisible(x)
   }
 
-#' @rdname tidy.recipe
-#' @param x A `step_umap` object.
+#' @rdname step_umap
+#' @usage NULL
 #' @export
 tidy.step_umap <- function(x, ...) {
   if (is_trained(x)) {

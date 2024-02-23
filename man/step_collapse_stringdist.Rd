@@ -2,6 +2,7 @@
 % Please edit documentation in R/collapse_stringdist.R
 \name{step_collapse_stringdist}
 \alias{step_collapse_stringdist}
+\alias{tidy.step_collapse_stringdist}
 \title{collapse factor levels using stringdist}
 \usage{
 step_collapse_stringdist(

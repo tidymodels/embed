@@ -2,6 +2,7 @@
 % Please edit documentation in R/discretize_cart.R
 \name{step_discretize_cart}
 \alias{step_discretize_cart}
+\alias{tidy.step_discretize_cart}
 \title{Discretize numeric variables with CART}
 \usage{
 step_discretize_cart(

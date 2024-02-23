@@ -221,8 +221,8 @@ print.step_lencode_glm <-
     invisible(x)
   }
 
-#' @rdname tidy.recipe
-#' @param x A `step_lencode_glm` object.
+#' @rdname step_lencode_glm
+#' @usage NULL
 #' @export
 tidy.step_lencode_glm <- function(x, ...) {
   if (is_trained(x)) {

@@ -486,8 +486,8 @@ print.step_woe <- function(x, width = max(20, options()$width - 29), ...) {
   invisible(x)
 }
 
-#' @rdname tidy.recipe
-#' @param x A `step_woe` object.
+#' @rdname step_woe
+#' @usage NULL
 #' @export
 tidy.step_woe <- function(x, ...) {
   if (is_trained(x)) {

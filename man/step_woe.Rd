@@ -2,6 +2,7 @@
 % Please edit documentation in R/woe.R
 \name{step_woe}
 \alias{step_woe}
+\alias{tidy.step_woe}
 \title{Weight of evidence transformation}
 \usage{
 step_woe(

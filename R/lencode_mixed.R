@@ -261,8 +261,8 @@ print.step_lencode_mixed <-
     invisible(x)
   }
 
-#' @rdname tidy.recipe
-#' @param x A `step_lencode_mixed` object.
+#' @rdname step_lencode_mixed
+#' @usage NULL
 #' @export
 tidy.step_lencode_mixed <- function(x, ...) {
   if (is_trained(x)) {

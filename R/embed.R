@@ -431,8 +431,8 @@ bake.step_embed <- function(object, new_data, ...) {
   new_data
 }
 
-#' @rdname tidy.recipe
-#' @param x A `step_embed` object.
+#' @rdname step_embed
+#' @usage NULL
 #' @export
 tidy.step_embed <- function(x, ...) {
   if (is_trained(x)) {

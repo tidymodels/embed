@@ -2,6 +2,7 @@
 % Please edit documentation in R/pca_truncated.R
 \name{step_pca_truncated}
 \alias{step_pca_truncated}
+\alias{tidy.step_pca_truncated}
 \title{Truncated PCA Signal Extraction}
 \usage{
 step_pca_truncated(

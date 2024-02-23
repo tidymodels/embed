@@ -161,8 +161,8 @@ print.step_collapse_cart <-
     invisible(x)
   }
 
-#' @rdname tidy.recipe
-#' @param x A `step_collapse_cart` object.
+#' @rdname step_collapse_cart
+#' @usage NULL
 #' @export
 tidy.step_collapse_cart <- function(x, ...) {
   if (is_trained(x)) {

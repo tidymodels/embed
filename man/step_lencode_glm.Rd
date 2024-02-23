@@ -2,6 +2,7 @@
 % Please edit documentation in R/lencode_glm.R
 \name{step_lencode_glm}
 \alias{step_lencode_glm}
+\alias{tidy.step_lencode_glm}
 \title{Supervised Factor Conversions into Linear Functions using Likelihood
 Encodings}
 \usage{

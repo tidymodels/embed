@@ -2,6 +2,7 @@
 % Please edit documentation in R/lencode_bayes.R
 \name{step_lencode_bayes}
 \alias{step_lencode_bayes}
+\alias{tidy.step_lencode_bayes}
 \title{Supervised Factor Conversions into Linear Functions using Bayesian Likelihood
 Encodings}
 \usage{
