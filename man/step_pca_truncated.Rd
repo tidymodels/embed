@@ -97,9 +97,26 @@ sequence of numbers. The variable names are padded with zeros. For example, if
 the names would be \code{PC1} - \code{PC101}.
 }
 \section{Tidying}{
-When you \code{\link[=tidy.recipe]{tidy()}} this step, use either \code{type = "coef"} for
-the variable loadings per component or \code{type = "variance"} for how much
-variance each component accounts for.
+When you \code{\link[=tidy.recipe]{tidy()}} this step two things can happen depending
+the \code{type} argument. If \code{type = "coef"} a tibble returned with 4 columns
+\code{terms}, \code{value}, \code{component} , and \code{id}:
+
+\describe{
+\item{terms}{character, the selectors or variables selected}
+\item{value}{numeric, variable loading}
+\item{component}{character, principle component}
+\item{id}{character, id of this step}
+}
+
+If \code{type = "variance"} a tibble returned with 4 columns \code{terms}, \code{value},
+\code{component} , and \code{id}:
+
+\describe{
+\item{terms}{character, type of variance}
+\item{value}{numeric, value of the variance}
+\item{component}{integer, principle component}
+\item{id}{character, id of this step}
+}
 }
 
 \section{Tuning Parameters}{

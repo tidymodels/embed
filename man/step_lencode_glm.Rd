@@ -67,8 +67,15 @@ the \emph{first} level of the factor.
 For novel levels, a slightly timmed average of the coefficients is returned.
 }
 \section{Tidying}{
-When you \code{\link[=tidy.recipe]{tidy()}} this step, a tibble with columns \code{terms}
-(the selectors or variables selected), \code{value} and \code{component} is returned.
+When you \code{\link[=tidy.recipe]{tidy()}} this step, a tibble is retruned with
+columns \code{level}, \code{value}, \code{terms}, and \code{id}:
+
+\describe{
+\item{level}{character, the factor levels}
+\item{value}{numeric, the encoding}
+\item{terms}{character, the selectors or variables selected}
+\item{id}{character, id of this step}
+}
 }
 
 \section{Case weights}{

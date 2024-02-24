@@ -44,9 +44,16 @@
 #'
 #' # Tidying
 #'
-#' When you [`tidy()`][tidy.recipe()] this step, a tibble with columns `terms`
-#' (the selectors or variables selected), `value` and `component` is returned.
-#'
+#' When you [`tidy()`][tidy.recipe()] this step, a tibble is retruned with
+#' columns `level`, `value`, `terms`, and `id`:
+#' 
+#' \describe{
+#'   \item{level}{character, the factor levels}
+#'   \item{value}{numeric, the encoding}
+#'   \item{terms}{character, the selectors or variables selected}
+#'   \item{id}{character, id of this step}
+#' }
+#' 
 #' @template case-weights-supervised
 #'
 #' @references

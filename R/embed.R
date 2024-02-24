@@ -102,10 +102,16 @@
 #' this step with `caret`, avoid parallel processing.
 #'
 #' # Tidying
-#'
-#' When you [`tidy()`][tidy.recipe()] this step, a tibble with columns `terms`
-#' (the selectors or variables selected), `levels` (levels in variable), and a
-#' number of columns with embedding information are returned.
+#' 
+#' When you [`tidy()`][tidy.recipe()] this step, a tibble is retruned with
+#' a number of columns with embedding information, and columns `terms`, 
+#' `levels`, and `id`:
+#' 
+#' \describe{
+#'   \item{terms}{character, the selectors or variables selected}
+#'   \item{levels}{character, levels in variable}
+#'   \item{id}{character, id of this step}
+#' }
 #'
 #' ```{r, echo = FALSE, results="asis"}
 #' step <- "step_embed"

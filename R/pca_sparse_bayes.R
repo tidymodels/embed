@@ -65,9 +65,16 @@
 #'
 #' # Tidying
 #'
-#' When you [`tidy()`][tidy.recipe()] this step, a tibble with columns `terms`
-#' (the selectors or variables selected), `value` and `component` is returned.
+#' When you [`tidy()`][tidy.recipe()] this step, a tibble is retruned with
+#' columns `terms`, `value`, `component`, and `id`:
 #'
+#' \describe{
+#'   \item{terms}{character, the selectors or variables selected}
+#'   \item{value}{numeric, variable loading}
+#'   \item{component}{character, principle component}
+#'   \item{id}{character, id of this step}
+#' }
+#' 
 #' ```{r, echo = FALSE, results="asis"}
 #' step <- "step_pca_sparse_bayes"
 #' result <- knitr::knit_child("man/rmd/tunable-args.Rmd")

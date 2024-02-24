@@ -38,7 +38,7 @@ predictors in a model.}
 been estimated.}
 
 \item{dictionary}{A tbl. A map of levels and woe values. It must have the
-same layout than the output returned from \code{\link[=dictionary]{dictionary()}}. If `NULL`` the
+same layout than the output returned from \code{\link[=dictionary]{dictionary()}}. If \code{NULL} the
 function will build a dictionary with those variables passed to \code{...}.
 See \code{\link[=dictionary]{dictionary()}} for details.}
 
@@ -104,6 +104,23 @@ When you \code{\link[=tidy.recipe]{tidy()}} this step, a tibble with columns \co
 (the selectors or variables selected), \code{value}, \code{n_tot}, \code{n_bad}, \code{n_good},
 \code{p_bad}, \code{p_good}, \code{woe} and \code{outcome} is returned.. See \code{\link[=dictionary]{dictionary()}} for
 more information.
+
+When you \code{\link[=tidy.recipe]{tidy()}} this step, a tibble is retruned with
+columns \code{terms} \code{value}, \code{n_tot}, \code{n_bad}, \code{n_good}, \code{p_bad}, \code{p_good}, \code{woe}
+and \code{outcome} and \code{id}:
+
+\describe{
+\item{terms}{character, the selectors or variables selected}
+\item{value}{character, level of the outcome}
+\item{n_tot}{integer, total number}
+\item{n_bad}{integer, number of bad examples}
+\item{n_good}{integer, number of good examples}
+\item{p_bad}{numeric, p of bad examples}
+\item{p_good}{numeric, p of good examples}
+\item{woe}{numeric, weight of evidence}
+\item{outcome}{character, name of outcome variable}
+\item{id}{character, id of this step}
+}
 }
 
 \section{Tuning Parameters}{

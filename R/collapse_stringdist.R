@@ -27,10 +27,16 @@
 #' @details
 #'
 #' # Tidying
-#'
-#' When you [`tidy()`][tidy.recipe()] this step, a tibble with columns `"terms"`
-#' (the column being modified), `"from"` (the old levels), `"to"` (the new
-#' levels), and `"id"`.
+#' 
+#' When you [`tidy()`][tidy.recipe()] this step, a tibble is retruned with
+#' columns `terms`, `from`, `to`, and `id`:
+#' 
+#' \describe{
+#'   \item{terms}{character, the selectors or variables selected}
+#'   \item{from}{character, the old levels}
+#'   \item{too}{character, the new levels}
+#'   \item{id}{character, id of this step}
+#' }
 #'
 #' @template case-weights-not-supported
 #'

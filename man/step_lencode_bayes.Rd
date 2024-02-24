@@ -87,8 +87,15 @@ below). \code{prior_intercept} is the argument that has the most effect on the
 amount of shrinkage.
 }
 \section{Tidying}{
-When you \code{\link[=tidy.recipe]{tidy()}} this step, a tibble with columns \code{terms}
-(the selectors or variables selected), \code{value} and \code{component} is returned.
+When you \code{\link[=tidy.recipe]{tidy()}} this step, a tibble is retruned with
+columns \code{level}, \code{value}, \code{terms}, and \code{id}:
+
+\describe{
+\item{level}{character, the factor levels}
+\item{value}{numeric, the encoding}
+\item{terms}{character, the selectors or variables selected}
+\item{id}{character, id of this step}
+}
 }
 
 \section{Case weights}{
@@ -126,7 +133,7 @@ Modeling," arXiv:1611.09477
 "Hierarchical Partial Pooling for Repeated Binary Trials"
 \url{https://tinyurl.com/stan-pooling}
 
-"Prior Distributions for `rstanarm`` Models"
+"Prior Distributions for \code{rstanarm} Models"
 \url{https://tinyurl.com/stan-priors}
 
 "Estimating Generalized (Non-)Linear Models with Group-Specific Terms with

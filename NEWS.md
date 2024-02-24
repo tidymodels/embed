@@ -2,13 +2,15 @@
 
 * `step_umap()` has gained `initial` and `target_weight` arguments. (#213)
 
+* Calling `?tidy.step_*()` now sends you to the documentation for `step_*()` where the outcome is documented. (#216)
+
+* Documentation for tidy methods for all steps has been improved to describe the return value more accurately. (#217)
+
 # embed 1.1.3
 
 * `step_collapse_stringdist()` will now return predictors as factors. (#204)
 
 * Fixed regression from 1.1.2 in `step_lencode_glm()` where it couldn't be used on multiple columns.
-
-* Calling `?tidy.step_*()` now sends you to the documentation for `step_*()` where the outcome is documented. (#216)
 
 # embed 1.1.2
 

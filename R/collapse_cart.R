@@ -41,11 +41,16 @@
 #' find any signal in the data.
 #'
 #' # Tidying
-#'
-#' When you [`tidy()`][tidy.recipe()] this step, a tibble with columns `"terms"`
-#' (the column being modified), `"old"` (the old levels), `"new"` (the new
-#' levels), and `"id"`. If the CART model failed or could not find a good split,
-#' the requested predictor will not be in the results.
+#' 
+#' When you [`tidy()`][tidy.recipe()] this step, a tibble is retruned with
+#' columns `terms`, `old`, `new`, and `id`:
+#' 
+#' \describe{
+#'   \item{terms}{character, the selectors or variables selected}
+#'   \item{old}{character, the old levels}
+#'   \item{new}{character, the new levels}
+#'   \item{id}{character, id of this step}
+#' }
 #'
 #' @template case-weights-not-supported
 #'

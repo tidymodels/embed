@@ -99,8 +99,14 @@ stop with a note about installing the package.
 Note that the original data will be replaced with the new bins.
 }
 \section{Tidying}{
-When you \code{\link[=tidy.recipe]{tidy()}} this step, a tibble with columns \code{terms}
-(the columns that is selected), \code{values} is returned.
+When you \code{\link[=tidy.recipe]{tidy()}} this step, a tibble is retruned with
+columns \code{terms}, \code{value}, and \code{id}:
+
+\describe{
+\item{terms}{character, the selectors or variables selected}
+\item{value}{numeric, location of the splits}
+\item{id}{character, id of this step}
+}
 }
 
 \section{Tuning Parameters}{
