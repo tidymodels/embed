@@ -107,8 +107,15 @@ sequence of numbers. The variable names are padded with zeros. For example, if
 the names would be \code{PC1} - \code{PC101}.
 }
 \section{Tidying}{
-When you \code{\link[=tidy.recipe]{tidy()}} this step, a tibble with columns \code{terms}
-(the selectors or variables selected), \code{value} and \code{component} is returned.
+When you \code{\link[=tidy.recipe]{tidy()}} this step, a tibble is retruned with
+columns \code{terms}, \code{value}, \code{component}, and \code{id}:
+
+\describe{
+\item{terms}{character, the selectors or variables selected}
+\item{value}{numeric, variable loading}
+\item{component}{character, principle component}
+\item{id}{character, id of this step}
+}
 }
 
 \section{Tuning Parameters}{

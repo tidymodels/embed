@@ -72,10 +72,15 @@ where there is "no admissible split" which means that the model could not
 find any signal in the data.
 }
 \section{Tidying}{
-When you \code{\link[=tidy.recipe]{tidy()}} this step, a tibble with columns \code{"terms"}
-(the column being modified), \code{"old"} (the old levels), \code{"new"} (the new
-levels), and \code{"id"}. If the CART model failed or could not find a good split,
-the requested predictor will not be in the results.
+When you \code{\link[=tidy.recipe]{tidy()}} this step, a tibble is retruned with
+columns \code{terms}, \code{old}, \code{new}, and \code{id}:
+
+\describe{
+\item{terms}{character, the selectors or variables selected}
+\item{old}{character, the old levels}
+\item{new}{character, the new levels}
+\item{id}{character, id of this step}
+}
 }
 
 \section{Case weights}{

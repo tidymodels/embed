@@ -68,9 +68,15 @@ columns \code{terms} (the columns that will be affected) and \code{base}.
 will collapse factor levels that have a low stringdist between them.
 }
 \section{Tidying}{
-When you \code{\link[=tidy.recipe]{tidy()}} this step, a tibble with columns \code{"terms"}
-(the column being modified), \code{"from"} (the old levels), \code{"to"} (the new
-levels), and \code{"id"}.
+When you \code{\link[=tidy.recipe]{tidy()}} this step, a tibble is retruned with
+columns \code{terms}, \code{from}, \code{to}, and \code{id}:
+
+\describe{
+\item{terms}{character, the selectors or variables selected}
+\item{from}{character, the old levels}
+\item{too}{character, the new levels}
+\item{id}{character, id of this step}
+}
 }
 
 \section{Case weights}{

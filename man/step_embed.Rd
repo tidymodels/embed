@@ -153,9 +153,15 @@ tensorflow models cannot be run in parallel within the same session (via
 this step with \code{caret}, avoid parallel processing.
 }
 \section{Tidying}{
-When you \code{\link[=tidy.recipe]{tidy()}} this step, a tibble with columns \code{terms}
-(the selectors or variables selected), \code{levels} (levels in variable), and a
-number of columns with embedding information are returned.
+When you \code{\link[=tidy.recipe]{tidy()}} this step, a tibble is retruned with
+a number of columns with embedding information, and columns \code{terms},
+\code{levels}, and \code{id}:
+
+\describe{
+\item{terms}{character, the selectors or variables selected}
+\item{levels}{character, levels in variable}
+\item{id}{character, id of this step}
+}
 }
 
 \section{Tuning Parameters}{

@@ -16,7 +16,7 @@
 #'   predictors in a model.
 #' @param outcome The bare name of the binary outcome encased in `vars()`.
 #' @param dictionary A tbl. A map of levels and woe values. It must have the
-#'   same layout than the output returned from [dictionary()]. If `NULL`` the
+#'   same layout than the output returned from [dictionary()]. If `NULL` the
 #'   function will build a dictionary with those variables passed to \code{...}.
 #'   See [dictionary()] for details.
 #' @param Laplace The Laplace smoothing parameter. A value usually applied to
@@ -66,6 +66,23 @@
 #' (the selectors or variables selected), `value`, `n_tot`, `n_bad`, `n_good`,
 #' `p_bad`, `p_good`, `woe` and `outcome` is returned.. See [dictionary()] for
 #' more information.
+#' 
+#' When you [`tidy()`][tidy.recipe()] this step, a tibble is retruned with
+#' columns `terms` `value`, `n_tot`, `n_bad`, `n_good`, `p_bad`, `p_good`, `woe`
+#' and `outcome` and `id`:
+#' 
+#' \describe{
+#'   \item{terms}{character, the selectors or variables selected}
+#'   \item{value}{character, level of the outcome}
+#'   \item{n_tot}{integer, total number}
+#'   \item{n_bad}{integer, number of bad examples}
+#'   \item{n_good}{integer, number of good examples}
+#'   \item{p_bad}{numeric, p of bad examples}
+#'   \item{p_good}{numeric, p of good examples}
+#'   \item{woe}{numeric, weight of evidence}
+#'   \item{outcome}{character, name of outcome variable}
+#'   \item{id}{character, id of this step}
+#' }
 #' 
 #' ```{r, echo = FALSE, results="asis"}
 #' step <- "step_woe"
