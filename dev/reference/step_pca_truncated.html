@@ -182,10 +182,38 @@ the names would be <code>PC1</code> - <code>PC101</code>.</p>
     </div>
     <div class="section level2">
     <h2 id="tidying">Tidying<a class="anchor" aria-label="anchor" href="#tidying"></a></h2>
-    <p>When you <code><a href="https://recipes.tidymodels.org/reference/tidy.recipe.html" class="external-link">tidy()</a></code> this step, use either <code>type = "coef"</code> for
-the variable loadings per component or <code>type = "variance"</code> for how much
-variance each component accounts for.</p>
-    </div>
+    <p>When you <code><a href="https://recipes.tidymodels.org/reference/tidy.recipe.html" class="external-link">tidy()</a></code> this step two things can happen depending
+the <code>type</code> argument. If <code>type = "coef"</code> a tibble returned with 4 columns
+<code>terms</code>, <code>value</code>, <code>component</code> , and <code>id</code>:</p>
+<dl><dt>terms</dt>
+<dd><p>character, the selectors or variables selected</p></dd>
+
+<dt>value</dt>
+<dd><p>numeric, variable loading</p></dd>
+
+<dt>component</dt>
+<dd><p>character, principle component</p></dd>
+
+<dt>id</dt>
+<dd><p>character, id of this step</p></dd>
+
+
+</dl><p>If <code>type = "variance"</code> a tibble returned with 4 columns <code>terms</code>, <code>value</code>,
+<code>component</code> , and <code>id</code>:</p>
+<dl><dt>terms</dt>
+<dd><p>character, type of variance</p></dd>
+
+<dt>value</dt>
+<dd><p>numeric, value of the variance</p></dd>
+
+<dt>component</dt>
+<dd><p>integer, principle component</p></dd>
+
+<dt>id</dt>
+<dd><p>character, id of this step</p></dd>
+
+
+</dl></div>
     <div class="section level2">
     <h2 id="tuning-parameters">Tuning Parameters<a class="anchor" aria-label="anchor" href="#tuning-parameters"></a></h2>
     <p>This step has 1 tuning parameters:</p><ul><li><p><code>num_comp</code>: # Components (type: integer, default: 5)</p></li>

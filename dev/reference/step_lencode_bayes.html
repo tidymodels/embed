@@ -165,9 +165,22 @@ amount of shrinkage.</p>
     </div>
     <div class="section level2">
     <h2 id="tidying">Tidying<a class="anchor" aria-label="anchor" href="#tidying"></a></h2>
-    <p>When you <code><a href="https://recipes.tidymodels.org/reference/tidy.recipe.html" class="external-link">tidy()</a></code> this step, a tibble with columns <code>terms</code>
-(the selectors or variables selected), <code>value</code> and <code>component</code> is returned.</p>
-    </div>
+    <p>When you <code><a href="https://recipes.tidymodels.org/reference/tidy.recipe.html" class="external-link">tidy()</a></code> this step, a tibble is retruned with
+columns <code>level</code>, <code>value</code>, <code>terms</code>, and <code>id</code>:</p>
+<dl><dt>level</dt>
+<dd><p>character, the factor levels</p></dd>
+
+<dt>value</dt>
+<dd><p>numeric, the encoding</p></dd>
+
+<dt>terms</dt>
+<dd><p>character, the selectors or variables selected</p></dd>
+
+<dt>id</dt>
+<dd><p>character, id of this step</p></dd>
+
+
+</dl></div>
     <div class="section level2">
     <h2 id="case-weights">Case weights<a class="anchor" aria-label="anchor" href="#case-weights"></a></h2>
     
@@ -186,7 +199,7 @@ Explorations Newsletter, 3(1), 27-32.</p>
 Modeling," arXiv:1611.09477</p>
 <p>"Hierarchical Partial Pooling for Repeated Binary Trials"
 <a href="https://tinyurl.com/stan-pooling" class="external-link">https://tinyurl.com/stan-pooling</a></p>
-<p>"Prior Distributions for `rstanarm`` Models"
+<p>"Prior Distributions for <code>rstanarm</code> Models"
 <a href="https://tinyurl.com/stan-priors" class="external-link">https://tinyurl.com/stan-priors</a></p>
 <p>"Estimating Generalized (Non-)Linear Models with Group-Specific Terms with
 <code>rstanarm</code>" <a href="https://tinyurl.com/stan-glm-grouped" class="external-link">https://tinyurl.com/stan-glm-grouped</a></p>

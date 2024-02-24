@@ -235,10 +235,20 @@ this step with <code>caret</code>, avoid parallel processing.</p>
     </div>
     <div class="section level2">
     <h2 id="tidying">Tidying<a class="anchor" aria-label="anchor" href="#tidying"></a></h2>
-    <p>When you <code><a href="https://recipes.tidymodels.org/reference/tidy.recipe.html" class="external-link">tidy()</a></code> this step, a tibble with columns <code>terms</code>
-(the selectors or variables selected), <code>levels</code> (levels in variable), and a
-number of columns with embedding information are returned.</p>
-    </div>
+    <p>When you <code><a href="https://recipes.tidymodels.org/reference/tidy.recipe.html" class="external-link">tidy()</a></code> this step, a tibble is retruned with
+a number of columns with embedding information, and columns <code>terms</code>,
+<code>levels</code>, and <code>id</code>:</p>
+<dl><dt>terms</dt>
+<dd><p>character, the selectors or variables selected</p></dd>
+
+<dt>levels</dt>
+<dd><p>character, levels in variable</p></dd>
+
+<dt>id</dt>
+<dd><p>character, id of this step</p></dd>
+
+
+</dl></div>
     <div class="section level2">
     <h2 id="tuning-parameters">Tuning Parameters<a class="anchor" aria-label="anchor" href="#tuning-parameters"></a></h2>
     <p>This step has 2 tuning parameters:</p><ul><li><p><code>num_terms</code>: # Model Terms (type: integer, default: 2)</p></li>

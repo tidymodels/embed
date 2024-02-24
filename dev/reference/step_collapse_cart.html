@@ -150,11 +150,22 @@ find any signal in the data.</p>
     </div>
     <div class="section level2">
     <h2 id="tidying">Tidying<a class="anchor" aria-label="anchor" href="#tidying"></a></h2>
-    <p>When you <code><a href="https://generics.r-lib.org/reference/tidy.html" class="external-link">tidy()</a></code> this step, a tibble with columns <code>"terms"</code>
-(the column being modified), <code>"old"</code> (the old levels), <code>"new"</code> (the new
-levels), and <code>"id"</code>. If the CART model failed or could not find a good split,
-the requested predictor will not be in the results.</p>
-    </div>
+    <p>When you <code><a href="https://generics.r-lib.org/reference/tidy.html" class="external-link">tidy()</a></code> this step, a tibble is retruned with
+columns <code>terms</code>, <code>old</code>, <code>new</code>, and <code>id</code>:</p>
+<dl><dt>terms</dt>
+<dd><p>character, the selectors or variables selected</p></dd>
+
+<dt>old</dt>
+<dd><p>character, the old levels</p></dd>
+
+<dt>new</dt>
+<dd><p>character, the new levels</p></dd>
+
+<dt>id</dt>
+<dd><p>character, id of this step</p></dd>
+
+
+</dl></div>
     <div class="section level2">
     <h2 id="case-weights">Case weights<a class="anchor" aria-label="anchor" href="#case-weights"></a></h2>
     

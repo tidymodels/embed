@@ -110,7 +110,7 @@ been estimated.</p></dd>
 
 <dt>dictionary</dt>
 <dd><p>A tbl. A map of levels and woe values. It must have the
-same layout than the output returned from <code><a href="dictionary.html">dictionary()</a></code>. If `NULL`` the
+same layout than the output returned from <code><a href="dictionary.html">dictionary()</a></code>. If <code>NULL</code> the
 function will build a dictionary with those variables passed to <code>...</code>.
 See <code><a href="dictionary.html">dictionary()</a></code> for details.</p></dd>
 
@@ -182,7 +182,41 @@ output returned from <code><a href="dictionary.html">dictionary()</a></code>.</p
 (the selectors or variables selected), <code>value</code>, <code>n_tot</code>, <code>n_bad</code>, <code>n_good</code>,
 <code>p_bad</code>, <code>p_good</code>, <code>woe</code> and <code>outcome</code> is returned.. See <code><a href="dictionary.html">dictionary()</a></code> for
 more information.</p>
-    </div>
+<p>When you <code><a href="https://recipes.tidymodels.org/reference/tidy.recipe.html" class="external-link">tidy()</a></code> this step, a tibble is retruned with
+columns <code>terms</code> <code>value</code>, <code>n_tot</code>, <code>n_bad</code>, <code>n_good</code>, <code>p_bad</code>, <code>p_good</code>, <code>woe</code>
+and <code>outcome</code> and <code>id</code>:</p>
+<dl><dt>terms</dt>
+<dd><p>character, the selectors or variables selected</p></dd>
+
+<dt>value</dt>
+<dd><p>character, level of the outcome</p></dd>
+
+<dt>n_tot</dt>
+<dd><p>integer, total number</p></dd>
+
+<dt>n_bad</dt>
+<dd><p>integer, number of bad examples</p></dd>
+
+<dt>n_good</dt>
+<dd><p>integer, number of good examples</p></dd>
+
+<dt>p_bad</dt>
+<dd><p>numeric, p of bad examples</p></dd>
+
+<dt>p_good</dt>
+<dd><p>numeric, p of good examples</p></dd>
+
+<dt>woe</dt>
+<dd><p>numeric, weight of evidence</p></dd>
+
+<dt>outcome</dt>
+<dd><p>character, name of outcome variable</p></dd>
+
+<dt>id</dt>
+<dd><p>character, id of this step</p></dd>
+
+
+</dl></div>
     <div class="section level2">
     <h2 id="tuning-parameters">Tuning Parameters<a class="anchor" aria-label="anchor" href="#tuning-parameters"></a></h2>
     <p>This step has 1 tuning parameters:</p><ul><li><p><code>Laplace</code>: Laplace Correction (type: double, default: 1e-06)</p></li>
