@@ -273,6 +273,8 @@ is_tf_2 <- function() {
 
 tf_coefs2 <- function(x, y, z, opt, num, lab, h, seeds = sample.int(10000, 4),
                       ...) {
+  rlang::check_installed("keras")
+
   vars <- names(x)
   p <- length(vars)
 
