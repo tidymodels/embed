@@ -164,6 +164,8 @@ make_hash_vars <- function(x, prefix, num_hash = 2^8) {
 
   uni_x <- unique(x)
 
+  rlang::check_installed("keras")
+
   column_int <-
     purrr::map_int(
       uni_x,
