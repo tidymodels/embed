@@ -128,7 +128,7 @@
 #' "Concatenate Embeddings for Categorical Variables with Keras"
 #' \url{https://flovv.github.io/Embeddings_with_keras_part2/}
 #'
-#' @examplesIf !embed:::is_cran_check() && rlang::is_installed("modeldata")
+#' @examplesIf !embed:::is_cran_check() && rlang::is_installed(c("modeldata", "keras"))
 #' data(grants, package = "modeldata")
 #'
 #' set.seed(1)
@@ -479,9 +479,9 @@ print.step_embed <-
 
 #' @export
 #' @rdname step_embed
-#' @param optimizer,loss,metrics Arguments to pass to [keras::compile()]
+#' @param optimizer,loss,metrics Arguments to pass to keras::compile()
 #' @param epochs,validation_split,batch_size,verbose,callbacks Arguments to pass
-#'   to [keras::fit()]
+#'   to keras::fit()
 embed_control <- function(loss = "mse",
                           metrics = NULL,
                           optimizer = "sgd",
