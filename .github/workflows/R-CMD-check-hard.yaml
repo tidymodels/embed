@@ -52,17 +52,6 @@ jobs:
             any::rmarkdown
           needs: check
           pak-version: devel
-
-      - uses: actions/setup-python@v4
-        with:
-          python-version: 3.9
-
-      - name: Install TensorFlow
-        run: |
-          reticulate::virtualenv_create('r-reticulate', python='3.9')
-          reticulate::use_virtualenv('r-reticulate')
-          tensorflow::install_tensorflow(version='2.11.0')
-        shell: Rscript {0}
         
       - uses: r-lib/actions/check-r-package@v2
         with:
