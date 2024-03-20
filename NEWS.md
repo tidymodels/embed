@@ -1,5 +1,7 @@
 # embed (development version)
 
+## Improvements
+
 * `step_umap()` has gained `initial` and `target_weight` arguments. (#213)
 
 * Calling `?tidy.step_*()` now sends you to the documentation for `step_*()` where the outcome is documented. (#216)
