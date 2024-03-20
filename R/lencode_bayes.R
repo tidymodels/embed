@@ -83,13 +83,13 @@
 #' Modeling," arXiv:1611.09477
 #'
 #' "Hierarchical Partial Pooling for Repeated Binary Trials"
-#' \url{https://tinyurl.com/stan-pooling}
+#' \url{https://CRAN.R-project.org/package=rstanarm/vignettes/pooling.html}
 #'
 #' "Prior Distributions for `rstanarm` Models"
-#' \url{https://tinyurl.com/stan-priors}
+#' \url{http://mc-stan.org/rstanarm/reference/priors.html}
 #'
 #' "Estimating Generalized (Non-)Linear Models with Group-Specific Terms with
-#' `rstanarm`" \url{https://tinyurl.com/stan-glm-grouped}
+#' `rstanarm`" \url{http://mc-stan.org/rstanarm/articles/glmer.html}
 #'
 #' @examplesIf rlang::is_installed("modeldata")
 #' library(recipes)
