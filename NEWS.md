@@ -6,6 +6,8 @@
 
 * Documentation for tidy methods for all steps has been improved to describe the return value more accurately. (#217)
 
+* {keras} and {tensorflow} have been moved to Suggests instead of Imports. (#218)
+
 # embed 1.1.3
 
 * `step_collapse_stringdist()` will now return predictors as factors. (#204)

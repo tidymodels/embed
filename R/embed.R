@@ -128,7 +128,7 @@
 #' "Concatenate Embeddings for Categorical Variables with Keras"
 #' \url{https://flovv.github.io/Embeddings_with_keras_part2/}
 #'
-#' @examplesIf !embed:::is_cran_check() && rlang::is_installed("modeldata")
+#' @examplesIf !embed:::is_cran_check() && rlang::is_installed(c("modeldata", "keras"))
 #' data(grants, package = "modeldata")
 #'
 #' set.seed(1)
@@ -273,6 +273,8 @@ is_tf_2 <- function() {
 
 tf_coefs2 <- function(x, y, z, opt, num, lab, h, seeds = sample.int(10000, 4),
                       ...) {
+  rlang::check_installed("keras")
+
   vars <- names(x)
   p <- length(vars)
 
@@ -306,7 +308,7 @@ tf_coefs2 <- function(x, y, z, opt, num, lab, h, seeds = sample.int(10000, 4),
   inputs <- vector(mode = "list", length = p)
   # For each categorical predictor, make an input layer
   for (i in 1:p) {
-    inputs[[i]] <- layer_input(shape = 1, name = paste0("input_", vars[i]))
+    inputs[[i]] <- keras::layer_input(shape = 1, name = paste0("input_", vars[i]))
   }
 
   layers <- vector(mode = "list", length = p)
@@ -314,32 +316,32 @@ tf_coefs2 <- function(x, y, z, opt, num, lab, h, seeds = sample.int(10000, 4),
   for (i in 1:p) {
     layers[[i]] <-
       inputs[[i]] %>%
-      layer_embedding(
+      keras::layer_embedding(
         input_dim = length(lvl[[i]]) + 1,
         output_dim = num,
         input_length = 1,
         name = paste0("layer_", vars[i])
       ) %>%
-      layer_flatten()
+      keras::layer_flatten()
   }
 
   if (is.null(z)) {
     if (p > 1) {
-      all_layers <- layer_concatenate(layers)
+      all_layers <- keras::layer_concatenate(layers)
     } else {
       all_layers <- layers[[1]]
     }
   } else {
     mats$z <- as.matrix(z)
-    pred_layer <- layer_input(shape = ncol(z), name = "other_pred")
-    all_layers <- layer_concatenate(c(layers, pred_layer))
+    pred_layer <- keras::layer_input(shape = ncol(z), name = "other_pred")
+    all_layers <- keras::layer_concatenate(c(layers, pred_layer))
     inputs <- c(inputs, pred_layer)
   }
 
   if (h > 0) {
     all_layers <-
       all_layers %>%
-      layer_dense(
+      keras::layer_dense(
         units = h, activation = "relu", name = "hidden_layer",
         kernel_initializer = keras::initializer_glorot_uniform(seed = seeds[3])
       )
@@ -348,14 +350,14 @@ tf_coefs2 <- function(x, y, z, opt, num, lab, h, seeds = sample.int(10000, 4),
   if (factor_y) {
     all_layers <-
       all_layers %>%
-      layer_dense(
+      keras::layer_dense(
         units = ncol(y), activation = "softmax", name = "output_layer",
         kernel_initializer = keras::initializer_glorot_uniform(seed = seeds[4])
       )
   } else {
     all_layers <-
       all_layers %>%
-      layer_dense(
+      keras::layer_dense(
         units = 1, activation = "linear", name = "output_layer",
         kernel_initializer = keras::initializer_glorot_uniform(seed = seeds[4])
       )
@@ -365,7 +367,7 @@ tf_coefs2 <- function(x, y, z, opt, num, lab, h, seeds = sample.int(10000, 4),
     keras::keras_model(inputs = inputs, outputs = all_layers)
 
   model %>%
-    compile(
+    keras::compile(
       loss = opt$loss,
       metrics = opt$metrics,
       optimizer = opt$optimizer
@@ -373,7 +375,7 @@ tf_coefs2 <- function(x, y, z, opt, num, lab, h, seeds = sample.int(10000, 4),
 
   history <-
     model %>%
-    fit(
+    keras::fit(
       x = unname(mats),
       y = y,
       epochs = opt$epochs,
@@ -387,7 +389,7 @@ tf_coefs2 <- function(x, y, z, opt, num, lab, h, seeds = sample.int(10000, 4),
 
   for (i in 1:p) {
     layer_values[[i]] <-
-      get_layer(model, paste0("layer_", vars[i]))$get_weights() %>%
+      keras::get_layer(model, paste0("layer_", vars[i]))$get_weights() %>%
       as.data.frame() %>%
       setNames(names0(num, paste0(vars[i], "_embed_"))) %>%
       as_tibble() %>%
@@ -477,9 +479,9 @@ print.step_embed <-
 
 #' @export
 #' @rdname step_embed
-#' @param optimizer,loss,metrics Arguments to pass to [keras::compile()]
+#' @param optimizer,loss,metrics Arguments to pass to keras::compile()
 #' @param epochs,validation_split,batch_size,verbose,callbacks Arguments to pass
-#'   to [keras::fit()]
+#'   to keras::fit()
 embed_control <- function(loss = "mse",
                           metrics = NULL,
                           optimizer = "sgd",

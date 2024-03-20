@@ -55,7 +55,7 @@
 #' Approach for Predictive Models_. CRC/Chapman Hall
 #' \url{https://bookdown.org/max/FES/encoding-predictors-with-many-categories.html}
 #' @seealso [recipes::step_dummy()], [recipes::step_zv()]
-#' @examplesIf !embed:::is_cran_check() && rlang::is_installed("modeldata")
+#' @examplesIf !embed:::is_cran_check() && rlang::is_installed(c("modeldata", "keras"))
 #' data(grants, package = "modeldata")
 #' rec <-
 #'   recipe(class ~ sponsor_code, data = grants_other) %>%
@@ -163,6 +163,8 @@ make_hash_vars <- function(x, prefix, num_hash = 2^8) {
   tmp <- tibble(data = x, ..order = seq_along(x))
 
   uni_x <- unique(x)
+
+  rlang::check_installed("keras")
 
   column_int <-
     purrr::map_int(

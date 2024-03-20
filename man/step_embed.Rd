@@ -81,10 +81,10 @@ processing the outcome variable(s)). Care should be taken when using \code{skip 
 
 \item{id}{A character string that is unique to this step to identify it.}
 
-\item{optimizer, loss, metrics}{Arguments to pass to \code{\link[keras:reexports]{keras::compile()}}}
+\item{optimizer, loss, metrics}{Arguments to pass to keras::compile()}
 
 \item{epochs, validation_split, batch_size, verbose, callbacks}{Arguments to pass
-to \code{\link[keras:reexports]{keras::fit()}}}
+to keras::fit()}
 }
 \value{
 An updated version of \code{recipe} with the new step added to the
@@ -179,7 +179,7 @@ The underlying operation does not allow for case weights.
 }
 
 \examples{
-\dontshow{if (!embed:::is_cran_check() && rlang::is_installed("modeldata")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (!embed:::is_cran_check() && rlang::is_installed(c("modeldata", "keras"))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 data(grants, package = "modeldata")
 
 set.seed(1)
