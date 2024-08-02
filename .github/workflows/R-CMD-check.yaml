@@ -60,7 +60,7 @@ jobs:
         run: |
           reticulate::virtualenv_create('r-reticulate', python='3.9')
           reticulate::use_virtualenv('r-reticulate')
-          tensorflow::install_tensorflow(version='2.11.0')
+          tensorflow::install_tensorflow(version='2.13.1')
         shell: Rscript {0}
         
       - uses: r-lib/actions/check-r-package@v2
