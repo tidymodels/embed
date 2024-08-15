@@ -1,5 +1,7 @@
 # embed (development version)
 
+* `step_umap()` has tunable `initial` and `target_weight` arguments. (#223)
+
 # embed 1.1.4
 
 ## Improvements

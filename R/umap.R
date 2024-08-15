@@ -348,13 +348,15 @@ required_pkgs.step_umap <- function(x, ...) {
 #' @rdname tunable_embed
 tunable.step_umap <- function(x, ...) {
   tibble::tibble(
-    name = c("num_comp", "neighbors", "min_dist", "learn_rate", "epochs"),
+    name = c("num_comp", "neighbors", "min_dist", "learn_rate", "epochs", "initial", "target_weight"),
     call_info = list(
       list(pkg = "dials", fun = "num_comp", range = c(1, 10)),
       list(pkg = "dials", fun = "neighbors", range = c(5, 200)),
       list(pkg = "dials", fun = "min_dist", range = c(-4, -0.69897)),
       list(pkg = "dials", fun = "learn_rate"),
-      list(pkg = "dials", fun = "epochs", range = c(100, 700))
+      list(pkg = "dials", fun = "epochs", range = c(100, 700)),
+      list(pkg = "dials", fun = "initial_umap", values = c("spectral", "normlaplacian", "random", "lvrandom", "laplacian", "pca", "spca", "agspectral")),
+      list(pkg = "dials", fun = "target_weight", range = c(0, 1))
     ),
     source = "recipe",
     component = "step_umap",
