@@ -1,5 +1,7 @@
 # embed (development version)
 
+* `step_umap()` has tunable `initial` and `target_weight` arguments. [#223](https://github.com/tidymodels/embed/issues/223), [#222](https://github.com/tidymodels/embed/issues/222))
+
 # embed 1.1.4
 
 ## Improvements
