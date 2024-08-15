@@ -4,7 +4,7 @@ pkgdown_sha: ~
 articles:
   Applications/GLM: Applications/GLM.html
   Applications/Tensorflow: Applications/Tensorflow.html
-last_built: 2024-08-05T10:51Z
+last_built: 2024-08-15T23:02Z
 urls:
   reference: https://embed.tidymodels.org/reference
   article: https://embed.tidymodels.org/articles
