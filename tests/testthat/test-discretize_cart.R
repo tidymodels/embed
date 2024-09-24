@@ -218,7 +218,7 @@ test_that("bake method errors when needed non-standard role columns are missing"
     update_role(x, new_role = "potato") %>%
     update_role_requirements(role = "potato", bake = FALSE)
   
-  expect_warning(
+  expect_snapshot(
     rec_trained <- prep(rec, training = sim_tr_cls, verbose = FALSE)
   )
   

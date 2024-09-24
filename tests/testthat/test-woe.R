@@ -147,7 +147,7 @@ test_that("add_woe do not accept dictionary with unexpected layout", {
 })
 
 # test_that("add_woe warns user if the variable has too many levels", {
-#   expect_warning(credit_data %>% add_woe("Status", Expenses))
+#   expect_snapshot(credit_data %>% add_woe("Status", Expenses))
 # })
 
 # step_woe ----------------------------------------------------------------
