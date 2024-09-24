@@ -4,14 +4,13 @@ test_that("collapsing factors", {
   
   data(ames, package = "modeldata")
 
-  expect_error(
+  expect_no_error(
     {
       rec_1 <-
         recipe(Sale_Price ~ ., data = ames) %>%
         step_collapse_stringdist(MS_SubClass, distance = 5) %>%
         prep()
-    },
-    regex = NA
+    }
   )
 
   expect_true(length(rec_1$steps[[1]]$results) == 1)
@@ -33,14 +32,13 @@ test_that("collapsing factors", {
     )
   )
 
-  expect_error(
+  expect_no_error(
     {
       rec_2 <-
         recipe(Sale_Price ~ ., data = ames) %>%
         step_collapse_stringdist(MS_SubClass, Overall_Cond, distance = 10) %>%
         prep()
-    },
-    regex = NA
+    }
   )
 
   expect_true(length(rec_2$steps[[1]]$results) == 2)
@@ -165,14 +163,13 @@ test_that("failed collapsing", {
   data(ames, package = "modeldata")
 
   # too many splits
-  expect_error(
+  expect_no_error(
     {
       rec_4 <-
         recipe(Sale_Price ~ ., data = ames) %>%
         step_collapse_stringdist(MS_SubClass, distance = 0) %>%
         prep()
-    },
-    regex = NA
+    }
   )
 
   expect_equal(
@@ -181,14 +178,13 @@ test_that("failed collapsing", {
   )
 
   # too few splits
-  expect_error(
+  expect_no_error(
     {
       rec_5 <-
         recipe(Sale_Price ~ ., data = ames) %>%
         step_collapse_stringdist(MS_SubClass, distance = 10000) %>%
         prep()
-    },
-    regex = NA
+    }
   )
 
   expect_equal(

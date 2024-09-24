@@ -3,7 +3,7 @@ test_that("collapsing factors", {
   data(ames, package = "modeldata")
   ames$Sale_Price <- log10(ames$Sale_Price)
 
-  expect_error(
+  expect_no_error(
     {
       rec_1 <-
         recipe(Sale_Price ~ ., data = ames) %>%
@@ -12,8 +12,7 @@ test_that("collapsing factors", {
           outcome = vars(Sale_Price)
         ) %>%
         prep()
-    },
-    regex = NA
+    }
   )
 
   expect_true(length(rec_1$steps[[1]]$results) == 1)
@@ -35,7 +34,7 @@ test_that("collapsing factors", {
     )
   )
 
-  expect_error(
+  expect_no_error(
     {
       rec_2 <-
         recipe(Sale_Price ~ ., data = ames) %>%
@@ -44,8 +43,7 @@ test_that("collapsing factors", {
           min_n = 100, cost_complexity = 0.1
         ) %>%
         prep()
-    },
-    regex = NA
+    }
   )
 
   expect_true(
@@ -60,7 +58,7 @@ test_that("failed collapsing", {
 
   # model fails
   ames$Sale_Price2 <- Inf
-  expect_error(
+  expect_no_error(
     {
       rec_3 <-
         recipe(Sale_Price2 ~ ., data = ames) %>%
@@ -69,14 +67,13 @@ test_that("failed collapsing", {
           outcome = vars(Sale_Price2)
         ) %>%
         prep()
-    },
-    regex = NA
+    }
   )
 
   expect_true(length(rec_3$steps[[1]]$results) == 0)
 
   # too many splits
-  expect_error(
+  expect_no_error(
     {
       rec_4 <-
         recipe(Sale_Price ~ ., data = ames) %>%
@@ -86,21 +83,19 @@ test_that("failed collapsing", {
           cost_complexity = 0, min_n = 1
         ) %>%
         prep()
-    },
-    regex = NA
+    }
   )
 
   expect_true(length(rec_4$steps[[1]]$results) == 0)
 
   # too many splits
-  expect_error(
+  expect_no_error(
     {
       rec_5 <-
         recipe(Sale_Price ~ ., data = ames) %>%
         step_collapse_cart(Central_Air, outcome = vars(Sale_Price)) %>%
         prep()
-    },
-    regex = NA
+    }
   )
 
   expect_true(length(rec_5$steps[[1]]$results) == 0)
