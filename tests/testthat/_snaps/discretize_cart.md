@@ -88,6 +88,22 @@
       -- Operations 
       * Discretizing variables using CART: x and z | Trained, weighted
 
+# bake method errors when needed non-standard role columns are missing
+
+    Code
+      rec_trained <- prep(rec, training = sim_tr_cls, verbose = FALSE)
+    Condition
+      Warning:
+      `step_discretize_cart()` failed to find any meaningful splits for predictor 'z', which will not be binned.
+
+---
+
+    Code
+      bake(rec_trained, new_data = sim_tr_cls[, -1])
+    Condition
+      Error in `step_discretize_cart()`:
+      ! The following required column is missing from `new_data`: x.
+
 # empty printing
 
     Code

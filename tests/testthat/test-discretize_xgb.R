@@ -121,7 +121,7 @@ test_that("run_xgboost for classification", {
     .num_class = NA
   )
 
-  expect_snapshot(xgboost)
+  expect_snapshot(xgboost, transform = trimws)
   expect_equal(length(xgboost$params), 8)
   expect_equal(xgboost$nfeatures, 13)
   expect_equal(xgboost$params$tree_method, "hist")
@@ -142,7 +142,7 @@ test_that("run_xgboost for multi-classification", {
     .objective = "multi:softprob"
   )
 
-  expect_snapshot(xgboost)
+  expect_snapshot(xgboost, transform = trimws)
   expect_equal(length(xgboost$params), 9)
   expect_equal(xgboost$nfeatures, 30)
   expect_equal(xgboost$params$tree_method, "hist")
@@ -163,7 +163,7 @@ test_that("run_xgboost for regression", {
     .num_class = NA
   )
 
-  expect_snapshot(xgboost)
+  expect_snapshot(xgboost, transform = trimws)
   expect_true(length(xgboost$params) > 1)
   expect_true(xgboost$nfeatures > 1)
   expect_equal(xgboost$params$tree_method, "hist")
@@ -639,9 +639,9 @@ test_that("bake method errors when needed non-standard role columns are missing"
   
   rec_trained <- prep(rec, training = sim_tr_cls, verbose = FALSE)
   
-  expect_error(
-    bake(rec_trained, new_data = sim_tr_cls[, -1]),
-    class = "new_data_missing_column"
+  expect_snapshot(
+    error = TRUE,
+    bake(rec_trained, new_data = sim_tr_cls[, -1])
   )
 })
 

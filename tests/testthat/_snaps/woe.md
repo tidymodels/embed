@@ -109,6 +109,14 @@
       Caused by error in `dictionary()`:
       ! 'outcome' must have exactly 2 categories (has 3)
 
+# bake method errors when needed non-standard role columns are missing
+
+    Code
+      bake(rec_trained, new_data = credit_data[, -8])
+    Condition
+      Error in `step_woe()`:
+      ! The following required column is missing from `new_data`: Job.
+
 # empty printing
 
     Code

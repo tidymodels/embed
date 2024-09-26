@@ -10,7 +10,7 @@ test_that("basic usage", {
   rec <- recipe(x1 ~ x3, data = ex_dat) %>%
     step_feature_hash(x3)
 
-  expect_error(rec_tr <- prep(rec), regex = NA)
+  expect_no_error(rec_tr <- prep(rec))
 
   res_tr <- bake(rec_tr, new_data = NULL, dplyr::starts_with("x3"))
 
@@ -64,7 +64,7 @@ test_that("basic usage - character strings", {
   rec <- recipe(x1 ~ x3, data = ex_dat) %>%
     step_feature_hash(x3)
 
-  expect_error(rec_tr <- prep(rec), regex = NA)
+  expect_no_error(rec_tr <- prep(rec))
 
   res_tr <- bake(rec_tr, new_data = NULL, dplyr::starts_with("x3"))
 
@@ -137,9 +137,9 @@ test_that("bake method errors when needed non-standard role columns are missing"
   
   rec_trained <- prep(rec, training = ex_dat, verbose = FALSE)
   
-  expect_error(
-    bake(rec_trained, new_data = ex_dat[, -3]),
-    class = "new_data_missing_column"
+  expect_snapshot(
+    error = TRUE,
+    bake(rec_trained, new_data = ex_dat[, -3])
   )
 })
 
@@ -241,9 +241,8 @@ test_that("keep_original_cols - can prep recipes with it missing", {
     rec <- prep(rec)
   )
   
-  expect_error(
-    bake(rec, new_data = ex_dat),
-    NA
+  expect_no_error(
+    bake(rec, new_data = ex_dat)
   )
 })
 

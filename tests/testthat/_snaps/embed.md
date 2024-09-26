@@ -39,6 +39,14 @@
       ! Name collision occurred. The following variable names already exist:
       * `x3_embed_1`
 
+# bake method errors when needed non-standard role columns are missing
+
+    Code
+      bake(rec_trained, new_data = ex_dat[, -3])
+    Condition
+      Error in `step_embed()`:
+      ! The following required column is missing from `new_data`: x3.
+
 # empty printing
 
     Code

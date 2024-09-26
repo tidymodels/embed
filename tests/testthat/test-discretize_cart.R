@@ -17,7 +17,7 @@ mod <- rpart(y ~ x, data = sim_tr_reg)
 best_split <- unname(mod$splits[, "index"])
 
 test_that("low-level binning for classification", {
-  expect_error(
+  expect_no_error(
     splits <-
       embed:::cart_binning(
         sim_tr_cls$x,
@@ -26,8 +26,7 @@ test_that("low-level binning for classification", {
         cost_complexity = 0.01,
         tree_depth = 5,
         min_n = 10
-      ),
-    regexp = NA
+      )
   )
   expect_equal(splits, best_split)
 
@@ -47,7 +46,7 @@ test_that("low-level binning for classification", {
 })
 
 test_that("low-level binning for regression", {
-  expect_error(
+  expect_no_error(
     splits <-
       embed:::cart_binning(
         sim_tr_reg$x,
@@ -56,8 +55,7 @@ test_that("low-level binning for regression", {
         cost_complexity = 0.01,
         tree_depth = 5,
         min_n = 10
-      ),
-    regexp = NA
+      )
   )
   expect_equal(splits, best_split)
 
@@ -87,9 +85,8 @@ test_that("step function for classification", {
   expect_equal(names(cart_rec$steps[[1]]$rules), "x")
   expect_equal(cart_rec$steps[[1]]$rules$x, best_split)
 
-  expect_error(
-    cart_pred <- bake(cart_rec, sim_tr_cls[, -3]),
-    regexp = NA
+  expect_no_error(
+    cart_pred <- bake(cart_rec, sim_tr_cls[, -3])
   )
 
   expect_true(is.factor(cart_pred$x))
@@ -108,9 +105,8 @@ test_that("step function for regression", {
   expect_equal(names(cart_rec$steps[[1]]$rules), "x")
   expect_equal(cart_rec$steps[[1]]$rules$x, best_split)
 
-  expect_error(
-    cart_pred <- bake(cart_rec, sim_tr_reg[, -3]),
-    regexp = NA
+  expect_no_error(
+    cart_pred <- bake(cart_rec, sim_tr_reg[, -3])
   )
 
   expect_true(is.factor(cart_pred$x))
@@ -218,13 +214,13 @@ test_that("bake method errors when needed non-standard role columns are missing"
     update_role(x, new_role = "potato") %>%
     update_role_requirements(role = "potato", bake = FALSE)
   
-  expect_warning(
+  expect_snapshot(
     rec_trained <- prep(rec, training = sim_tr_cls, verbose = FALSE)
   )
   
-  expect_error(
-    bake(rec_trained, new_data = sim_tr_cls[, -1]),
-    class = "new_data_missing_column"
+  expect_snapshot(
+    error = TRUE,
+    bake(rec_trained, new_data = sim_tr_cls[, -1])
   )
 })
 

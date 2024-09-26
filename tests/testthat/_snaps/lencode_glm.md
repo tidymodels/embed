@@ -54,6 +54,14 @@
       -- Operations 
       * Linear embedding for factors via GLM for: x3 | Trained, weighted
 
+# bake method errors when needed non-standard role columns are missing
+
+    Code
+      bake(rec_trained, new_data = ex_dat[, -3])
+    Condition
+      Error in `step_lencode_glm()`:
+      ! The following required column is missing from `new_data`: x3.
+
 # empty printing
 
     Code
