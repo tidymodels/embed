@@ -156,7 +156,7 @@ step_woe <- function(recipe,
                      skip = FALSE,
                      id = rand_id("woe")) {
   if (missing(outcome)) {
-    rlang::abort('argument "outcome" is missing, with no default')
+    cli::cli_abort("The {.arg outcome} argument is missing, with no default.")
   }
 
   add_step(
@@ -233,12 +233,13 @@ woe_table <- function(predictor,
   }
 
   if (length(outcome_original_labels) != 2) {
-    rlang::abort(sprintf(
-      "'outcome' must have exactly 2 categories (has %s)",
-      length(outcome_original_labels)
-    ), call = call)
+    cli::cli_abort(
+      "{.arg outcome} must have exactly 2 categories 
+      (has {length(outcome_original_labels)}).", 
+      call = call
+    )
   }
-
+  
   if (is.factor(predictor)) {
     predictor <- as.character(predictor)
   }
@@ -356,26 +357,26 @@ dictionary <- function(.data, outcome, ..., Laplace = 1e-6) {
 #' @export
 add_woe <- function(.data, outcome, ..., dictionary = NULL, prefix = "woe") {
   if (missing(.data)) {
-    rlang::abort('argument ".data" is missing, with no default')
+    cli::cli_abort("The {.arg .data} argument is missing, with no default.")
   }
   if (missing(outcome)) {
-    rlang::abort('argument "outcome" is missing, with no default')
+    cli::cli_abort("Argument {.arg outcome} is missing, with no default.")
   }
   if (!is.character(outcome)) {
-    rlang::abort("'outcome' should be a single character value.")
+    cli::cli_abort("{.arg outcome} should be a single character value.")
   }
 
   if (is.null(dictionary)) {
     dictionary <- dictionary(.data, outcome, ...)
   } else {
     if (is.null(dictionary$variable)) {
-      rlang::abort('column "variable" is missing in dictionary.')
+      cli::cli_abort('Column {.field variable} is missing in dictionary.')
     }
     if (is.null(dictionary$predictor)) {
-      rlang::abort('column "predictor" is missing in dictionary.')
+      cli::cli_abort('The column {.code predictor} is missing in the dictionary.')
     }
     if (is.null(dictionary$woe)) {
-      rlang::abort('column "woe" is missing in dictionary.')
+      cli::cli_abort('Column {.field woe} is missing in dictionary.')
     }
   }
 
@@ -447,12 +448,10 @@ prep.step_woe <- function(x, training, info = NULL, ...) {
 
     if (any(n_count$low_n > 0)) {
       flagged <- n_count$variable[n_count$low_n > 0]
-      flagged <- paste0("'", unique(flagged), "'", collapse = ", ")
-      msg <- glue(
-        "Some columns used by `step_woe()` have categories with ",
-        "less than 10 values: {flagged}"
+      cli::cli_warn(
+        "Some columns used by {.fn step_woe} have categories with fewer than 10 
+        values: {.val {unique(flagged)}}"
       )
-      rlang::warn(msg)
     }
   } else {
     x$dictionary <- tibble::tibble()

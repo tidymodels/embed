@@ -189,7 +189,8 @@
     Condition
       Error in `step_discretize_xgb()`:
       Caused by error in `prep()`:
-      ! Too few observations in the early stopping validation set.Consider increasing the `sample_val` parameter.
+      ! Too few observations in the early stopping validation set.
+      i Consider increasing the `sample_val` parameter.
 
 ---
 
@@ -199,7 +200,8 @@
         outcome = "Status") %>% prep(retain = TRUE)
     Condition
       Warning:
-      More than 20 unique training set values are required. Predictors 'Time' were not processed; their original values will be used.
+      More than 20 unique training set values are required.
+      i Predictors 'Time' were not processed; their original values will be used.
     Message
       
       -- Recipe ----------------------------------------------------------------------
@@ -261,7 +263,8 @@
     Condition
       Error in `step_discretize_xgb()`:
       Caused by error in `prep()`:
-      ! Too few observations in the early stopping validation set.Consider increasing the `sample_val` parameter.
+      ! Too few observations in the early stopping validation set.
+      i Consider increasing the `sample_val` parameter.
 
 # xgb_binning() errors if only one class in outcome
 
@@ -270,7 +273,8 @@
         learn_rate = 0.3, num_breaks = 10, tree_depth = 1, min_n = 5)
     Condition
       Error:
-      ! Outcome variable only has less than 2 levels. Doesn't conform to regresion or classification task.
+      ! Outcome variable only has less than 2 levels.
+      i Doesn't conform to regresion or classification task.
 
 # case weights step_discretize_xgb
 

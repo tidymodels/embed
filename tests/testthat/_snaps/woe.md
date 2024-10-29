@@ -4,7 +4,7 @@
       embed:::woe_table(rep(c(0, 1), 20), rep(letters[1:4], 5))
     Condition
       Error in `embed:::woe_table()`:
-      ! 'outcome' must have exactly 2 categories (has 4)
+      ! `outcome` must have exactly 2 categories (has 4).
 
 # woe_table accepts only outcome with 2 distinct categories
 
@@ -12,7 +12,7 @@
       embed:::woe_table(rep(letters[1:3], 10), rep(c(0, 1, 2), 10))
     Condition
       Error in `embed:::woe_table()`:
-      ! 'outcome' must have exactly 2 categories (has 3)
+      ! `outcome` must have exactly 2 categories (has 3).
 
 ---
 
@@ -20,7 +20,7 @@
       embed:::woe_table(rep(letters[1:3], 10), rep(c(0), 30))
     Condition
       Error in `embed:::woe_table()`:
-      ! 'outcome' must have exactly 2 categories (has 1)
+      ! `outcome` must have exactly 2 categories (has 1).
 
 ---
 
@@ -28,7 +28,7 @@
       embed:::woe_table(df$x2, df$x1)
     Condition
       Error in `embed:::woe_table()`:
-      ! 'outcome' must have exactly 2 categories (has 3)
+      ! `outcome` must have exactly 2 categories (has 3).
 
 # add_woe accepts only outcome with 2 distinct categories
 
@@ -36,7 +36,7 @@
       dictionary(df %>% filter(y %in% "B"), "y")
     Condition
       Error in `dictionary()`:
-      ! 'outcome' must have exactly 2 categories (has 1)
+      ! `outcome` must have exactly 2 categories (has 1).
 
 # add_woe do not accept dictionary with unexpected layout
 
@@ -44,7 +44,7 @@
       add_woe(df, outcome = "y", x1, dictionary = iris)
     Condition
       Error in `add_woe()`:
-      ! column "variable" is missing in dictionary.
+      ! Column variable is missing in dictionary.
 
 ---
 
@@ -52,7 +52,7 @@
       add_woe(df, outcome = "y", x1, dictionary = iris %>% mutate(variable = 1))
     Condition
       Error in `add_woe()`:
-      ! column "predictor" is missing in dictionary.
+      ! The column `predictor` is missing in the dictionary.
 
 # step_woe
 
@@ -60,7 +60,7 @@
       woe_models <- prep(rec, training = credit_tr)
     Condition
       Warning:
-      Some columns used by `step_woe()` have categories with less than 10 values: 'Home', 'Job'
+      Some columns used by `step_woe()` have categories with fewer than 10 values: "Home" and "Job"
 
 ---
 
@@ -70,7 +70,7 @@
       oper 1 step woe [training] 
     Condition
       Warning:
-      Some columns used by `step_woe()` have categories with less than 10 values: 'Home', 'Job'
+      Some columns used by `step_woe()` have categories with fewer than 10 values: "Home" and "Job"
     Output
       The retained training set is ~ 0.14 Mb  in memory.
       
@@ -107,7 +107,7 @@
     Condition
       Error in `step_woe()`:
       Caused by error in `dictionary()`:
-      ! 'outcome' must have exactly 2 categories (has 3)
+      ! `outcome` must have exactly 2 categories (has 3).
 
 # bake method errors when needed non-standard role columns are missing
 
@@ -187,7 +187,7 @@
       prep(rec)
     Condition
       Warning:
-      Some columns used by `step_woe()` have categories with less than 10 values: 'Home', 'Job'
+      Some columns used by `step_woe()` have categories with fewer than 10 values: "Home" and "Job"
     Message
       
       -- Recipe ----------------------------------------------------------------------

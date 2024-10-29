@@ -117,7 +117,7 @@ step_lencode_bayes <-
            skip = FALSE,
            id = rand_id("lencode_bayes")) {
     if (is.null(outcome)) {
-      rlang::abort("Please list a variable in `outcome`")
+      cli::cli_abort("Please list a variable in {.code outcome}.")
     }
     add_step(
       recipe,
