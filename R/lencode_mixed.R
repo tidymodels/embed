@@ -103,7 +103,7 @@ step_lencode_mixed <-
            skip = FALSE,
            id = rand_id("lencode_mixed")) {
     if (is.null(outcome)) {
-      rlang::abort("Please list a variable in `outcome`")
+      cli::cli_abort("Please list a variable in {.arg outcome}.")
     }
     add_step(
       recipe,
@@ -153,10 +153,9 @@ prep.step_lencode_mixed <- function(x, training, info = NULL, ...) {
     y_name <- recipes_eval_select(x$outcome, training, info)
     if (is.factor(training[[y_name]])) {
       if (length(levels(training[[y_name]])) > 2) {
-        rlang::abort(glue(
-          "Mixed effects methods here are only implemented for ",
-          "two-class problems."
-        ))
+        cli::cli_abort(
+          "Mixed effects methods here are only implemented for two-class problems."
+        )
       }
     }
     res <-

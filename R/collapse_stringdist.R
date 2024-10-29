@@ -79,7 +79,7 @@ step_collapse_stringdist <-
            skip = FALSE,
            id = rand_id("collapse_stringdist")) {
     if (is.null(distance)) {
-      rlang::abort("`distance` argument must be set.")
+      cli::cli_abort("The {.arg distance} argument must be set.")
     }
 
     add_step(

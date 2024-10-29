@@ -159,7 +159,7 @@ step_embed <-
     is_tf_available()
 
     if (is.null(outcome)) {
-      rlang::abort("Please list a variable in `outcome`")
+      cli::cli_abort("Please list a variable in {.arg outcome}.")
     }
     add_step(
       recipe,
@@ -261,10 +261,10 @@ prep.step_embed <- function(x, training, info = NULL, ...) {
 
 is_tf_2 <- function() {
   if (!is_tf_available()) {
-    rlang::abort(
+    cli::cli_abort(
       c(
         "tensorflow could now be found.",
-        "Please run `tensorflow::install_tensorflow()` to install."
+        "i" = "Please run {.code tensorflow::install_tensorflow()} to install."
       )
     )
   }
@@ -491,13 +491,13 @@ embed_control <- function(loss = "mse",
                           verbose = 0,
                           callbacks = NULL) {
   if (batch_size < 1) {
-    rlang::abort("`batch_size` should be a positive integer")
+    cli::cli_abort("{.arg batch_size} should be a positive integer.")
   }
   if (epochs < 1) {
-    rlang::abort("`epochs` should be a positive integer")
+    cli::cli_abort("{.arg epochs} should be a positive integer.")
   }
   if (validation_split < 0 || validation_split > 1) {
-    rlang::abort("`validation_split` should be on [0, 1)")
+    cli::cli_abort("{.arg validation_split} should be on [0, 1).")
   }
   list(
     loss = loss, metrics = metrics, optimizer = optimizer, epochs = epochs,
@@ -518,11 +518,9 @@ tf_options_check <- function(opt) {
   )
 
   if (length(setdiff(exp_names, names(opt))) > 0) {
-    rlang::abort(
-      paste0(
-        "The following options are missing from the `options`: ",
-        paste0(setdiff(exp_names, names(opt)), collapse = ",")
-      )
+    cli::cli_abort(
+      "The options {.code {setdiff(exp_names, names(opt))}} are missing from 
+      {.arg options}."
     )
   }
   opt
@@ -530,7 +528,7 @@ tf_options_check <- function(opt) {
 
 class2ind <- function(x) {
   if (!is.factor(x)) {
-    rlang::abort("'x' should be a factor")
+    cli::cli_abort("{.arg x} should be a factor.")
   }
   y <- model.matrix(~ x - 1)
   colnames(y) <- gsub("^x", "", colnames(y))

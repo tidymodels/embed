@@ -5,7 +5,7 @@
       cost_complexity = 0.01, tree_depth = 5, min_n = 10)
     Condition
       Warning:
-      `step_discretize_cart()` failed to find any meaningful splits for predictor 'x', which will not be binned.
+      `step_discretize_cart()` failed to find any meaningful splits for predictor "x", which will not be binned.
 
 # low-level binning for regression
 
@@ -14,7 +14,7 @@
       cost_complexity = 0.01, tree_depth = 5, min_n = 10)
     Condition
       Warning:
-      `step_discretize_cart()` failed to find any meaningful splits for predictor 'potato', which will not be binned.
+      `step_discretize_cart()` failed to find any meaningful splits for predictor "potato", which will not be binned.
 
 # step function for classification
 
@@ -23,7 +23,7 @@
         all_predictors(), outcome = "class") %>% prep()
     Condition
       Warning:
-      `step_discretize_cart()` failed to find any meaningful splits for predictor 'z', which will not be binned.
+      `step_discretize_cart()` failed to find any meaningful splits for predictor "z", which will not be binned.
 
 # step function for regression
 
@@ -32,7 +32,7 @@
         all_predictors(), outcome = "y") %>% prep()
     Condition
       Warning:
-      `step_discretize_cart()` failed to find any meaningful splits for predictor 'z', which will not be binned.
+      `step_discretize_cart()` failed to find any meaningful splits for predictor "z", which will not be binned.
 
 # bad args
 
@@ -51,7 +51,7 @@
       cart_rec <- prep(cart_rec)
     Condition
       Warning:
-      `step_discretize_cart()` failed to find any meaningful splits for predictor 'z', which will not be binned.
+      `step_discretize_cart()` failed to find any meaningful splits for predictor "z", which will not be binned.
 
 # case weights step functions
 
@@ -60,7 +60,7 @@
         all_predictors(), outcome = "class") %>% prep()
     Condition
       Warning:
-      `step_discretize_cart()` failed to find any meaningful splits for predictor 'z', which will not be binned.
+      `step_discretize_cart()` failed to find any meaningful splits for predictor "z", which will not be binned.
 
 ---
 
@@ -94,7 +94,7 @@
       rec_trained <- prep(rec, training = sim_tr_cls, verbose = FALSE)
     Condition
       Warning:
-      `step_discretize_cart()` failed to find any meaningful splits for predictor 'z', which will not be binned.
+      `step_discretize_cart()` failed to find any meaningful splits for predictor "z", which will not be binned.
 
 ---
 
@@ -161,7 +161,7 @@
       prep(rec)
     Condition
       Warning:
-      `step_discretize_cart()` failed to find any meaningful splits for predictor 'z', which will not be binned.
+      `step_discretize_cart()` failed to find any meaningful splits for predictor "z", which will not be binned.
     Message
       
       -- Recipe ----------------------------------------------------------------------

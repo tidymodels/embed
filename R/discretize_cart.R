@@ -104,7 +104,9 @@ step_discretize_cart <-
     recipes_pkg_check(required_pkgs.step_discretize_cart())
 
     if (is.null(outcome)) {
-      rlang::abort("`outcome` should select at least one column.")
+      cli::cli_abort(
+        "The {.arg outcome} argument should select at least one column."
+      )
     }
 
     add_step(
@@ -167,24 +169,20 @@ cart_binning <- function(predictor, term, outcome, cost_complexity, tree_depth,
 
   if (inherits(cart_mdl, "try-error")) {
     err <- conditionMessage(attr(cart_mdl, "condition"))
-    msg <-
-      glue(
-        "`step_discretize_cart()` failed to create a tree with error for ",
-        "predictor '{term}', which will not be binned. The error: {err}"
-      )
-    rlang::warn(msg)
+    cli::cli_warn(
+      "step_discretize_cart() failed to create a tree for predictor {.var {term}}, 
+      which will not be binned. The error: {err}"
+    )
     return(numeric(0))
   }
 
   if (any(names(cart_mdl) == "splits")) {
     cart_split <- sort(unique(cart_mdl$splits[, "index"]))
   } else {
-    msg <-
-      glue(
-        "`step_discretize_cart()` failed to find any meaningful splits for ",
-        "predictor '{term}', which will not be binned."
-      )
-    rlang::warn(msg)
+    cli::cli_warn(
+      "{.fn step_discretize_cart} failed to find any meaningful splits for 
+      predictor {.val {term}}, which will not be binned."
+    )
     cart_split <- numeric(0)
   }
   cart_split

@@ -89,7 +89,7 @@ step_lencode_glm <-
            skip = FALSE,
            id = rand_id("lencode_glm")) {
     if (is.null(outcome)) {
-      rlang::abort("Please list a variable in `outcome`")
+      cli::cli_abort("Please list a variable in {.arg outcome}.")
     }
     add_step(
       recipe,

@@ -142,7 +142,7 @@ step_umap <-
       seed <- as.integer(seed)
     }
     if (length(seed) != 2) {
-      rlang::abort("Two integers are required for `seed`.")
+      cli::cli_abort("Two integers are required for {.arg seed}.")
     }
 
     add_step(
