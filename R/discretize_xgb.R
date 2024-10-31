@@ -496,7 +496,7 @@ bake.step_discretize_xgb <- function(object, new_data, ...) {
         dig.lab = 4
       )
 
-      check_name(binned_data, new_data, object)
+      recipes::check_name(binned_data, new_data, object)
       new_data <- binned_data
     }
   }

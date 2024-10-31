@@ -208,7 +208,7 @@ bake.step_pca_truncated <- function(object, new_data, ...) {
     object$res$rotation
   comps <- comps[, 1:object$num_comp, drop = FALSE]
   comps <- as_tibble(comps)
-  comps <- check_name(comps, new_data, object)
+  comps <- recipes::check_name(comps, new_data, object)
   new_data <- vec_cbind(new_data, comps)
 
   new_data <- remove_original_cols(new_data, object, pca_vars)

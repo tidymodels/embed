@@ -429,7 +429,7 @@ bake.step_embed <- function(object, new_data, ...) {
       prefix = col_name
     )
    
-    tmp <- check_name(tmp, new_data, object, names(tmp))
+    tmp <- recipes::check_name(tmp, new_data, object, names(tmp))
     
     new_data <- vec_cbind(new_data, tmp)
   }

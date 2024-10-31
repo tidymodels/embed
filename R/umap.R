@@ -304,7 +304,7 @@ bake.step_umap <- function(object, new_data, ...) {
   colnames(res) <- names0(object$num_comp, prefix = object$prefix)
   res <- as_tibble(res)
   
-  res <- check_name(res, new_data, object, names(res))
+  res <- recipes::check_name(res, new_data, object, names(res))
   new_data <- vec_cbind(new_data, res)
 
   new_data <- remove_original_cols(new_data, object, col_names)

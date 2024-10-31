@@ -222,7 +222,7 @@ bake.step_feature_hash <- function(object, new_data, ...) {
       object$num_hash
   )
   
-  new_cols <- check_name(new_cols, new_data, object, names(new_cols))
+  new_cols <- recipes::check_name(new_cols, new_data, object, names(new_cols))
   
   new_data <- vec_cbind(new_data, new_cols)
 

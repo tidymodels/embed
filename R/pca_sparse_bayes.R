@@ -234,7 +234,7 @@ bake.step_pca_sparse_bayes <- function(object, new_data, ...) {
   x <- as.matrix(new_data[, pca_vars])
   comps <- x %*% object$res
   comps <- as_tibble(comps)
-  comps <- check_name(comps, new_data, object)
+  comps <- recipes::check_name(comps, new_data, object)
   new_data <- vec_cbind(new_data, comps)
 
   new_data <- remove_original_cols(new_data, object, pca_vars)
