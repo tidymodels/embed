@@ -3,7 +3,7 @@
     Code
       res_te <- bake(rec_tr, te_dat, dplyr::starts_with("x3"))
     Condition
-      Warning:
+      Warning in `bake()`:
       ! There was 1 column that was a factor when the recipe was prepped:
       * `x3`
       i This may cause errors when processing new data.
