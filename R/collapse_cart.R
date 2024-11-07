@@ -80,6 +80,9 @@ step_collapse_cart <-
            id = rand_id("step_collapse_cart")) {
     recipes_pkg_check(required_pkgs.step_discretize_cart())
 
+    check_number_decimal(cost_complexity, min = 0)
+    check_number_whole(min_n, min = 1)
+
     add_step(
       recipe,
       step_collapse_cart_new(

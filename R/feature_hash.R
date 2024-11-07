@@ -138,6 +138,8 @@ step_feature_hash_new <-
 prep.step_feature_hash <- function(x, training, info = NULL, ...) {
   col_names <- recipes_eval_select(x$terms, training, info)
 
+  check_number_whole(x$num_hash, min = 0, arg = "num_hash")
+  
   if (length(col_names) > 0) {
     check_type(training[, col_names], types = c("string", "factor", "ordered"))
   }

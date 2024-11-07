@@ -193,6 +193,21 @@ test_that("failed collapsing", {
   )
 })
 
+test_that("bad args", {
+  skip_if_not_installed("stringdist")
+
+  expect_snapshot(
+    error = TRUE,
+    recipe(~., data = mtcars) %>%
+      step_collapse_stringdist(cost_complexity = -4)
+  )
+  expect_snapshot(
+    error = TRUE,
+    recipe(~., data = mtcars) %>%
+      step_collapse_stringdist(min_n = -4)
+  )
+})
+
 # Infrastructure ---------------------------------------------------------------
 
 test_that("bake method errors when needed non-standard role columns are missing", {

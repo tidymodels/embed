@@ -29,6 +29,26 @@
       x All columns selected for the step should be string, factor, or ordered.
       * 1 double variable found: `Sepal.Length`
 
+---
+
+    Code
+      recipe(~., data = mtcars) %>% step_embed(outcome = vars(mpg), num_terms = -4) %>%
+        prep()
+    Condition
+      Error in `step_embed()`:
+      Caused by error in `prep()`:
+      ! `num_terms` must be a whole number larger than or equal to 0, not the number -4.
+
+---
+
+    Code
+      recipe(~., data = mtcars) %>% step_embed(outcome = vars(mpg), hidden_units = -4) %>%
+        prep()
+    Condition
+      Error in `step_embed()`:
+      Caused by error in `prep()`:
+      ! `hidden_units` must be a whole number larger than or equal to 0, not the number -4.
+
 # check_name() is used
 
     Code

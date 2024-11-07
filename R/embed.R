@@ -206,6 +206,9 @@ step_embed_new <-
 prep.step_embed <- function(x, training, info = NULL, ...) {
   col_names <- recipes_eval_select(x$terms, training, info)
 
+  check_number_whole(x$num_terms, min = 0, arg = "num_terms")
+  check_number_whole(x$hidden_units, min = 0, arg = "hidden_units")
+
   if (length(col_names) > 0) {
     check_type(training[, col_names], types = c("string", "factor", "ordered"))
     y_name <- recipes_eval_select(x$outcome, training, info)

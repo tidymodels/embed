@@ -192,6 +192,10 @@ cart_binning <- function(predictor, term, outcome, cost_complexity, tree_depth,
 prep.step_discretize_cart <- function(x, training, info = NULL, ...) {
   col_names <- recipes_eval_select(x$terms, training, info)
 
+  check_number_decimal(x$cost_complexity, min = 0, arg = "cost_complexity")
+  check_number_decimal(x$tree_depth, min = 0, arg = "tree_depth")
+  check_number_decimal(x$min_n, min = 0, arg = "min_n")
+
   wts <- get_case_weights(info, training)
   were_weights_used <- are_weights_used(wts)
   if (isFALSE(were_weights_used)) {

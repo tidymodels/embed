@@ -18,6 +18,18 @@
       ! Name collision occurred. The following variable names already exist:
       * `x3_hash_01`
 
+# bad args
+
+    Code
+      recipe(~., data = mtcars) %>% step_feature_hash(num_hash = -4) %>% prep()
+    Condition
+      Warning:
+      `step_feature_hash()` was deprecated in embed 0.2.0.
+      i Please use `textrecipes::step_dummy_hash()` instead.
+      Error in `step_feature_hash()`:
+      Caused by error in `prep()`:
+      ! `num_hash` must be a whole number larger than or equal to 0, not the number -4.
+
 # bake method errors when needed non-standard role columns are missing
 
     Code

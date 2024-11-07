@@ -109,6 +109,24 @@
       Caused by error in `dictionary()`:
       ! `outcome` must have exactly 2 categories (has 3).
 
+# bad args
+
+    Code
+      recipe(~., data = mtcars) %>% step_woe(outcome = vars(mpg), Laplace = NULL) %>%
+        prep()
+    Condition
+      Error in `step_woe()`:
+      Caused by error in `prep()`:
+      ! `Laplace` must be a number, not `NULL`.
+
+---
+
+    Code
+      recipe(~., data = mtcars) %>% step_woe(outcome = vars(mpg), prefix = NULL)
+    Condition
+      Error in `step_woe()`:
+      ! `prefix` must be a single string, not `NULL`.
+
 # bake method errors when needed non-standard role columns are missing
 
     Code

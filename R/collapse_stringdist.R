@@ -78,9 +78,8 @@ step_collapse_stringdist <-
            columns = NULL,
            skip = FALSE,
            id = rand_id("collapse_stringdist")) {
-    if (is.null(distance)) {
-      cli::cli_abort("The {.arg distance} argument must be set.")
-    }
+    check_number_decimal(distance, min = 0)
+    check_string(method)
 
     add_step(
       recipe,

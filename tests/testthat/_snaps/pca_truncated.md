@@ -8,6 +8,23 @@
       ! Name collision occurred. The following variable names already exist:
       * `PC1`
 
+# bad args
+
+    Code
+      recipe(~., data = mtcars) %>% step_pca_truncated(num_comp = -4) %>% prep()
+    Condition
+      Error in `step_pca_truncated()`:
+      Caused by error in `prep()`:
+      ! `num_comp` must be a whole number larger than or equal to 0, not the number -4.
+
+---
+
+    Code
+      recipe(~., data = mtcars) %>% step_pca_truncated(prefix = NULL)
+    Condition
+      Error in `step_pca_truncated()`:
+      ! `prefix` must be a single string, not `NULL`.
+
 # bake method errors when needed non-standard role columns are missing
 
     Code

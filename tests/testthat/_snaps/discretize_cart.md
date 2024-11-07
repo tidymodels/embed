@@ -45,6 +45,36 @@
       x All columns selected for the step should be double or integer.
       * 1 factor variable found: `w`
 
+---
+
+    Code
+      recipe(~., data = mtcars) %>% step_discretize_cart(outcome = vars("mpg"),
+      cost_complexity = -4) %>% prep()
+    Condition
+      Error in `step_discretize_cart()`:
+      Caused by error in `prep()`:
+      ! `cost_complexity` must be a number larger than or equal to 0, not the number -4.
+
+---
+
+    Code
+      recipe(~., data = mtcars) %>% step_discretize_cart(outcome = vars("mpg"),
+      min_n = -4) %>% prep()
+    Condition
+      Error in `step_discretize_cart()`:
+      Caused by error in `prep()`:
+      ! `min_n` must be a number larger than or equal to 0, not the number -4.
+
+---
+
+    Code
+      recipe(~., data = mtcars) %>% step_discretize_cart(outcome = vars("mpg"),
+      tree_depth = -4) %>% prep()
+    Condition
+      Error in `step_discretize_cart()`:
+      Caused by error in `prep()`:
+      ! `tree_depth` must be a number larger than or equal to 0, not the number -4.
+
 # tidy method
 
     Code

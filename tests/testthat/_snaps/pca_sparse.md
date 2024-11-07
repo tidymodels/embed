@@ -26,6 +26,32 @@
       ! Name collision occurred. The following variable names already exist:
       * `PC1`
 
+# bad args
+
+    Code
+      recipe(~., data = mtcars) %>% step_pca_sparse(num_comp = -4) %>% prep()
+    Condition
+      Error in `step_pca_sparse()`:
+      Caused by error in `prep()`:
+      ! `num_comp` must be a whole number larger than or equal to 0, not the number -4.
+
+---
+
+    Code
+      recipe(~., data = mtcars) %>% step_pca_sparse(predictor_prop = -4) %>% prep()
+    Condition
+      Error in `step_pca_sparse()`:
+      Caused by error in `prep()`:
+      ! `predictor_prop` must be a number between 0 and 1, not the number -4.
+
+---
+
+    Code
+      recipe(~., data = mtcars) %>% step_pca_sparse(prefix = NULL)
+    Condition
+      Error in `step_pca_sparse()`:
+      ! `prefix` must be a single string, not `NULL`.
+
 # bake method errors when needed non-standard role columns are missing
 
     Code

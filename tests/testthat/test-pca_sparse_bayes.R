@@ -115,6 +115,32 @@ test_that("Do nothing for num_comps = 0 and keep_original_cols = FALSE", {
   expect_identical(res, tibble::as_tibble(mtcars))
 })
 
+test_that("bad args", {
+  expect_snapshot(
+    error = TRUE,
+    recipe(~., data = mtcars) %>%
+      step_pca_sparse_bayes(num_comp = -4) %>%
+      prep()
+  )
+  expect_snapshot(
+    error = TRUE,
+    recipe(~., data = mtcars) %>%
+      step_pca_sparse_bayes(prior_slab_dispersion = -4) %>%
+      prep()
+  )
+  expect_snapshot(
+    error = TRUE,
+    recipe(~., data = mtcars) %>%
+      step_pca_sparse_bayes(prior_mixture_threshold = -4) %>%
+      prep()
+  )
+  expect_snapshot(
+    error = TRUE,
+    recipe(~., data = mtcars) %>%
+      step_pca_sparse_bayes(prefix = NULL)
+  )
+})
+
 # Infrastructure ---------------------------------------------------------------
 
 test_that("bake method errors when needed non-standard role columns are missing", {
