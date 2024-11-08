@@ -3,7 +3,7 @@
     Code
       new_values_ch <- bake(class_test, new_data = new_dat_ch)
     Condition
-      Warning:
+      Warning in `bake()`:
       ! There was 1 column that was a factor when the recipe was prepped:
       * `x3`
       i This may cause errors when processing new data.
@@ -13,7 +13,7 @@
     Code
       new_values_ch <- bake(reg_test, new_data = new_dat_ch)
     Condition
-      Warning:
+      Warning in `bake()`:
       ! There was 1 column that was a factor when the recipe was prepped:
       * `x3`
       i This may cause errors when processing new data.
