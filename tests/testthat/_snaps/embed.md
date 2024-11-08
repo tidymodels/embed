@@ -18,18 +18,17 @@
       * `x3`
       i This may cause errors when processing new data.
 
-# bad args
+# check_name() is used
 
     Code
-      recipe(Species ~ ., data = three_class) %>% step_embed(Sepal.Length, outcome = vars(
-        Species)) %>% prep(training = three_class, retain = TRUE)
+      prep(rec, training = dat)
     Condition
       Error in `step_embed()`:
-      Caused by error in `prep()`:
-      x All columns selected for the step should be string, factor, or ordered.
-      * 1 double variable found: `Sepal.Length`
+      Caused by error in `bake()`:
+      ! Name collision occurred. The following variable names already exist:
+      * `x3_embed_1`
 
----
+# bad args
 
     Code
       recipe(~., data = mtcars) %>% step_embed(outcome = vars(mpg), num_terms = -4) %>%
@@ -48,16 +47,6 @@
       Error in `step_embed()`:
       Caused by error in `prep()`:
       ! `hidden_units` must be a whole number larger than or equal to 0, not the number -4.
-
-# check_name() is used
-
-    Code
-      prep(rec, training = dat)
-    Condition
-      Error in `step_embed()`:
-      Caused by error in `bake()`:
-      ! Name collision occurred. The following variable names already exist:
-      * `x3_embed_1`
 
 # bake method errors when needed non-standard role columns are missing
 

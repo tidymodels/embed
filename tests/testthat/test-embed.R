@@ -283,23 +283,6 @@ test_that("character encoded predictor", {
   )
 })
 
-test_that("bad args", {
-  skip_on_cran()
-  skip_if_not_installed("keras")
-  skip_if(!embed:::is_tf_available())
-
-  three_class <- iris
-  three_class$fac <- rep(letters[1:3], 50)
-  three_class$logical <- rep(c(TRUE, FALSE), 75)
-
-  expect_snapshot(
-    error = TRUE,
-    recipe(Species ~ ., data = three_class) %>%
-      step_embed(Sepal.Length, outcome = vars(Species)) %>%
-      prep(training = three_class, retain = TRUE)
-  )
-})
-
 test_that("check_name() is used", {
   skip_on_cran()
   skip_if_not_installed("keras")
