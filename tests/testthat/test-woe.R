@@ -1,5 +1,3 @@
-source(testthat::test_path("test-helpers.R"))
-
 set.seed(1)
 df <- data.frame(
   x1 = sample(c("A", "B", "C"), size = 20, replace = TRUE) %>% factor(),

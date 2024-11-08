@@ -1,6 +1,3 @@
-source(testthat::test_path("make_example_data.R"))
-source(testthat::test_path("test-helpers.R"))
-
 test_that("factor encoded predictor", {
   class_test <- recipe(x2 ~ ., data = ex_dat) %>%
     step_lencode_glm(x3, outcome = vars(x2), id = "id") %>%

@@ -5,8 +5,6 @@ skip_on_cran()
 skip_if_not_installed("xgboost")
 skip_if_not_installed("modeldata")
 
-source(test_path("make_binned_data.R"))
-
 data("credit_data", package = "modeldata")
 data("ames", package = "modeldata")
 data("attrition", package = "modeldata")

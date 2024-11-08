@@ -1,5 +1,3 @@
-source(testthat::test_path("test-helpers.R"))
-
 test_that("step_pca_sparse_bayes", {
   skip_if_not_installed("VBsparsePCA")
   skip_if_not_installed("modeldata")

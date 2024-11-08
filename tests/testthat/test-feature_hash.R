@@ -1,6 +1,3 @@
-source(testthat::test_path("make_example_data.R"))
-source(testthat::test_path("test-helpers.R"))
-
 test_that("basic usage", {
   skip_on_cran()
   skip_if_not_installed("keras")

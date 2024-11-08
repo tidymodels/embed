@@ -1,6 +1,3 @@
-source(testthat::test_path("make_example_data.R"))
-source(testthat::test_path("test-helpers.R"))
-
 # Stops noisy tensorflow messages
 withr::local_envvar(TF_CPP_MIN_LOG_LEVEL = "2")
 

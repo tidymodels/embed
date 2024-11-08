@@ -1,5 +1,3 @@
-source(testthat::test_path("test-helpers.R"))
-
 test_that("step_pca_truncated", {
   skip_if_not_installed("irlba")
   skip_if_not_installed("modeldata")

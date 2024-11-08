@@ -1,6 +1,3 @@
-source(testthat::test_path("make_example_data.R"))
-source(testthat::test_path("test-helpers.R"))
-
 opts <- list(seed = 34677, chains = 2, iter = 500)
 
 omit_warning <- function(pattern) {
