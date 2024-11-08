@@ -392,6 +392,12 @@ xgb_binning <- function(df, outcome, predictor, sample_val, learn_rate,
 prep.step_discretize_xgb <- function(x, training, info = NULL, ...) {
   col_names <- recipes_eval_select(x$terms, training, info)
 
+  check_number_decimal(x$sample_val, min = 0, max = 1, arg = "sample_val")
+  check_number_decimal(x$learn_rate, min = 0, arg = "learn_rate")
+  check_number_whole(x$num_breaks, min = 0, arg = "num_breaks")
+  check_number_whole(x$tree_depth, min = 0, arg = "tree_depth")
+  check_number_whole(x$min_n, min = 0, arg = "min_n")
+
   wts <- get_case_weights(info, training)
   were_weights_used <- are_weights_used(wts)
   if (isFALSE(were_weights_used) || is.null(wts)) {
@@ -496,7 +502,7 @@ bake.step_discretize_xgb <- function(object, new_data, ...) {
         dig.lab = 4
       )
 
-      check_name(binned_data, new_data, object)
+      recipes::check_name(binned_data, new_data, object)
       new_data <- binned_data
     }
   }

@@ -96,6 +96,8 @@ step_pca_truncated <- function(recipe,
                                keep_original_cols = FALSE,
                                skip = FALSE,
                                id = rand_id("pca_truncated")) {
+  check_string(prefix)
+
   add_step(
     recipe,
     step_pca_truncated_new(
@@ -139,6 +141,8 @@ step_pca_truncated_new <-
 prep.step_pca_truncated <- function(x, training, info = NULL, ...) {
   col_names <- recipes_eval_select(x$terms, training, info)
   check_type(training[, col_names], types = c("double", "integer"))
+
+  check_number_whole(x$num_comp, min = 0, arg = "num_comp")
 
   wts <- get_case_weights(info, training)
   were_weights_used <- are_weights_used(wts, unsupervised = TRUE)
@@ -208,7 +212,7 @@ bake.step_pca_truncated <- function(object, new_data, ...) {
     object$res$rotation
   comps <- comps[, 1:object$num_comp, drop = FALSE]
   comps <- as_tibble(comps)
-  comps <- check_name(comps, new_data, object)
+  comps <- recipes::check_name(comps, new_data, object)
   new_data <- vec_cbind(new_data, comps)
 
   new_data <- remove_original_cols(new_data, object, pca_vars)

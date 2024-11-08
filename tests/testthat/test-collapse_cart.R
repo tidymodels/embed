@@ -101,6 +101,19 @@ test_that("failed collapsing", {
   expect_true(length(rec_5$steps[[1]]$results) == 0)
 })
 
+test_that("bad args", {
+  expect_snapshot(
+    error = TRUE,
+    recipe(~., data = mtcars) %>%
+      step_collapse_cart(cost_complexity = -4)
+  )
+  expect_snapshot(
+    error = TRUE,
+    recipe(~., data = mtcars) %>%
+      step_collapse_cart(min_n = -4)
+  )
+})
+
 # Infrastructure ---------------------------------------------------------------
 
 test_that("bake method errors when needed non-standard role columns are missing", {

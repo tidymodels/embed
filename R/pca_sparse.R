@@ -103,6 +103,8 @@ step_pca_sparse <- function(recipe,
                             keep_original_cols = FALSE,
                             skip = FALSE,
                             id = rand_id("pca_sparse")) {
+  check_string(prefix)
+  
   add_step(
     recipe,
     step_pca_sparse_new(
@@ -143,6 +145,11 @@ step_pca_sparse_new <-
 #' @export
 prep.step_pca_sparse <- function(x, training, info = NULL, ...) {
   col_names <- recipes_eval_select(x$terms, training, info)
+
+  check_number_whole(x$num_comp, min = 0, arg = "num_comp")
+  check_number_decimal(
+    x$predictor_prop, min = 0, max = 1, arg = "predictor_prop"
+  )
 
   if (length(col_names) > 0 && x$num_comp > 0) {
     check_type(training[, col_names], types = c("double", "integer"))
@@ -211,7 +218,7 @@ bake.step_pca_sparse <- function(object, new_data, ...) {
   x <- as.matrix(new_data[, pca_vars])
   comps <- x %*% object$res
   comps <- as_tibble(comps)
-  comps <- check_name(comps, new_data, object)
+  comps <- recipes::check_name(comps, new_data, object)
   new_data <- vec_cbind(new_data, comps)
   
   new_data <- remove_original_cols(new_data, object, pca_vars)

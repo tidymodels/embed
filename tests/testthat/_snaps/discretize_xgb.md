@@ -296,6 +296,56 @@
       -- Operations 
       * Discretizing variables using xgboost: x and z | Trained, weighted
 
+# bad args
+
+    Code
+      recipe(~., data = mtcars) %>% step_discretize_xgb(outcome = "class",
+        sample_val = -4) %>% prep()
+    Condition
+      Error in `step_discretize_xgb()`:
+      Caused by error in `prep()`:
+      ! `sample_val` must be a number between 0 and 1, not the number -4.
+
+---
+
+    Code
+      recipe(~., data = mtcars) %>% step_discretize_xgb(outcome = "class",
+        learn_rate = -4) %>% prep()
+    Condition
+      Error in `step_discretize_xgb()`:
+      Caused by error in `prep()`:
+      ! `learn_rate` must be a number larger than or equal to 0, not the number -4.
+
+---
+
+    Code
+      recipe(~., data = mtcars) %>% step_discretize_xgb(outcome = "class",
+        num_breaks = -4) %>% prep()
+    Condition
+      Error in `step_discretize_xgb()`:
+      Caused by error in `prep()`:
+      ! `num_breaks` must be a whole number larger than or equal to 0, not the number -4.
+
+---
+
+    Code
+      recipe(~., data = mtcars) %>% step_discretize_xgb(outcome = "class",
+        tree_depth = -4) %>% prep()
+    Condition
+      Error in `step_discretize_xgb()`:
+      Caused by error in `prep()`:
+      ! `tree_depth` must be a whole number larger than or equal to 0, not the number -4.
+
+---
+
+    Code
+      recipe(~., data = mtcars) %>% step_discretize_xgb(outcome = "class", min_n = -4) %>%
+        prep()
+    Condition
+      Error in `step_discretize_xgb()`:
+      Caused by error in `prep()`:
+      ! `min_n` must be a whole number larger than or equal to 0, not the number -4.
+
 # bake method errors when needed non-standard role columns are missing
 
     Code

@@ -119,6 +119,9 @@ step_lencode_bayes <-
     if (is.null(outcome)) {
       cli::cli_abort("Please list a variable in {.code outcome}.")
     }
+
+    check_bool(verbose)
+    
     add_step(
       recipe,
       step_lencode_bayes_new(

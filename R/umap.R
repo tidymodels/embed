@@ -137,6 +137,8 @@ step_umap <-
       keep_original_cols <- retain
     }
 
+    check_string(prefix)
+
     recipes_pkg_check(required_pkgs.step_umap())
     if (is.numeric(seed) && !is.integer(seed)) {
       seed <- as.integer(seed)
@@ -229,6 +231,14 @@ umap_fit_call <- function(obj, y = NULL) {
 prep.step_umap <- function(x, training, info = NULL, ...) {
   col_names <- recipes_eval_select(x$terms, training, info)
 
+  check_number_whole(x$num_comp, min = 0, arg = "num_comp")
+  check_number_whole(x$neighbors, min = 0, arg = "neighbors")
+  check_number_decimal(x$min_dist, arg = "min_dist")
+  check_number_decimal(x$learn_rate, min = 0, arg = "learn_rate")
+  check_number_whole(x$epochs, min = 0, allow_null = TRUE, arg = "epochs")
+  rlang::arg_match0(x$initial, initial_umap_values, arg_nm = "initial")
+  check_number_decimal(x$target_weight, min = 0, max = 1, arg = "target_weight")
+
   if (length(col_names) > 0) {
     if (length(x$outcome) > 0) {
       y_name <- recipes_eval_select(x$outcome, training, info)
@@ -304,7 +314,7 @@ bake.step_umap <- function(object, new_data, ...) {
   colnames(res) <- names0(object$num_comp, prefix = object$prefix)
   res <- as_tibble(res)
   
-  res <- check_name(res, new_data, object, names(res))
+  res <- recipes::check_name(res, new_data, object, names(res))
   new_data <- vec_cbind(new_data, res)
 
   new_data <- remove_original_cols(new_data, object, col_names)
@@ -355,7 +365,7 @@ tunable.step_umap <- function(x, ...) {
       list(pkg = "dials", fun = "min_dist", range = c(-4, -0.69897)),
       list(pkg = "dials", fun = "learn_rate"),
       list(pkg = "dials", fun = "epochs", range = c(100, 700)),
-      list(pkg = "dials", fun = "initial_umap", values = c("spectral", "normlaplacian", "random", "lvrandom", "laplacian", "pca", "spca", "agspectral")),
+      list(pkg = "dials", fun = "initial_umap", values = initial_umap_values),
       list(pkg = "dials", fun = "target_weight", range = c(0, 1))
     ),
     source = "recipe",
@@ -363,3 +373,14 @@ tunable.step_umap <- function(x, ...) {
     component_id = x$id
   )
 }
+
+initial_umap_values <- c(
+  "spectral",
+  "normlaplacian",
+  "random",
+  "lvrandom",
+  "laplacian",
+  "pca",
+  "spca",
+  "agspectral"
+)

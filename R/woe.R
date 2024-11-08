@@ -159,6 +159,8 @@ step_woe <- function(recipe,
     cli::cli_abort("The {.arg outcome} argument is missing, with no default.")
   }
 
+  check_string(prefix)
+
   add_step(
     recipe,
     step_woe_new(
@@ -422,6 +424,8 @@ add_woe <- function(.data, outcome, ..., dictionary = NULL, prefix = "woe") {
 #' @export
 prep.step_woe <- function(x, training, info = NULL, ...) {
   col_names <- recipes_eval_select(x$terms, training, info)
+
+  check_number_decimal(x$Laplace, arg = "Laplace")
 
   if (length(col_names) > 0) {
     outcome_name <- recipes_eval_select(x$outcome, training, info)

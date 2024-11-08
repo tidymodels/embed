@@ -412,6 +412,14 @@ test_that("case weights", {
   expect_snapshot(class_test)
 })
 
+test_that("bad args", {
+  expect_snapshot(
+    error = TRUE,
+    recipe(~., data = mtcars) %>%
+      step_lencode_bayes(outcome = vars(mpg), verbose = "yes")
+  )
+})
+
 # Infrastructure ---------------------------------------------------------------
 
 test_that("bake method errors when needed non-standard role columns are missing", {

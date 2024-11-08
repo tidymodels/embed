@@ -101,6 +101,14 @@
       -- Operations 
       * Linear embedding for factors via Bayesian GLM for: x3 | Trained, weighted
 
+# bad args
+
+    Code
+      recipe(~., data = mtcars) %>% step_lencode_bayes(outcome = vars(mpg), verbose = "yes")
+    Condition
+      Error in `step_lencode_bayes()`:
+      ! `verbose` must be `TRUE` or `FALSE`, not the string "yes".
+
 # bake method errors when needed non-standard role columns are missing
 
     Code
