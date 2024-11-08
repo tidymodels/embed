@@ -1,5 +1,3 @@
-source(testthat::test_path("test-helpers.R"))
-
 iris_dat <- iris
 
 iris_dat[, 1:4] <- scale(iris_dat[, 1:4])

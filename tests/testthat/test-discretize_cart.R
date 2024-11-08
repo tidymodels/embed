@@ -2,8 +2,6 @@ library(testthat)
 library(dplyr)
 library(rpart)
 
-source(test_path("make_binned_data.R"))
-
 set.seed(8497)
 sim_tr_cls <- sim_data_2class(1000)
 sim_te_cls <- sim_data_2class(100)
