@@ -103,7 +103,7 @@
 #'
 #' # Tidying
 #' 
-#' When you [`tidy()`][tidy.recipe()] this step, a tibble is retruned with
+#' When you [`tidy()`][tidy.recipe()] this step, a tibble is returned with
 #' a number of columns with embedding information, and columns `terms`, 
 #' `levels`, and `id`:
 #' 
