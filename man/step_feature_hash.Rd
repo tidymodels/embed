@@ -83,7 +83,7 @@ likely that some columns will have all zeros. A zero-variance filter (via
 \code{\link[recipes:step_zv]{recipes::step_zv()}}) is recommended for any recipe that uses hashed columns.
 }
 \section{Tidying}{
-When you \code{\link[=tidy.recipe]{tidy()}} this step, a tibble is retruned with
+When you \code{\link[=tidy.recipe]{tidy()}} this step, a tibble is returned with
 columns \code{terms} and \code{id}:
 
 \describe{

@@ -105,7 +105,7 @@ When you \code{\link[=tidy.recipe]{tidy()}} this step, a tibble with columns \co
 \code{p_bad}, \code{p_good}, \code{woe} and \code{outcome} is returned.. See \code{\link[=dictionary]{dictionary()}} for
 more information.
 
-When you \code{\link[=tidy.recipe]{tidy()}} this step, a tibble is retruned with
+When you \code{\link[=tidy.recipe]{tidy()}} this step, a tibble is returned with
 columns \code{terms} \code{value}, \code{n_tot}, \code{n_bad}, \code{n_good}, \code{p_bad}, \code{p_good}, \code{woe}
 and \code{outcome} and \code{id}:
 

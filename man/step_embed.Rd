@@ -153,7 +153,7 @@ tensorflow models cannot be run in parallel within the same session (via
 this step with \code{caret}, avoid parallel processing.
 }
 \section{Tidying}{
-When you \code{\link[=tidy.recipe]{tidy()}} this step, a tibble is retruned with
+When you \code{\link[=tidy.recipe]{tidy()}} this step, a tibble is returned with
 a number of columns with embedding information, and columns \code{terms},
 \code{levels}, and \code{id}:
 

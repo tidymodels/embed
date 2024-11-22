@@ -87,7 +87,7 @@ below). \code{prior_intercept} is the argument that has the most effect on the
 amount of shrinkage.
 }
 \section{Tidying}{
-When you \code{\link[=tidy.recipe]{tidy()}} this step, a tibble is retruned with
+When you \code{\link[=tidy.recipe]{tidy()}} this step, a tibble is returned with
 columns \code{level}, \code{value}, \code{terms}, and \code{id}:
 
 \describe{

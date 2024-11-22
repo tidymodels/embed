@@ -67,7 +67,7 @@ the \emph{first} level of the factor.
 For novel levels, a slightly timmed average of the coefficients is returned.
 }
 \section{Tidying}{
-When you \code{\link[=tidy.recipe]{tidy()}} this step, a tibble is retruned with
+When you \code{\link[=tidy.recipe]{tidy()}} this step, a tibble is returned with
 columns \code{level}, \code{value}, \code{terms}, and \code{id}:
 
 \describe{

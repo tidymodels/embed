@@ -130,7 +130,7 @@ sequence of numbers. The variable names are padded with zeros. For example, if
 the names would be \code{UMAP1} - \code{UMAP101}.
 }
 \section{Tidying}{
-When you \code{\link[=tidy.recipe]{tidy()}} this step, a tibble is retruned with
+When you \code{\link[=tidy.recipe]{tidy()}} this step, a tibble is returned with
 columns \code{terms} and \code{id}:
 
 \describe{
