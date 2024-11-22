@@ -81,7 +81,7 @@ as well as any arguments given to the \code{options} argument to the step.
 Relevant options include \code{control} and others.
 }
 \section{Tidying}{
-When you \code{\link[=tidy.recipe]{tidy()}} this step, a tibble is retruned with
+When you \code{\link[=tidy.recipe]{tidy()}} this step, a tibble is returned with
 columns \code{level}, \code{value}, \code{terms}, and \code{id}:
 
 \describe{

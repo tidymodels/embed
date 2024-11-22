@@ -67,7 +67,7 @@
 #' `p_bad`, `p_good`, `woe` and `outcome` is returned.. See [dictionary()] for
 #' more information.
 #' 
-#' When you [`tidy()`][tidy.recipe()] this step, a tibble is retruned with
+#' When you [`tidy()`][tidy.recipe()] this step, a tibble is returned with
 #' columns `terms` `value`, `n_tot`, `n_bad`, `n_good`, `p_bad`, `p_good`, `woe`
 #' and `outcome` and `id`:
 #' 
