@@ -171,7 +171,7 @@ pooled_plot <-
   ylim(rng)
 
 # Convert the plot to a format that the html file can handle
-ggiraph(ggobj = pooled_plot)
+girafe(ggobj = pooled_plot)
 ```
 
 New levels are encoded as:
@@ -221,7 +221,7 @@ mixed_plot <-
   xlim(rng) +
   ylim(rng)
 
-ggiraph(ggobj = mixed_plot)
+girafe(ggobj = mixed_plot)
 ```
 
 These values are very similar to the Bayesian estimates. 

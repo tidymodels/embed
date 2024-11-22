@@ -133,7 +133,7 @@ tf_plot <-
   theme(legend.position = "top") +
   labs(y = "Mean (log scale)", x = "Embedding")
 
-ggiraph(ggobj = tf_plot)
+girafe(ggobj = tf_plot)
 ```
 
 
