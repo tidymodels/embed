@@ -18,7 +18,7 @@ URL: https://embed.tidymodels.org, https://github.com/tidymodels/embed
 BugReports: https://github.com/tidymodels/embed/issues
 Depends: 
     R (>= 3.6),
-    recipes (>= 1.1.0.9000)
+    recipes (>= 1.1.0)
 Imports:
     cli,
     glue,
@@ -53,8 +53,6 @@ Suggests:
     testthat (>= 3.0.0),
     VBsparsePCA,
     xgboost
-Remotes:
-    tidymodels/recipes
 ByteCompile: true
 Config/Needs/website: tidymodels, ggiraph, tidyverse/tidytemplate, reticulate
 Config/testthat/edition: 3
