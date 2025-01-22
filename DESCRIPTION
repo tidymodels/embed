@@ -10,9 +10,9 @@ Authors@R: c(
   )
 Description: Predictors can be converted to one or more numeric
     representations using a variety of methods. Effect encodings using
-    simple generalized linear models <arXiv:1611.09477> or nonlinear
-    models <arXiv:1604.06737> can be used.  There are also functions for
-    dimension reduction and other approaches.
+    simple generalized linear models <doi:10.48550/arXiv.1611.09477> or 
+    nonlinear models <doi:10.48550/arXiv.1604.06737> can be used. There 
+    are also functions for dimension reduction and other approaches.
 License: MIT + file LICENSE
 URL: https://embed.tidymodels.org, https://github.com/tidymodels/embed
 BugReports: https://github.com/tidymodels/embed/issues
