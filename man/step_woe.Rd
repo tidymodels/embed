@@ -24,7 +24,7 @@ step_woe(
 operations for this recipe.}
 
 \item{...}{One or more selector functions to choose which variables will be
-used to compute the components. See \code{\link[=selections]{selections()}} for more details. For
+used to compute the components. See \link[recipes:selections]{recipes::selections} for more details. For
 the \code{tidy} method, these are not currently used.}
 
 \item{role}{For model terms created by this step, what analysis role should
@@ -84,7 +84,7 @@ ones with the property that the order and magnitude reflects the association
 with a binary outcome.  To apply it on numerical predictors, it is advisable
 to discretize the variables prior to running WoE. Here, each variable will be
 binarized to have woe associated later. This can achieved by using
-\code{\link[=step_discretize]{step_discretize()}}.
+\code{\link[recipes:step_discretize]{recipes::step_discretize()}}.
 
 The argument \code{Laplace} is an small quantity added to the proportions of 1's
 and 0's with the goal to avoid log(p/0) or log(0/p) results. The numerical
@@ -100,12 +100,12 @@ levels of one given predictor. One easy way to do this is by tweaking an
 output returned from \code{dictionary()}.
 }
 \section{Tidying}{
-When you \code{\link[=tidy.recipe]{tidy()}} this step, a tibble with columns \code{terms}
+When you \code{\link[recipes:tidy.recipe]{tidy()}} this step, a tibble with columns \code{terms}
 (the selectors or variables selected), \code{value}, \code{n_tot}, \code{n_bad}, \code{n_good},
 \code{p_bad}, \code{p_good}, \code{woe} and \code{outcome} is returned.. See \code{\link[=dictionary]{dictionary()}} for
 more information.
 
-When you \code{\link[=tidy.recipe]{tidy()}} this step, a tibble is returned with
+When you \code{\link[recipes:tidy.recipe]{tidy()}} this step, a tibble is returned with
 columns \code{terms} \code{value}, \code{n_tot}, \code{n_bad}, \code{n_good}, \code{p_bad}, \code{p_good}, \code{woe}
 and \code{outcome} and \code{id}:
 

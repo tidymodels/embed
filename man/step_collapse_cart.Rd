@@ -23,7 +23,7 @@ step_collapse_cart(
 operations for this recipe.}
 
 \item{...}{One or more selector functions to choose which variables are
-affected by the step. See \code{\link[=selections]{selections()}} for more details. For the \code{tidy}
+affected by the step. See \link[recipes:selections]{recipes::selections} for more details. For the \code{tidy}
 method, these are not currently used.}
 
 \item{role}{Not used by this step since no new variables are created.}
@@ -45,7 +45,7 @@ complex trees.}
 \item{results}{A list of results to convert to new factor levels.}
 
 \item{skip}{A logical. Should the step be skipped when the recipe is baked by
-\code{\link[=bake]{bake()}}? While all operations are baked when \code{\link[=prep]{prep()}} is run, some
+\link[recipes:bake]{recipes::bake}? While all operations are baked when \link[recipes:prep]{recipes::prep} is run, some
 operations may not be able to be conducted on new data (e.g. processing the
 outcome variable(s)). Care should be taken when using \code{skip = TRUE} as it
 may affect the computations for subsequent operations}
@@ -72,7 +72,7 @@ where there is "no admissible split" which means that the model could not
 find any signal in the data.
 }
 \section{Tidying}{
-When you \code{\link[=tidy.recipe]{tidy()}} this step, a tibble is returned with
+When you \code{\link[recipes:tidy.recipe]{tidy()}} this step, a tibble is returned with
 columns \code{terms}, \code{old}, \code{new}, and \code{id}:
 
 \describe{
