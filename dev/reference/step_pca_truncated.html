@@ -13,7 +13,7 @@ them as is done in recipes::step_pca()."><meta property="og:image" content="http
 
     <a class="navbar-brand me-2" href="../index.html">embed</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.1.4.9000</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.1.5.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -110,7 +110,7 @@ argument <code>x</code> should not be passed here (or at all).</p></dd>
 
 <dt id="arg-res">res<a class="anchor" aria-label="anchor" href="#arg-res"></a></dt>
 <dd><p>The <code><a href="https://rdrr.io/pkg/irlba/man/prcomp_irlba.html" class="external-link">irlba::prcomp_irlba()</a></code> object is stored here once this
-preprocessing step has be trained by <code><a href="https://recipes.tidymodels.org/reference/prep.html" class="external-link">prep()</a></code>.</p></dd>
+preprocessing step has be trained by <a href="https://recipes.tidymodels.org/reference/prep.html" class="external-link">recipes::prep</a>.</p></dd>
 
 
 <dt id="arg-columns">columns<a class="anchor" aria-label="anchor" href="#arg-columns"></a></dt>
@@ -156,8 +156,8 @@ independent from one another. This means that they can be used to combat
 large inter-variables correlations in a data set.</p>
 <p>It is advisable to standardize the variables prior to running PCA. Here, each
 variable will be centered and scaled prior to the PCA calculation. This can
-be changed using the <code>options</code> argument or by using <code><a href="https://recipes.tidymodels.org/reference/step_center.html" class="external-link">step_center()</a></code> and
-<code><a href="https://recipes.tidymodels.org/reference/step_scale.html" class="external-link">step_scale()</a></code>.</p>
+be changed using the <code>options</code> argument or by using <code><a href="https://recipes.tidymodels.org/reference/step_center.html" class="external-link">recipes::step_center()</a></code> and
+<code><a href="https://recipes.tidymodels.org/reference/step_scale.html" class="external-link">recipes::step_scale()</a></code>.</p>
 <p>The argument <code>num_comp</code> controls the number of components that will be retained
 (the original variables that are used to derive the components are removed from
 the data). The new components will have names that begin with <code>prefix</code> and a
@@ -210,7 +210,7 @@ the <code>type</code> argument. If <code>type = "coef"</code> a tibble returned 
 
 <p>This step performs an unsupervised operation that can utilize case weights.
 As a result, case weights are only used with frequency weights. For more
-information, see the documentation in <a href="https://recipes.tidymodels.org/reference/case_weights.html" class="external-link">case_weights</a> and the examples on
+information, see the documentation in <a href="https://recipes.tidymodels.org/reference/case_weights.html" class="external-link">recipes::case_weights</a> and the examples on
 <code>tidymodels.org</code>.</p>
     </div>
     <div class="section level2">

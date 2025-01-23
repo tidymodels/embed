@@ -11,7 +11,7 @@ against a binary outcome."><meta property="og:image" content="https://embed.tidy
 
     <a class="navbar-brand me-2" href="../index.html">embed</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.1.4.9000</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.1.5.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -75,7 +75,7 @@ operations for this recipe.</p></dd>
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
 <dd><p>One or more selector functions to choose which variables will be
-used to compute the components. See <code><a href="https://recipes.tidymodels.org/reference/selections.html" class="external-link">selections()</a></code> for more details. For
+used to compute the components. See <a href="https://recipes.tidymodels.org/reference/selections.html" class="external-link">recipes::selections</a> for more details. For
 the <code>tidy</code> method, these are not currently used.</p></dd>
 
 
@@ -148,7 +148,7 @@ ones with the property that the order and magnitude reflects the association
 with a binary outcome.  To apply it on numerical predictors, it is advisable
 to discretize the variables prior to running WoE. Here, each variable will be
 binarized to have woe associated later. This can achieved by using
-<code><a href="https://recipes.tidymodels.org/reference/step_discretize.html" class="external-link">step_discretize()</a></code>.</p>
+<code><a href="https://recipes.tidymodels.org/reference/step_discretize.html" class="external-link">recipes::step_discretize()</a></code>.</p>
 <p>The argument <code>Laplace</code> is an small quantity added to the proportions of 1's
 and 0's with the goal to avoid log(p/0) or log(0/p) results. The numerical
 woe versions will have names that begin with <code>woe_</code> followed by the
