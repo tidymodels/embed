@@ -1,105 +1,37 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://embed.tidymodels.org/404.html</loc>
-  </url>
-  <url>
-    <loc>https://embed.tidymodels.org/CODE_OF_CONDUCT.html</loc>
-  </url>
-  <url>
-    <loc>https://embed.tidymodels.org/CONTRIBUTING.html</loc>
-  </url>
-  <url>
-    <loc>https://embed.tidymodels.org/LICENSE-text.html</loc>
-  </url>
-  <url>
-    <loc>https://embed.tidymodels.org/LICENSE.html</loc>
-  </url>
-  <url>
-    <loc>https://embed.tidymodels.org/articles/Applications/GLM.html</loc>
-  </url>
-  <url>
-    <loc>https://embed.tidymodels.org/articles/Applications/Tensorflow.html</loc>
-  </url>
-  <url>
-    <loc>https://embed.tidymodels.org/articles/index.html</loc>
-  </url>
-  <url>
-    <loc>https://embed.tidymodels.org/authors.html</loc>
-  </url>
-  <url>
-    <loc>https://embed.tidymodels.org/index.html</loc>
-  </url>
-  <url>
-    <loc>https://embed.tidymodels.org/news/index.html</loc>
-  </url>
-  <url>
-    <loc>https://embed.tidymodels.org/reference/add_woe.html</loc>
-  </url>
-  <url>
-    <loc>https://embed.tidymodels.org/reference/dictionary.html</loc>
-  </url>
-  <url>
-    <loc>https://embed.tidymodels.org/reference/embed-package.html</loc>
-  </url>
-  <url>
-    <loc>https://embed.tidymodels.org/reference/index.html</loc>
-  </url>
-  <url>
-    <loc>https://embed.tidymodels.org/reference/reexports.html</loc>
-  </url>
-  <url>
-    <loc>https://embed.tidymodels.org/reference/required_pkgs.embed.html</loc>
-  </url>
-  <url>
-    <loc>https://embed.tidymodels.org/reference/solubility.html</loc>
-  </url>
-  <url>
-    <loc>https://embed.tidymodels.org/reference/step_collapse_cart.html</loc>
-  </url>
-  <url>
-    <loc>https://embed.tidymodels.org/reference/step_collapse_stringdist.html</loc>
-  </url>
-  <url>
-    <loc>https://embed.tidymodels.org/reference/step_discretize_cart.html</loc>
-  </url>
-  <url>
-    <loc>https://embed.tidymodels.org/reference/step_discretize_xgb.html</loc>
-  </url>
-  <url>
-    <loc>https://embed.tidymodels.org/reference/step_embed.html</loc>
-  </url>
-  <url>
-    <loc>https://embed.tidymodels.org/reference/step_feature_hash.html</loc>
-  </url>
-  <url>
-    <loc>https://embed.tidymodels.org/reference/step_lencode_bayes.html</loc>
-  </url>
-  <url>
-    <loc>https://embed.tidymodels.org/reference/step_lencode_glm.html</loc>
-  </url>
-  <url>
-    <loc>https://embed.tidymodels.org/reference/step_lencode_mixed.html</loc>
-  </url>
-  <url>
-    <loc>https://embed.tidymodels.org/reference/step_pca_sparse.html</loc>
-  </url>
-  <url>
-    <loc>https://embed.tidymodels.org/reference/step_pca_sparse_bayes.html</loc>
-  </url>
-  <url>
-    <loc>https://embed.tidymodels.org/reference/step_pca_truncated.html</loc>
-  </url>
-  <url>
-    <loc>https://embed.tidymodels.org/reference/step_umap.html</loc>
-  </url>
-  <url>
-    <loc>https://embed.tidymodels.org/reference/step_woe.html</loc>
-  </url>
-  <url>
-    <loc>https://embed.tidymodels.org/reference/tunable_embed.html</loc>
-  </url>
-  <url>
-    <loc>https://embed.tidymodels.org/reference/woe_table.html</loc>
-  </url>
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>https://embed.tidymodels.org/404.html</loc></url>
+<url><loc>https://embed.tidymodels.org/CODE_OF_CONDUCT.html</loc></url>
+<url><loc>https://embed.tidymodels.org/CONTRIBUTING.html</loc></url>
+<url><loc>https://embed.tidymodels.org/LICENSE-text.html</loc></url>
+<url><loc>https://embed.tidymodels.org/LICENSE.html</loc></url>
+<url><loc>https://embed.tidymodels.org/articles/Applications/GLM.html</loc></url>
+<url><loc>https://embed.tidymodels.org/articles/Applications/Tensorflow.html</loc></url>
+<url><loc>https://embed.tidymodels.org/articles/index.html</loc></url>
+<url><loc>https://embed.tidymodels.org/authors.html</loc></url>
+<url><loc>https://embed.tidymodels.org/index.html</loc></url>
+<url><loc>https://embed.tidymodels.org/news/index.html</loc></url>
+<url><loc>https://embed.tidymodels.org/reference/add_woe.html</loc></url>
+<url><loc>https://embed.tidymodels.org/reference/dictionary.html</loc></url>
+<url><loc>https://embed.tidymodels.org/reference/embed-package.html</loc></url>
+<url><loc>https://embed.tidymodels.org/reference/index.html</loc></url>
+<url><loc>https://embed.tidymodels.org/reference/reexports.html</loc></url>
+<url><loc>https://embed.tidymodels.org/reference/required_pkgs.embed.html</loc></url>
+<url><loc>https://embed.tidymodels.org/reference/solubility.html</loc></url>
+<url><loc>https://embed.tidymodels.org/reference/step_collapse_cart.html</loc></url>
+<url><loc>https://embed.tidymodels.org/reference/step_collapse_stringdist.html</loc></url>
+<url><loc>https://embed.tidymodels.org/reference/step_discretize_cart.html</loc></url>
+<url><loc>https://embed.tidymodels.org/reference/step_discretize_xgb.html</loc></url>
+<url><loc>https://embed.tidymodels.org/reference/step_embed.html</loc></url>
+<url><loc>https://embed.tidymodels.org/reference/step_feature_hash.html</loc></url>
+<url><loc>https://embed.tidymodels.org/reference/step_lencode_bayes.html</loc></url>
+<url><loc>https://embed.tidymodels.org/reference/step_lencode_glm.html</loc></url>
+<url><loc>https://embed.tidymodels.org/reference/step_lencode_mixed.html</loc></url>
+<url><loc>https://embed.tidymodels.org/reference/step_pca_sparse.html</loc></url>
+<url><loc>https://embed.tidymodels.org/reference/step_pca_sparse_bayes.html</loc></url>
+<url><loc>https://embed.tidymodels.org/reference/step_pca_truncated.html</loc></url>
+<url><loc>https://embed.tidymodels.org/reference/step_umap.html</loc></url>
+<url><loc>https://embed.tidymodels.org/reference/step_woe.html</loc></url>
+<url><loc>https://embed.tidymodels.org/reference/tunable_embed.html</loc></url>
+<url><loc>https://embed.tidymodels.org/reference/woe_table.html</loc></url>
 </urlset>
+
