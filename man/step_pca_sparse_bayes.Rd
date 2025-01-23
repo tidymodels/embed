@@ -26,7 +26,7 @@ step_pca_sparse_bayes(
 operations for this recipe.}
 
 \item{...}{One or more selector functions to choose which variables will be
-used to compute the components. See \code{\link[=selections]{selections()}} for more details. For
+used to compute the components. See \link[recipes:selections]{recipes::selections} for more details. For
 the \code{tidy} method, these are not currently used.}
 
 \item{role}{For model terms created by this step, what analysis role should
@@ -55,7 +55,7 @@ parameter increases the number of zero coefficients.}
 \code{\link[VBsparsePCA:VBsparsePCA]{VBsparsePCA::VBsparsePCA()}}.}
 
 \item{res}{The rotation matrix once this preprocessing step has been trained
-by \code{\link[=prep]{prep()}}.}
+by \link[recipes:prep]{recipes::prep}.}
 
 \item{prefix}{A character string that will be the prefix to the resulting new
 variables. See notes below.}
@@ -107,7 +107,7 @@ sequence of numbers. The variable names are padded with zeros. For example, if
 the names would be \code{PC1} - \code{PC101}.
 }
 \section{Tidying}{
-When you \code{\link[=tidy.recipe]{tidy()}} this step, a tibble is returned with
+When you \code{\link[recipes:tidy.recipe]{tidy()}} this step, a tibble is returned with
 columns \code{terms}, \code{value}, \code{component}, and \code{id}:
 
 \describe{

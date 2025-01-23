@@ -24,7 +24,7 @@ step_collapse_stringdist(
 sequence of operations for this recipe.}
 
 \item{...}{One or more selector functions to choose which variables are
-affected by the step. See \code{\link[=selections]{selections()}} for more details.  For the \code{tidy}
+affected by the step. See \link[recipes:selections]{recipes::selections} for more details.  For the \code{tidy}
 method, these are not currently used.}
 
 \item{role}{Not used by this step since no new variables are created.}
@@ -44,7 +44,7 @@ that have a string distance between them of 2 or lower.}
 are used for different values of \code{method}.}
 
 \item{results}{A list denoting the way the labels should be collapses is
-stored here once this preprocessing step has be trained by \code{\link[=prep]{prep()}}.}
+stored here once this preprocessing step has be trained by \link[recipes:prep]{recipes::prep}.}
 
 \item{columns}{A character string of variable names that will be populated
 (eventually) by the \code{terms} argument.}
@@ -68,7 +68,7 @@ columns \code{terms} (the columns that will be affected) and \code{base}.
 will collapse factor levels that have a low stringdist between them.
 }
 \section{Tidying}{
-When you \code{\link[=tidy.recipe]{tidy()}} this step, a tibble is returned with
+When you \code{\link[recipes:tidy.recipe]{tidy()}} this step, a tibble is returned with
 columns \code{terms}, \code{from}, \code{to}, and \code{id}:
 
 \describe{

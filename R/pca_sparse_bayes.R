@@ -8,7 +8,7 @@
 #' @inheritParams recipes::step_pca
 #' @inherit step_lencode_bayes return
 #' @param ... One or more selector functions to choose which variables will be
-#'   used to compute the components. See [selections()] for more details. For
+#'   used to compute the components. See [recipes::selections] for more details. For
 #'   the `tidy` method, these are not currently used.
 #' @param role For model terms created by this step, what analysis role should
 #'   they be assigned? By default, the function assumes that the new principal
@@ -25,7 +25,7 @@
 #' @param options A list of options to the default method for
 #'   [VBsparsePCA::VBsparsePCA()].
 #' @param res The rotation matrix once this preprocessing step has been trained
-#'   by [prep()].
+#'   by [recipes::prep].
 #' @param prefix A character string that will be the prefix to the resulting new
 #'   variables. See notes below.
 #' @return An updated version of `recipe` with the new step added to the
@@ -65,7 +65,7 @@
 #'
 #' # Tidying
 #'
-#' When you [`tidy()`][tidy.recipe()] this step, a tibble is returned with
+#' When you [`tidy()`][recipes::tidy.recipe] this step, a tibble is returned with
 #' columns `terms`, `value`, `component`, and `id`:
 #'
 #' \describe{

@@ -7,7 +7,7 @@
 #' @param recipe A recipe object. The step will be added to the sequence of
 #'   operations for this recipe.
 #' @param ... One or more selector functions to choose which variables are
-#'   affected by the step. See [selections()] for more details.
+#'   affected by the step. See [recipes::selections] for more details.
 #' @param role Defaults to `"predictor"`.
 #' @param trained A logical to indicate if the quantities for preprocessing have
 #'   been estimated.
@@ -46,7 +46,7 @@
 #'
 #' # Tidying
 #' 
-#' When you [`tidy()`][tidy.recipe()] this step, a tibble is returned with
+#' When you [`tidy()`][recipes::tidy.recipe] this step, a tibble is returned with
 #' columns `terms`, `value`, and `id`:
 #' 
 #' \describe{

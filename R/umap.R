@@ -34,8 +34,8 @@
 #'   `n_threads` are set.
 #' @param seed Two integers to control the random numbers used by the numerical
 #'   methods. The default pulls from the main session's stream of numbers and
-#'   will give reproducible results if the seed is set prior to calling [prep()]
-#'   or [bake()].
+#'   will give reproducible results if the seed is set prior to calling [recipes::prep]
+#'   or [recipes::bake].
 #' @param retain Use `keep_original_cols` instead to specify whether the
 #'   original predictors should be retained along with the new embedding
 #'   variables.
@@ -57,7 +57,7 @@
 #'
 #' # Tidying
 #'
-#' When you [`tidy()`][tidy.recipe()] this step, a tibble is returned with
+#' When you [`tidy()`][recipes::tidy.recipe] this step, a tibble is returned with
 #'  columns `terms` and `id`:
 #' 
 #' \describe{

@@ -5,7 +5,7 @@
 #'
 #' @inheritParams recipes::step_center
 #' @param ... One or more selector functions to choose which variables are
-#'   affected by the step. See [selections()] for more details.  For the `tidy`
+#'   affected by the step. See [recipes::selections] for more details.  For the `tidy`
 #'   method, these are not currently used.
 #' @param role Not used by this step since no new variables are created.
 #' @param distance Integer, value to determine which strings should be collapsed
@@ -17,7 +17,7 @@
 #'   [stringdist::stringdistmatrix()] such as `weight`, `q`, `p`, and `bt`, that
 #'   are used for different values of `method`. 
 #' @param results A list denoting the way the labels should be collapses is
-#'   stored here once this preprocessing step has be trained by [prep()].
+#'   stored here once this preprocessing step has be trained by [recipes::prep].
 #' @param columns A character string of variable names that will be populated
 #'   (eventually) by the `terms` argument.
 #' @return An updated version of `recipe` with the new step added to the
@@ -28,7 +28,7 @@
 #'
 #' # Tidying
 #' 
-#' When you [`tidy()`][tidy.recipe()] this step, a tibble is returned with
+#' When you [`tidy()`][recipes::tidy.recipe] this step, a tibble is returned with
 #' columns `terms`, `from`, `to`, and `id`:
 #' 
 #' \describe{

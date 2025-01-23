@@ -26,7 +26,7 @@ step_discretize_xgb(
 operations for this recipe.}
 
 \item{...}{One or more selector functions to choose which variables are
-affected by the step. See \code{\link[=selections]{selections()}} for more details.}
+affected by the step. See \link[recipes:selections]{recipes::selections} for more details.}
 
 \item{role}{Defaults to \code{"predictor"}.}
 
@@ -99,7 +99,7 @@ stop with a note about installing the package.
 Note that the original data will be replaced with the new bins.
 }
 \section{Tidying}{
-When you \code{\link[=tidy.recipe]{tidy()}} this step, a tibble is returned with
+When you \code{\link[recipes:tidy.recipe]{tidy()}} this step, a tibble is returned with
 columns \code{terms}, \code{value}, and \code{id}:
 
 \describe{

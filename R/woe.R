@@ -8,7 +8,7 @@
 #' @inheritParams recipes::step_pca
 #' @inherit step_center return
 #' @param ... One or more selector functions to choose which variables will be
-#'   used to compute the components. See [selections()] for more details. For
+#'   used to compute the components. See [recipes::selections] for more details. For
 #'   the `tidy` method, these are not currently used.
 #' @param role For model terms created by this step, what analysis role should
 #'   they be assigned?. By default, the function assumes that the new woe
@@ -45,7 +45,7 @@
 #' with a binary outcome.  To apply it on numerical predictors, it is advisable
 #' to discretize the variables prior to running WoE. Here, each variable will be
 #' binarized to have woe associated later. This can achieved by using
-#' [step_discretize()].
+#' [recipes::step_discretize()].
 #'
 #' The argument `Laplace` is an small quantity added to the proportions of 1's
 #' and 0's with the goal to avoid log(p/0) or log(0/p) results. The numerical
@@ -62,12 +62,12 @@
 #'
 #' # Tidying
 #'
-#' When you [`tidy()`][tidy.recipe()] this step, a tibble with columns `terms`
+#' When you [`tidy()`][recipes::tidy.recipe] this step, a tibble with columns `terms`
 #' (the selectors or variables selected), `value`, `n_tot`, `n_bad`, `n_good`,
 #' `p_bad`, `p_good`, `woe` and `outcome` is returned.. See [dictionary()] for
 #' more information.
 #' 
-#' When you [`tidy()`][tidy.recipe()] this step, a tibble is returned with
+#' When you [`tidy()`][recipes::tidy.recipe] this step, a tibble is returned with
 #' columns `terms` `value`, `n_tot`, `n_bad`, `n_good`, `p_bad`, `p_good`, `woe`
 #' and `outcome` and `id`:
 #' 

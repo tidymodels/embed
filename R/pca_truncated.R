@@ -11,7 +11,7 @@
 #'   `center = FALSE`, `scale. = FALSE`, and `tol = NULL`. **Note** that the
 #'   argument `x` should not be passed here (or at all).
 #' @param res The [irlba::prcomp_irlba()] object is stored here once this
-#'   preprocessing step has be trained by [prep()].
+#'   preprocessing step has be trained by [recipes::prep].
 #' @template step-return
 #' @details
 #'
@@ -24,8 +24,8 @@
 #'
 #' It is advisable to standardize the variables prior to running PCA. Here, each
 #' variable will be centered and scaled prior to the PCA calculation. This can
-#' be changed using the `options` argument or by using [step_center()] and
-#' [step_scale()].
+#' be changed using the `options` argument or by using [recipes::step_center()] and
+#' [recipes::step_scale()].
 #'
 #' ```{r, echo = FALSE, results="asis"}
 #' prefix <- "PC"
@@ -35,7 +35,7 @@
 #' 
 #' # Tidying
 #'
-#' When you [`tidy()`][tidy.recipe()] this step two things can happen depending
+#' When you [`tidy()`][recipes::tidy.recipe] this step two things can happen depending
 #' the `type` argument. If `type = "coef"` a tibble returned with 4 columns
 #' `terms`, `value`, `component` , and `id`:
 #'
