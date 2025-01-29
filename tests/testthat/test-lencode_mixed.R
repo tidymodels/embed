@@ -1,4 +1,4 @@
-test_that("factor encoded predictor", {
+test_that("factor outcome - factor predictor", {
   skip_if_not_installed("Matrix", "1.6-2")
   skip_if_not_installed("lme4", "1.1-35.1")
   
@@ -58,7 +58,7 @@ test_that("factor encoded predictor", {
   )
 })
 
-test_that("character encoded predictor", {
+test_that("factor outcome - character predictor", {
   skip_if_not_installed("Matrix", "1.6-2")
   skip_if_not_installed("lme4", "1.1-35.1")
   
@@ -116,9 +116,7 @@ test_that("character encoded predictor", {
   )
 })
 
-###################################################################
-
-test_that("factor encoded predictor", {
+test_that("numeric outcome - factor predictor", {
   skip_if_not_installed("Matrix", "1.6-2")
   skip_if_not_installed("lme4", "1.1-35.1")
   
@@ -179,7 +177,7 @@ test_that("factor encoded predictor", {
   )
 })
 
-test_that("character encoded predictor", {
+test_that("numeric outcome - character predictor", {
   skip_if_not_installed("Matrix", "1.6-2")
   skip_if_not_installed("lme4", "1.1-35.1")
   
@@ -236,8 +234,6 @@ test_that("character encoded predictor", {
     key$x3$..value
   )
 })
-
-###################################################################
 
 test_that("bad args", {
   skip_if_not_installed("Matrix", "1.6-2")

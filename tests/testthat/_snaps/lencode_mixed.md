@@ -1,4 +1,4 @@
-# factor encoded predictor
+# factor outcome - factor predictor
 
     Code
       new_values_ch <- bake(class_test, new_data = new_dat_ch)
@@ -8,7 +8,7 @@
       * `x3`
       i This may cause errors when processing new data.
 
----
+# numeric outcome - factor predictor
 
     Code
       new_values_ch <- bake(reg_test, new_data = new_dat_ch)
