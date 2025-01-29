@@ -1,4 +1,4 @@
-# factor encoded predictor
+# factor outcome - factor predictor
 
     Code
       class_test <- recipe(x2 ~ ., data = ex_dat) %>% step_lencode_bayes(x3, outcome = vars(
@@ -15,7 +15,15 @@
       * `x3`
       i This may cause errors when processing new data.
 
----
+# factor outcome - character predictor
+
+    Code
+      class_test <- recipe(x2 ~ ., data = ex_dat_ch) %>% step_lencode_bayes(x3,
+        outcome = vars(x2), verbose = FALSE, options = opts, id = "id") %>% prep(
+        training = ex_dat_ch, retain = TRUE, options = opts)
+    Condition
+
+# numeric outcome - factor predictor
 
     Code
       set.seed(8283)
@@ -33,15 +41,7 @@
       * `x3`
       i This may cause errors when processing new data.
 
-# character encoded predictor
-
-    Code
-      class_test <- recipe(x2 ~ ., data = ex_dat_ch) %>% step_lencode_bayes(x3,
-        outcome = vars(x2), verbose = FALSE, options = opts, id = "id") %>% prep(
-        training = ex_dat_ch, retain = TRUE, options = opts)
-    Condition
-
----
+# numeric outcome - character predictor
 
     Code
       set.seed(8283)

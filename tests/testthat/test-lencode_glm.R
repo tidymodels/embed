@@ -1,4 +1,4 @@
-test_that("factor encoded predictor", {
+test_that("factor outcome - factor predictor", {
   class_test <- recipe(x2 ~ ., data = ex_dat) %>%
     step_lencode_glm(x3, outcome = vars(x2), id = "id") %>%
     prep(training = ex_dat, retain = TRUE)
@@ -55,7 +55,7 @@ test_that("factor encoded predictor", {
   )
 })
 
-test_that("character encoded predictor", {
+test_that("factor outcome - character predictor", {
   class_test <- recipe(x2 ~ ., data = ex_dat_ch) %>%
     step_lencode_glm(x3, outcome = vars(x2)) %>%
     prep(training = ex_dat_ch, retain = TRUE)
@@ -112,7 +112,7 @@ test_that("character encoded predictor", {
   )
 })
 
-test_that("factor encoded predictor", {
+test_that("numeric outcome - factor predictor", {
   reg_test <- recipe(x1 ~ ., data = ex_dat) %>%
     step_lencode_glm(x3, outcome = vars(x1)) %>%
     prep(training = ex_dat, retain = TRUE)
@@ -170,7 +170,7 @@ test_that("factor encoded predictor", {
   )
 })
 
-test_that("character encoded predictor", {
+test_that("numeric outcome - character predictor", {
   reg_test <- recipe(x1 ~ ., data = ex_dat_ch) %>%
     step_lencode_glm(x3, outcome = vars(x1)) %>%
     prep(training = ex_dat_ch, retain = TRUE)

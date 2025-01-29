@@ -1,4 +1,4 @@
-# factor encoded predictor
+# factor outcome - factor predictor
 
     Code
       new_values_ch <- bake(class_test, new_data = new_dat_ch)
@@ -8,7 +8,12 @@
       * `x3`
       i This may cause errors when processing new data.
 
----
+# factor outcome - character predictor
+
+    Code
+      new_values <- bake(class_test, new_data = new_dat_ch)
+
+# numeric outcome - factor predictor
 
     Code
       new_values_ch <- bake(reg_test, new_data = new_dat_ch)
@@ -17,11 +22,6 @@
       ! There was 1 column that was a factor when the recipe was prepped:
       * `x3`
       i This may cause errors when processing new data.
-
-# character encoded predictor
-
-    Code
-      new_values <- bake(class_test, new_data = new_dat_ch)
 
 # bad args
 

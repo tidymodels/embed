@@ -9,7 +9,7 @@ omit_warning <- function(pattern) {
   }
 }
 
-test_that("factor encoded predictor", {
+test_that("factor outcome - factor predictor", {
   skip_on_cran()
   skip_if_not_installed("rstanarm")
   skip_if_not_installed("Matrix", "1.6-2")
@@ -79,7 +79,7 @@ test_that("factor encoded predictor", {
   )
 })
 
-test_that("character encoded predictor", {
+test_that("factor outcome - character predictor", {
   skip_on_cran()
   skip_if_not_installed("rstanarm")
   skip_if_not_installed("Matrix", "1.6-2")
@@ -149,7 +149,7 @@ test_that("character encoded predictor", {
   )
 })
 
-test_that("factor encoded predictor", {
+test_that("numeric outcome - factor predictor", {
   skip_on_cran()
   skip_if_not_installed("rstanarm")
   skip_if_not_installed("Matrix", "1.6-2")
@@ -222,7 +222,7 @@ test_that("factor encoded predictor", {
   )
 })
 
-test_that("character encoded predictor", {
+test_that("numeric outcome - character predictor", {
   skip_on_cran()
   skip_if_not_installed("rstanarm")
   skip_if_not_installed("Matrix", "1.6-2")
