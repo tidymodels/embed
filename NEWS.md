@@ -1,5 +1,7 @@
 # embed (development version)
 
+* `step_feature_hash()` has been fully deprecated in favor of `textrecipes::step_dummy_hash()`. (#253)
+
 # embed 1.1.5
 
 ## Improvements
