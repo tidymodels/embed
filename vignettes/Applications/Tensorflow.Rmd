@@ -9,7 +9,9 @@ output:
 ---
 
 
-```{r setup, include = FALSE}
+```{r}
+#| label: setup
+#| include: false
 library(tidymodels)
 library(keras3)
 library(embed)
@@ -28,7 +30,8 @@ To translate this model to a set of embeddings, the coefficients of the original
 
 As an example, we use the Ames housing data where the sale price of houses are being predicted. One predictor, neighborhood, has the most factor levels of the predictors. 
 
-```{r ames}
+```{r}
+#| label: ames
 library(tidymodels)
 data(ames)
 length(levels(ames$Neighborhood))
@@ -36,7 +39,8 @@ length(levels(ames$Neighborhood))
 
 The distribution of data in the neighborhood is not uniform:
 
-```{r ames-xtab}
+```{r}
+#| label: ames-xtab
 #| fig.alt: "Horizontal bar chart. n along the x axis, neighborhoods along the y-axis. The lengths of the bars vary from near zero for Landmarks and Green_Hills, to almost 450 for North_Ames."
 ames |>
   count(Neighborhood) |>
@@ -48,7 +52,8 @@ ames |>
 
 Fo plotting later, we calculate the simple means per neighborhood:
 
-```{r ames-means}
+```{r}
+#| label: ames-means
 means <-
   ames |>
   group_by(Neighborhood) |>
@@ -62,7 +67,8 @@ means <-
 
 We'll fit a model with 10 hidden units and 3 encoding columns:
 
-```{r ames-linear}
+```{r}
+#| label: ames-linear
 #| fig-alt: "Line chart with 2 lines. epochs along the x-axis, loss along the y-axis. The two lines are colored according to the type of loss, red for normal loss and blue for validation loss. The lines have high values for small epochs and lower values for higher epochs, with the validation loss being lower at all times."
 library(embed)
 tf_embed <-
@@ -93,7 +99,9 @@ tf_embed$steps[[4]]$history |>
 
 The embeddings are obtained using the `tidy` method:
 
-```{r linear-coefs, warning = FALSE}
+```{r}
+#| label: linear-coefs
+#| warning: false
 hood_coef <-
   tidy(tf_embed, number = 4) |>
   dplyr::select(-terms, -id) |>
@@ -139,7 +147,8 @@ girafe(ggobj = tf_plot)
 
 However, this has induced some between-predictor correlations:
 
-```{r linear-cor}
+```{r}
+#| label: linear-cor
 hood_coef |>
   dplyr::select(contains("emb")) |>
   cor() |>
