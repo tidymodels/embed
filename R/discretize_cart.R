@@ -241,7 +241,7 @@ prep.step_discretize_cart <- function(x, training, info = NULL, ...) {
         wts = wts
       )
 
-    has_splits <- purrr::map_lgl(rules, ~ length(.x) > 0)
+    has_splits <- purrr::map_lgl(rules, \(.x) length(.x) > 0)
 
     rules <- rules[has_splits]
     col_names <- col_names[has_splits]

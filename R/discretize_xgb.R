@@ -457,7 +457,10 @@ prep.step_discretize_xgb <- function(x, training, info = NULL, ...) {
     # Changes: check for the minimum number of unique data points in the column
     # in order to run the step. Otherwise, take it out of col_names. I think
     # that num_unique = 20 is probably a good default
-    num_unique <- purrr::map_int(training[, col_names], ~ length(unique(.x)))
+    num_unique <- purrr::map_int(
+      training[, col_names],
+      \(.x) length(unique(.x))
+    )
     too_few <- num_unique < 20
     if (any(too_few)) {
       predictors <- paste0("'", col_names[too_few], "'", collapse = ", ")
@@ -487,7 +490,7 @@ prep.step_discretize_xgb <- function(x, training, info = NULL, ...) {
       )
     }
 
-    has_splits <- purrr::map_lgl(rules, ~ length(.x) > 0)
+    has_splits <- purrr::map_lgl(rules, \(.x) length(.x) > 0)
 
     rules <- rules[has_splits]
     col_names <- col_names[has_splits]

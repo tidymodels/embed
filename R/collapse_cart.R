@@ -230,12 +230,12 @@ collapse_rpart <- function(x, feature_name, y, prefix = feature_name, ...) {
   groups <-
     purrr::map(
       term_nodes_ind,
-      ~ rpart::path.rpart(split_model, .x, print.it = FALSE)[[1]]
+      \(.x) rpart::path.rpart(split_model, .x, print.it = FALSE)[[1]]
     ) |>
-    purrr::map(~ .x[length(.x)]) |>
-    purrr::map(~ strsplit(.x, "=")[[1]]) |>
-    purrr::map(~ .x[length(.x)]) |>
-    purrr::map(~ strsplit(.x, ",")[[1]])
+    purrr::map(\(.x) .x[length(.x)]) |>
+    purrr::map(\(.x) strsplit(.x, "=")[[1]]) |>
+    purrr::map(\(.x) .x[length(.x)]) |>
+    purrr::map(\(.x) strsplit(.x, ",")[[1]])
   group_size <- purrr::map_int(groups, length)
 
   # check for each level a group

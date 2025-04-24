@@ -211,7 +211,7 @@ bake.step_collapse_stringdist <- function(object, new_data, ...) {
 }
 
 collapse_apply <- function(x, dict) {
-  dict <- purrr::map_dfr(dict, ~ list(from = .x, to = .x[1]))
+  dict <- purrr::map_dfr(dict, \(.x) list(from = .x, to = .x[1]))
 
   res <- dict$to[match(x, dict$from)]
 
@@ -236,7 +236,7 @@ tidy.step_collapse_stringdist <- function(x, ...) {
     } else {
       res <- purrr::map_dfr(
         x$results,
-        ~ purrr::map_dfr(.x, ~ list(from = .x, to = .x[1])),
+        ~ purrr::map_dfr(.x, \(.x) list(from = .x, to = .x[1])),
         .id = "terms"
       )
     }
