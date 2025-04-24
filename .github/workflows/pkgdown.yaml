@@ -4,7 +4,6 @@ on:
   push:
     branches: [main, master]
   pull_request:
-    branches: [main, master]
   release:
     types: [published]
   workflow_dispatch:
@@ -44,8 +43,8 @@ jobs:
  
       - name: Install TensorFlow
         run: |
-          reticulate::conda_create('r-reticulate', packages = c('python==3.6.9'))
-          tensorflow::install_tensorflow(version='2.13.1')
+          reticulate::conda_create('r-reticulate', packages = c('python==3.11.11'))
+          tensorflow::install_tensorflow(version='2.16')
         shell: Rscript {0}
 
       - name: Build site
