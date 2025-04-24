@@ -21,7 +21,7 @@ preprocessing methods are *supervised*.
 These steps are available here in a separate package because the step
 dependencies, [`rstanarm`](https://CRAN.r-project.org/package=rstanarm),
 [`lme4`](https://CRAN.r-project.org/package=lme4), and
-[`keras`](https://CRAN.r-project.org/package=keras), are fairly heavy.
+[`keras3`](https://CRAN.r-project.org/package=keras3), are fairly heavy.
 
 Some steps handle categorical predictors:
 
@@ -33,7 +33,7 @@ Some steps handle categorical predictors:
   pooling (`stan_glm` or `lmer`). Currently implemented for numeric and
   two-class outcomes.
 
-- `step_embed()` uses `keras::layer_embedding` to translate the original
+- `step_embed()` uses `keras3::layer_embedding` to translate the original
   *C* factor levels into a set of *D* new variables (\< *C*). The model
   fitting routine optimizes which factor levels are mapped to each of
   the new variables as well as the corresponding regression coefficients

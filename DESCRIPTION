@@ -41,7 +41,7 @@ Suggests:
     ggplot2,
     hardhat,
     irlba,
-    keras,
+    keras3,
     knitr,
     lme4,
     modeldata,
