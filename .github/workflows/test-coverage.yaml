@@ -34,7 +34,7 @@ jobs:
  
       - name: Install TensorFlow
         run: |
-          reticulate::conda_create('r-reticulate', packages = c('python==3.11.11'))
+          reticulate::conda_create('r-reticulate', packages = c('python==3.11'))
           tensorflow::install_tensorflow(version='2.16')
         shell: Rscript {0}
 
