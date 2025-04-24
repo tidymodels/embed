@@ -1,17 +1,7 @@
-# check_name() is used
-
-    Code
-      prep(rec, training = dat)
-    Condition
-      Error in `step_umap()`:
-      Caused by error in `bake()`:
-      ! Name collision occurred. The following variable names already exist:
-      * `UMAP1`
-
 # bad args
 
     Code
-      recipe(~., data = mtcars) %>% step_umap(num_comp = -4) %>% prep()
+      prep(step_umap(recipe(~., data = mtcars), num_comp = -4))
     Condition
       Error in `step_umap()`:
       Caused by error in `prep()`:
@@ -20,7 +10,7 @@
 ---
 
     Code
-      recipe(~., data = mtcars) %>% step_umap(neighbors = -4) %>% prep()
+      prep(step_umap(recipe(~., data = mtcars), neighbors = -4))
     Condition
       Error in `step_umap()`:
       Caused by error in `prep()`:
@@ -29,7 +19,7 @@
 ---
 
     Code
-      recipe(~., data = mtcars) %>% step_umap(min_dist = TRUE) %>% prep()
+      prep(step_umap(recipe(~., data = mtcars), min_dist = TRUE))
     Condition
       Error in `step_umap()`:
       Caused by error in `prep()`:
@@ -38,7 +28,7 @@
 ---
 
     Code
-      recipe(~., data = mtcars) %>% step_umap(learn_rate = -4) %>% prep()
+      prep(step_umap(recipe(~., data = mtcars), learn_rate = -4))
     Condition
       Error in `step_umap()`:
       Caused by error in `prep()`:
@@ -47,7 +37,7 @@
 ---
 
     Code
-      recipe(~., data = mtcars) %>% step_umap(epochs = -4) %>% prep()
+      prep(step_umap(recipe(~., data = mtcars), epochs = -4))
     Condition
       Error in `step_umap()`:
       Caused by error in `prep()`:
@@ -56,7 +46,7 @@
 ---
 
     Code
-      recipe(~., data = mtcars) %>% step_umap(initial = "wrong") %>% prep()
+      prep(step_umap(recipe(~., data = mtcars), initial = "wrong"))
     Condition
       Error in `step_umap()`:
       Caused by error in `prep()`:
@@ -65,7 +55,7 @@
 ---
 
     Code
-      recipe(~., data = mtcars) %>% step_umap(target_weight = -4) %>% prep()
+      prep(step_umap(recipe(~., data = mtcars), target_weight = -4))
     Condition
       Error in `step_umap()`:
       Caused by error in `prep()`:
@@ -74,7 +64,7 @@
 ---
 
     Code
-      recipe(~., data = mtcars) %>% step_umap(prefix = NULL)
+      step_umap(recipe(~., data = mtcars), prefix = NULL)
     Condition
       Error in `step_umap()`:
       ! `prefix` must be a single string, not `NULL`.

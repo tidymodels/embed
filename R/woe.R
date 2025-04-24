@@ -66,11 +66,11 @@
 #' (the selectors or variables selected), `value`, `n_tot`, `n_bad`, `n_good`,
 #' `p_bad`, `p_good`, `woe` and `outcome` is returned.. See [dictionary()] for
 #' more information.
-#' 
+#'
 #' When you [`tidy()`][recipes::tidy.recipe] this step, a tibble is returned with
 #' columns `terms` `value`, `n_tot`, `n_bad`, `n_good`, `p_bad`, `p_good`, `woe`
 #' and `outcome` and `id`:
-#' 
+#'
 #' \describe{
 #'   \item{terms}{character, the selectors or variables selected}
 #'   \item{value}{character, level of the outcome}
@@ -83,7 +83,7 @@
 #'   \item{outcome}{character, name of outcome variable}
 #'   \item{id}{character, id of this step}
 #' }
-#' 
+#'
 #' ```{r, echo = FALSE, results="asis"}
 #' step <- "step_woe"
 #' result <- knitr::knit_child("man/rmd/tunable-args.Rmd")
@@ -112,49 +112,51 @@
 #' credit_tr <- credit_data[in_training, ]
 #' credit_te <- credit_data[-in_training, ]
 #'
-#' rec <- recipe(Status ~ ., data = credit_tr) %>%
+#' rec <- recipe(Status ~ ., data = credit_tr) |>
 #'   step_woe(Job, Home, outcome = vars(Status))
 #'
 #' woe_models <- prep(rec, training = credit_tr)
 #'
 #' # the encoding:
-#' bake(woe_models, new_data = credit_te %>% slice(1:5), starts_with("woe"))
+#' bake(woe_models, new_data = credit_te |> slice(1:5), starts_with("woe"))
 #' # the original data
-#' credit_te %>%
-#'   slice(1:5) %>%
+#' credit_te |>
+#'   slice(1:5) |>
 #'   dplyr::select(Job, Home)
 #' # the details:
 #' tidy(woe_models, number = 1)
 #'
 #' # Example of custom dictionary + tweaking
 #' # custom dictionary
-#' woe_dict_custom <- credit_tr %>% dictionary(Job, Home, outcome = "Status")
+#' woe_dict_custom <- credit_tr |> dictionary(Job, Home, outcome = "Status")
 #' woe_dict_custom[4, "woe"] <- 1.23 # tweak
 #'
 #' # passing custom dict to step_woe()
-#' rec_custom <- recipe(Status ~ ., data = credit_tr) %>%
+#' rec_custom <- recipe(Status ~ ., data = credit_tr) |>
 #'   step_woe(
 #'     Job, Home,
 #'     outcome = vars(Status), dictionary = woe_dict_custom
-#'   ) %>%
+#'   ) |>
 #'   prep()
 #'
 #' rec_custom_baked <- bake(rec_custom, new_data = credit_te)
-#' rec_custom_baked %>%
-#'   dplyr::filter(woe_Job == 1.23) %>%
+#' rec_custom_baked |>
+#'   dplyr::filter(woe_Job == 1.23) |>
 #'   head()
 #' @export
-step_woe <- function(recipe,
-                     ...,
-                     role = "predictor",
-                     outcome,
-                     trained = FALSE,
-                     dictionary = NULL,
-                     Laplace = 1e-6,
-                     prefix = "woe",
-                     keep_original_cols = FALSE,
-                     skip = FALSE,
-                     id = rand_id("woe")) {
+step_woe <- function(
+  recipe,
+  ...,
+  role = "predictor",
+  outcome,
+  trained = FALSE,
+  dictionary = NULL,
+  Laplace = 1e-6,
+  prefix = "woe",
+  keep_original_cols = FALSE,
+  skip = FALSE,
+  id = rand_id("woe")
+) {
   if (missing(outcome)) {
     cli::cli_abort("The {.arg outcome} argument is missing, with no default.")
   }
@@ -179,8 +181,18 @@ step_woe <- function(recipe,
 }
 
 ## Initializes a new object
-step_woe_new <- function(terms, role, trained, outcome, dictionary, Laplace,
-                         prefix, keep_original_cols, skip, id) {
+step_woe_new <- function(
+  terms,
+  role,
+  trained,
+  outcome,
+  dictionary,
+  Laplace,
+  prefix,
+  keep_original_cols,
+  skip,
+  id
+) {
   step(
     subclass = "woe",
     terms = terms,
@@ -224,10 +236,12 @@ step_woe_new <- function(terms, role, trained, outcome, dictionary, Laplace,
 #'
 #' Good, I. J. (1985), "Weight of evidence: A brief survey", _Bayesian
 #' Statistics_, 2, pp.249-270.
-woe_table <- function(predictor,
-                      outcome,
-                      Laplace = 1e-6,
-                      call = rlang::caller_env(0)) {
+woe_table <- function(
+  predictor,
+  outcome,
+  Laplace = 1e-6,
+  call = rlang::caller_env(0)
+) {
   if (is.factor(outcome)) {
     outcome_original_labels <- levels(outcome)
   } else {
@@ -237,11 +251,11 @@ woe_table <- function(predictor,
   if (length(outcome_original_labels) != 2) {
     cli::cli_abort(
       "{.arg outcome} must have exactly 2 categories 
-      (has {length(outcome_original_labels)}).", 
+      (has {length(outcome_original_labels)}).",
       call = call
     )
   }
-  
+
   if (is.factor(predictor)) {
     predictor <- as.character(predictor)
   }
@@ -258,16 +272,16 @@ woe_table <- function(predictor,
   )
 
   woe_tbl <-
-    tibble::tibble(outcome, predictor) %>%
-    dplyr::group_by(outcome, predictor) %>%
-    dplyr::summarise(n = dplyr::n()) %>%
-    dplyr::group_by(predictor) %>%
-    dplyr::mutate(n_tot = sum(n)) %>%
-    dplyr::group_by(outcome) %>%
-    dplyr::mutate(p = n / sum(n)) %>%
-    tidyr::gather(summary, value, n, p) %>%
-    tidyr::unite(summary_outcome, summary, outcome) %>%
-    tidyr::spread(summary_outcome, value, fill = 0) %>%
+    tibble::tibble(outcome, predictor) |>
+    dplyr::group_by(outcome, predictor) |>
+    dplyr::summarise(n = dplyr::n()) |>
+    dplyr::group_by(predictor) |>
+    dplyr::mutate(n_tot = sum(n)) |>
+    dplyr::group_by(outcome) |>
+    dplyr::mutate(p = n / sum(n)) |>
+    tidyr::gather(summary, value, n, p) |>
+    tidyr::unite(summary_outcome, summary, outcome) |>
+    tidyr::spread(summary_outcome, value, fill = 0) |>
     dplyr::mutate(
       woe = eval(woe_expr),
       predictor = as.character(predictor)
@@ -302,7 +316,7 @@ woe_table <- function(predictor,
 #'
 #' @examples
 #'
-#' mtcars %>% dictionary("am", cyl, gear:carb)
+#' mtcars |> dictionary("am", cyl, gear:carb)
 #' @references
 #'
 #' Kullback, S. (1959). *Information Theory and Statistics.* Wiley, New York.
@@ -315,10 +329,11 @@ woe_table <- function(predictor,
 #'
 #' @export
 dictionary <- function(.data, outcome, ..., Laplace = 1e-6) {
-  outcome_vector <- .data %>% dplyr::pull(!!outcome)
-  res <- dplyr::select(.data, ..., -!!outcome) 
+  outcome_vector <- .data |> dplyr::pull(!!outcome)
+  res <- dplyr::select(.data, ..., -!!outcome)
   res <- lapply(
-    res, woe_table, 
+    res,
+    woe_table,
     outcome = outcome_vector,
     Laplace = Laplace,
     call = caller_env(0)
@@ -355,7 +370,7 @@ dictionary <- function(.data, outcome, ..., Laplace = 1e-6) {
 #'
 #' @examples
 #'
-#' mtcars %>% add_woe("am", cyl, gear:carb)
+#' mtcars |> add_woe("am", cyl, gear:carb)
 #' @export
 add_woe <- function(.data, outcome, ..., dictionary = NULL, prefix = "woe") {
   if (missing(.data)) {
@@ -375,7 +390,9 @@ add_woe <- function(.data, outcome, ..., dictionary = NULL, prefix = "woe") {
       cli::cli_abort('Column {.field variable} is missing in dictionary.')
     }
     if (is.null(dictionary$predictor)) {
-      cli::cli_abort('The column {.code predictor} is missing in the dictionary.')
+      cli::cli_abort(
+        'The column {.code predictor} is missing in the dictionary.'
+      )
     }
     if (is.null(dictionary$woe)) {
       cli::cli_abort('Column {.field woe} is missing in dictionary.')
@@ -385,37 +402,39 @@ add_woe <- function(.data, outcome, ..., dictionary = NULL, prefix = "woe") {
   if (missing(...)) {
     dots_vars <- names(.data)
   } else {
-    dots_vars <- names(.data %>% dplyr::select(...))
+    dots_vars <- names(.data |> dplyr::select(...))
   }
 
-  output <- dictionary %>%
-    dplyr::filter(variable %in% dots_vars) %>%
+  output <- dictionary |>
+    dplyr::filter(variable %in% dots_vars) |>
     dplyr::select(variable, predictor, woe)
 
   output <- tidyr::nest(output, woe_table = -dplyr::one_of("variable"))
 
   output <-
-    output %>%
+    output |>
     dplyr::mutate(
-      woe_table =
-        purrr::map2(
-          woe_table, variable,
-          ~ purrr::set_names(.x, c(.y, paste0(prefix, "_", .y)))
-        ) %>%
-          purrr::set_names(variable)
+      woe_table = purrr::map2(
+        woe_table,
+        variable,
+        ~ purrr::set_names(.x, c(.y, paste0(prefix, "_", .y)))
+      ) |>
+        purrr::set_names(variable)
     )
 
-  output <- purrr::map2(
+  output <- output <- purrr::map2(
     output$woe_table,
-    output$variable, ~ {
-      .data %>%
-        dplyr::select(!!.y) %>%
-        dplyr::mutate_all(as.character) %>%
-        dplyr::left_join(.x, by = .y) %>%
+    output$variable,
+    ~ {
+      .data |>
+        dplyr::select(!!.y) |>
+        dplyr::mutate_all(as.character) |>
+        dplyr::left_join(.x, by = .y) |>
         dplyr::select(starts_with(prefix))
     }
-  ) %>%
-    dplyr::bind_cols(.data, .) %>%
+  )
+
+  output <- dplyr::bind_cols(.data, output) |>
     tibble::as_tibble()
 
   output
@@ -441,13 +460,13 @@ prep.step_woe <- function(x, training, info = NULL, ...) {
       x$dictionary <- dictionary(
         .data = training[, unique(c(outcome_name, col_names))],
         outcome = outcome_name
-      ) %>%
+      ) |>
         dplyr::mutate(outcome = outcome_name)
     }
 
     n_count <-
-      x$dictionary %>%
-      dplyr::group_by(variable) %>%
+      x$dictionary |>
+      dplyr::group_by(variable) |>
       dplyr::summarize(low_n = sum(n_tot < 10))
 
     if (any(n_count$low_n > 0)) {
@@ -492,9 +511,9 @@ bake.step_woe <- function(object, new_data, ...) {
     dictionary = dict,
     prefix = object$prefix
   )
-  
+
   new_data <- remove_original_cols(new_data, object, col_names)
-  
+
   new_data
 }
 
@@ -523,7 +542,7 @@ tidy.step_woe <- function(x, ...) {
         woe = double()
       )
     } else {
-      res <- x$dictionary %>%
+      res <- x$dictionary |>
         dplyr::rename(terms = variable, value = predictor)
     }
   } else {

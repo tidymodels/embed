@@ -1,10 +1,10 @@
 #' Dummy Variables Creation via Feature Hashing
 #'
-#' @description 
+#' @description
 #' `r lifecycle::badge("deprecated")`
 #'
 #' Please use [textrecipes::step_dummy_hash()] instead.
-#' 
+#'
 #' @keywords internal
 #' @export
 step_feature_hash <- function(

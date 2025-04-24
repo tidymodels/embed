@@ -62,10 +62,10 @@
 #' Note that the original data will be replaced with the new bins.
 #'
 #' # Tidying
-#' 
+#'
 #' When you [`tidy()`][recipes::tidy.recipe] this step, a tibble is returned with
 #' columns `terms`, `value`, and `id`:
-#' 
+#'
 #' \describe{
 #'   \item{terms}{character, the selectors or variables selected}
 #'   \item{value}{numeric, location of the splits}
@@ -92,8 +92,8 @@
 #' credit_data_te <- testing(split)
 #'
 #' xgb_rec <-
-#'   recipe(Status ~ Income + Assets, data = credit_data_tr) %>%
-#'   step_impute_median(Income, Assets) %>%
+#'   recipe(Status ~ Income + Assets, data = credit_data_tr) |>
+#'   step_impute_median(Income, Assets) |>
 #'   step_discretize_xgb(Income, Assets, outcome = "Status")
 #'
 #' xgb_rec <- prep(xgb_rec, training = credit_data_tr)
@@ -103,19 +103,21 @@
 #' [recipes::prep()], [recipes::bake()]
 #' @export
 step_discretize_xgb <-
-  function(recipe,
-           ...,
-           role = NA,
-           trained = FALSE,
-           outcome = NULL,
-           sample_val = 0.20,
-           learn_rate = 0.3,
-           num_breaks = 10,
-           tree_depth = 1,
-           min_n = 5,
-           rules = NULL,
-           skip = FALSE,
-           id = rand_id("discretize_xgb")) {
+  function(
+    recipe,
+    ...,
+    role = NA,
+    trained = FALSE,
+    outcome = NULL,
+    sample_val = 0.20,
+    learn_rate = 0.3,
+    num_breaks = 10,
+    tree_depth = 1,
+    min_n = 5,
+    rules = NULL,
+    skip = FALSE,
+    id = rand_id("discretize_xgb")
+  ) {
     if (is.null(outcome)) {
       cli::cli_abort("{.arg outcome} should select at least one column.")
     }
@@ -143,8 +145,21 @@ step_discretize_xgb <-
   }
 
 step_discretize_xgb_new <-
-  function(terms, role, trained, outcome, sample_val, learn_rate, num_breaks,
-           tree_depth, min_n, rules, skip, id, case_weights) {
+  function(
+    terms,
+    role,
+    trained,
+    outcome,
+    sample_val,
+    learn_rate,
+    num_breaks,
+    tree_depth,
+    min_n,
+    rules,
+    skip,
+    id,
+    case_weights
+  ) {
     step(
       subclass = "discretize_xgb",
       terms = terms,
@@ -163,8 +178,16 @@ step_discretize_xgb_new <-
     )
   }
 
-run_xgboost <- function(.train, .test, .learn_rate, .num_breaks, .tree_depth,
-                        .min_n, .objective, .num_class) {
+run_xgboost <- function(
+  .train,
+  .test,
+  .learn_rate,
+  .num_breaks,
+  .tree_depth,
+  .min_n,
+  .objective,
+  .num_class
+) {
   # Need to set an additional parameter (num_class) when perfoming
   # multi-classification
   if (.objective == "multi:softprob") {
@@ -190,7 +213,7 @@ run_xgboost <- function(.train, .test, .learn_rate, .num_breaks, .tree_depth,
     data = .train,
     watchlist = list(
       train = .train,
-      test  = .test
+      test = .test
     ),
     tree_method = "hist",
     early_stopping_rounds = 10,
@@ -200,9 +223,18 @@ run_xgboost <- function(.train, .test, .learn_rate, .num_breaks, .tree_depth,
   )
 }
 
-xgb_binning <- function(df, outcome, predictor, sample_val, learn_rate,
-                        num_breaks, tree_depth, min_n, wts = NULL,
-                        call = caller_env()) {
+xgb_binning <- function(
+  df,
+  outcome,
+  predictor,
+  sample_val,
+  learn_rate,
+  num_breaks,
+  tree_depth,
+  min_n,
+  wts = NULL,
+  call = caller_env()
+) {
   # Assuring correct types
   if (is.character(df[[outcome]])) {
     df[[outcome]] <- as.factor(df[[outcome]])
@@ -377,12 +409,12 @@ xgb_binning <- function(df, outcome, predictor, sample_val, learn_rate,
   # data frame.
 
   xgb_split <-
-    xgb_tree %>%
-    tibble::as_tibble() %>%
-    dplyr::select(Node, Feature, Split, Yes, No, Missing) %>%
-    stats::na.omit() %>%
-    dplyr::distinct(Split) %>%
-    dplyr::arrange(Split) %>%
+    xgb_tree |>
+    tibble::as_tibble() |>
+    dplyr::select(Node, Feature, Split, Yes, No, Missing) |>
+    stats::na.omit() |>
+    dplyr::distinct(Split) |>
+    dplyr::arrange(Split) |>
     dplyr::pull(Split)
 
   xgb_split
@@ -425,7 +457,10 @@ prep.step_discretize_xgb <- function(x, training, info = NULL, ...) {
     # Changes: check for the minimum number of unique data points in the column
     # in order to run the step. Otherwise, take it out of col_names. I think
     # that num_unique = 20 is probably a good default
-    num_unique <- purrr::map_int(training[, col_names], ~ length(unique(.x)))
+    num_unique <- purrr::map_int(
+      training[, col_names],
+      \(.x) length(unique(.x))
+    )
     too_few <- num_unique < 20
     if (any(too_few)) {
       predictors <- paste0("'", col_names[too_few], "'", collapse = ", ")
@@ -455,7 +490,7 @@ prep.step_discretize_xgb <- function(x, training, info = NULL, ...) {
       )
     }
 
-    has_splits <- purrr::map_lgl(rules, ~ length(.x) > 0)
+    has_splits <- purrr::map_lgl(rules, \(.x) length(.x) > 0)
 
     rules <- rules[has_splits]
     col_names <- col_names[has_splits]
@@ -510,11 +545,18 @@ bake.step_discretize_xgb <- function(object, new_data, ...) {
 }
 
 #' @export
-print.step_discretize_xgb <- function(x, width = max(20, options()$width - 30),
-                                      ...) {
+print.step_discretize_xgb <- function(
+  x,
+  width = max(20, options()$width - 30),
+  ...
+) {
   title <- "Discretizing variables using xgboost "
   print_step(
-    names(x$rules), x$terms, x$trained, title, width,
+    names(x$rules),
+    x$terms,
+    x$trained,
+    title,
+    width,
     case_weights = x$case_weights
   )
   invisible(x)
@@ -526,7 +568,7 @@ print.step_discretize_xgb <- function(x, width = max(20, options()$width - 30),
 tidy.step_discretize_xgb <- function(x, ...) {
   if (is_trained(x)) {
     num_splits <- purrr::map_int(x$rules, length)
-    
+
     if (length(num_splits) > 0) {
       res <- tibble(
         terms = rep(names(x$rules), num_splits),

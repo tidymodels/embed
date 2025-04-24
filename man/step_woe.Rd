@@ -147,36 +147,36 @@ in_training <- sample(1:nrow(credit_data), 2000)
 credit_tr <- credit_data[in_training, ]
 credit_te <- credit_data[-in_training, ]
 
-rec <- recipe(Status ~ ., data = credit_tr) \%>\%
+rec <- recipe(Status ~ ., data = credit_tr) |>
   step_woe(Job, Home, outcome = vars(Status))
 
 woe_models <- prep(rec, training = credit_tr)
 
 # the encoding:
-bake(woe_models, new_data = credit_te \%>\% slice(1:5), starts_with("woe"))
+bake(woe_models, new_data = credit_te |> slice(1:5), starts_with("woe"))
 # the original data
-credit_te \%>\%
-  slice(1:5) \%>\%
+credit_te |>
+  slice(1:5) |>
   dplyr::select(Job, Home)
 # the details:
 tidy(woe_models, number = 1)
 
 # Example of custom dictionary + tweaking
 # custom dictionary
-woe_dict_custom <- credit_tr \%>\% dictionary(Job, Home, outcome = "Status")
+woe_dict_custom <- credit_tr |> dictionary(Job, Home, outcome = "Status")
 woe_dict_custom[4, "woe"] <- 1.23 # tweak
 
 # passing custom dict to step_woe()
-rec_custom <- recipe(Status ~ ., data = credit_tr) \%>\%
+rec_custom <- recipe(Status ~ ., data = credit_tr) |>
   step_woe(
     Job, Home,
     outcome = vars(Status), dictionary = woe_dict_custom
-  ) \%>\%
+  ) |>
   prep()
 
 rec_custom_baked <- bake(rec_custom, new_data = credit_te)
-rec_custom_baked \%>\%
-  dplyr::filter(woe_Job == 1.23) \%>\%
+rec_custom_baked |>
+  dplyr::filter(woe_Job == 1.23) |>
   head()
 \dontshow{\}) # examplesIf}
 }

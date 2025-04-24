@@ -33,7 +33,7 @@
 # add_woe accepts only outcome with 2 distinct categories
 
     Code
-      dictionary(df %>% filter(y %in% "B"), "y")
+      dictionary(filter(df, y %in% "B"), "y")
     Condition
       Error in `dictionary()`:
       ! `outcome` must have exactly 2 categories (has 1).
@@ -49,7 +49,7 @@
 ---
 
     Code
-      add_woe(df, outcome = "y", x1, dictionary = iris %>% mutate(variable = 1))
+      add_woe(df, outcome = "y", x1, dictionary = mutate(iris, variable = 1))
     Condition
       Error in `add_woe()`:
       ! The column `predictor` is missing in the dictionary.
@@ -87,7 +87,7 @@
       Training data contained 2000 data points and 186 incomplete rows.
       
       -- Operations 
-      * WoE version against outcome Status for: Home and Marital, ... | Trained
+      * WoE version against outcome Status for: Home Marital, ... | Trained
 
 ---
 
@@ -102,8 +102,7 @@
 # 2-level factors
 
     Code
-      recipe(Species ~ ., data = iris3) %>% step_woe(group, outcome = vars(Species)) %>%
-        prep()
+      prep(step_woe(recipe(Species ~ ., data = iris3), group, outcome = vars(Species)))
     Condition
       Error in `step_woe()`:
       Caused by error in `dictionary()`:
@@ -112,8 +111,7 @@
 # bad args
 
     Code
-      recipe(~., data = mtcars) %>% step_woe(outcome = vars(mpg), Laplace = NULL) %>%
-        prep()
+      prep(step_woe(recipe(~., data = mtcars), outcome = vars(mpg), Laplace = NULL))
     Condition
       Error in `step_woe()`:
       Caused by error in `prep()`:
@@ -122,7 +120,7 @@
 ---
 
     Code
-      recipe(~., data = mtcars) %>% step_woe(outcome = vars(mpg), prefix = NULL)
+      step_woe(recipe(~., data = mtcars), outcome = vars(mpg), prefix = NULL)
     Condition
       Error in `step_woe()`:
       ! `prefix` must be a single string, not `NULL`.
@@ -197,7 +195,7 @@
       predictor: 13
       
       -- Operations 
-      * WoE version against outcome Status for: Job and Home
+      * WoE version against outcome Status for: Job Home
 
 ---
 
@@ -219,5 +217,5 @@
       Training data contained 4454 data points and 415 incomplete rows.
       
       -- Operations 
-      * WoE version against outcome Status for: Job and Home | Trained
+      * WoE version against outcome Status for: Job Home | Trained
 

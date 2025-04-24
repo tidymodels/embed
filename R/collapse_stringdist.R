@@ -11,11 +11,11 @@
 #' @param distance Integer, value to determine which strings should be collapsed
 #'   with which. The value is being used inclusive, so `2` will collapse levels
 #'   that have a string distance between them of 2 or lower.
-#' @param method Character, method for distance calculation. The default is 
+#' @param method Character, method for distance calculation. The default is
 #'   `"osa"`, see [stringdist::stringdist-metrics].
 #' @param options List, other arguments passed to
 #'   [stringdist::stringdistmatrix()] such as `weight`, `q`, `p`, and `bt`, that
-#'   are used for different values of `method`. 
+#'   are used for different values of `method`.
 #' @param results A list denoting the way the labels should be collapses is
 #'   stored here once this preprocessing step has be trained by [recipes::prep].
 #' @param columns A character string of variable names that will be populated
@@ -27,10 +27,10 @@
 #' @details
 #'
 #' # Tidying
-#' 
+#'
 #' When you [`tidy()`][recipes::tidy.recipe] this step, a tibble is returned with
 #' columns `terms`, `from`, `to`, and `id`:
-#' 
+#'
 #' \describe{
 #'   \item{terms}{character, the selectors or variables selected}
 #'   \item{from}{character, the old levels}
@@ -48,36 +48,38 @@
 #'   x2 = c("ak", "b", "djj", "e", "hjhgfgjgr", "hjhgfgjgr")
 #' )
 #'
-#' rec <- recipe(~., data = data0) %>%
-#'   step_collapse_stringdist(all_predictors(), distance = 1) %>%
+#' rec <- recipe(~., data = data0) |>
+#'   step_collapse_stringdist(all_predictors(), distance = 1) |>
 #'   prep()
 #'
-#' rec %>%
+#' rec |>
 #'   bake(new_data = NULL)
 #'
 #' tidy(rec, 1)
 #'
-#' rec <- recipe(~., data = data0) %>%
-#'   step_collapse_stringdist(all_predictors(), distance = 2) %>%
+#' rec <- recipe(~., data = data0) |>
+#'   step_collapse_stringdist(all_predictors(), distance = 2) |>
 #'   prep()
 #'
-#' rec %>%
+#' rec |>
 #'   bake(new_data = NULL)
 #'
 #' tidy(rec, 1)
 #' @export
 step_collapse_stringdist <-
-  function(recipe,
-           ...,
-           role = NA,
-           trained = FALSE,
-           distance = NULL,
-           method = "osa",
-           options = list(),
-           results = NULL,
-           columns = NULL,
-           skip = FALSE,
-           id = rand_id("collapse_stringdist")) {
+  function(
+    recipe,
+    ...,
+    role = NA,
+    trained = FALSE,
+    distance = NULL,
+    method = "osa",
+    options = list(),
+    results = NULL,
+    columns = NULL,
+    skip = FALSE,
+    id = rand_id("collapse_stringdist")
+  ) {
     check_number_decimal(distance, min = 0)
     check_string(method)
 
@@ -99,8 +101,18 @@ step_collapse_stringdist <-
   }
 
 step_collapse_stringdist_new <-
-  function(terms, role, trained, distance, method, options, results, columns, 
-           skip, id) {
+  function(
+    terms,
+    role,
+    trained,
+    distance,
+    method,
+    options,
+    results,
+    columns,
+    skip,
+    id
+  ) {
     step(
       subclass = "collapse_stringdist",
       terms = terms,
@@ -122,7 +134,7 @@ prep.step_collapse_stringdist <- function(x, training, info = NULL, ...) {
 
   values <- lapply(
     training[, col_names],
-    collapse_stringdist_impl, 
+    collapse_stringdist_impl,
     dist = x$distance,
     method = x$method,
     options = x$options
@@ -148,14 +160,16 @@ collapse_stringdist_impl <- function(x, dist, method, options) {
   } else {
     x <- unique(x)
   }
-  
+
   cl <- rlang::call2(
     "stringdistmatrix",
     .ns = "stringdist",
-    a = x, b = x, method = method,
+    a = x,
+    b = x,
+    method = method,
     !!!options
   )
-  
+
   dists <- rlang::eval_tidy(cl)
 
   pairs <- which(dists <= dist, arr.ind = TRUE)
@@ -197,10 +211,10 @@ bake.step_collapse_stringdist <- function(object, new_data, ...) {
 }
 
 collapse_apply <- function(x, dict) {
-  dict <- purrr::map_dfr(dict, ~ list(from = .x, to = .x[1]))
+  dict <- purrr::map_dfr(dict, \(.x) list(from = .x, to = .x[1]))
 
   res <- dict$to[match(x, dict$from)]
-  
+
   factor(res, levels = unique(dict$to))
 }
 
@@ -222,7 +236,7 @@ tidy.step_collapse_stringdist <- function(x, ...) {
     } else {
       res <- purrr::map_dfr(
         x$results,
-        ~ purrr::map_dfr(.x, ~ list(from = .x, to = .x[1])),
+        ~ purrr::map_dfr(.x, \(.x) list(from = .x, to = .x[1])),
         .id = "terms"
       )
     }

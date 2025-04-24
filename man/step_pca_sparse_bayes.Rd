@@ -37,11 +37,11 @@ predictors in a model.}
 \item{trained}{A logical to indicate if the quantities for preprocessing have
 been estimated.}
 
-\item{num_comp}{The number of components to retain as new predictors.
-If \code{num_comp} is greater than the number of columns or the number of
-possible components, a smaller value will be used. If \code{num_comp = 0}
-is set then no transformation is done and selected variables will
-stay unchanged, regardless of the value of \code{keep_original_cols}.}
+\item{num_comp}{The number of components to retain as new predictors. If
+\code{num_comp} is greater than the number of columns or the number of possible
+components, a smaller value will be used. If \code{num_comp = 0} is set then no
+transformation is done and selected variables will stay unchanged,
+regardless of the value of \code{keep_original_cols}.}
 
 \item{prior_slab_dispersion}{This value is proportional to the dispersion (or
 scale) parameter for the slab portion of the prior. Smaller values result
@@ -141,21 +141,21 @@ library(ggplot2)
 data(ad_data, package = "modeldata")
 
 ad_rec <-
-  recipe(Class ~ ., data = ad_data) \%>\%
-  step_zv(all_predictors()) \%>\%
-  step_YeoJohnson(all_numeric_predictors()) \%>\%
-  step_normalize(all_numeric_predictors()) \%>\%
+  recipe(Class ~ ., data = ad_data) |>
+  step_zv(all_predictors()) |>
+  step_YeoJohnson(all_numeric_predictors()) |>
+  step_normalize(all_numeric_predictors()) |>
   step_pca_sparse_bayes(
     all_numeric_predictors(),
     prior_mixture_threshold = 0.95,
     prior_slab_dispersion = 0.05,
     num_comp = 3,
     id = "sparse bayesian pca"
-  ) \%>\%
+  ) |>
   prep()
 
-tidy(ad_rec, id = "sparse bayesian pca") \%>\%
-  mutate(value = ifelse(value == 0, NA, value)) \%>\%
+tidy(ad_rec, id = "sparse bayesian pca") |>
+  mutate(value = ifelse(value == 0, NA, value)) |>
   ggplot(aes(x = component, y = terms, fill = value)) +
   geom_tile() +
   scale_fill_gradient2() +

@@ -4,7 +4,6 @@
 ## usethis namespace: start
 #' @import recipes
 #' @import rlang
-#' @importFrom dplyr %>%
 #' @importFrom dplyr arrange
 #' @importFrom dplyr bind_rows
 #' @importFrom dplyr contains

@@ -63,14 +63,14 @@
 #'
 #' When you [`tidy()`][recipes::tidy.recipe] this step, a tibble is returned with
 #' columns `level`, `value`, `terms`, and `id`:
-#' 
+#'
 #' \describe{
 #'   \item{level}{character, the factor levels}
 #'   \item{value}{numeric, the encoding}
 #'   \item{terms}{character, the selectors or variables selected}
 #'   \item{id}{character, id of this step}
 #' }
-#' 
+#'
 #' @template case-weights-supervised
 #'
 #' @references
@@ -101,27 +101,29 @@
 #' set.seed(1)
 #' grants_other <- sample_n(grants_other, 500)
 #' \donttest{
-#' reencoded <- recipe(class ~ sponsor_code, data = grants_other) %>%
+#' reencoded <- recipe(class ~ sponsor_code, data = grants_other) |>
 #'   step_lencode_bayes(sponsor_code, outcome = vars(class))
 #' }
 #' @export
 step_lencode_bayes <-
-  function(recipe,
-           ...,
-           role = NA,
-           trained = FALSE,
-           outcome = NULL,
-           options = list(seed = sample.int(10^5, 1)),
-           verbose = FALSE,
-           mapping = NULL,
-           skip = FALSE,
-           id = rand_id("lencode_bayes")) {
+  function(
+    recipe,
+    ...,
+    role = NA,
+    trained = FALSE,
+    outcome = NULL,
+    options = list(seed = sample.int(10^5, 1)),
+    verbose = FALSE,
+    mapping = NULL,
+    skip = FALSE,
+    id = rand_id("lencode_bayes")
+  ) {
     if (is.null(outcome)) {
       cli::cli_abort("Please list a variable in {.code outcome}.")
     }
 
     check_bool(verbose)
-    
+
     add_step(
       recipe,
       step_lencode_bayes_new(
@@ -140,8 +142,18 @@ step_lencode_bayes <-
   }
 
 step_lencode_bayes_new <-
-  function(terms, role, trained, outcome, options, verbose, mapping, skip, id,
-           case_weights) {
+  function(
+    terms,
+    role,
+    trained,
+    outcome,
+    options,
+    verbose,
+    mapping,
+    skip,
+    id,
+    case_weights
+  ) {
     step(
       subclass = "lencode_bayes",
       terms = terms,
@@ -171,9 +183,13 @@ prep.step_lencode_bayes <- function(x, training, info = NULL, ...) {
     check_type(training[, col_names], types = c("string", "factor", "ordered"))
     y_name <- recipes_eval_select(x$outcome, training, info)
     res <-
-      purrr::map(training[, col_names], stan_coefs,
+      purrr::map(
+        training[, col_names],
+        stan_coefs,
         y = training[, y_name],
-        x$options, x$verbose, wts
+        x$options,
+        x$verbose,
+        wts
       )
   } else {
     res <- list()
@@ -271,15 +287,19 @@ print.step_lencode_bayes <-
   function(x, width = max(20, options()$width - 31), ...) {
     title <- "Linear embedding for factors via Bayesian GLM for "
     print_step(
-      names(x$mapping), x$terms, x$trained, title, width,
+      names(x$mapping),
+      x$terms,
+      x$trained,
+      title,
+      width,
       case_weights = x$case_weights
     )
     invisible(x)
   }
 
-  #' @rdname step_lencode_bayes
-  #' @usage NULL
-  #' @export
+#' @rdname step_lencode_bayes
+#' @usage NULL
+#' @export
 tidy.step_lencode_bayes <- function(x, ...) {
   if (is_trained(x)) {
     if (length(x$mapping) == 0) {

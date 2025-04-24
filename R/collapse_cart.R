@@ -41,10 +41,10 @@
 #' find any signal in the data.
 #'
 #' # Tidying
-#' 
+#'
 #' When you [`tidy()`][recipes::tidy.recipe] this step, a tibble is returned with
 #' columns `terms`, `old`, `new`, and `id`:
-#' 
+#'
 #' \describe{
 #'   \item{terms}{character, the selectors or variables selected}
 #'   \item{old}{character, the old levels}
@@ -59,25 +59,27 @@
 #' ames$Sale_Price <- log10(ames$Sale_Price)
 #'
 #' rec <-
-#'   recipe(Sale_Price ~ ., data = ames) %>%
+#'   recipe(Sale_Price ~ ., data = ames) |>
 #'   step_collapse_cart(
 #'     Sale_Type, Garage_Type, Neighborhood,
 #'     outcome = vars(Sale_Price)
-#'   ) %>%
+#'   ) |>
 #'   prep()
 #' tidy(rec, number = 1)
 #' @export
 step_collapse_cart <-
-  function(recipe,
-           ...,
-           role = NA,
-           trained = FALSE,
-           outcome = NULL,
-           cost_complexity = 0.0001,
-           min_n = 5,
-           results = NULL,
-           skip = FALSE,
-           id = rand_id("step_collapse_cart")) {
+  function(
+    recipe,
+    ...,
+    role = NA,
+    trained = FALSE,
+    outcome = NULL,
+    cost_complexity = 0.0001,
+    min_n = 5,
+    results = NULL,
+    skip = FALSE,
+    id = rand_id("step_collapse_cart")
+  ) {
     recipes_pkg_check(required_pkgs.step_discretize_cart())
 
     check_number_decimal(cost_complexity, min = 0)
@@ -99,8 +101,17 @@ step_collapse_cart <-
     )
   }
 step_collapse_cart_new <-
-  function(terms, role, trained, outcome, cost_complexity, min_n, results, skip,
-           id) {
+  function(
+    terms,
+    role,
+    trained,
+    outcome,
+    cost_complexity,
+    min_n,
+    results,
+    skip,
+    id
+  ) {
     step(
       subclass = "collapse_cart",
       terms = terms,
@@ -157,7 +168,7 @@ bake.step_collapse_cart <- function(object, new_data, ...) {
   for (col_name in col_names) {
     new_data <- convert_keys(col_name, object$results[[col_name]], new_data)
   }
-  
+
   new_data
 }
 
@@ -219,12 +230,12 @@ collapse_rpart <- function(x, feature_name, y, prefix = feature_name, ...) {
   groups <-
     purrr::map(
       term_nodes_ind,
-      ~ rpart::path.rpart(split_model, .x, print.it = FALSE)[[1]]
-    ) %>%
-    purrr::map(~ .x[length(.x)]) %>%
-    purrr::map(~ strsplit(.x, "=")[[1]]) %>%
-    purrr::map(~ .x[length(.x)]) %>%
-    purrr::map(~ strsplit(.x, ",")[[1]])
+      \(.x) rpart::path.rpart(split_model, .x, print.it = FALSE)[[1]]
+    ) |>
+    purrr::map(\(.x) .x[length(.x)]) |>
+    purrr::map(\(.x) strsplit(.x, "=")[[1]]) |>
+    purrr::map(\(.x) .x[length(.x)]) |>
+    purrr::map(\(.x) strsplit(.x, ",")[[1]])
   group_size <- purrr::map_int(groups, length)
 
   # check for each level a group
@@ -236,24 +247,24 @@ collapse_rpart <- function(x, feature_name, y, prefix = feature_name, ...) {
     tibble::tibble(
       var = unlist(groups),
       group = rep(seq_along(group_size), group_size)
-    ) %>%
+    ) |>
     dplyr::mutate(
       var = factor(var, levels = lvls),
       group_f = gsub(" ", "0", format(group)),
       .group = paste0(prefix, "_", group_f),
       .group = factor(.group)
-    ) %>%
-    dplyr::select(dplyr::all_of(c("var", ".group"))) %>%
+    ) |>
+    dplyr::select(dplyr::all_of(c("var", ".group"))) |>
     setNames(c(feature_name, ".group"))
   key
 }
 
 format_collapse_keys <- function(x, nm) {
-  setNames(x, c("old", "new")) %>%
+  setNames(x, c("old", "new")) |>
     dplyr::mutate(
       dplyr::across(where(is.factor), as.character),
       terms = nm
-    ) %>%
+    ) |>
     dplyr::relocate(terms)
 }
 
@@ -262,11 +273,11 @@ convert_keys <- function(nm, keys, dat) {
   names(rn) <- nm
   col_nms <- names(dat)
   dat <-
-    dat %>%
-    dplyr::mutate(.rows = dplyr::row_number()) %>%
-    dplyr::left_join(keys, by = nm) %>%
-    dplyr::select(-dplyr::all_of(nm)) %>%
-    dplyr::rename(!!!rn) %>%
+    dat |>
+    dplyr::mutate(.rows = dplyr::row_number()) |>
+    dplyr::left_join(keys, by = nm) |>
+    dplyr::select(-dplyr::all_of(nm)) |>
+    dplyr::rename(!!!rn) |>
     dplyr::arrange(.rows)
 
   dat[, col_nms]

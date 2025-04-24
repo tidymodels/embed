@@ -141,8 +141,8 @@ credit_data_tr <- training(split)
 credit_data_te <- testing(split)
 
 xgb_rec <-
-  recipe(Status ~ Income + Assets, data = credit_data_tr) \%>\%
-  step_impute_median(Income, Assets) \%>\%
+  recipe(Status ~ Income + Assets, data = credit_data_tr) |>
+  step_impute_median(Income, Assets) |>
   step_discretize_xgb(Income, Assets, outcome = "Status")
 
 xgb_rec <- prep(xgb_rec, training = credit_data_tr)

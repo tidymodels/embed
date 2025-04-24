@@ -46,14 +46,14 @@
 #'
 #' When you [`tidy()`][recipes::tidy.recipe] this step, a tibble is returned with
 #' columns `level`, `value`, `terms`, and `id`:
-#' 
+#'
 #' \describe{
 #'   \item{level}{character, the factor levels}
 #'   \item{value}{numeric, the encoding}
 #'   \item{terms}{character, the selectors or variables selected}
 #'   \item{id}{character, id of this step}
 #' }
-#' 
+#'
 #' @template case-weights-supervised
 #'
 #' @references
@@ -75,19 +75,21 @@
 #' set.seed(1)
 #' grants_other <- sample_n(grants_other, 500)
 #' \donttest{
-#' reencoded <- recipe(class ~ sponsor_code, data = grants_other) %>%
+#' reencoded <- recipe(class ~ sponsor_code, data = grants_other) |>
 #'   step_lencode_glm(sponsor_code, outcome = vars(class))
 #' }
 #' @export
 step_lencode_glm <-
-  function(recipe,
-           ...,
-           role = NA,
-           trained = FALSE,
-           outcome = NULL,
-           mapping = NULL,
-           skip = FALSE,
-           id = rand_id("lencode_glm")) {
+  function(
+    recipe,
+    ...,
+    role = NA,
+    trained = FALSE,
+    outcome = NULL,
+    mapping = NULL,
+    skip = FALSE,
+    id = rand_id("lencode_glm")
+  ) {
     if (is.null(outcome)) {
       cli::cli_abort("Please list a variable in {.arg outcome}.")
     }
@@ -191,12 +193,12 @@ glm_coefs <- function(x, y, wts = NULL, ...) {
 
 map_glm_coef <- function(dat, mapping) {
   new_val <- mapping$..value[mapping$..level == "..new"]
-  dat <- dat %>%
-    mutate(..order = seq_len(nrow(dat))) %>%
-    set_names(c("..level", "..order")) %>%
+  dat <- dat |>
+    mutate(..order = seq_len(nrow(dat))) |>
+    set_names(c("..level", "..order")) |>
     mutate(..level = as.character(..level))
-  mapping <- mapping %>% dplyr::filter(..level != "..new")
-  dat <- left_join(dat, mapping, by = "..level") %>%
+  mapping <- mapping |> dplyr::filter(..level != "..new")
+  dat <- left_join(dat, mapping, by = "..level") |>
     arrange(..order)
   dat$..value[is.na(dat$..value)] <- new_val
   dat$..value
@@ -222,7 +224,11 @@ print.step_lencode_glm <-
   function(x, width = max(20, options()$width - 31), ...) {
     title <- "Linear embedding for factors via GLM for "
     print_step(
-      names(x$mapping), x$terms, x$trained, title, width,
+      names(x$mapping),
+      x$terms,
+      x$trained,
+      title,
+      width,
       case_weights = x$case_weights
     )
     invisible(x)
@@ -240,11 +246,11 @@ tidy.step_lencode_glm <- function(x, ...) {
         value = double()
       )
     } else {
-    for (i in seq_along(x$mapping)) {
-      x$mapping[[i]]$terms <- names(x$mapping)[i]
-    }
-    res <- bind_rows(x$mapping)
-    names(res) <- gsub("^\\.\\.", "", names(res))
+      for (i in seq_along(x$mapping)) {
+        x$mapping[[i]]$terms <- names(x$mapping)[i]
+      }
+      res <- bind_rows(x$mapping)
+      names(res) <- gsub("^\\.\\.", "", names(res))
     }
   } else {
     term_names <- sel2char(x$terms)

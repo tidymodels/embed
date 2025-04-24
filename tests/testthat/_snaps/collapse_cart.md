@@ -1,7 +1,7 @@
 # bad args
 
     Code
-      recipe(~., data = mtcars) %>% step_collapse_cart(cost_complexity = -4)
+      step_collapse_cart(recipe(~., data = mtcars), cost_complexity = -4)
     Condition
       Error in `step_collapse_cart()`:
       ! `cost_complexity` must be a number larger than or equal to 0, not the number -4.
@@ -9,7 +9,7 @@
 ---
 
     Code
-      recipe(~., data = mtcars) %>% step_collapse_cart(min_n = -4)
+      step_collapse_cart(recipe(~., data = mtcars), min_n = -4)
     Condition
       Error in `step_collapse_cart()`:
       ! `min_n` must be a whole number larger than or equal to 1, not the number -4.
@@ -71,7 +71,7 @@
       predictor: 73
       
       -- Operations 
-      * Collapsing factor levels using CART: Neighborhood and Central_Air
+      * Collapsing factor levels using CART: Neighborhood Central_Air
 
 ---
 

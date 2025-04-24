@@ -32,7 +32,7 @@
 #' result <- knitr::knit_child("man/rmd/num_comp.Rmd")
 #' cat(result)
 #' ```
-#' 
+#'
 #' # Tidying
 #'
 #' When you [`tidy()`][recipes::tidy.recipe] this step two things can happen depending
@@ -55,7 +55,7 @@
 #'   \item{component}{integer, principle component}
 #'   \item{id}{character, id of this step}
 #' }
-#' 
+#'
 #' ```{r, echo = FALSE, results="asis"}
 #' step <- "step_pca_truncated"
 #' result <- knitr::knit_child("man/rmd/tunable-args.Rmd")
@@ -70,8 +70,8 @@
 #'
 #' @examples
 #' rec <- recipe(~., data = mtcars)
-#' pca_trans <- rec %>%
-#'   step_normalize(all_numeric()) %>%
+#' pca_trans <- rec |>
+#'   step_normalize(all_numeric()) |>
 #'   step_pca_truncated(all_numeric(), num_comp = 2)
 #' pca_estimates <- prep(pca_trans, training = mtcars)
 #' pca_data <- bake(pca_estimates, mtcars)
@@ -84,18 +84,20 @@
 #' tidy(pca_trans, number = 2)
 #' tidy(pca_estimates, number = 2)
 #' @export
-step_pca_truncated <- function(recipe,
-                               ...,
-                               role = "predictor",
-                               trained = FALSE,
-                               num_comp = 5,
-                               options = list(),
-                               res = NULL,
-                               columns = NULL,
-                               prefix = "PC",
-                               keep_original_cols = FALSE,
-                               skip = FALSE,
-                               id = rand_id("pca_truncated")) {
+step_pca_truncated <- function(
+  recipe,
+  ...,
+  role = "predictor",
+  trained = FALSE,
+  num_comp = 5,
+  options = list(),
+  res = NULL,
+  columns = NULL,
+  prefix = "PC",
+  keep_original_cols = FALSE,
+  skip = FALSE,
+  id = rand_id("pca_truncated")
+) {
   check_string(prefix)
 
   add_step(
@@ -118,8 +120,20 @@ step_pca_truncated <- function(recipe,
 }
 
 step_pca_truncated_new <-
-  function(terms, role, trained, num_comp, options, res, columns,
-           prefix, keep_original_cols, skip, id, case_weights) {
+  function(
+    terms,
+    role,
+    trained,
+    num_comp,
+    options,
+    res,
+    columns,
+    prefix,
+    keep_original_cols,
+    skip,
+    id,
+    case_weights
+  ) {
     step(
       subclass = "pca_truncated",
       terms = terms,
@@ -166,15 +180,16 @@ prep.step_pca_truncated <- function(x, training, info = NULL, ...) {
       prc_call$x <- expr(training[, col_names, drop = FALSE])
       prc_obj <- eval(prc_call)
     } else {
-      prc_obj <- recipes::pca_wts(training[, col_names, drop = FALSE], wts = wts)
+      prc_obj <- recipes::pca_wts(
+        training[, col_names, drop = FALSE],
+        wts = wts
+      )
     }
     rownames(prc_obj$rotation) <- col_names
   } else {
     prc_obj <- NULL
     prc_obj$rotation <- matrix(nrow = 0, ncol = 0)
   }
-
-  
 
   if (is.null(prc_obj$center)) {
     prc_obj$center <- FALSE
@@ -198,13 +213,13 @@ prep.step_pca_truncated <- function(x, training, info = NULL, ...) {
 
 #' @export
 bake.step_pca_truncated <- function(object, new_data, ...) {
-  col_names <- names(object$columns) %||% 
+  col_names <- names(object$columns) %||%
     stats::setNames(nm = rownames(object$res$rotation))
 
   if (length(col_names) == 0 || all(is.na(object$res$rotation))) {
     return(new_data)
   }
-  
+
   check_new_data(col_names, object, new_data)
 
   pca_vars <- rownames(object$res$rotation)
@@ -216,7 +231,7 @@ bake.step_pca_truncated <- function(object, new_data, ...) {
   new_data <- vec_cbind(new_data, comps)
 
   new_data <- remove_original_cols(new_data, object, pca_vars)
-  
+
   new_data
 }
 
@@ -238,7 +253,12 @@ print.step_pca_truncated <-
     } else {
       title <- "Truncated PCA extraction with "
     }
-    print_step(columns, x$terms, x$trained, title, width,
+    print_step(
+      columns,
+      x$terms,
+      x$trained,
+      title,
+      width,
       case_weights = x$case_weights
     )
     invisible(x)

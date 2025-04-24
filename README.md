@@ -33,11 +33,12 @@ Some steps handle categorical predictors:
   pooling (`stan_glm` or `lmer`). Currently implemented for numeric and
   two-class outcomes.
 
-- `step_embed()` uses `keras3::layer_embedding` to translate the original
-  *C* factor levels into a set of *D* new variables (\< *C*). The model
-  fitting routine optimizes which factor levels are mapped to each of
-  the new variables as well as the corresponding regression coefficients
-  (i.e., neural network weights) that will be used as the new encodings.
+- `step_embed()` uses `keras3::layer_embedding` to translate the
+  original *C* factor levels into a set of *D* new variables (\< *C*).
+  The model fitting routine optimizes which factor levels are mapped to
+  each of the new variables as well as the corresponding regression
+  coefficients (i.e., neural network weights) that will be used as the
+  new encodings.
 
 - `step_woe()` creates new variables based on weight of evidence
   encodings.
