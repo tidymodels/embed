@@ -59,11 +59,11 @@
 #' ames$Sale_Price <- log10(ames$Sale_Price)
 #'
 #' rec <-
-#'   recipe(Sale_Price ~ ., data = ames) %>%
+#'   recipe(Sale_Price ~ ., data = ames) |>
 #'   step_collapse_cart(
 #'     Sale_Type, Garage_Type, Neighborhood,
 #'     outcome = vars(Sale_Price)
-#'   ) %>%
+#'   ) |>
 #'   prep()
 #' tidy(rec, number = 1)
 #' @export
@@ -231,10 +231,10 @@ collapse_rpart <- function(x, feature_name, y, prefix = feature_name, ...) {
     purrr::map(
       term_nodes_ind,
       ~ rpart::path.rpart(split_model, .x, print.it = FALSE)[[1]]
-    ) %>%
-    purrr::map(~ .x[length(.x)]) %>%
-    purrr::map(~ strsplit(.x, "=")[[1]]) %>%
-    purrr::map(~ .x[length(.x)]) %>%
+    ) |>
+    purrr::map(~ .x[length(.x)]) |>
+    purrr::map(~ strsplit(.x, "=")[[1]]) |>
+    purrr::map(~ .x[length(.x)]) |>
     purrr::map(~ strsplit(.x, ",")[[1]])
   group_size <- purrr::map_int(groups, length)
 
@@ -247,24 +247,24 @@ collapse_rpart <- function(x, feature_name, y, prefix = feature_name, ...) {
     tibble::tibble(
       var = unlist(groups),
       group = rep(seq_along(group_size), group_size)
-    ) %>%
+    ) |>
     dplyr::mutate(
       var = factor(var, levels = lvls),
       group_f = gsub(" ", "0", format(group)),
       .group = paste0(prefix, "_", group_f),
       .group = factor(.group)
-    ) %>%
-    dplyr::select(dplyr::all_of(c("var", ".group"))) %>%
+    ) |>
+    dplyr::select(dplyr::all_of(c("var", ".group"))) |>
     setNames(c(feature_name, ".group"))
   key
 }
 
 format_collapse_keys <- function(x, nm) {
-  setNames(x, c("old", "new")) %>%
+  setNames(x, c("old", "new")) |>
     dplyr::mutate(
       dplyr::across(where(is.factor), as.character),
       terms = nm
-    ) %>%
+    ) |>
     dplyr::relocate(terms)
 }
 
@@ -273,11 +273,11 @@ convert_keys <- function(nm, keys, dat) {
   names(rn) <- nm
   col_nms <- names(dat)
   dat <-
-    dat %>%
-    dplyr::mutate(.rows = dplyr::row_number()) %>%
-    dplyr::left_join(keys, by = nm) %>%
-    dplyr::select(-dplyr::all_of(nm)) %>%
-    dplyr::rename(!!!rn) %>%
+    dat |>
+    dplyr::mutate(.rows = dplyr::row_number()) |>
+    dplyr::left_join(keys, by = nm) |>
+    dplyr::select(-dplyr::all_of(nm)) |>
+    dplyr::rename(!!!rn) |>
     dplyr::arrange(.rows)
 
   dat[, col_nms]

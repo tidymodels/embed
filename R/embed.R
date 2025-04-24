@@ -66,12 +66,12 @@
 #' predictor, and no hidden units used here would be
 #'
 #' ```
-#'   keras_model_sequential() %>%
+#'   keras_model_sequential() |>
 #'   layer_embedding(
 #'     input_dim = num_factor_levels_x + 1,
 #'     output_dim = num_terms
-#'   ) %>%
-#'   layer_flatten() %>%
+#'   ) |>
+#'   layer_flatten() |>
 #'   layer_dense(units = 1, activation = 'linear')
 #' ```
 #'
@@ -79,13 +79,13 @@
 #' be
 #'
 #' ```
-#'   keras_model_sequential() %>%
+#'   keras_model_sequential() |>
 #'   layer_embedding(
 #'     input_dim = num_factor_levels_x + 1,
 #'     output_dim = num_terms
-#'   ) %>%
-#'   layer_flatten() %>%
-#'   layer_dense(units = hidden_units, activation = "relu") %>%
+#'   ) |>
+#'   layer_flatten() |>
+#'   layer_dense(units = hidden_units, activation = "relu") |>
 #'   layer_dense(units = num_factor_levels_y, activation = 'softmax')
 #' ```
 #'
@@ -132,7 +132,7 @@
 #' set.seed(1)
 #' grants_other <- sample_n(grants_other, 500)
 #'
-#' rec <- recipe(class ~ num_ci + sponsor_code, data = grants_other) %>%
+#' rec <- recipe(class ~ num_ci + sponsor_code, data = grants_other) |>
 #'   step_embed(sponsor_code,
 #'     outcome = vars(class),
 #'     options = embed_control(epochs = 10)
@@ -246,8 +246,8 @@ prep.step_embed <- function(x, training, info = NULL, ...) {
     # compute epochs actually trained for
     epochs <- min(res$history$params$epochs, length(res$history$metrics[[1]]))
     .hist <- # TODO convert to pivot and get signature for below
-      as_tibble(res$history$metrics) %>%
-      mutate(epochs = 1:epochs) %>%
+      as_tibble(res$history$metrics) |>
+      mutate(epochs = 1:epochs) |>
       tidyr::pivot_longer(c(-epochs), names_to = "type", values_to = "loss")
   } else {
     res <- NULL
@@ -343,12 +343,12 @@ tf_coefs2 <- function(
   # Now add embedding to each layer and then flatten
   for (i in 1:p) {
     layers[[i]] <-
-      inputs[[i]] %>%
+      inputs[[i]] |>
       keras3::layer_embedding(
         input_dim = length(lvl[[i]]) + 1,
         output_dim = num,
         name = paste0("layer_", vars[i])
-      ) %>%
+      ) |>
       keras3::layer_flatten()
   }
 
@@ -367,7 +367,7 @@ tf_coefs2 <- function(
 
   if (h > 0) {
     all_layers <-
-      all_layers %>%
+      all_layers |>
       keras3::layer_dense(
         units = h,
         activation = "relu",
@@ -378,7 +378,7 @@ tf_coefs2 <- function(
 
   if (factor_y) {
     all_layers <-
-      all_layers %>%
+      all_layers |>
       keras3::layer_dense(
         units = ncol(y),
         activation = "softmax",
@@ -387,7 +387,7 @@ tf_coefs2 <- function(
       )
   } else {
     all_layers <-
-      all_layers %>%
+      all_layers |>
       keras3::layer_dense(
         units = 1,
         activation = "linear",
@@ -399,7 +399,7 @@ tf_coefs2 <- function(
   model <-
     keras3::keras_model(inputs = inputs, outputs = all_layers)
 
-  model %>%
+  model |>
     keras3::compile(
       loss = opt$loss,
       metrics = opt$metrics,
@@ -407,7 +407,7 @@ tf_coefs2 <- function(
     )
 
   history <-
-    model %>%
+    model |>
     keras3::fit(
       x = unname(mats),
       y = y,
@@ -422,10 +422,10 @@ tf_coefs2 <- function(
 
   for (i in 1:p) {
     layer_values[[i]] <-
-      keras3::get_layer(model, paste0("layer_", vars[i]))$get_weights() %>%
-      as.data.frame() %>%
-      setNames(names0(num, paste0(vars[i], "_embed_"))) %>%
-      as_tibble() %>%
+      keras3::get_layer(model, paste0("layer_", vars[i]))$get_weights() |>
+      as.data.frame() |>
+      setNames(names0(num, paste0(vars[i], "_embed_"))) |>
+      as_tibble() |>
       mutate(..level = c("..new", lvl[[i]]))
   }
   names(layer_values) <- vars
@@ -434,18 +434,18 @@ tf_coefs2 <- function(
 }
 
 map_tf_coef2 <- function(dat, mapping, prefix) {
-  new_val <- mapping %>%
-    dplyr::filter(..level == "..new") %>%
+  new_val <- mapping |>
+    dplyr::filter(..level == "..new") |>
     dplyr::select(-..level)
-  dat <- dat %>%
-    mutate(..order = seq_len(nrow(dat))) %>%
-    set_names(c("..level", "..order")) %>%
+  dat <- dat |>
+    mutate(..order = seq_len(nrow(dat))) |>
+    set_names(c("..level", "..order")) |>
     mutate(..level = as.character(..level))
-  mapping <- mapping %>% dplyr::filter(..level != "..new")
-  dat <- left_join(dat, mapping, by = "..level") %>%
+  mapping <- mapping |> dplyr::filter(..level != "..new")
+  dat <- left_join(dat, mapping, by = "..level") |>
     arrange(..order)
 
-  dat <- dat %>% dplyr::select(contains("_embed"))
+  dat <- dat |> dplyr::select(contains("_embed"))
   dat[!complete.cases(dat), ] <- new_val
   dat
 }

@@ -9,7 +9,7 @@ sim_data_2class <- function(n = 300) {
     )
   }
 
-  dat <- tibble(x = runif(n), z = runif(n)) %>%
+  dat <- tibble(x = runif(n), z = runif(n)) |>
     mutate(
       class = purrr::map_chr(x, xf),
       class = factor(class, levels = letters[1:2])
@@ -26,7 +26,7 @@ sim_data_3class <- function(n = 300) {
     )
   }
 
-  dat <- tibble(x = runif(n), z = runif(n)) %>%
+  dat <- tibble(x = runif(n), z = runif(n)) |>
     mutate(
       class = purrr::map_chr(x, xf),
       class = factor(class, levels = letters[1:3])
@@ -43,7 +43,7 @@ sim_data_reg <- function(n = 300) {
     )
   }
 
-  dat <- tibble(x = runif(n), z = runif(n)) %>%
+  dat <- tibble(x = runif(n), z = runif(n)) |>
     mutate(
       y = purrr::map_dbl(x, xf),
       y = y + rnorm(n, sd = .1)

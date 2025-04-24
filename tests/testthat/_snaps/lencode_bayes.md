@@ -1,8 +1,9 @@
 # factor outcome - factor predictor
 
     Code
-      class_test <- recipe(x2 ~ ., data = ex_dat) %>% step_lencode_bayes(x3, outcome = vars(
-        x2), verbose = FALSE, options = opts) %>% prep(training = ex_dat, retain = TRUE)
+      class_test <- prep(step_lencode_bayes(recipe(x2 ~ ., data = ex_dat), x3,
+      outcome = vars(x2), verbose = FALSE, options = opts), training = ex_dat,
+      retain = TRUE)
     Condition
 
 ---
@@ -18,17 +19,17 @@
 # factor outcome - character predictor
 
     Code
-      class_test <- recipe(x2 ~ ., data = ex_dat_ch) %>% step_lencode_bayes(x3,
-        outcome = vars(x2), verbose = FALSE, options = opts, id = "id") %>% prep(
-        training = ex_dat_ch, retain = TRUE, options = opts)
+      class_test <- prep(step_lencode_bayes(recipe(x2 ~ ., data = ex_dat_ch), x3,
+      outcome = vars(x2), verbose = FALSE, options = opts, id = "id"), training = ex_dat_ch,
+      retain = TRUE, options = opts)
     Condition
 
 # numeric outcome - factor predictor
 
     Code
       set.seed(8283)
-      reg_test <- recipe(x1 ~ ., data = ex_dat) %>% step_lencode_bayes(x3, outcome = vars(
-        x1), verbose = FALSE, options = opts) %>% prep(training = ex_dat, retain = TRUE)
+      reg_test <- prep(step_lencode_bayes(recipe(x1 ~ ., data = ex_dat), x3, outcome = vars(
+        x1), verbose = FALSE, options = opts), training = ex_dat, retain = TRUE)
     Condition
 
 ---
@@ -45,17 +46,17 @@
 
     Code
       set.seed(8283)
-      reg_test <- recipe(x1 ~ ., data = ex_dat_ch) %>% step_lencode_bayes(x3,
-        outcome = vars(x1), verbose = FALSE, options = opts) %>% prep(training = ex_dat_ch,
-        retain = TRUE)
+      reg_test <- prep(step_lencode_bayes(recipe(x1 ~ ., data = ex_dat_ch), x3,
+      outcome = vars(x1), verbose = FALSE, options = opts), training = ex_dat_ch,
+      retain = TRUE)
     Condition
 
 # Works with passing family 
 
     Code
-      class_test <- recipe(outcome ~ ., data = ex_dat_poisson) %>% step_lencode_bayes(
-        x3, outcome = vars(outcome), verbose = FALSE, options = c(opts, family = stats::poisson)) %>%
-        prep(training = ex_dat_poisson, retain = TRUE)
+      class_test <- prep(step_lencode_bayes(recipe(outcome ~ ., data = ex_dat_poisson),
+      x3, outcome = vars(outcome), verbose = FALSE, options = c(opts, family = stats::poisson)),
+      training = ex_dat_poisson, retain = TRUE)
     Condition
 
 ---
@@ -71,13 +72,13 @@
 # case weights
 
     Code
-      class_test <- recipe(x2 ~ ., data = ex_dat_cw) %>% step_lencode_bayes(x3,
-        outcome = vars(x2), verbose = FALSE, options = opts) %>% prep(training = ex_dat_cw,
-        retain = TRUE)
+      class_test <- prep(step_lencode_bayes(recipe(x2 ~ ., data = ex_dat_cw), x3,
+      outcome = vars(x2), verbose = FALSE, options = opts), training = ex_dat_cw,
+      retain = TRUE)
     Condition
     Code
       junk <- capture.output(ref_mod <- rstanarm::stan_glmer(formula = x2 ~ (1 |
-      value), data = ex_dat_cw %>% transmute(value = x3, x2), family = binomial(),
+      value), data = transmute(ex_dat_cw, value = x3, x2), family = binomial(),
       na.action = na.omit, seed = 34677, chains = 2, iter = 500, weights = wts_int, ))
     Condition
 
@@ -104,7 +105,7 @@
 # bad args
 
     Code
-      recipe(~., data = mtcars) %>% step_lencode_bayes(outcome = vars(mpg), verbose = "yes")
+      step_lencode_bayes(recipe(~., data = mtcars), outcome = vars(mpg), verbose = "yes")
     Condition
       Error in `step_lencode_bayes()`:
       ! `verbose` must be `TRUE` or `FALSE`, not the string "yes".

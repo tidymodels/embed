@@ -6,12 +6,12 @@ test_that("collapsing factors", {
   expect_no_error(
     {
       rec_1 <-
-        recipe(Sale_Price ~ ., data = ames) %>%
+        recipe(Sale_Price ~ ., data = ames) |>
         step_collapse_cart(
           Neighborhood,
           Central_Air,
           outcome = vars(Sale_Price)
-        ) %>%
+        ) |>
         prep()
     }
   )
@@ -25,8 +25,8 @@ test_that("collapsing factors", {
   )
 
   expect_equal(
-    ames %>% select(-Neighborhood, -Sale_Price),
-    bake(rec_1, new_data = NULL) %>% select(-Neighborhood, -Sale_Price)
+    ames |> select(-Neighborhood, -Sale_Price),
+    bake(rec_1, new_data = NULL) |> select(-Neighborhood, -Sale_Price)
   )
 
   expect_false(
@@ -38,14 +38,14 @@ test_that("collapsing factors", {
   expect_no_error(
     {
       rec_2 <-
-        recipe(Sale_Price ~ ., data = ames) %>%
+        recipe(Sale_Price ~ ., data = ames) |>
         step_collapse_cart(
           Neighborhood,
           Central_Air,
           outcome = vars(Sale_Price),
           min_n = 100,
           cost_complexity = 0.1
-        ) %>%
+        ) |>
         prep()
     }
   )
@@ -65,12 +65,12 @@ test_that("failed collapsing", {
   expect_no_error(
     {
       rec_3 <-
-        recipe(Sale_Price2 ~ ., data = ames) %>%
+        recipe(Sale_Price2 ~ ., data = ames) |>
         step_collapse_cart(
           Neighborhood,
           Central_Air,
           outcome = vars(Sale_Price2)
-        ) %>%
+        ) |>
         prep()
     }
   )
@@ -81,13 +81,13 @@ test_that("failed collapsing", {
   expect_no_error(
     {
       rec_4 <-
-        recipe(Sale_Price ~ ., data = ames) %>%
+        recipe(Sale_Price ~ ., data = ames) |>
         step_collapse_cart(
           Neighborhood,
           outcome = vars(Sale_Price),
           cost_complexity = 0,
           min_n = 1
-        ) %>%
+        ) |>
         prep()
     }
   )
@@ -98,8 +98,8 @@ test_that("failed collapsing", {
   expect_no_error(
     {
       rec_5 <-
-        recipe(Sale_Price ~ ., data = ames) %>%
-        step_collapse_cart(Central_Air, outcome = vars(Sale_Price)) %>%
+        recipe(Sale_Price ~ ., data = ames) |>
+        step_collapse_cart(Central_Air, outcome = vars(Sale_Price)) |>
         prep()
     }
   )
@@ -110,12 +110,12 @@ test_that("failed collapsing", {
 test_that("bad args", {
   expect_snapshot(
     error = TRUE,
-    recipe(~., data = mtcars) %>%
+    recipe(~., data = mtcars) |>
       step_collapse_cart(cost_complexity = -4)
   )
   expect_snapshot(
     error = TRUE,
-    recipe(~., data = mtcars) %>%
+    recipe(~., data = mtcars) |>
       step_collapse_cart(min_n = -4)
   )
 })
@@ -126,9 +126,9 @@ test_that("bake method errors when needed non-standard role columns are missing"
   skip_if_not_installed("modeldata")
   data(ames, package = "modeldata")
 
-  rec <- recipe(Sale_Price ~ ., data = ames) %>%
-    step_collapse_cart(MS_SubClass, outcome = vars(Sale_Price)) %>%
-    update_role(MS_SubClass, new_role = "potato") %>%
+  rec <- recipe(Sale_Price ~ ., data = ames) |>
+    step_collapse_cart(MS_SubClass, outcome = vars(Sale_Price)) |>
+    update_role(MS_SubClass, new_role = "potato") |>
     update_role_requirements(role = "potato", bake = FALSE)
 
   rec_trained <- prep(rec, training = ames, verbose = FALSE)
@@ -180,7 +180,7 @@ test_that("printing", {
   skip_if_not_installed("modeldata")
   data(ames, package = "modeldata")
 
-  rec <- recipe(Sale_Price ~ ., data = ames) %>%
+  rec <- recipe(Sale_Price ~ ., data = ames) |>
     step_collapse_cart(Neighborhood, Central_Air, outcome = vars(Sale_Price))
 
   expect_snapshot(print(rec))

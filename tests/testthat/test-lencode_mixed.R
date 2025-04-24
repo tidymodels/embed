@@ -2,8 +2,8 @@ test_that("factor outcome - factor predictor", {
   skip_if_not_installed("Matrix", "1.6-2")
   skip_if_not_installed("lme4", "1.1-35.1")
 
-  class_test <- recipe(x2 ~ ., data = ex_dat) %>%
-    step_lencode_mixed(x3, outcome = vars(x2), id = "id") %>%
+  class_test <- recipe(x2 ~ ., data = ex_dat) |>
+    step_lencode_mixed(x3, outcome = vars(x2), id = "id") |>
     prep(training = ex_dat, retain = TRUE)
   tr_values <- bake(class_test, new_data = NULL)$x3
   new_values <- bake(class_test, new_data = new_dat)
@@ -62,8 +62,8 @@ test_that("factor outcome - character predictor", {
   skip_if_not_installed("Matrix", "1.6-2")
   skip_if_not_installed("lme4", "1.1-35.1")
 
-  class_test <- recipe(x2 ~ ., data = ex_dat_ch) %>%
-    step_lencode_mixed(x3, outcome = vars(x2)) %>%
+  class_test <- recipe(x2 ~ ., data = ex_dat_ch) |>
+    step_lencode_mixed(x3, outcome = vars(x2)) |>
     prep(training = ex_dat_ch, retain = TRUE)
   tr_values <- bake(class_test, new_data = NULL)$x3
   new_values <- bake(class_test, new_data = new_dat_ch)
@@ -120,8 +120,8 @@ test_that("numeric outcome - factor predictor", {
   skip_if_not_installed("Matrix", "1.6-2")
   skip_if_not_installed("lme4", "1.1-35.1")
 
-  reg_test <- recipe(x1 ~ ., data = ex_dat) %>%
-    step_lencode_mixed(x3, outcome = vars(x1)) %>%
+  reg_test <- recipe(x1 ~ ., data = ex_dat) |>
+    step_lencode_mixed(x3, outcome = vars(x1)) |>
     prep(training = ex_dat, retain = TRUE)
   tr_values <- bake(reg_test, new_data = NULL)$x3
   new_values <- bake(reg_test, new_data = new_dat)
@@ -181,8 +181,8 @@ test_that("numeric outcome - character predictor", {
   skip_if_not_installed("Matrix", "1.6-2")
   skip_if_not_installed("lme4", "1.1-35.1")
 
-  reg_test <- recipe(x1 ~ ., data = ex_dat_ch) %>%
-    step_lencode_mixed(x3, outcome = vars(x1)) %>%
+  reg_test <- recipe(x1 ~ ., data = ex_dat_ch) |>
+    step_lencode_mixed(x3, outcome = vars(x1)) |>
     prep(training = ex_dat_ch, retain = TRUE)
   tr_values <- bake(reg_test, new_data = NULL)$x3
   new_values <- bake(reg_test, new_data = new_dat_ch)
@@ -245,8 +245,8 @@ test_that("bad args", {
 
   expect_snapshot(
     error = TRUE,
-    recipe(Species ~ ., data = three_class) %>%
-      step_lencode_mixed(Sepal.Length, outcome = vars(Species)) %>%
+    recipe(Species ~ ., data = three_class) |>
+      step_lencode_mixed(Sepal.Length, outcome = vars(Species)) |>
       prep(training = three_class, retain = TRUE)
   )
 })
@@ -257,16 +257,16 @@ test_that("case weights", {
 
   wts_int <- rep(c(0, 1), times = c(100, 400))
 
-  ex_dat_cw <- ex_dat %>%
+  ex_dat_cw <- ex_dat |>
     mutate(wts = importance_weights(wts_int))
 
-  class_test <- recipe(x2 ~ ., data = ex_dat_cw) %>%
-    step_lencode_mixed(x3, outcome = vars(x2), id = "id") %>%
+  class_test <- recipe(x2 ~ ., data = ex_dat_cw) |>
+    step_lencode_mixed(x3, outcome = vars(x2), id = "id") |>
     prep(training = ex_dat_cw, retain = TRUE)
 
   ref_mod <- lme4::glmer(
     formula = y ~ 1 + (1 | x3),
-    data = ex_dat_cw %>% mutate(y = as.numeric(x2) - 1),
+    data = ex_dat_cw |> mutate(y = as.numeric(x2) - 1),
     family = stats::binomial,
     verbose = 0,
     na.action = na.omit,
@@ -287,9 +287,9 @@ test_that("bake method errors when needed non-standard role columns are missing"
   skip_if_not_installed("Matrix", "1.6-2")
   skip_if_not_installed("lme4", "1.1-35.1")
 
-  rec <- recipe(x2 ~ ., data = ex_dat) %>%
-    step_lencode_mixed(x3, outcome = vars(x2)) %>%
-    update_role(x3, new_role = "potato") %>%
+  rec <- recipe(x2 ~ ., data = ex_dat) |>
+    step_lencode_mixed(x3, outcome = vars(x2)) |>
+    update_role(x3, new_role = "potato") |>
     update_role_requirements(role = "potato", bake = FALSE)
 
   rec_trained <- prep(rec, training = ex_dat, verbose = FALSE)
@@ -346,7 +346,7 @@ test_that("printing", {
   skip_if_not_installed("Matrix", "1.6-2")
   skip_if_not_installed("lme4", "1.1-35.1")
 
-  rec <- recipe(x2 ~ ., data = ex_dat_ch) %>%
+  rec <- recipe(x2 ~ ., data = ex_dat_ch) |>
     step_lencode_mixed(x3, outcome = vars(x2))
 
   expect_snapshot(print(rec))

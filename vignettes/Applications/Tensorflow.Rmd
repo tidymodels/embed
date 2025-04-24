@@ -38,8 +38,8 @@ The distribution of data in the neighborhood is not uniform:
 
 ```{r ames-xtab}
 #| fig.alt: "Horizontal bar chart. n along the x axis, neighborhoods along the y-axis. The lengths of the bars vary from near zero for Landmarks and Green_Hills, to almost 450 for North_Ames."
-ames %>%
-  count(Neighborhood) %>%
+ames |>
+  count(Neighborhood) |>
   ggplot(aes(n, reorder(Neighborhood, n))) +
   geom_col() +
   labs(y = NULL) +
@@ -50,8 +50,8 @@ Fo plotting later, we calculate the simple means per neighborhood:
 
 ```{r ames-means}
 means <-
-  ames %>%
-  group_by(Neighborhood) %>%
+  ames |>
+  group_by(Neighborhood) |>
   summarise(
     mean = mean(log10(Sale_Price)),
     n = length(Sale_Price),
@@ -66,12 +66,12 @@ We'll fit a model with 10 hidden units and 3 encoding columns:
 #| fig-alt: "Line chart with 2 lines. epochs along the x-axis, loss along the y-axis. The two lines are colored according to the type of loss, red for normal loss and blue for validation loss. The lines have high values for small epochs and lower values for higher epochs, with the validation loss being lower at all times."
 library(embed)
 tf_embed <-
-  recipe(Sale_Price ~ ., data = ames) %>%
-  step_log(Sale_Price, base = 10) %>%
+  recipe(Sale_Price ~ ., data = ames) |>
+  step_log(Sale_Price, base = 10) |>
   # Add some other predictors that can be used by the network
   # We preprocess them first
-  step_YeoJohnson(Lot_Area, Full_Bath, Gr_Liv_Area) %>%
-  step_range(Lot_Area, Full_Bath, Gr_Liv_Area) %>%
+  step_YeoJohnson(Lot_Area, Full_Bath, Gr_Liv_Area) |>
+  step_range(Lot_Area, Full_Bath, Gr_Liv_Area) |>
   step_embed(
     Neighborhood,
     outcome = vars(Sale_Price),
@@ -79,13 +79,13 @@ tf_embed <-
     num_terms = 5,
     hidden_units = 10,
     options = embed_control(epochs = 75, validation_split = 0.2)
-  ) %>%
+  ) |>
   prep(training = ames)
 
 theme_set(theme_bw() + theme(legend.position = "top"))
 
-tf_embed$steps[[4]]$history %>%
-  filter(epochs > 1) %>%
+tf_embed$steps[[4]]$history |>
+  filter(epochs > 1) |>
   ggplot(aes(x = epochs, y = loss, col = type)) +
   geom_line() +
   scale_y_log10()
@@ -95,9 +95,9 @@ The embeddings are obtained using the `tidy` method:
 
 ```{r linear-coefs, warning = FALSE}
 hood_coef <-
-  tidy(tf_embed, number = 4) %>%
-  dplyr::select(-terms, -id) %>%
-  dplyr::rename(Neighborhood = level) %>%
+  tidy(tf_embed, number = 4) |>
+  dplyr::select(-terms, -id) |>
+  dplyr::rename(Neighborhood = level) |>
   # Make names smaller
   rename_at(
     vars(contains("emb")),
@@ -106,7 +106,7 @@ hood_coef <-
 hood_coef
 
 hood_coef <-
-  hood_coef %>%
+  hood_coef |>
   inner_join(means, by = "Neighborhood")
 hood_coef
 ```
@@ -117,15 +117,15 @@ We can make a simple, interactive plot of the new features versus the outcome:
 ```{r}
 #| fig-alt: "Faceted scatter chart. Embedding value along the x-axis, Mean (log scale) on the y-axis. Each facet is a diffferent embedding. Appears fairly random for facet 1, 3, and 4. Small trend in embedding 2 and 5."
 tf_plot <-
-  hood_coef %>%
-  dplyr::select(-lon, -lat) %>%
-  gather(variable, value, starts_with("embed")) %>%
+  hood_coef |>
+  dplyr::select(-lon, -lat) |>
+  gather(variable, value, starts_with("embed")) |>
   # Clean up the embedding names
   # Add a new variable as a hover-over/tool tip
   mutate(
     label = paste0(gsub("_", " ", Neighborhood), " (n=", n, ")"),
     variable = gsub("_", " ", variable)
-  ) %>%
+  ) |>
   ggplot(aes(x = value, y = mean)) +
   geom_point_interactive(aes(size = sqrt(n), tooltip = label), alpha = .5) +
   facet_wrap(~variable, scales = "free_x") +
@@ -140,8 +140,8 @@ girafe(ggobj = tf_plot)
 However, this has induced some between-predictor correlations:
 
 ```{r linear-cor}
-hood_coef %>%
-  dplyr::select(contains("emb")) %>%
-  cor() %>%
+hood_coef |>
+  dplyr::select(contains("emb")) |>
+  cor() |>
   round(2)
 ```

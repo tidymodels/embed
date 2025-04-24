@@ -19,8 +19,8 @@
 # step function for classification
 
     Code
-      cart_rec <- recipe(class ~ ., data = sim_tr_cls) %>% step_discretize_cart(
-        all_predictors(), outcome = "class") %>% prep()
+      cart_rec <- prep(step_discretize_cart(recipe(class ~ ., data = sim_tr_cls),
+      all_predictors(), outcome = "class"))
     Condition
       Warning:
       `step_discretize_cart()` failed to find any meaningful splits for predictor "z", which will not be binned.
@@ -28,8 +28,8 @@
 # step function for regression
 
     Code
-      cart_rec <- recipe(y ~ ., data = sim_tr_reg) %>% step_discretize_cart(
-        all_predictors(), outcome = "y") %>% prep()
+      cart_rec <- prep(step_discretize_cart(recipe(y ~ ., data = sim_tr_reg),
+      all_predictors(), outcome = "y"))
     Condition
       Warning:
       `step_discretize_cart()` failed to find any meaningful splits for predictor "z", which will not be binned.
@@ -37,8 +37,8 @@
 # bad args
 
     Code
-      cart_rec <- recipe(y ~ ., data = tmp) %>% step_discretize_cart(all_predictors(),
-      outcome = "y") %>% prep()
+      cart_rec <- prep(step_discretize_cart(recipe(y ~ ., data = tmp), all_predictors(),
+      outcome = "y"))
     Condition
       Error in `step_discretize_cart()`:
       Caused by error in `prep()`:
@@ -48,8 +48,8 @@
 ---
 
     Code
-      recipe(~., data = mtcars) %>% step_discretize_cart(outcome = vars("mpg"),
-      cost_complexity = -4) %>% prep()
+      prep(step_discretize_cart(recipe(~., data = mtcars), outcome = vars("mpg"),
+      cost_complexity = -4))
     Condition
       Error in `step_discretize_cart()`:
       Caused by error in `prep()`:
@@ -58,8 +58,8 @@
 ---
 
     Code
-      recipe(~., data = mtcars) %>% step_discretize_cart(outcome = vars("mpg"),
-      min_n = -4) %>% prep()
+      prep(step_discretize_cart(recipe(~., data = mtcars), outcome = vars("mpg"),
+      min_n = -4))
     Condition
       Error in `step_discretize_cart()`:
       Caused by error in `prep()`:
@@ -68,8 +68,8 @@
 ---
 
     Code
-      recipe(~., data = mtcars) %>% step_discretize_cart(outcome = vars("mpg"),
-      tree_depth = -4) %>% prep()
+      prep(step_discretize_cart(recipe(~., data = mtcars), outcome = vars("mpg"),
+      tree_depth = -4))
     Condition
       Error in `step_discretize_cart()`:
       Caused by error in `prep()`:
@@ -86,8 +86,8 @@
 # case weights step functions
 
     Code
-      cart_rec <- recipe(class ~ ., data = sim_tr_cls_cw) %>% step_discretize_cart(
-        all_predictors(), outcome = "class") %>% prep()
+      cart_rec <- prep(step_discretize_cart(recipe(class ~ ., data = sim_tr_cls_cw),
+      all_predictors(), outcome = "class"))
     Condition
       Warning:
       `step_discretize_cart()` failed to find any meaningful splits for predictor "z", which will not be binned.
@@ -95,8 +95,8 @@
 ---
 
     Code
-      cart_rec <- recipe(y ~ ., data = sim_tr_reg_cw) %>% step_discretize_cart(
-        all_predictors(), outcome = "y") %>% prep()
+      cart_rec <- prep(step_discretize_cart(recipe(y ~ ., data = sim_tr_reg_cw),
+      all_predictors(), outcome = "y"))
 
 ---
 

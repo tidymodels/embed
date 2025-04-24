@@ -7,8 +7,8 @@ test_that("collapsing factors", {
   expect_no_error(
     {
       rec_1 <-
-        recipe(Sale_Price ~ ., data = ames) %>%
-        step_collapse_stringdist(MS_SubClass, distance = 5) %>%
+        recipe(Sale_Price ~ ., data = ames) |>
+        step_collapse_stringdist(MS_SubClass, distance = 5) |>
         prep()
     }
   )
@@ -22,8 +22,8 @@ test_that("collapsing factors", {
   )
 
   expect_equal(
-    ames %>% select(-MS_SubClass, -Sale_Price),
-    bake(rec_1, new_data = NULL) %>% select(-MS_SubClass, -Sale_Price)
+    ames |> select(-MS_SubClass, -Sale_Price),
+    bake(rec_1, new_data = NULL) |> select(-MS_SubClass, -Sale_Price)
   )
 
   expect_false(
@@ -35,8 +35,8 @@ test_that("collapsing factors", {
   expect_no_error(
     {
       rec_2 <-
-        recipe(Sale_Price ~ ., data = ames) %>%
-        step_collapse_stringdist(MS_SubClass, Overall_Cond, distance = 10) %>%
+        recipe(Sale_Price ~ ., data = ames) |>
+        step_collapse_stringdist(MS_SubClass, Overall_Cond, distance = 10) |>
         prep()
     }
   )
@@ -61,8 +61,8 @@ test_that("collapsing factors manual test", {
     x2 = c("ak", "b", "djj", "e", "aaaaaa", "aaaaaa")
   )
 
-  rec <- recipe(~., data = data0) %>%
-    step_collapse_stringdist(all_predictors(), distance = 1) %>%
+  rec <- recipe(~., data = data0) |>
+    step_collapse_stringdist(all_predictors(), distance = 1) |>
     prep()
 
   exp_result <- tibble(
@@ -74,8 +74,8 @@ test_that("collapsing factors manual test", {
     exp_result
   )
 
-  rec <- recipe(~., data = data0) %>%
-    step_collapse_stringdist(all_predictors(), distance = 2) %>%
+  rec <- recipe(~., data = data0) |>
+    step_collapse_stringdist(all_predictors(), distance = 2) |>
     prep()
 
   exp_result <- tibble(
@@ -96,12 +96,12 @@ test_that("method argument", {
     x2 = c("ak", "b", "djj", "e", "aaaaaa", "aaaaaa")
   )
 
-  rec <- recipe(~., data = data0) %>%
+  rec <- recipe(~., data = data0) |>
     step_collapse_stringdist(
       all_predictors(),
       distance = 0.5,
       method = "cosine"
-    ) %>%
+    ) |>
     prep()
 
   exp_result <- tibble(
@@ -113,12 +113,12 @@ test_that("method argument", {
     exp_result
   )
 
-  rec <- recipe(~., data = data0) %>%
+  rec <- recipe(~., data = data0) |>
     step_collapse_stringdist(
       all_predictors(),
       distance = 1,
       method = "cosine"
-    ) %>%
+    ) |>
     prep()
 
   exp_result <- tibble(
@@ -139,12 +139,12 @@ test_that("options argument", {
     x2 = c("ak", "b", "djj", "e", "aaaaaa", "aaaaaa")
   )
 
-  rec <- recipe(~., data = data0) %>%
+  rec <- recipe(~., data = data0) |>
     step_collapse_stringdist(
       all_predictors(),
       distance = 1,
       options = list(weight = c(d = 0.1, i = 1, s = 1, t = 1))
-    ) %>%
+    ) |>
     prep()
 
   exp_result <- tibble(
@@ -168,8 +168,8 @@ test_that("failed collapsing", {
   expect_no_error(
     {
       rec_4 <-
-        recipe(Sale_Price ~ ., data = ames) %>%
-        step_collapse_stringdist(MS_SubClass, distance = 0) %>%
+        recipe(Sale_Price ~ ., data = ames) |>
+        step_collapse_stringdist(MS_SubClass, distance = 0) |>
         prep()
     }
   )
@@ -183,8 +183,8 @@ test_that("failed collapsing", {
   expect_no_error(
     {
       rec_5 <-
-        recipe(Sale_Price ~ ., data = ames) %>%
-        step_collapse_stringdist(MS_SubClass, distance = 10000) %>%
+        recipe(Sale_Price ~ ., data = ames) |>
+        step_collapse_stringdist(MS_SubClass, distance = 10000) |>
         prep()
     }
   )
@@ -200,12 +200,12 @@ test_that("bad args", {
 
   expect_snapshot(
     error = TRUE,
-    recipe(~., data = mtcars) %>%
+    recipe(~., data = mtcars) |>
       step_collapse_stringdist(cost_complexity = -4)
   )
   expect_snapshot(
     error = TRUE,
-    recipe(~., data = mtcars) %>%
+    recipe(~., data = mtcars) |>
       step_collapse_stringdist(min_n = -4)
   )
 })
@@ -218,9 +218,9 @@ test_that("bake method errors when needed non-standard role columns are missing"
 
   data(ames, package = "modeldata")
 
-  rec <- recipe(Sale_Price ~ ., data = ames) %>%
-    step_collapse_stringdist(MS_SubClass, distance = 2) %>%
-    update_role(MS_SubClass, new_role = "potato") %>%
+  rec <- recipe(Sale_Price ~ ., data = ames) |>
+    step_collapse_stringdist(MS_SubClass, distance = 2) |>
+    update_role(MS_SubClass, new_role = "potato") |>
     update_role_requirements(role = "potato", bake = FALSE)
 
   rec_trained <- prep(rec, training = ames, verbose = FALSE)
@@ -274,7 +274,7 @@ test_that("printing", {
 
   data(ames, package = "modeldata")
 
-  rec <- recipe(Sale_Price ~ ., data = ames) %>%
+  rec <- recipe(Sale_Price ~ ., data = ames) |>
     step_collapse_stringdist(MS_SubClass, distance = 5)
 
   expect_snapshot(print(rec))

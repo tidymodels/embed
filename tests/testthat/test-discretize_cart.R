@@ -75,8 +75,8 @@ test_that("low-level binning for regression", {
 test_that("step function for classification", {
   expect_snapshot({
     cart_rec <-
-      recipe(class ~ ., data = sim_tr_cls) %>%
-      step_discretize_cart(all_predictors(), outcome = "class") %>%
+      recipe(class ~ ., data = sim_tr_cls) |>
+      step_discretize_cart(all_predictors(), outcome = "class") |>
       prep()
   })
 
@@ -95,8 +95,8 @@ test_that("step function for classification", {
 test_that("step function for regression", {
   expect_snapshot({
     cart_rec <-
-      recipe(y ~ ., data = sim_tr_reg) %>%
-      step_discretize_cart(all_predictors(), outcome = "y") %>%
+      recipe(y ~ ., data = sim_tr_reg) |>
+      step_discretize_cart(all_predictors(), outcome = "y") |>
       prep()
   })
 
@@ -118,15 +118,15 @@ test_that("bad args", {
 
   expect_snapshot(error = TRUE, {
     cart_rec <-
-      recipe(y ~ ., data = tmp) %>%
-      step_discretize_cart(all_predictors(), outcome = "y") %>%
+      recipe(y ~ ., data = tmp) |>
+      step_discretize_cart(all_predictors(), outcome = "y") |>
       prep()
   })
 })
 
 test_that("tidy method", {
   cart_rec <-
-    recipe(y ~ ., data = sim_tr_reg) %>%
+    recipe(y ~ ., data = sim_tr_reg) |>
     step_discretize_cart(all_predictors(), outcome = "y")
 
   res <- tidy(cart_rec, number = 1)
@@ -155,10 +155,10 @@ test_that("tidy method", {
 })
 
 test_that("case weights step functions", {
-  sim_tr_cls_cw <- sim_tr_cls %>%
+  sim_tr_cls_cw <- sim_tr_cls |>
     mutate(weight = importance_weights(rep(0:1, each = 500)))
 
-  sim_tr_reg_cw <- sim_tr_reg %>%
+  sim_tr_reg_cw <- sim_tr_reg |>
     mutate(weight = importance_weights(rep(0:1, each = 500)))
 
   mod_cw <- rpart(y ~ x, data = sim_tr_reg, weights = rep(0:1, each = 500))
@@ -167,8 +167,8 @@ test_that("case weights step functions", {
   # Classification
   expect_snapshot({
     cart_rec <-
-      recipe(class ~ ., data = sim_tr_cls_cw) %>%
-      step_discretize_cart(all_predictors(), outcome = "class") %>%
+      recipe(class ~ ., data = sim_tr_cls_cw) |>
+      step_discretize_cart(all_predictors(), outcome = "class") |>
       prep()
   })
 
@@ -178,8 +178,8 @@ test_that("case weights step functions", {
   # Regression
   expect_snapshot({
     cart_rec <-
-      recipe(y ~ ., data = sim_tr_reg_cw) %>%
-      step_discretize_cart(all_predictors(), outcome = "y") %>%
+      recipe(y ~ ., data = sim_tr_reg_cw) |>
+      step_discretize_cart(all_predictors(), outcome = "y") |>
       prep()
   })
 
@@ -191,7 +191,7 @@ test_that("case weights step functions", {
 
 test_that("tunable", {
   rec <-
-    recipe(~., data = mtcars) %>%
+    recipe(~., data = mtcars) |>
     step_discretize_cart(all_predictors(), outcome = "mpg")
   rec_param <- tunable.step_discretize_cart(rec$steps[[1]])
   expect_equal(rec_param$name, c("cost_complexity", "tree_depth", "min_n"))
@@ -207,20 +207,20 @@ test_that("tunable", {
 test_that("bad args", {
   expect_snapshot(
     error = TRUE,
-    recipe(~., data = mtcars) %>%
-      step_discretize_cart(outcome = vars("mpg"), cost_complexity = -4) %>%
+    recipe(~., data = mtcars) |>
+      step_discretize_cart(outcome = vars("mpg"), cost_complexity = -4) |>
       prep()
   )
   expect_snapshot(
     error = TRUE,
-    recipe(~., data = mtcars) %>%
-      step_discretize_cart(outcome = vars("mpg"), min_n = -4) %>%
+    recipe(~., data = mtcars) |>
+      step_discretize_cart(outcome = vars("mpg"), min_n = -4) |>
       prep()
   )
   expect_snapshot(
     error = TRUE,
-    recipe(~., data = mtcars) %>%
-      step_discretize_cart(outcome = vars("mpg"), tree_depth = -4) %>%
+    recipe(~., data = mtcars) |>
+      step_discretize_cart(outcome = vars("mpg"), tree_depth = -4) |>
       prep()
   )
 })
@@ -229,9 +229,9 @@ test_that("bad args", {
 # Infrastructure ---------------------------------------------------------------
 
 test_that("bake method errors when needed non-standard role columns are missing", {
-  rec <- recipe(class ~ ., data = sim_tr_cls) %>%
-    step_discretize_cart(x, z, outcome = "class") %>%
-    update_role(x, new_role = "potato") %>%
+  rec <- recipe(class ~ ., data = sim_tr_cls) |>
+    step_discretize_cart(x, z, outcome = "class") |>
+    update_role(x, new_role = "potato") |>
     update_role_requirements(role = "potato", bake = FALSE)
 
   expect_snapshot(
@@ -282,7 +282,7 @@ test_that("empty selection tidy method works", {
 })
 
 test_that("printing", {
-  rec <- recipe(class ~ ., data = sim_tr_cls) %>%
+  rec <- recipe(class ~ ., data = sim_tr_cls) |>
     step_discretize_cart(all_predictors(), outcome = "class")
 
   expect_snapshot(print(rec))
@@ -291,7 +291,7 @@ test_that("printing", {
 
 test_that("tunable is setup to works with extract_parameter_set_dials", {
   skip_if_not_installed("dials")
-  rec <- recipe(~., data = mtcars) %>%
+  rec <- recipe(~., data = mtcars) |>
     step_discretize_cart(
       all_predictors(),
       outcome = "mpg",

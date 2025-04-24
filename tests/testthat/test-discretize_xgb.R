@@ -18,10 +18,10 @@ credit_data_test <- rsample::testing(credit_data_split)
 set.seed(2393)
 credit_data_small <- dplyr::sample_n(credit_data_train, 30)
 
-rec_credit <- credit_data_train %>%
-  select(-Status) %>%
-  recipe(~.) %>%
-  step_integer(all_predictors()) %>%
+rec_credit <- credit_data_train |>
+  select(-Status) |>
+  recipe(~.) |>
+  step_integer(all_predictors()) |>
   prep(retain = TRUE)
 
 xgb_credit_train <- xgboost::xgb.DMatrix(
@@ -38,7 +38,7 @@ xgb_credit_test <- xgboost::xgb.DMatrix(
 
 # Data for multi-classification problem testing
 set.seed(42)
-attrition <- attrition %>%
+attrition <- attrition |>
   mutate(EducationField = as.integer(EducationField) - 1)
 attrition_data_split <- rsample::initial_split(
   attrition,
@@ -50,10 +50,10 @@ attrition_data_test <- rsample::testing(attrition_data_split)
 set.seed(2393)
 attrition_data_small <- dplyr::sample_n(attrition_data_train, 10)
 
-rec_attrition <- attrition_data_train %>%
-  select(-EducationField) %>%
-  recipe(~.) %>%
-  step_integer(all_predictors()) %>%
+rec_attrition <- attrition_data_train |>
+  select(-EducationField) |>
+  recipe(~.) |>
+  step_integer(all_predictors()) |>
   prep(retain = TRUE)
 
 xgb_attrition_train <- xgboost::xgb.DMatrix(
@@ -78,10 +78,10 @@ ames_data_test <- rsample::testing(ames_data_split)
 set.seed(8134)
 ames_data_small <- dplyr::sample_n(ames_data_train, 10)
 
-ames_rec <- ames_data_train %>%
-  select(-Sale_Price) %>%
-  recipe(~.) %>%
-  step_integer(all_predictors()) %>%
+ames_rec <- ames_data_train |>
+  select(-Sale_Price) |>
+  recipe(~.) |>
+  step_integer(all_predictors()) |>
   prep(retain = TRUE)
 
 xgb_ames_train <- xgboost::xgb.DMatrix(
@@ -299,7 +299,7 @@ test_that("step_discretize_xgb for classification", {
   set.seed(125)
   # General use
   xgb_rec <-
-    recipe(class ~ ., data = sim_tr_cls) %>%
+    recipe(class ~ ., data = sim_tr_cls) |>
     step_discretize_xgb(all_predictors(), outcome = "class")
 
   set.seed(28)
@@ -324,8 +324,8 @@ test_that("step_discretize_xgb for classification", {
 
   # Too few data
   expect_snapshot(error = TRUE, {
-    recipe(class ~ ., data = sim_tr_cls[1:9, ]) %>%
-      step_discretize_xgb(all_predictors(), outcome = "class") %>%
+    recipe(class ~ ., data = sim_tr_cls[1:9, ]) |>
+      step_discretize_xgb(all_predictors(), outcome = "class") |>
       prep()
   })
 
@@ -336,17 +336,17 @@ test_that("step_discretize_xgb for classification", {
     "Marital"
   )
 
-  xgb_rec <- credit_data_train %>%
-    select(one_of(predictors_non_numeric)) %>%
-    recipe(Status ~ .) %>%
-    step_impute_median(all_numeric()) %>%
+  xgb_rec <- credit_data_train |>
+    select(one_of(predictors_non_numeric)) |>
+    recipe(Status ~ .) |>
+    step_impute_median(all_numeric()) |>
     step_discretize_xgb(all_numeric(), outcome = "Status")
 
   # Information about insufficient datapoints for Time predictor
   expect_snapshot({
     set.seed(1)
-    recipe(Status ~ ., data = credit_data_train) %>%
-      step_discretize_xgb(Time, outcome = "Status") %>%
+    recipe(Status ~ ., data = credit_data_train) |>
+      step_discretize_xgb(Time, outcome = "Status") |>
       prep(retain = TRUE)
   })
 })
@@ -357,7 +357,7 @@ test_that("step_discretize_xgb for multi-classification", {
   set.seed(125)
   # General use
   xgb_rec <-
-    recipe(class ~ ., data = sim_tr_mcls) %>%
+    recipe(class ~ ., data = sim_tr_mcls) |>
     step_discretize_xgb(all_predictors(), outcome = "class")
 
   set.seed(28)
@@ -383,8 +383,8 @@ test_that("step_discretize_xgb for multi-classification", {
   # Too few data
   expect_snapshot(
     error = TRUE,
-    recipe(class ~ ., data = sim_tr_mcls[1:9, ]) %>%
-      step_discretize_xgb(all_predictors(), outcome = "class") %>%
+    recipe(class ~ ., data = sim_tr_mcls[1:9, ]) |>
+      step_discretize_xgb(all_predictors(), outcome = "class") |>
       prep()
   )
 
@@ -406,10 +406,10 @@ test_that("step_discretize_xgb for multi-classification", {
     "WorkLifeBalance"
   )
 
-  xgb_rec <- attrition_data_train %>%
-    select(one_of(predictors_non_numeric)) %>%
-    recipe(BusinessTravel ~ .) %>%
-    step_impute_median(all_numeric()) %>%
+  xgb_rec <- attrition_data_train |>
+    select(one_of(predictors_non_numeric)) |>
+    recipe(BusinessTravel ~ .) |>
+    step_impute_median(all_numeric()) |>
     step_discretize_xgb(all_numeric(), outcome = "BusinessTravel")
 })
 
@@ -427,7 +427,7 @@ test_that("step_discretize_xgb for regression", {
   # General use
   set.seed(83834)
   xgb_rec <-
-    recipe(y ~ ., data = sim_tr_reg) %>%
+    recipe(y ~ ., data = sim_tr_reg) |>
     step_discretize_xgb(all_predictors(), outcome = "y")
   tidy_untrained <- tidy(xgb_rec, 1)
 
@@ -475,8 +475,8 @@ test_that("step_discretize_xgb for regression", {
   sim_tr_reg$x <- round(sim_tr_reg$x, 1)
   expect_snapshot({
     xgb_rec <-
-      recipe(y ~ ., data = sim_tr_reg[1:100, ]) %>%
-      step_discretize_xgb(all_predictors(), outcome = "y") %>%
+      recipe(y ~ ., data = sim_tr_reg[1:100, ]) |>
+      step_discretize_xgb(all_predictors(), outcome = "y") |>
       prep()
   })
 
@@ -485,10 +485,10 @@ test_that("step_discretize_xgb for regression", {
     "Neighborhood"
   )
 
-  xgb_rec <- ames_data_train %>%
-    select(Sale_Price, one_of(predictors_non_numeric)) %>%
-    recipe(Sale_Price ~ .) %>%
-    step_medianimpute(all_numeric()) %>%
+  xgb_rec <- ames_data_train |>
+    select(Sale_Price, one_of(predictors_non_numeric)) |>
+    recipe(Sale_Price ~ .) |>
+    step_medianimpute(all_numeric()) |>
     step_discretize_xgb(all_predictors(), outcome = "Sale_Price")
 })
 
@@ -517,20 +517,20 @@ test_that("xgb_binning() errors if only one class in outcome", {
 test_that("case weights step_discretize_xgb", {
   skip_on_cran() # because data.table uses all cores by default
 
-  sim_tr_cls_cw <- sim_tr_cls %>%
+  sim_tr_cls_cw <- sim_tr_cls |>
     mutate(weight = importance_weights(rep(1:0, each = 500)))
 
-  sim_tr_mcls_cw <- sim_tr_mcls %>%
+  sim_tr_mcls_cw <- sim_tr_mcls |>
     mutate(weight = importance_weights(rep(1:0, each = 500)))
 
-  sim_tr_reg_cw <- sim_tr_reg %>%
+  sim_tr_reg_cw <- sim_tr_reg |>
     mutate(weight = importance_weights(rep(1:0, each = 500)))
 
   # classification ------------------------------------------------------------
   set.seed(125)
   # General use
   xgb_rec_cw <-
-    recipe(class ~ ., data = sim_tr_cls_cw) %>%
+    recipe(class ~ ., data = sim_tr_cls_cw) |>
     step_discretize_xgb(all_predictors(), outcome = "class")
 
   set.seed(28)
@@ -541,7 +541,7 @@ test_that("case weights step_discretize_xgb", {
   set.seed(28)
   for (col_names in c("x", "z")) {
     exp_rules[[col_names]] <- xgb_binning(
-      sim_tr_cls_cw %>% select(-weight),
+      sim_tr_cls_cw |> select(-weight),
       "class",
       col_names,
       sample_val = 0.20,
@@ -561,7 +561,7 @@ test_that("case weights step_discretize_xgb", {
   set.seed(125)
   # General use
   xgb_rec_cw <-
-    recipe(class ~ ., data = sim_tr_mcls_cw) %>%
+    recipe(class ~ ., data = sim_tr_mcls_cw) |>
     step_discretize_xgb(all_predictors(), outcome = "class")
 
   set.seed(28)
@@ -572,7 +572,7 @@ test_that("case weights step_discretize_xgb", {
   set.seed(28)
   for (col_names in c("x", "z")) {
     exp_rules[[col_names]] <- xgb_binning(
-      sim_tr_mcls_cw %>% select(-weight),
+      sim_tr_mcls_cw |> select(-weight),
       "class",
       col_names,
       sample_val = 0.20,
@@ -592,7 +592,7 @@ test_that("case weights step_discretize_xgb", {
   set.seed(125)
   # General use
   xgb_rec_cw <-
-    recipe(y ~ ., data = sim_tr_reg_cw) %>%
+    recipe(y ~ ., data = sim_tr_reg_cw) |>
     step_discretize_xgb(all_predictors(), outcome = "y")
 
   set.seed(28)
@@ -603,7 +603,7 @@ test_that("case weights step_discretize_xgb", {
   set.seed(28)
   for (col_names in c("x", "z")) {
     exp_rules[[col_names]] <- xgb_binning(
-      sim_tr_reg_cw %>% select(-weight),
+      sim_tr_reg_cw |> select(-weight),
       "y",
       col_names,
       sample_val = 0.20,
@@ -625,7 +625,7 @@ test_that("case weights step_discretize_xgb", {
 
 test_that("tunable", {
   rec <-
-    recipe(~., data = mtcars) %>%
+    recipe(~., data = mtcars) |>
     step_discretize_xgb(all_predictors(), outcome = "mpg")
   rec_param <- tunable.step_discretize_xgb(rec$steps[[1]])
   expect_equal(
@@ -645,32 +645,32 @@ test_that("tunable", {
 test_that("bad args", {
   expect_snapshot(
     error = TRUE,
-    recipe(~., data = mtcars) %>%
-      step_discretize_xgb(outcome = "class", sample_val = -4) %>%
+    recipe(~., data = mtcars) |>
+      step_discretize_xgb(outcome = "class", sample_val = -4) |>
       prep()
   )
   expect_snapshot(
     error = TRUE,
-    recipe(~., data = mtcars) %>%
-      step_discretize_xgb(outcome = "class", learn_rate = -4) %>%
+    recipe(~., data = mtcars) |>
+      step_discretize_xgb(outcome = "class", learn_rate = -4) |>
       prep()
   )
   expect_snapshot(
     error = TRUE,
-    recipe(~., data = mtcars) %>%
-      step_discretize_xgb(outcome = "class", num_breaks = -4) %>%
+    recipe(~., data = mtcars) |>
+      step_discretize_xgb(outcome = "class", num_breaks = -4) |>
       prep()
   )
   expect_snapshot(
     error = TRUE,
-    recipe(~., data = mtcars) %>%
-      step_discretize_xgb(outcome = "class", tree_depth = -4) %>%
+    recipe(~., data = mtcars) |>
+      step_discretize_xgb(outcome = "class", tree_depth = -4) |>
       prep()
   )
   expect_snapshot(
     error = TRUE,
-    recipe(~., data = mtcars) %>%
-      step_discretize_xgb(outcome = "class", min_n = -4) %>%
+    recipe(~., data = mtcars) |>
+      step_discretize_xgb(outcome = "class", min_n = -4) |>
       prep()
   )
 })
@@ -678,9 +678,9 @@ test_that("bad args", {
 # Infrastructure ---------------------------------------------------------------
 
 test_that("bake method errors when needed non-standard role columns are missing", {
-  rec <- recipe(class ~ ., data = sim_tr_cls) %>%
-    step_discretize_xgb(x, z, outcome = "class") %>%
-    update_role(x, new_role = "potato") %>%
+  rec <- recipe(class ~ ., data = sim_tr_cls) |>
+    step_discretize_xgb(x, z, outcome = "class") |>
+    update_role(x, new_role = "potato") |>
     update_role_requirements(role = "potato", bake = FALSE)
 
   rec_trained <- prep(rec, training = sim_tr_cls, verbose = FALSE)
@@ -731,7 +731,7 @@ test_that("empty selection tidy method works", {
 test_that("printing", {
   skip_on_cran() # because data.table uses all cores by default
 
-  rec <- recipe(class ~ ., data = sim_tr_cls) %>%
+  rec <- recipe(class ~ ., data = sim_tr_cls) |>
     step_discretize_xgb(all_predictors(), outcome = "class")
 
   expect_snapshot(print(rec))
@@ -740,7 +740,7 @@ test_that("printing", {
 
 test_that("tunable is setup to works with extract_parameter_set_dials", {
   skip_if_not_installed("dials")
-  rec <- recipe(~., data = mtcars) %>%
+  rec <- recipe(~., data = mtcars) |>
     step_discretize_xgb(
       all_predictors(),
       outcome = "mpg",

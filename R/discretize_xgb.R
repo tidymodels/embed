@@ -92,8 +92,8 @@
 #' credit_data_te <- testing(split)
 #'
 #' xgb_rec <-
-#'   recipe(Status ~ Income + Assets, data = credit_data_tr) %>%
-#'   step_impute_median(Income, Assets) %>%
+#'   recipe(Status ~ Income + Assets, data = credit_data_tr) |>
+#'   step_impute_median(Income, Assets) |>
 #'   step_discretize_xgb(Income, Assets, outcome = "Status")
 #'
 #' xgb_rec <- prep(xgb_rec, training = credit_data_tr)
@@ -409,12 +409,12 @@ xgb_binning <- function(
   # data frame.
 
   xgb_split <-
-    xgb_tree %>%
-    tibble::as_tibble() %>%
-    dplyr::select(Node, Feature, Split, Yes, No, Missing) %>%
-    stats::na.omit() %>%
-    dplyr::distinct(Split) %>%
-    dplyr::arrange(Split) %>%
+    xgb_tree |>
+    tibble::as_tibble() |>
+    dplyr::select(Node, Feature, Split, Yes, No, Missing) |>
+    stats::na.omit() |>
+    dplyr::distinct(Split) |>
+    dplyr::arrange(Split) |>
     dplyr::pull(Split)
 
   xgb_split

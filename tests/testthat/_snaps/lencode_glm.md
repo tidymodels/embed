@@ -26,8 +26,8 @@
 # bad args
 
     Code
-      recipe(Species ~ ., data = three_class) %>% step_lencode_glm(Sepal.Length,
-        outcome = vars(Species)) %>% prep(training = three_class, retain = TRUE)
+      prep(step_lencode_glm(recipe(Species ~ ., data = three_class), Sepal.Length,
+      outcome = vars(Species)), training = three_class, retain = TRUE)
     Condition
       Error in `step_lencode_glm()`:
       Caused by error in `prep()`:

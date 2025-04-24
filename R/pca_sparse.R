@@ -72,20 +72,20 @@
 #' data(ad_data, package = "modeldata")
 #'
 #' ad_rec <-
-#'   recipe(Class ~ ., data = ad_data) %>%
-#'   step_zv(all_predictors()) %>%
-#'   step_YeoJohnson(all_numeric_predictors()) %>%
-#'   step_normalize(all_numeric_predictors()) %>%
+#'   recipe(Class ~ ., data = ad_data) |>
+#'   step_zv(all_predictors()) |>
+#'   step_YeoJohnson(all_numeric_predictors()) |>
+#'   step_normalize(all_numeric_predictors()) |>
 #'   step_pca_sparse(
 #'     all_numeric_predictors(),
 #'     predictor_prop = 0.75,
 #'     num_comp = 3,
 #'     id = "sparse pca"
-#'   ) %>%
+#'   ) |>
 #'   prep()
 #'
-#' tidy(ad_rec, id = "sparse pca") %>%
-#'   mutate(value = ifelse(value == 0, NA, value)) %>%
+#' tidy(ad_rec, id = "sparse pca") |>
+#'   mutate(value = ifelse(value == 0, NA, value)) |>
 #'   ggplot(aes(x = component, y = terms, fill = value)) +
 #'   geom_tile() +
 #'   scale_fill_gradient2() +

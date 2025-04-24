@@ -1,6 +1,6 @@
 test_that("factor outcome - factor predictor", {
-  class_test <- recipe(x2 ~ ., data = ex_dat) %>%
-    step_lencode_glm(x3, outcome = vars(x2), id = "id") %>%
+  class_test <- recipe(x2 ~ ., data = ex_dat) |>
+    step_lencode_glm(x3, outcome = vars(x2), id = "id") |>
     prep(training = ex_dat, retain = TRUE)
   tr_values <- bake(class_test, new_data = NULL)$x3
   new_values <- bake(class_test, new_data = new_dat)
@@ -56,8 +56,8 @@ test_that("factor outcome - factor predictor", {
 })
 
 test_that("factor outcome - character predictor", {
-  class_test <- recipe(x2 ~ ., data = ex_dat_ch) %>%
-    step_lencode_glm(x3, outcome = vars(x2)) %>%
+  class_test <- recipe(x2 ~ ., data = ex_dat_ch) |>
+    step_lencode_glm(x3, outcome = vars(x2)) |>
     prep(training = ex_dat_ch, retain = TRUE)
   tr_values <- bake(class_test, new_data = NULL)$x3
   expect_snapshot(
@@ -113,8 +113,8 @@ test_that("factor outcome - character predictor", {
 })
 
 test_that("numeric outcome - factor predictor", {
-  reg_test <- recipe(x1 ~ ., data = ex_dat) %>%
-    step_lencode_glm(x3, outcome = vars(x1)) %>%
+  reg_test <- recipe(x1 ~ ., data = ex_dat) |>
+    step_lencode_glm(x3, outcome = vars(x1)) |>
     prep(training = ex_dat, retain = TRUE)
   tr_values <- bake(reg_test, new_data = NULL)$x3
   new_values <- bake(reg_test, new_data = new_dat)
@@ -171,8 +171,8 @@ test_that("numeric outcome - factor predictor", {
 })
 
 test_that("numeric outcome - character predictor", {
-  reg_test <- recipe(x1 ~ ., data = ex_dat_ch) %>%
-    step_lencode_glm(x3, outcome = vars(x1)) %>%
+  reg_test <- recipe(x1 ~ ., data = ex_dat_ch) |>
+    step_lencode_glm(x3, outcome = vars(x1)) |>
     prep(training = ex_dat_ch, retain = TRUE)
   tr_values <- bake(reg_test, new_data = NULL)$x3
   new_values <- bake(reg_test, new_data = new_dat_ch)
@@ -232,8 +232,8 @@ test_that("bad args", {
 
   expect_snapshot(
     error = TRUE,
-    recipe(Species ~ ., data = three_class) %>%
-      step_lencode_glm(Sepal.Length, outcome = vars(Species)) %>%
+    recipe(Species ~ ., data = three_class) |>
+      step_lencode_glm(Sepal.Length, outcome = vars(Species)) |>
       prep(training = three_class, retain = TRUE)
   )
 })
@@ -241,11 +241,11 @@ test_that("bad args", {
 test_that("case weights", {
   wts_int <- rep(c(0, 1), times = c(100, 400))
 
-  ex_dat_cw <- ex_dat %>%
+  ex_dat_cw <- ex_dat |>
     mutate(wts = importance_weights(wts_int))
 
-  class_test <- recipe(x2 ~ ., data = ex_dat_cw) %>%
-    step_lencode_glm(x3, outcome = vars(x2), id = "id") %>%
+  class_test <- recipe(x2 ~ ., data = ex_dat_cw) |>
+    step_lencode_glm(x3, outcome = vars(x2), id = "id") |>
     prep(training = ex_dat_cw, retain = TRUE)
 
   ref_mod <- glm(
@@ -267,9 +267,9 @@ test_that("case weights", {
 # Infrastructure ---------------------------------------------------------------
 
 test_that("bake method errors when needed non-standard role columns are missing", {
-  rec <- recipe(x2 ~ ., data = ex_dat) %>%
-    step_lencode_glm(x3, outcome = vars(x2)) %>%
-    update_role(x3, new_role = "potato") %>%
+  rec <- recipe(x2 ~ ., data = ex_dat) |>
+    step_lencode_glm(x3, outcome = vars(x2)) |>
+    update_role(x3, new_role = "potato") |>
     update_role_requirements(role = "potato", bake = FALSE)
 
   rec_trained <- prep(rec, training = ex_dat, verbose = FALSE)
@@ -323,7 +323,7 @@ test_that("empty selection tidy method works", {
 })
 
 test_that("printing", {
-  rec <- recipe(x2 ~ ., data = ex_dat_ch) %>%
+  rec <- recipe(x2 ~ ., data = ex_dat_ch) |>
     step_lencode_glm(x3, outcome = vars(x2))
 
   expect_snapshot(print(rec))

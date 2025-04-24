@@ -6,13 +6,13 @@ test_that("factor encoded predictor", {
   skip_if_not_installed("keras3")
   skip_if(!embed:::is_tf_available())
 
-  class_test <- recipe(x2 ~ ., data = ex_dat) %>%
+  class_test <- recipe(x2 ~ ., data = ex_dat) |>
     step_embed(
       x3,
       outcome = vars(x2),
       options = embed_control(verbose = 0),
       id = "id"
-    ) %>%
+    ) |>
     prep(training = ex_dat, retain = TRUE)
   tr_values <- bake(class_test, new_data = NULL, contains("embed"))
   new_values <- bake(class_test, new_data = new_dat, contains("embed"))
@@ -36,36 +36,36 @@ test_that("factor encoded predictor", {
   expect_true(all(vapply(tr_values, is.numeric, logical(1))))
 
   expect_equal(
-    new_values[1, ] %>% setNames(letters[1:2]),
-    key$x3[key$x3$..level == "..new", -3] %>% setNames(letters[1:2]),
+    new_values[1, ] |> setNames(letters[1:2]),
+    key$x3[key$x3$..level == "..new", -3] |> setNames(letters[1:2]),
     ignore_attr = TRUE
   )
   expect_equal(
-    new_values[2, ] %>% setNames(letters[1:2]),
-    key$x3[key$x3$..level == levels(ex_dat$x3)[1], -3] %>%
+    new_values[2, ] |> setNames(letters[1:2]),
+    key$x3[key$x3$..level == levels(ex_dat$x3)[1], -3] |>
       setNames(letters[1:2]),
     ignore_attr = TRUE
   )
   expect_equal(
-    new_values[3, ] %>% setNames(letters[1:2]),
-    key$x3[key$x3$..level == "..new", -3] %>% setNames(letters[1:2]),
+    new_values[3, ] |> setNames(letters[1:2]),
+    key$x3[key$x3$..level == "..new", -3] |> setNames(letters[1:2]),
     ignore_attr = TRUE
   )
 
   expect_equal(
-    new_values_ch[1, ] %>% setNames(letters[1:2]),
-    key$x3[key$x3$..level == "..new", -3] %>% setNames(letters[1:2]),
+    new_values_ch[1, ] |> setNames(letters[1:2]),
+    key$x3[key$x3$..level == "..new", -3] |> setNames(letters[1:2]),
     ignore_attr = TRUE
   )
   expect_equal(
-    new_values_ch[2, ] %>% setNames(letters[1:2]),
-    key$x3[key$x3$..level == levels(ex_dat$x3)[1], -3] %>%
+    new_values_ch[2, ] |> setNames(letters[1:2]),
+    key$x3[key$x3$..level == levels(ex_dat$x3)[1], -3] |>
       setNames(letters[1:2]),
     ignore_attr = TRUE
   )
   expect_equal(
-    new_values_ch[3, ] %>% setNames(letters[1:2]),
-    key$x3[key$x3$..level == "..new", -3] %>% setNames(letters[1:2]),
+    new_values_ch[3, ] |> setNames(letters[1:2]),
+    key$x3[key$x3$..level == "..new", -3] |> setNames(letters[1:2]),
     ignore_attr = TRUE
   )
 
@@ -74,8 +74,8 @@ test_that("factor encoded predictor", {
     key$x3$..level
   )
   expect_equal(
-    td_obj %>% select(contains("emb")) %>% setNames(letters[1:2]),
-    key$x3 %>% select(contains("emb")) %>% setNames(letters[1:2])
+    td_obj |> select(contains("emb")) |> setNames(letters[1:2]),
+    key$x3 |> select(contains("emb")) |> setNames(letters[1:2])
   )
 })
 
@@ -84,8 +84,8 @@ test_that("character encoded predictor", {
   skip_if_not_installed("keras3")
   skip_if(!embed:::is_tf_available())
 
-  class_test <- recipe(x2 ~ ., data = ex_dat_ch) %>%
-    step_embed(x3, outcome = vars(x2), options = embed_control(verbose = 0)) %>%
+  class_test <- recipe(x2 ~ ., data = ex_dat_ch) |>
+    step_embed(x3, outcome = vars(x2), options = embed_control(verbose = 0)) |>
     prep(training = ex_dat_ch, retain = TRUE)
   tr_values <- bake(class_test, new_data = NULL, contains("embed"))
   new_values <- bake(class_test, new_data = new_dat, contains("embed"))
@@ -107,36 +107,36 @@ test_that("character encoded predictor", {
   expect_true(all(vapply(tr_values, is.numeric, logical(1))))
 
   expect_equal(
-    new_values[1, ] %>% setNames(letters[1:2]),
-    key$x3[key$x3$..level == "..new", -3] %>% setNames(letters[1:2]),
+    new_values[1, ] |> setNames(letters[1:2]),
+    key$x3[key$x3$..level == "..new", -3] |> setNames(letters[1:2]),
     ignore_attr = TRUE
   )
   expect_equal(
-    new_values[2, ] %>% setNames(letters[1:2]),
-    key$x3[key$x3$..level == levels(ex_dat$x3)[1], -3] %>%
+    new_values[2, ] |> setNames(letters[1:2]),
+    key$x3[key$x3$..level == levels(ex_dat$x3)[1], -3] |>
       setNames(letters[1:2]),
     ignore_attr = TRUE
   )
   expect_equal(
-    new_values[3, ] %>% setNames(letters[1:2]),
-    key$x3[key$x3$..level == "..new", -3] %>% setNames(letters[1:2]),
+    new_values[3, ] |> setNames(letters[1:2]),
+    key$x3[key$x3$..level == "..new", -3] |> setNames(letters[1:2]),
     ignore_attr = TRUE
   )
 
   expect_equal(
-    new_values_fc[1, ] %>% setNames(letters[1:2]),
-    key$x3[key$x3$..level == "..new", -3] %>% setNames(letters[1:2]),
+    new_values_fc[1, ] |> setNames(letters[1:2]),
+    key$x3[key$x3$..level == "..new", -3] |> setNames(letters[1:2]),
     ignore_attr = TRUE
   )
   expect_equal(
-    new_values_fc[2, ] %>% setNames(letters[1:2]),
-    key$x3[key$x3$..level == levels(ex_dat$x3)[1], -3] %>%
+    new_values_fc[2, ] |> setNames(letters[1:2]),
+    key$x3[key$x3$..level == levels(ex_dat$x3)[1], -3] |>
       setNames(letters[1:2]),
     ignore_attr = TRUE
   )
   expect_equal(
-    new_values_fc[3, ] %>% setNames(letters[1:2]),
-    key$x3[key$x3$..level == "..new", -3] %>% setNames(letters[1:2]),
+    new_values_fc[3, ] |> setNames(letters[1:2]),
+    key$x3[key$x3$..level == "..new", -3] |> setNames(letters[1:2]),
     ignore_attr = TRUE
   )
 
@@ -145,8 +145,8 @@ test_that("character encoded predictor", {
     key$x3$..level
   )
   expect_equal(
-    td_obj %>% select(contains("emb")) %>% setNames(letters[1:2]),
-    key$x3 %>% select(contains("emb")) %>% setNames(letters[1:2])
+    td_obj |> select(contains("emb")) |> setNames(letters[1:2]),
+    key$x3 |> select(contains("emb")) |> setNames(letters[1:2])
   )
 })
 
@@ -155,8 +155,8 @@ test_that("factor encoded predictor", {
   skip_if_not_installed("keras3")
   skip_if(!embed:::is_tf_available())
 
-  class_test <- recipe(x1 ~ ., data = ex_dat) %>%
-    step_embed(x3, outcome = vars(x1), options = embed_control(verbose = 0)) %>%
+  class_test <- recipe(x1 ~ ., data = ex_dat) |>
+    step_embed(x3, outcome = vars(x1), options = embed_control(verbose = 0)) |>
     prep(training = ex_dat, retain = TRUE)
   tr_values <- bake(class_test, new_data = NULL, contains("embed"))
   new_values <- bake(class_test, new_data = new_dat, contains("embed"))
@@ -179,36 +179,36 @@ test_that("factor encoded predictor", {
   expect_true(all(vapply(tr_values, is.numeric, logical(1))))
 
   expect_equal(
-    new_values[1, ] %>% setNames(letters[1:2]),
-    key$x3[key$x3$..level == "..new", -3] %>% setNames(letters[1:2]),
+    new_values[1, ] |> setNames(letters[1:2]),
+    key$x3[key$x3$..level == "..new", -3] |> setNames(letters[1:2]),
     ignore_attr = TRUE
   )
   expect_equal(
-    new_values[2, ] %>% setNames(letters[1:2]),
-    key$x3[key$x3$..level == levels(ex_dat$x3)[1], -3] %>%
+    new_values[2, ] |> setNames(letters[1:2]),
+    key$x3[key$x3$..level == levels(ex_dat$x3)[1], -3] |>
       setNames(letters[1:2]),
     ignore_attr = TRUE
   )
   expect_equal(
-    new_values[3, ] %>% setNames(letters[1:2]),
-    key$x3[key$x3$..level == "..new", -3] %>% setNames(letters[1:2]),
+    new_values[3, ] |> setNames(letters[1:2]),
+    key$x3[key$x3$..level == "..new", -3] |> setNames(letters[1:2]),
     ignore_attr = TRUE
   )
 
   expect_equal(
-    new_values_ch[1, ] %>% setNames(letters[1:2]),
-    key$x3[key$x3$..level == "..new", -3] %>% setNames(letters[1:2]),
+    new_values_ch[1, ] |> setNames(letters[1:2]),
+    key$x3[key$x3$..level == "..new", -3] |> setNames(letters[1:2]),
     ignore_attr = TRUE
   )
   expect_equal(
-    new_values_ch[2, ] %>% setNames(letters[1:2]),
-    key$x3[key$x3$..level == levels(ex_dat$x3)[1], -3] %>%
+    new_values_ch[2, ] |> setNames(letters[1:2]),
+    key$x3[key$x3$..level == levels(ex_dat$x3)[1], -3] |>
       setNames(letters[1:2]),
     ignore_attr = TRUE
   )
   expect_equal(
-    new_values_ch[3, ] %>% setNames(letters[1:2]),
-    key$x3[key$x3$..level == "..new", -3] %>% setNames(letters[1:2]),
+    new_values_ch[3, ] |> setNames(letters[1:2]),
+    key$x3[key$x3$..level == "..new", -3] |> setNames(letters[1:2]),
     ignore_attr = TRUE
   )
 
@@ -217,8 +217,8 @@ test_that("factor encoded predictor", {
     key$x3$..level
   )
   expect_equal(
-    td_obj %>% select(contains("emb")) %>% setNames(letters[1:2]),
-    key$x3 %>% select(contains("emb")) %>% setNames(letters[1:2])
+    td_obj |> select(contains("emb")) |> setNames(letters[1:2]),
+    key$x3 |> select(contains("emb")) |> setNames(letters[1:2])
   )
 })
 
@@ -227,13 +227,13 @@ test_that("character encoded predictor", {
   skip_if_not_installed("keras3")
   skip_if(!embed:::is_tf_available())
 
-  class_test <- recipe(x1 ~ ., data = ex_dat_ch) %>%
+  class_test <- recipe(x1 ~ ., data = ex_dat_ch) |>
     step_embed(
       x3,
       outcome = vars(x1),
       num_terms = 5,
       options = embed_control(verbose = 0)
-    ) %>%
+    ) |>
     prep(training = ex_dat_ch, retain = TRUE)
   tr_values <- bake(class_test, new_data = NULL, contains("embed"))
   new_values <- bake(class_test, new_data = new_dat, contains("embed"))
@@ -255,36 +255,36 @@ test_that("character encoded predictor", {
   expect_true(all(vapply(tr_values, is.numeric, logical(1))))
 
   expect_equal(
-    new_values[1, ] %>% setNames(letters[1:5]),
-    key$x3[key$x3$..level == "..new", -6] %>% setNames(letters[1:5]),
+    new_values[1, ] |> setNames(letters[1:5]),
+    key$x3[key$x3$..level == "..new", -6] |> setNames(letters[1:5]),
     ignore_attr = TRUE
   )
   expect_equal(
-    new_values[2, ] %>% setNames(letters[1:5]),
-    key$x3[key$x3$..level == levels(ex_dat$x3)[1], -6] %>%
+    new_values[2, ] |> setNames(letters[1:5]),
+    key$x3[key$x3$..level == levels(ex_dat$x3)[1], -6] |>
       setNames(letters[1:5]),
     ignore_attr = TRUE
   )
   expect_equal(
-    new_values[3, ] %>% setNames(letters[1:5]),
-    key$x3[key$x3$..level == "..new", -6] %>% setNames(letters[1:5]),
+    new_values[3, ] |> setNames(letters[1:5]),
+    key$x3[key$x3$..level == "..new", -6] |> setNames(letters[1:5]),
     ignore_attr = TRUE
   )
 
   expect_equal(
-    new_values_fc[1, ] %>% setNames(letters[1:5]),
-    key$x3[key$x3$..level == "..new", -6] %>% setNames(letters[1:5]),
+    new_values_fc[1, ] |> setNames(letters[1:5]),
+    key$x3[key$x3$..level == "..new", -6] |> setNames(letters[1:5]),
     ignore_attr = TRUE
   )
   expect_equal(
-    new_values_fc[2, ] %>% setNames(letters[1:5]),
-    key$x3[key$x3$..level == levels(ex_dat$x3)[1], -6] %>%
+    new_values_fc[2, ] |> setNames(letters[1:5]),
+    key$x3[key$x3$..level == levels(ex_dat$x3)[1], -6] |>
       setNames(letters[1:5]),
     ignore_attr = TRUE
   )
   expect_equal(
-    new_values_fc[3, ] %>% setNames(letters[1:5]),
-    key$x3[key$x3$..level == "..new", -6] %>% setNames(letters[1:5]),
+    new_values_fc[3, ] |> setNames(letters[1:5]),
+    key$x3[key$x3$..level == "..new", -6] |> setNames(letters[1:5]),
     ignore_attr = TRUE
   )
 
@@ -293,8 +293,8 @@ test_that("character encoded predictor", {
     key$x3$..level
   )
   expect_equal(
-    td_obj %>% select(contains("emb")) %>% setNames(letters[1:5]),
-    key$x3 %>% select(contains("emb")) %>% setNames(letters[1:5])
+    td_obj |> select(contains("emb")) |> setNames(letters[1:5]),
+    key$x3 |> select(contains("emb")) |> setNames(letters[1:5])
   )
 })
 
@@ -306,7 +306,7 @@ test_that("check_name() is used", {
   dat <- ex_dat
   dat$x3_embed_1 <- dat$x3
 
-  rec <- recipe(~., data = dat) %>%
+  rec <- recipe(~., data = dat) |>
     step_embed(x3, outcome = vars(x2), options = embed_control(verbose = 0))
 
   expect_snapshot(
@@ -317,7 +317,7 @@ test_that("check_name() is used", {
 
 test_that("tunable", {
   rec <-
-    recipe(~., data = mtcars) %>%
+    recipe(~., data = mtcars) |>
     step_embed(all_predictors(), outcome = "mpg")
   rec_param <- tunable.step_embed(rec$steps[[1]])
   expect_equal(rec_param$name, c("num_terms", "hidden_units"))
@@ -333,14 +333,14 @@ test_that("tunable", {
 test_that("bad args", {
   expect_snapshot(
     error = TRUE,
-    recipe(~., data = mtcars) %>%
-      step_embed(outcome = vars(mpg), num_terms = -4) %>%
+    recipe(~., data = mtcars) |>
+      step_embed(outcome = vars(mpg), num_terms = -4) |>
       prep()
   )
   expect_snapshot(
     error = TRUE,
-    recipe(~., data = mtcars) %>%
-      step_embed(outcome = vars(mpg), hidden_units = -4) %>%
+    recipe(~., data = mtcars) |>
+      step_embed(outcome = vars(mpg), hidden_units = -4) |>
       prep()
   )
 })
@@ -351,14 +351,14 @@ test_that("bake method errors when needed non-standard role columns are missing"
   skip_on_cran()
   skip_if_not_installed("keras3")
   skip_if(!embed:::is_tf_available())
-  rec <- recipe(x2 ~ ., data = ex_dat) %>%
+  rec <- recipe(x2 ~ ., data = ex_dat) |>
     step_embed(
       x3,
       outcome = vars(x2),
       options = embed_control(verbose = 0),
       id = "id"
-    ) %>%
-    update_role(x3, new_role = "potato") %>%
+    ) |>
+    update_role(x3, new_role = "potato") |>
     update_role_requirements(role = "potato", bake = FALSE)
 
   rec_trained <- prep(rec, training = ex_dat, verbose = FALSE)
@@ -422,7 +422,7 @@ test_that("keep_original_cols works", {
 
   new_names <- c("x2", "x3_embed_1", "x3_embed_2")
 
-  rec <- recipe(x2 ~ x3, data = ex_dat) %>%
+  rec <- recipe(x2 ~ x3, data = ex_dat) |>
     step_embed(
       x3,
       outcome = vars(x2),
@@ -438,7 +438,7 @@ test_that("keep_original_cols works", {
     new_names
   )
 
-  rec <- recipe(x2 ~ x3, data = ex_dat) %>%
+  rec <- recipe(x2 ~ x3, data = ex_dat) |>
     step_embed(
       x3,
       outcome = vars(x2),
@@ -460,7 +460,7 @@ test_that("keep_original_cols - can prep recipes with it missing", {
   skip_if_not_installed("keras3")
   skip_if(!embed:::is_tf_available())
 
-  rec <- recipe(x2 ~ x3, data = ex_dat) %>%
+  rec <- recipe(x2 ~ x3, data = ex_dat) |>
     step_embed(x3, outcome = vars(x2), options = embed_control(verbose = 0))
 
   rec$steps[[1]]$keep_original_cols <- NULL
@@ -479,7 +479,7 @@ test_that("printing", {
   skip_if_not_installed("keras3")
   skip_if(!embed:::is_tf_available())
 
-  rec <- recipe(x2 ~ ., data = ex_dat_ch) %>%
+  rec <- recipe(x2 ~ ., data = ex_dat_ch) |>
     step_embed(x3, outcome = vars(x2))
 
   expect_snapshot(print(rec))
@@ -488,7 +488,7 @@ test_that("printing", {
 
 test_that("tunable is setup to works with extract_parameter_set_dials", {
   skip_if_not_installed("dials")
-  rec <- recipe(~., data = mtcars) %>%
+  rec <- recipe(~., data = mtcars) |>
     step_embed(
       all_predictors(),
       outcome = "mpg",

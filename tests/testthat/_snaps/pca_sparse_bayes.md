@@ -29,7 +29,7 @@
 # bad args
 
     Code
-      recipe(~., data = mtcars) %>% step_pca_sparse_bayes(num_comp = -4) %>% prep()
+      prep(step_pca_sparse_bayes(recipe(~., data = mtcars), num_comp = -4))
     Condition
       Error in `step_pca_sparse_bayes()`:
       Caused by error in `prep()`:
@@ -38,8 +38,8 @@
 ---
 
     Code
-      recipe(~., data = mtcars) %>% step_pca_sparse_bayes(prior_slab_dispersion = -4) %>%
-        prep()
+      prep(step_pca_sparse_bayes(recipe(~., data = mtcars), prior_slab_dispersion = -
+      4))
     Condition
       Error in `step_pca_sparse_bayes()`:
       Caused by error in `prep()`:
@@ -48,8 +48,8 @@
 ---
 
     Code
-      recipe(~., data = mtcars) %>% step_pca_sparse_bayes(prior_mixture_threshold = -
-        4) %>% prep()
+      prep(step_pca_sparse_bayes(recipe(~., data = mtcars), prior_mixture_threshold = -
+      4))
     Condition
       Error in `step_pca_sparse_bayes()`:
       Caused by error in `prep()`:
@@ -58,7 +58,7 @@
 ---
 
     Code
-      recipe(~., data = mtcars) %>% step_pca_sparse_bayes(prefix = NULL)
+      step_pca_sparse_bayes(recipe(~., data = mtcars), prefix = NULL)
     Condition
       Error in `step_pca_sparse_bayes()`:
       ! `prefix` must be a single string, not `NULL`.

@@ -118,25 +118,25 @@ layer while softmax is used for factor outcomes (with any number of levels).
 For example, the \code{keras3} code for a numeric outcome, one categorical
 predictor, and no hidden units used here would be
 
-\if{html}{\out{<div class="sourceCode">}}\preformatted{  keras_model_sequential() \%>\%
+\if{html}{\out{<div class="sourceCode">}}\preformatted{  keras_model_sequential() |>
   layer_embedding(
     input_dim = num_factor_levels_x + 1,
     output_dim = num_terms
-  ) \%>\%
-  layer_flatten() \%>\%
+  ) |>
+  layer_flatten() |>
   layer_dense(units = 1, activation = 'linear')
 }\if{html}{\out{</div>}}
 
 If a factor outcome is used and hidden units were requested, the code would
 be
 
-\if{html}{\out{<div class="sourceCode">}}\preformatted{  keras_model_sequential() \%>\%
+\if{html}{\out{<div class="sourceCode">}}\preformatted{  keras_model_sequential() |>
   layer_embedding(
     input_dim = num_factor_levels_x + 1,
     output_dim = num_terms
-  ) \%>\%
-  layer_flatten() \%>\%
-  layer_dense(units = hidden_units, activation = "relu") \%>\%
+  ) |>
+  layer_flatten() |>
+  layer_dense(units = hidden_units, activation = "relu") |>
   layer_dense(units = num_factor_levels_y, activation = 'softmax')
 }\if{html}{\out{</div>}}
 
@@ -183,7 +183,7 @@ data(grants, package = "modeldata")
 set.seed(1)
 grants_other <- sample_n(grants_other, 500)
 
-rec <- recipe(class ~ num_ci + sponsor_code, data = grants_other) \%>\%
+rec <- recipe(class ~ num_ci + sponsor_code, data = grants_other) |>
   step_embed(sponsor_code,
     outcome = vars(class),
     options = embed_control(epochs = 10)

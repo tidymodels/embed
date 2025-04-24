@@ -70,8 +70,8 @@
 #'
 #' @examples
 #' rec <- recipe(~., data = mtcars)
-#' pca_trans <- rec %>%
-#'   step_normalize(all_numeric()) %>%
+#' pca_trans <- rec |>
+#'   step_normalize(all_numeric()) |>
 #'   step_pca_truncated(all_numeric(), num_comp = 2)
 #' pca_estimates <- prep(pca_trans, training = mtcars)
 #' pca_data <- bake(pca_estimates, mtcars)

@@ -48,20 +48,20 @@
 #'   x2 = c("ak", "b", "djj", "e", "hjhgfgjgr", "hjhgfgjgr")
 #' )
 #'
-#' rec <- recipe(~., data = data0) %>%
-#'   step_collapse_stringdist(all_predictors(), distance = 1) %>%
+#' rec <- recipe(~., data = data0) |>
+#'   step_collapse_stringdist(all_predictors(), distance = 1) |>
 #'   prep()
 #'
-#' rec %>%
+#' rec |>
 #'   bake(new_data = NULL)
 #'
 #' tidy(rec, 1)
 #'
-#' rec <- recipe(~., data = data0) %>%
-#'   step_collapse_stringdist(all_predictors(), distance = 2) %>%
+#' rec <- recipe(~., data = data0) |>
+#'   step_collapse_stringdist(all_predictors(), distance = 2) |>
 #'   prep()
 #'
-#' rec %>%
+#' rec |>
 #'   bake(new_data = NULL)
 #'
 #' tidy(rec, 1)

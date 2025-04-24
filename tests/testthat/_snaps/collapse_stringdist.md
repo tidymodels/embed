@@ -1,7 +1,7 @@
 # bad args
 
     Code
-      recipe(~., data = mtcars) %>% step_collapse_stringdist(cost_complexity = -4)
+      step_collapse_stringdist(recipe(~., data = mtcars), cost_complexity = -4)
     Condition
       Error in `step_collapse_stringdist()`:
       ! `distance` must be a number, not `NULL`.
@@ -9,7 +9,7 @@
 ---
 
     Code
-      recipe(~., data = mtcars) %>% step_collapse_stringdist(min_n = -4)
+      step_collapse_stringdist(recipe(~., data = mtcars), min_n = -4)
     Condition
       Error in `step_collapse_stringdist()`:
       ! `distance` must be a number, not `NULL`.

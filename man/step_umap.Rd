@@ -176,15 +176,15 @@ te <- iris[split, ]
 
 set.seed(11)
 supervised <-
-  recipe(Species ~ ., data = tr) \%>\%
-  step_center(all_predictors()) \%>\%
-  step_scale(all_predictors()) \%>\%
-  step_umap(all_predictors(), outcome = vars(Species), num_comp = 2) \%>\%
+  recipe(Species ~ ., data = tr) |>
+  step_center(all_predictors()) |>
+  step_scale(all_predictors()) |>
+  step_umap(all_predictors(), outcome = vars(Species), num_comp = 2) |>
   prep(training = tr)
 
 theme_set(theme_bw())
 
-bake(supervised, new_data = te, Species, starts_with("umap")) \%>\%
+bake(supervised, new_data = te, Species, starts_with("umap")) |>
   ggplot(aes(x = UMAP1, y = UMAP2, col = Species)) +
   geom_point(alpha = .5)
 \dontshow{\}) # examplesIf}

@@ -29,7 +29,7 @@
 # bad args
 
     Code
-      recipe(~., data = mtcars) %>% step_pca_sparse(num_comp = -4) %>% prep()
+      prep(step_pca_sparse(recipe(~., data = mtcars), num_comp = -4))
     Condition
       Error in `step_pca_sparse()`:
       Caused by error in `prep()`:
@@ -38,7 +38,7 @@
 ---
 
     Code
-      recipe(~., data = mtcars) %>% step_pca_sparse(predictor_prop = -4) %>% prep()
+      prep(step_pca_sparse(recipe(~., data = mtcars), predictor_prop = -4))
     Condition
       Error in `step_pca_sparse()`:
       Caused by error in `prep()`:
@@ -47,7 +47,7 @@
 ---
 
     Code
-      recipe(~., data = mtcars) %>% step_pca_sparse(prefix = NULL)
+      step_pca_sparse(recipe(~., data = mtcars), prefix = NULL)
     Condition
       Error in `step_pca_sparse()`:
       ! `prefix` must be a single string, not `NULL`.

@@ -31,8 +31,7 @@
 # bad args
 
     Code
-      recipe(~., data = mtcars) %>% step_embed(outcome = vars(mpg), num_terms = -4) %>%
-        prep()
+      prep(step_embed(recipe(~., data = mtcars), outcome = vars(mpg), num_terms = -4))
     Condition
       Error in `step_embed()`:
       Caused by error in `prep()`:
@@ -41,8 +40,8 @@
 ---
 
     Code
-      recipe(~., data = mtcars) %>% step_embed(outcome = vars(mpg), hidden_units = -4) %>%
-        prep()
+      prep(step_embed(recipe(~., data = mtcars), outcome = vars(mpg), hidden_units = -
+      4))
     Condition
       Error in `step_embed()`:
       Caused by error in `prep()`:

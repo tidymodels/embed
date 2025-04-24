@@ -33,16 +33,16 @@ theme_set(theme_bw() + theme(legend.position = "top"))
 data(grants)
 
 props <-
-  grants_other %>%
-  group_by(sponsor_code) %>%
+  grants_other |>
+  group_by(sponsor_code) |>
   summarise(
     prop = mean(class == "successful"),
     log_odds = log(prop / (1 - prop)),
     n = length(class)
-  ) %>%
+  ) |>
   mutate(label = paste0(gsub("_", " ", sponsor_code), " (n=", n, ")"))
 
-props %>%
+props |>
   select(-label)
 
 # later, for plotting
@@ -59,9 +59,9 @@ For these data, a recipe is created and `step_lencode_glm` is used:
 
 ```{r simple-glm}
 grants_glm <-
-  recipe(class ~ ., data = grants_other) %>%
+  recipe(class ~ ., data = grants_other) |>
   # specify the variable being encoded and the outcome
-  step_lencode_glm(sponsor_code, outcome = vars(class)) %>%
+  step_lencode_glm(sponsor_code, outcome = vars(class)) |>
   # estimate the effects
   prep(training = grants_other)
 ```
@@ -70,31 +70,31 @@ The `tidy` method can be used to extract the encodings and are merged with the r
 
 ```{r simple-glm-extract}
 glm_estimates <-
-  tidy(grants_glm, number = 1) %>%
+  tidy(grants_glm, number = 1) |>
   dplyr::select(-terms, -id)
 glm_estimates
 
 glm_estimates <-
-  glm_estimates %>%
-  set_names(c("sponsor_code", "glm")) %>%
+  glm_estimates |>
+  set_names(c("sponsor_code", "glm")) |>
   inner_join(props, by = "sponsor_code")
 ```
 
 For the sponsor codes with `n > 1`, the estimates are effectively the same:
 
 ```{r simple-glm-check}
-glm_estimates %>%
-  dplyr::filter(is.finite(log_odds)) %>%
-  mutate(difference = log_odds - glm) %>%
-  dplyr::select(difference) %>%
+glm_estimates |>
+  dplyr::filter(is.finite(log_odds)) |>
+  mutate(difference = log_odds - glm) |>
+  dplyr::select(difference) |>
   summary()
 ```
 
 Note that there is also a effect that is used for a novel sponsor code for future data sets that is the average effect:
 
 ```{r simple-glm-new}
-tidy(grants_glm, number = 1) %>%
-  dplyr::filter(level == "..new") %>%
+tidy(grants_glm, number = 1) |>
+  dplyr::filter(level == "..new") |>
   select(-id)
 ```
 
@@ -131,12 +131,12 @@ Using the default priors, the model is estimated via:
 
 ```{r stan-fit-defaults}
 grants_glmer <-
-  recipe(class ~ ., data = grants_other) %>%
+  recipe(class ~ ., data = grants_other) |>
   step_lencode_bayes(
     sponsor_code,
     outcome = vars(class),
     options = opts
-  ) %>%
+  ) |>
   prep(training = grants_other)
 ```
 
@@ -144,12 +144,12 @@ This took more time than the simple non-pooled model. The embeddings are extract
 
 ```{r stan-extract}
 all_estimates <-
-  tidy(grants_glmer, number = 1) %>%
-  dplyr::select(-terms, -id) %>%
-  set_names(c("sponsor_code", "glmer")) %>%
+  tidy(grants_glmer, number = 1) |>
+  dplyr::select(-terms, -id) |>
+  set_names(c("sponsor_code", "glmer")) |>
   inner_join(glm_estimates, by = "sponsor_code")
 
-all_estimates %>% dplyr::select(sponsor_code, log_odds, glm, glmer)
+all_estimates |> dplyr::select(sponsor_code, log_odds, glm, glmer)
 ```
 
 Note that the `n = 1` sponsor codes have estimates that are less extreme that the naive estimates. Also, 
@@ -159,8 +159,8 @@ Let's see the effect of the shrinkage induced by partial pooling by plotting the
 ```{r stan-compare}
 #| fig-alt: "Scatter chart. log odds along the x-axis, glmer along the y-axis. a red line appears at x=y. Points appear near the line. with smaller values of log_odds appear over the line, and larger values appear over the line."
 pooled_plot <-
-  all_estimates %>%
-  dplyr::filter(is.finite(log_odds)) %>%
+  all_estimates |>
+  dplyr::filter(is.finite(log_odds)) |>
   ggplot(aes(x = log_odds, y = glmer)) +
   geom_abline(col = "red", alpha = .5) +
   geom_point_interactive(
@@ -177,8 +177,8 @@ girafe(ggobj = pooled_plot)
 New levels are encoded as:
 
 ```{r glmer-new}
-tidy(grants_glmer, number = 1) %>%
-  dplyr::filter(level == "..new") %>%
+tidy(grants_glmer, number = 1) |>
+  dplyr::filter(level == "..new") |>
   dplyr::select(-terms, -id)
 ```
 
@@ -188,20 +188,20 @@ The same generalized linear model can be fit using mixed models via a random int
 
 ```{r mixed-rec}
 grants_mixed <-
-  recipe(class ~ ., data = grants_other) %>%
+  recipe(class ~ ., data = grants_other) |>
   step_lencode_mixed(
     sponsor_code,
     outcome = vars(class),
-  ) %>%
+  ) |>
   prep(training = grants_other)
 
 all_estimates <-
-  tidy(grants_mixed, number = 1) %>%
-  dplyr::select(-terms, -id) %>%
-  set_names(c("sponsor_code", "mixed")) %>%
+  tidy(grants_mixed, number = 1) |>
+  dplyr::select(-terms, -id) |>
+  set_names(c("sponsor_code", "mixed")) |>
   inner_join(all_estimates, by = "sponsor_code")
 
-all_estimates %>%
+all_estimates |>
   dplyr::select(sponsor_code, log_odds, glm, glmer, mixed)
 ```
 
@@ -210,8 +210,8 @@ Comparing the raw and mixed model estimates:
 ```{r mixed-compare}
 #| fig-alt: "Scatter chart. log odds along the x-axis, glmer along the y-axis. a red line appears at x=y. Points appear near the line. with smaller values of log_odds appear over the line, and larger values appear over the line."
 mixed_plot <-
-  all_estimates %>%
-  dplyr::filter(is.finite(log_odds)) %>%
+  all_estimates |>
+  dplyr::filter(is.finite(log_odds)) |>
   ggplot(aes(x = log_odds, y = mixed)) +
   geom_abline(col = "red", alpha = .5) +
   geom_point_interactive(

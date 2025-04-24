@@ -11,13 +11,13 @@ test_that("step_pca_sparse_bayes", {
   te <- cells[split, ]
 
   rec <-
-    recipe(~., data = tr) %>%
+    recipe(~., data = tr) |>
     step_pca_sparse_bayes(
       all_predictors(),
       num_comp = 4,
       prior_slab_dispersion = 1 / 2,
       prior_mixture_threshold = 1 / 15
-    ) %>%
+    ) |>
     prep()
 
   direct_mod <- VBsparsePCA::VBsparsePCA(
@@ -68,7 +68,7 @@ test_that("check_name() is used", {
   dat$PC1 <- dat$var_inten_ch_1
 
   rec <- rec <-
-    recipe(~., data = dat) %>%
+    recipe(~., data = dat) |>
     step_pca_sparse_bayes(
       all_predictors(),
       num_comp = 4,
@@ -84,7 +84,7 @@ test_that("check_name() is used", {
 
 test_that("tunable", {
   rec <-
-    recipe(~., data = mtcars) %>%
+    recipe(~., data = mtcars) |>
     step_pca_sparse_bayes(all_predictors())
   rec_param <- tunable.step_pca_sparse_bayes(rec$steps[[1]])
   expect_equal(
@@ -103,12 +103,12 @@ test_that("tunable", {
 test_that("Do nothing for num_comps = 0 and keep_original_cols = FALSE", {
   # https://github.com/tidymodels/recipes/issues/1152
 
-  rec <- recipe(carb ~ ., data = mtcars) %>%
+  rec <- recipe(carb ~ ., data = mtcars) |>
     step_pca_sparse_bayes(
       all_predictors(),
       num_comp = 0,
       keep_original_cols = FALSE
-    ) %>%
+    ) |>
     prep()
 
   res <- bake(rec, new_data = NULL)
@@ -119,25 +119,25 @@ test_that("Do nothing for num_comps = 0 and keep_original_cols = FALSE", {
 test_that("bad args", {
   expect_snapshot(
     error = TRUE,
-    recipe(~., data = mtcars) %>%
-      step_pca_sparse_bayes(num_comp = -4) %>%
+    recipe(~., data = mtcars) |>
+      step_pca_sparse_bayes(num_comp = -4) |>
       prep()
   )
   expect_snapshot(
     error = TRUE,
-    recipe(~., data = mtcars) %>%
-      step_pca_sparse_bayes(prior_slab_dispersion = -4) %>%
+    recipe(~., data = mtcars) |>
+      step_pca_sparse_bayes(prior_slab_dispersion = -4) |>
       prep()
   )
   expect_snapshot(
     error = TRUE,
-    recipe(~., data = mtcars) %>%
-      step_pca_sparse_bayes(prior_mixture_threshold = -4) %>%
+    recipe(~., data = mtcars) |>
+      step_pca_sparse_bayes(prior_mixture_threshold = -4) |>
       prep()
   )
   expect_snapshot(
     error = TRUE,
-    recipe(~., data = mtcars) %>%
+    recipe(~., data = mtcars) |>
       step_pca_sparse_bayes(prefix = NULL)
   )
 })
@@ -155,7 +155,7 @@ test_that("bake method errors when needed non-standard role columns are missing"
   tr <- cells[-split, ]
   te <- cells[split, ]
 
-  rec <- recipe(~., data = tr) %>%
+  rec <- recipe(~., data = tr) |>
     step_pca_sparse_bayes(
       avg_inten_ch_1,
       avg_inten_ch_2,
@@ -164,8 +164,8 @@ test_that("bake method errors when needed non-standard role columns are missing"
       num_comp = 2,
       prior_slab_dispersion = 1 / 2,
       prior_mixture_threshold = 1 / 15
-    ) %>%
-    update_role(avg_inten_ch_1, new_role = "potato") %>%
+    ) |>
+    update_role(avg_inten_ch_1, new_role = "potato") |>
     update_role_requirements(role = "potato", bake = FALSE)
 
   rec_trained <- prep(rec, training = tr, verbose = FALSE)
@@ -228,7 +228,7 @@ test_that("keep_original_cols works", {
 
   new_names <- c("PC1")
 
-  rec <- recipe(~., data = cells) %>%
+  rec <- recipe(~., data = cells) |>
     step_pca_sparse_bayes(
       all_predictors(),
       num_comp = 1,
@@ -243,7 +243,7 @@ test_that("keep_original_cols works", {
     new_names
   )
 
-  rec <- recipe(~., data = cells) %>%
+  rec <- recipe(~., data = cells) |>
     step_pca_sparse_bayes(
       all_predictors(),
       num_comp = 1,
@@ -267,7 +267,7 @@ test_that("keep_original_cols - can prep recipes with it missing", {
   cells$case <- cells$class <- NULL
   cells <- as.data.frame(scale(cells))
 
-  rec <- recipe(~., data = cells) %>%
+  rec <- recipe(~., data = cells) |>
     step_pca_sparse_bayes(all_predictors(), num_comp = 1)
 
   rec$steps[[1]]$keep_original_cols <- NULL
@@ -292,7 +292,7 @@ test_that("printing", {
   tr <- cells[-split, ]
   te <- cells[split, ]
 
-  rec <- recipe(~., data = tr[, -5]) %>%
+  rec <- recipe(~., data = tr[, -5]) |>
     step_pca_sparse_bayes(all_predictors())
 
   expect_snapshot(print(rec))
@@ -301,7 +301,7 @@ test_that("printing", {
 
 test_that("tunable is setup to works with extract_parameter_set_dials", {
   skip_if_not_installed("dials")
-  rec <- recipe(~., data = mtcars) %>%
+  rec <- recipe(~., data = mtcars) |>
     step_pca_sparse_bayes(
       all_predictors(),
       num_comp = hardhat::tune(),

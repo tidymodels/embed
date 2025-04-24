@@ -74,7 +74,7 @@
 #' ad_data_te <- testing(split)
 #'
 #' cart_rec <-
-#'   recipe(Class ~ ., data = ad_data_tr) %>%
+#'   recipe(Class ~ ., data = ad_data_tr) |>
 #'   step_discretize_cart(
 #'     tau, age, p_tau, Ab_42,
 #'     outcome = "Class", id = "cart splits"

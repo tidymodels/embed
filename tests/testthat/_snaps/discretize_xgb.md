@@ -184,8 +184,8 @@
 ---
 
     Code
-      recipe(class ~ ., data = sim_tr_cls[1:9, ]) %>% step_discretize_xgb(
-        all_predictors(), outcome = "class") %>% prep()
+      prep(step_discretize_xgb(recipe(class ~ ., data = sim_tr_cls[1:9, ]),
+      all_predictors(), outcome = "class"))
     Condition
       Error in `step_discretize_xgb()`:
       Caused by error in `prep()`:
@@ -196,8 +196,8 @@
 
     Code
       set.seed(1)
-      recipe(Status ~ ., data = credit_data_train) %>% step_discretize_xgb(Time,
-        outcome = "Status") %>% prep(retain = TRUE)
+      prep(step_discretize_xgb(recipe(Status ~ ., data = credit_data_train), Time,
+      outcome = "Status"), retain = TRUE)
     Condition
       Warning:
       More than 20 unique training set values are required.
@@ -258,8 +258,8 @@
 ---
 
     Code
-      recipe(class ~ ., data = sim_tr_mcls[1:9, ]) %>% step_discretize_xgb(
-        all_predictors(), outcome = "class") %>% prep()
+      prep(step_discretize_xgb(recipe(class ~ ., data = sim_tr_mcls[1:9, ]),
+      all_predictors(), outcome = "class"))
     Condition
       Error in `step_discretize_xgb()`:
       Caused by error in `prep()`:
@@ -299,8 +299,8 @@
 # bad args
 
     Code
-      recipe(~., data = mtcars) %>% step_discretize_xgb(outcome = "class",
-        sample_val = -4) %>% prep()
+      prep(step_discretize_xgb(recipe(~., data = mtcars), outcome = "class",
+      sample_val = -4))
     Condition
       Error in `step_discretize_xgb()`:
       Caused by error in `prep()`:
@@ -309,8 +309,8 @@
 ---
 
     Code
-      recipe(~., data = mtcars) %>% step_discretize_xgb(outcome = "class",
-        learn_rate = -4) %>% prep()
+      prep(step_discretize_xgb(recipe(~., data = mtcars), outcome = "class",
+      learn_rate = -4))
     Condition
       Error in `step_discretize_xgb()`:
       Caused by error in `prep()`:
@@ -319,8 +319,8 @@
 ---
 
     Code
-      recipe(~., data = mtcars) %>% step_discretize_xgb(outcome = "class",
-        num_breaks = -4) %>% prep()
+      prep(step_discretize_xgb(recipe(~., data = mtcars), outcome = "class",
+      num_breaks = -4))
     Condition
       Error in `step_discretize_xgb()`:
       Caused by error in `prep()`:
@@ -329,8 +329,8 @@
 ---
 
     Code
-      recipe(~., data = mtcars) %>% step_discretize_xgb(outcome = "class",
-        tree_depth = -4) %>% prep()
+      prep(step_discretize_xgb(recipe(~., data = mtcars), outcome = "class",
+      tree_depth = -4))
     Condition
       Error in `step_discretize_xgb()`:
       Caused by error in `prep()`:
@@ -339,8 +339,8 @@
 ---
 
     Code
-      recipe(~., data = mtcars) %>% step_discretize_xgb(outcome = "class", min_n = -4) %>%
-        prep()
+      prep(step_discretize_xgb(recipe(~., data = mtcars), outcome = "class", min_n = -
+      4))
     Condition
       Error in `step_discretize_xgb()`:
       Caused by error in `prep()`:

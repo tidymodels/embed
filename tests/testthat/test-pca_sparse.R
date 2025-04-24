@@ -11,12 +11,12 @@ test_that("step_pca_sparse", {
   te <- cells[split, ]
 
   rec <-
-    recipe(~., data = tr) %>%
+    recipe(~., data = tr) |>
     step_pca_sparse(
       all_predictors(),
       num_comp = 4,
       predictor_prop = 1 / 2
-    ) %>%
+    ) |>
     prep()
 
   direct_mod <- irlba::ssvd(as.matrix(tr), k = 4, n = ncol(tr) / 2)
@@ -63,7 +63,7 @@ test_that("check_name() is used", {
   dat$PC1 <- dat$var_inten_ch_1
 
   rec <- rec <-
-    recipe(~., data = dat) %>%
+    recipe(~., data = dat) |>
     step_pca_sparse(
       all_predictors(),
       num_comp = 4,
@@ -78,7 +78,7 @@ test_that("check_name() is used", {
 
 test_that("tunable", {
   rec <-
-    recipe(~., data = mtcars) %>%
+    recipe(~., data = mtcars) |>
     step_pca_sparse(all_predictors())
   rec_param <- tunable.step_pca_sparse(rec$steps[[1]])
   expect_equal(rec_param$name, c("num_comp", "predictor_prop"))
@@ -94,12 +94,12 @@ test_that("tunable", {
 test_that("Do nothing for num_comps = 0 and keep_original_cols = FALSE", {
   # https://github.com/tidymodels/recipes/issues/1152
 
-  rec <- recipe(carb ~ ., data = mtcars) %>%
+  rec <- recipe(carb ~ ., data = mtcars) |>
     step_pca_sparse(
       all_predictors(),
       num_comp = 0,
       keep_original_cols = FALSE
-    ) %>%
+    ) |>
     prep()
 
   res <- bake(rec, new_data = NULL)
@@ -110,19 +110,19 @@ test_that("Do nothing for num_comps = 0 and keep_original_cols = FALSE", {
 test_that("bad args", {
   expect_snapshot(
     error = TRUE,
-    recipe(~., data = mtcars) %>%
-      step_pca_sparse(num_comp = -4) %>%
+    recipe(~., data = mtcars) |>
+      step_pca_sparse(num_comp = -4) |>
       prep()
   )
   expect_snapshot(
     error = TRUE,
-    recipe(~., data = mtcars) %>%
-      step_pca_sparse(predictor_prop = -4) %>%
+    recipe(~., data = mtcars) |>
+      step_pca_sparse(predictor_prop = -4) |>
       prep()
   )
   expect_snapshot(
     error = TRUE,
-    recipe(~., data = mtcars) %>%
+    recipe(~., data = mtcars) |>
       step_pca_sparse(prefix = NULL)
   )
 })
@@ -141,7 +141,7 @@ test_that("bake method errors when needed non-standard role columns are missing"
   tr <- cells[-split, ]
   te <- cells[split, ]
 
-  rec <- recipe(tr) %>%
+  rec <- recipe(tr) |>
     step_pca_sparse(
       avg_inten_ch_1,
       avg_inten_ch_2,
@@ -149,8 +149,8 @@ test_that("bake method errors when needed non-standard role columns are missing"
       avg_inten_ch_4,
       num_comp = 1,
       predictor_prop = 1 / 2
-    ) %>%
-    update_role(avg_inten_ch_1, new_role = "potato") %>%
+    ) |>
+    update_role(avg_inten_ch_1, new_role = "potato") |>
     update_role_requirements(role = "potato", bake = FALSE)
 
   rec_trained <- prep(rec, training = tr, verbose = FALSE)
@@ -213,7 +213,7 @@ test_that("keep_original_cols works", {
 
   new_names <- c("PC1")
 
-  rec <- recipe(~., data = cells) %>%
+  rec <- recipe(~., data = cells) |>
     step_pca_sparse(
       all_predictors(),
       num_comp = 1,
@@ -229,7 +229,7 @@ test_that("keep_original_cols works", {
     new_names
   )
 
-  rec <- recipe(~., data = cells) %>%
+  rec <- recipe(~., data = cells) |>
     step_pca_sparse(
       all_predictors(),
       num_comp = 1,
@@ -254,7 +254,7 @@ test_that("keep_original_cols - can prep recipes with it missing", {
   cells$case <- cells$class <- NULL
   cells <- as.data.frame(scale(cells))
 
-  rec <- recipe(~., data = cells) %>%
+  rec <- recipe(~., data = cells) |>
     step_pca_sparse(all_predictors(), num_comp = 1, predictor_prop = 1 / 2)
 
   rec$steps[[1]]$keep_original_cols <- NULL
@@ -271,7 +271,7 @@ test_that("keep_original_cols - can prep recipes with it missing", {
 test_that("printing", {
   skip_if_not_installed("irlba")
 
-  rec <- recipe(mpg ~ ., data = mtcars) %>%
+  rec <- recipe(mpg ~ ., data = mtcars) |>
     step_pca_sparse(all_predictors(), num_comp = 2)
 
   expect_snapshot(print(rec))
@@ -280,7 +280,7 @@ test_that("printing", {
 
 test_that("tunable is setup to works with extract_parameter_set_dials", {
   skip_if_not_installed("dials")
-  rec <- recipe(~., data = mtcars) %>%
+  rec <- recipe(~., data = mtcars) |>
     step_pca_sparse(
       all_predictors(),
       num_comp = hardhat::tune(),

@@ -21,8 +21,8 @@
 # bad args
 
     Code
-      recipe(Species ~ ., data = three_class) %>% step_lencode_mixed(Sepal.Length,
-        outcome = vars(Species)) %>% prep(training = three_class, retain = TRUE)
+      prep(step_lencode_mixed(recipe(Species ~ ., data = three_class), Sepal.Length,
+      outcome = vars(Species)), training = three_class, retain = TRUE)
     Condition
       Error in `step_lencode_mixed()`:
       Caused by error in `prep()`:

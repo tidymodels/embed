@@ -88,7 +88,7 @@
 #' set.seed(1)
 #' grants_other <- sample_n(grants_other, 500)
 #' \donttest{
-#' reencoded <- recipe(class ~ sponsor_code, data = grants_other) %>%
+#' reencoded <- recipe(class ~ sponsor_code, data = grants_other) |>
 #'   step_lencode_mixed(sponsor_code, outcome = vars(class))
 #' }
 #' @export
@@ -243,12 +243,12 @@ lme_coefs <- function(x, y, wts = NULL, ...) {
 
 map_lme_coef <- function(dat, mapping) {
   new_val <- mapping$..value[mapping$..level == "..new"]
-  dat <- dat %>%
-    mutate(..order = seq_len(nrow(dat))) %>%
-    set_names(c("..level", "..order")) %>%
+  dat <- dat |>
+    mutate(..order = seq_len(nrow(dat))) |>
+    set_names(c("..level", "..order")) |>
     mutate(..level = as.character(..level))
-  mapping <- mapping %>% dplyr::filter(..level != "..new")
-  dat <- left_join(dat, mapping, by = "..level") %>%
+  mapping <- mapping |> dplyr::filter(..level != "..new")
+  dat <- left_join(dat, mapping, by = "..level") |>
     arrange(..order)
   dat$..value[is.na(dat$..value)] <- new_val
   dat$..value

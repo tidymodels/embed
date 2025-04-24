@@ -11,7 +11,7 @@
 # bad args
 
     Code
-      recipe(~., data = mtcars) %>% step_pca_truncated(num_comp = -4) %>% prep()
+      prep(step_pca_truncated(recipe(~., data = mtcars), num_comp = -4))
     Condition
       Error in `step_pca_truncated()`:
       Caused by error in `prep()`:
@@ -20,7 +20,7 @@
 ---
 
     Code
-      recipe(~., data = mtcars) %>% step_pca_truncated(prefix = NULL)
+      step_pca_truncated(recipe(~., data = mtcars), prefix = NULL)
     Condition
       Error in `step_pca_truncated()`:
       ! `prefix` must be a single string, not `NULL`.

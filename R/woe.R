@@ -112,36 +112,36 @@
 #' credit_tr <- credit_data[in_training, ]
 #' credit_te <- credit_data[-in_training, ]
 #'
-#' rec <- recipe(Status ~ ., data = credit_tr) %>%
+#' rec <- recipe(Status ~ ., data = credit_tr) |>
 #'   step_woe(Job, Home, outcome = vars(Status))
 #'
 #' woe_models <- prep(rec, training = credit_tr)
 #'
 #' # the encoding:
-#' bake(woe_models, new_data = credit_te %>% slice(1:5), starts_with("woe"))
+#' bake(woe_models, new_data = credit_te |> slice(1:5), starts_with("woe"))
 #' # the original data
-#' credit_te %>%
-#'   slice(1:5) %>%
+#' credit_te |>
+#'   slice(1:5) |>
 #'   dplyr::select(Job, Home)
 #' # the details:
 #' tidy(woe_models, number = 1)
 #'
 #' # Example of custom dictionary + tweaking
 #' # custom dictionary
-#' woe_dict_custom <- credit_tr %>% dictionary(Job, Home, outcome = "Status")
+#' woe_dict_custom <- credit_tr |> dictionary(Job, Home, outcome = "Status")
 #' woe_dict_custom[4, "woe"] <- 1.23 # tweak
 #'
 #' # passing custom dict to step_woe()
-#' rec_custom <- recipe(Status ~ ., data = credit_tr) %>%
+#' rec_custom <- recipe(Status ~ ., data = credit_tr) |>
 #'   step_woe(
 #'     Job, Home,
 #'     outcome = vars(Status), dictionary = woe_dict_custom
-#'   ) %>%
+#'   ) |>
 #'   prep()
 #'
 #' rec_custom_baked <- bake(rec_custom, new_data = credit_te)
-#' rec_custom_baked %>%
-#'   dplyr::filter(woe_Job == 1.23) %>%
+#' rec_custom_baked |>
+#'   dplyr::filter(woe_Job == 1.23) |>
 #'   head()
 #' @export
 step_woe <- function(
@@ -272,16 +272,16 @@ woe_table <- function(
   )
 
   woe_tbl <-
-    tibble::tibble(outcome, predictor) %>%
-    dplyr::group_by(outcome, predictor) %>%
-    dplyr::summarise(n = dplyr::n()) %>%
-    dplyr::group_by(predictor) %>%
-    dplyr::mutate(n_tot = sum(n)) %>%
-    dplyr::group_by(outcome) %>%
-    dplyr::mutate(p = n / sum(n)) %>%
-    tidyr::gather(summary, value, n, p) %>%
-    tidyr::unite(summary_outcome, summary, outcome) %>%
-    tidyr::spread(summary_outcome, value, fill = 0) %>%
+    tibble::tibble(outcome, predictor) |>
+    dplyr::group_by(outcome, predictor) |>
+    dplyr::summarise(n = dplyr::n()) |>
+    dplyr::group_by(predictor) |>
+    dplyr::mutate(n_tot = sum(n)) |>
+    dplyr::group_by(outcome) |>
+    dplyr::mutate(p = n / sum(n)) |>
+    tidyr::gather(summary, value, n, p) |>
+    tidyr::unite(summary_outcome, summary, outcome) |>
+    tidyr::spread(summary_outcome, value, fill = 0) |>
     dplyr::mutate(
       woe = eval(woe_expr),
       predictor = as.character(predictor)
@@ -316,7 +316,7 @@ woe_table <- function(
 #'
 #' @examples
 #'
-#' mtcars %>% dictionary("am", cyl, gear:carb)
+#' mtcars |> dictionary("am", cyl, gear:carb)
 #' @references
 #'
 #' Kullback, S. (1959). *Information Theory and Statistics.* Wiley, New York.
@@ -329,7 +329,7 @@ woe_table <- function(
 #'
 #' @export
 dictionary <- function(.data, outcome, ..., Laplace = 1e-6) {
-  outcome_vector <- .data %>% dplyr::pull(!!outcome)
+  outcome_vector <- .data |> dplyr::pull(!!outcome)
   res <- dplyr::select(.data, ..., -!!outcome)
   res <- lapply(
     res,
@@ -370,7 +370,7 @@ dictionary <- function(.data, outcome, ..., Laplace = 1e-6) {
 #'
 #' @examples
 #'
-#' mtcars %>% add_woe("am", cyl, gear:carb)
+#' mtcars |> add_woe("am", cyl, gear:carb)
 #' @export
 add_woe <- function(.data, outcome, ..., dictionary = NULL, prefix = "woe") {
   if (missing(.data)) {
@@ -402,38 +402,39 @@ add_woe <- function(.data, outcome, ..., dictionary = NULL, prefix = "woe") {
   if (missing(...)) {
     dots_vars <- names(.data)
   } else {
-    dots_vars <- names(.data %>% dplyr::select(...))
+    dots_vars <- names(.data |> dplyr::select(...))
   }
 
-  output <- dictionary %>%
-    dplyr::filter(variable %in% dots_vars) %>%
+  output <- dictionary |>
+    dplyr::filter(variable %in% dots_vars) |>
     dplyr::select(variable, predictor, woe)
 
   output <- tidyr::nest(output, woe_table = -dplyr::one_of("variable"))
 
   output <-
-    output %>%
+    output |>
     dplyr::mutate(
       woe_table = purrr::map2(
         woe_table,
         variable,
         ~ purrr::set_names(.x, c(.y, paste0(prefix, "_", .y)))
-      ) %>%
+      ) |>
         purrr::set_names(variable)
     )
 
-  output <- purrr::map2(
+  output <- output <- purrr::map2(
     output$woe_table,
     output$variable,
     ~ {
-      .data %>%
-        dplyr::select(!!.y) %>%
-        dplyr::mutate_all(as.character) %>%
-        dplyr::left_join(.x, by = .y) %>%
+      .data |>
+        dplyr::select(!!.y) |>
+        dplyr::mutate_all(as.character) |>
+        dplyr::left_join(.x, by = .y) |>
         dplyr::select(starts_with(prefix))
     }
-  ) %>%
-    dplyr::bind_cols(.data, .) %>%
+  )
+
+  output <- dplyr::bind_cols(.data, output) |>
     tibble::as_tibble()
 
   output
@@ -459,13 +460,13 @@ prep.step_woe <- function(x, training, info = NULL, ...) {
       x$dictionary <- dictionary(
         .data = training[, unique(c(outcome_name, col_names))],
         outcome = outcome_name
-      ) %>%
+      ) |>
         dplyr::mutate(outcome = outcome_name)
     }
 
     n_count <-
-      x$dictionary %>%
-      dplyr::group_by(variable) %>%
+      x$dictionary |>
+      dplyr::group_by(variable) |>
       dplyr::summarize(low_n = sum(n_tot < 10))
 
     if (any(n_count$low_n > 0)) {
@@ -541,7 +542,7 @@ tidy.step_woe <- function(x, ...) {
         woe = double()
       )
     } else {
-      res <- x$dictionary %>%
+      res <- x$dictionary |>
         dplyr::rename(terms = variable, value = predictor)
     }
   } else {

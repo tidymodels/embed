@@ -11,8 +11,8 @@ test_that("factor outcome", {
 
   set.seed(11)
   supervised <-
-    recipe(Species ~ ., data = tr) %>%
-    step_umap(all_predictors(), outcome = vars(Species), num_comp = 2) %>%
+    recipe(Species ~ ., data = tr) |>
+    step_umap(all_predictors(), outcome = vars(Species), num_comp = 2) |>
     prep(training = tr)
 
   direct_mod <-
@@ -57,8 +57,8 @@ test_that("numeric outcome", {
 
   set.seed(11)
   supervised <-
-    recipe(Sepal.Length ~ ., data = tr[, -5]) %>%
-    step_umap(all_predictors(), outcome = vars(Sepal.Length), num_comp = 2) %>%
+    recipe(Sepal.Length ~ ., data = tr[, -5]) |>
+    step_umap(all_predictors(), outcome = vars(Sepal.Length), num_comp = 2) |>
     prep(training = tr[, -5])
 
   direct_mod <-
@@ -108,14 +108,14 @@ test_that("metric argument works", {
 
   set.seed(11)
   unsupervised <-
-    recipe(~., data = tr[, -5]) %>%
+    recipe(~., data = tr[, -5]) |>
     step_umap(
       all_predictors(),
       num_comp = 3,
       min_dist = .2,
       learn_rate = .2,
       metric = "hamming"
-    ) %>%
+    ) |>
     prep(training = tr[, -5])
 
   direct_mod <-
@@ -165,13 +165,13 @@ test_that("no outcome", {
 
   set.seed(11)
   unsupervised <-
-    recipe(~., data = tr[, -5]) %>%
+    recipe(~., data = tr[, -5]) |>
     step_umap(
       all_predictors(),
       num_comp = 3,
       min_dist = .2,
       learn_rate = .2
-    ) %>%
+    ) |>
     prep(training = tr[, -5])
 
   direct_mod <-
@@ -221,7 +221,7 @@ test_that("check_name() is used", {
   dat <- tr
   dat$UMAP1 <- dat$Species
 
-  rec <- recipe(Species ~ ., data = dat) %>%
+  rec <- recipe(Species ~ ., data = dat) |>
     step_umap(all_predictors(), num_comp = 2)
 
   expect_snapshot(
@@ -232,7 +232,7 @@ test_that("check_name() is used", {
 
 test_that("tunable", {
   rec <-
-    recipe(~., data = mtcars) %>%
+    recipe(~., data = mtcars) |>
     step_umap(all_predictors())
   rec_param <- tunable.step_umap(rec$steps[[1]])
   expect_equal(
@@ -259,7 +259,7 @@ test_that("tunable", {
 test_that("backwards compatible for initial and target_weight args (#213)", {
   skip_if_not_installed("irlba", "2.3.5.2")
 
-  rec <- recipe(Species ~ ., data = tr) %>%
+  rec <- recipe(Species ~ ., data = tr) |>
     step_umap(all_predictors(), num_comp = 2)
 
   exp_res <- prep(rec)
@@ -276,49 +276,49 @@ test_that("backwards compatible for initial and target_weight args (#213)", {
 test_that("bad args", {
   expect_snapshot(
     error = TRUE,
-    recipe(~., data = mtcars) %>%
-      step_umap(num_comp = -4) %>%
+    recipe(~., data = mtcars) |>
+      step_umap(num_comp = -4) |>
       prep()
   )
   expect_snapshot(
     error = TRUE,
-    recipe(~., data = mtcars) %>%
-      step_umap(neighbors = -4) %>%
+    recipe(~., data = mtcars) |>
+      step_umap(neighbors = -4) |>
       prep()
   )
   expect_snapshot(
     error = TRUE,
-    recipe(~., data = mtcars) %>%
-      step_umap(min_dist = TRUE) %>%
+    recipe(~., data = mtcars) |>
+      step_umap(min_dist = TRUE) |>
       prep()
   )
   expect_snapshot(
     error = TRUE,
-    recipe(~., data = mtcars) %>%
-      step_umap(learn_rate = -4) %>%
+    recipe(~., data = mtcars) |>
+      step_umap(learn_rate = -4) |>
       prep()
   )
   expect_snapshot(
     error = TRUE,
-    recipe(~., data = mtcars) %>%
-      step_umap(epochs = -4) %>%
+    recipe(~., data = mtcars) |>
+      step_umap(epochs = -4) |>
       prep()
   )
   expect_snapshot(
     error = TRUE,
-    recipe(~., data = mtcars) %>%
-      step_umap(initial = "wrong") %>%
+    recipe(~., data = mtcars) |>
+      step_umap(initial = "wrong") |>
       prep()
   )
   expect_snapshot(
     error = TRUE,
-    recipe(~., data = mtcars) %>%
-      step_umap(target_weight = -4) %>%
+    recipe(~., data = mtcars) |>
+      step_umap(target_weight = -4) |>
       prep()
   )
   expect_snapshot(
     error = TRUE,
-    recipe(~., data = mtcars) %>%
+    recipe(~., data = mtcars) |>
       step_umap(prefix = NULL)
   )
 })
@@ -328,9 +328,9 @@ test_that("bad args", {
 test_that("bake method errors when needed non-standard role columns are missing", {
   skip_if_not_installed("irlba", "2.3.5.2")
 
-  rec <- recipe(Species ~ ., data = tr) %>%
-    step_umap(Sepal.Length, Sepal.Width, Petal.Length, Petal.Width) %>%
-    update_role(Petal.Width, new_role = "potato") %>%
+  rec <- recipe(Species ~ ., data = tr) |>
+    step_umap(Sepal.Length, Sepal.Width, Petal.Length, Petal.Width) |>
+    update_role(Petal.Width, new_role = "potato") |>
     update_role_requirements(role = "potato", bake = FALSE)
 
   rec_trained <- prep(rec, training = tr, verbose = FALSE)
@@ -383,7 +383,7 @@ test_that("keep_original_cols works", {
 
   new_names <- c("UMAP1", "UMAP2", "UMAP3")
 
-  rec <- recipe(~., data = tr[, -5]) %>%
+  rec <- recipe(~., data = tr[, -5]) |>
     step_umap(
       all_predictors(),
       num_comp = 3,
@@ -400,7 +400,7 @@ test_that("keep_original_cols works", {
     new_names
   )
 
-  rec <- recipe(~., data = tr[, -5]) %>%
+  rec <- recipe(~., data = tr[, -5]) |>
     step_umap(
       all_predictors(),
       num_comp = 3,
@@ -421,7 +421,7 @@ test_that("keep_original_cols works", {
 test_that("keep_original_cols - can prep recipes with it missing", {
   skip_if_not_installed("irlba", "2.3.5.2")
 
-  rec <- recipe(~mpg, mtcars) %>%
+  rec <- recipe(~mpg, mtcars) |>
     step_umap(all_predictors())
 
   rec$steps[[1]]$keep_original_cols <- NULL
@@ -438,7 +438,7 @@ test_that("keep_original_cols - can prep recipes with it missing", {
 test_that("printing", {
   skip_if_not_installed("irlba", "2.3.5.2")
 
-  rec <- recipe(~., data = tr[, -5]) %>%
+  rec <- recipe(~., data = tr[, -5]) |>
     step_umap(all_predictors())
 
   expect_snapshot(print(rec))
@@ -447,7 +447,7 @@ test_that("printing", {
 
 test_that("tunable is setup to works with extract_parameter_set_dials", {
   skip_if_not_installed("dials")
-  rec <- recipe(~., data = mtcars) %>%
+  rec <- recipe(~., data = mtcars) |>
     step_umap(
       all_predictors(),
       num_comp = hardhat::tune(),

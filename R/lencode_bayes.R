@@ -101,7 +101,7 @@
 #' set.seed(1)
 #' grants_other <- sample_n(grants_other, 500)
 #' \donttest{
-#' reencoded <- recipe(class ~ sponsor_code, data = grants_other) %>%
+#' reencoded <- recipe(class ~ sponsor_code, data = grants_other) |>
 #'   step_lencode_bayes(sponsor_code, outcome = vars(class))
 #' }
 #' @export
