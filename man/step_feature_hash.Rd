@@ -2,7 +2,6 @@
 % Please edit documentation in R/feature_hash.R
 \name{step_feature_hash}
 \alias{step_feature_hash}
-\alias{tidy.step_feature_hash}
 \title{Dummy Variables Creation via Feature Hashing}
 \usage{
 step_feature_hash(
@@ -18,114 +17,9 @@ step_feature_hash(
   id = rand_id("feature_hash")
 )
 }
-\arguments{
-\item{recipe}{A recipe object. The step will be added to the
-sequence of operations for this recipe.}
-
-\item{...}{One or more selector functions to choose variables
-for this step. See \code{\link[recipes:selections]{selections()}} for more details.}
-
-\item{role}{For model terms created by this step, what analysis role should
-they be assigned? By default, the new columns created by this step from
-the original variables will be used as \emph{predictors} in a model.}
-
-\item{trained}{A logical to indicate if the quantities for
-preprocessing have been estimated.}
-
-\item{num_hash}{The number of resulting dummy variable columns.}
-
-\item{preserve}{Use \code{keep_original_cols} instead to specify whether the
-selected column(s) should be retained in addition to the new dummy
-variables.}
-
-\item{columns}{A character vector for the selected columns. This is \code{NULL}
-until the step is trained by \code{\link[recipes:prep]{recipes::prep()}}.}
-
-\item{keep_original_cols}{A logical to keep the original variables in the
-output. Defaults to \code{FALSE}.}
-
-\item{skip}{A logical. Should the step be skipped when the
-recipe is baked by \code{\link[recipes:bake]{bake()}}? While all operations are baked
-when \code{\link[recipes:prep]{prep()}} is run, some operations may not be able to be
-conducted on new data (e.g. processing the outcome variable(s)).
-Care should be taken when using \code{skip = TRUE} as it may affect
-the computations for subsequent operations.}
-
-\item{id}{A character string that is unique to this step to identify it.}
-}
-\value{
-An updated version of \code{recipe} with the new step added to the
-sequence of any existing operations.
-}
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#soft-deprecated}{\figure{lifecycle-soft-deprecated.svg}{options: alt='[Soft-deprecated]'}}}{\strong{[Soft-deprecated]}}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
 
-\code{step_feature_hash()} is being deprecated in favor of
-\code{\link[textrecipes:step_dummy_hash]{textrecipes::step_dummy_hash()}}. This function creates a \emph{specification}
-of a recipe step that will convert nominal data (e.g. character or factors)
-into one or more numeric binary columns using the levels of the original
-data.
+Please use \code{\link[textrecipes:step_dummy_hash]{textrecipes::step_dummy_hash()}} instead.
 }
-\details{
-\code{step_feature_hash()} will create a set of binary dummy variables from a
-factor or character variable. The values themselves are used to determine
-which row that the dummy variable should be assigned (as opposed to having a
-specific column that the value will map to).
-
-Since this method does not rely on a pre-determined assignment of levels to
-columns, new factor levels can be added to the selected columns without
-issue. Missing values result in missing values for all of the hashed columns.
-
-Note that the assignment of the levels to the hashing columns does not try to
-maximize the allocation. It is likely that multiple levels of the column will
-map to the same hashed columns (even with small data sets). Similarly, it is
-likely that some columns will have all zeros. A zero-variance filter (via
-\code{\link[recipes:step_zv]{recipes::step_zv()}}) is recommended for any recipe that uses hashed columns.
-}
-\section{Tidying}{
-When you \code{\link[recipes:tidy.recipe]{tidy()}} this step, a tibble is returned with
-columns \code{terms} and \code{id}:
-
-\describe{
-\item{terms}{character, the selectors or variables selected}
-\item{id}{character, id of this step}
-}
-}
-
-\section{Case weights}{
-
-
-The underlying operation does not allow for case weights.
-}
-
-\examples{
-\dontshow{if (!embed:::is_cran_check() && rlang::is_installed(c("modeldata", "keras"))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
-data(grants, package = "modeldata")
-rec <-
-  recipe(class ~ sponsor_code, data = grants_other) \%>\%
-  step_feature_hash(
-    sponsor_code,
-    num_hash = 2^6, keep_original_cols = TRUE
-  ) \%>\%
-  prep()
-
-# How many of the 298 locations ended up in each hash column?
-results <-
-  bake(rec, new_data = NULL, starts_with("sponsor_code")) \%>\%
-  distinct()
-
-apply(results \%>\% select(-sponsor_code), 2, sum) \%>\% table()
-\dontshow{\}) # examplesIf}
-}
-\references{
-Weinberger, K, A Dasgupta, J Langford, A Smola, and J Attenberg. 2009.
-"Feature Hashing for Large Scale Multitask Learning." In Proceedings of the
-26th Annual International Conference on Machine Learning, 1113–20. ACM.
-
-Kuhn and Johnson (2020) \emph{Feature Engineering and Selection: A Practical
-Approach for Predictive Models}. CRC/Chapman Hall
-\url{https://bookdown.org/max/FES/encoding-predictors-with-many-categories.html}
-}
-\seealso{
-\code{\link[recipes:step_dummy]{recipes::step_dummy()}}, \code{\link[recipes:step_zv]{recipes::step_zv()}}
-}
+\keyword{internal}

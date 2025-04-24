@@ -11,7 +11,7 @@ output:
 
 ```{r setup, include = FALSE}
 library(tidymodels)
-library(keras)
+library(keras3)
 library(embed)
 library(ggplot2)
 library(ggiraph)
