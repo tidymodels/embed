@@ -17,3 +17,5 @@ Applications/Tensorflow.Rmd
 ^revdep$
 ^cran-comments\.md$
 ^CRAN-SUBMISSION$
+^[\.]?air\.toml$
+^\.vscode$
