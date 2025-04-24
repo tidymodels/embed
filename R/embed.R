@@ -62,15 +62,14 @@
 #' When the outcome is numeric, a linear activation function is used in the last
 #' layer while softmax is used for factor outcomes (with any number of levels).
 #'
-#' For example, the `keras` code for a numeric outcome, one categorical
+#' For example, the `keras3` code for a numeric outcome, one categorical
 #' predictor, and no hidden units used here would be
 #'
 #' ```
 #'   keras_model_sequential() %>%
 #'   layer_embedding(
 #'     input_dim = num_factor_levels_x + 1,
-#'     output_dim = num_terms,
-#'     input_length = 1
+#'     output_dim = num_terms
 #'   ) %>%
 #'   layer_flatten() %>%
 #'   layer_dense(units = 1, activation = 'linear')
@@ -83,9 +82,8 @@
 #'   keras_model_sequential() %>%
 #'   layer_embedding(
 #'     input_dim = num_factor_levels_x + 1,
-#'     output_dim = num_terms,
-#'     input_length = 1
-#'    ) %>%
+#'     output_dim = num_terms
+#'   ) %>%
 #'   layer_flatten() %>%
 #'   layer_dense(units = hidden_units, activation = "relu") %>%
 #'   layer_dense(units = num_factor_levels_y, activation = 'softmax')
@@ -125,10 +123,10 @@
 #'
 #' Francois C and Allaire JJ (2018) _Deep Learning with R_, Manning
 #'
-#' "Concatenate Embeddings for Categorical Variables with Keras"
-#' \url{https://flovv.github.io/Embeddings_with_keras_part2/}
+#' "Concatenate Embeddings for Categorical Variables with keras3"
+#' \url{https://flovv.github.io/Embeddings_with_keras3_part2/}
 #'
-#' @examplesIf !embed:::is_cran_check() && rlang::is_installed(c("modeldata", "keras"))
+#' @examplesIf !embed:::is_cran_check() && rlang::is_installed(c("modeldata", "keras3"))
 #' data(grants, package = "modeldata")
 #'
 #' set.seed(1)
@@ -276,7 +274,7 @@ is_tf_2 <- function() {
 
 tf_coefs2 <- function(x, y, z, opt, num, lab, h, seeds = sample.int(10000, 4),
                       ...) {
-  rlang::check_installed("keras")
+  rlang::check_installed("keras3")
 
   vars <- names(x)
   p <- length(vars)
@@ -289,7 +287,7 @@ tf_coefs2 <- function(x, y, z, opt, num, lab, h, seeds = sample.int(10000, 4),
     tensorflow::use_session_with_seed(seeds[2])
   }
 
-  on.exit(keras::backend()$clear_session())
+  on.exit(keras3::clear_session())
 
   lvl <- lapply(x, levels)
 
@@ -311,7 +309,7 @@ tf_coefs2 <- function(x, y, z, opt, num, lab, h, seeds = sample.int(10000, 4),
   inputs <- vector(mode = "list", length = p)
   # For each categorical predictor, make an input layer
   for (i in 1:p) {
-    inputs[[i]] <- keras::layer_input(shape = 1, name = paste0("input_", vars[i]))
+    inputs[[i]] <- keras3::layer_input(shape = 1, name = paste0("input_", vars[i]))
   }
 
   layers <- vector(mode = "list", length = p)
@@ -319,58 +317,57 @@ tf_coefs2 <- function(x, y, z, opt, num, lab, h, seeds = sample.int(10000, 4),
   for (i in 1:p) {
     layers[[i]] <-
       inputs[[i]] %>%
-      keras::layer_embedding(
+      keras3::layer_embedding(
         input_dim = length(lvl[[i]]) + 1,
         output_dim = num,
-        input_length = 1,
         name = paste0("layer_", vars[i])
       ) %>%
-      keras::layer_flatten()
+      keras3::layer_flatten()
   }
 
   if (is.null(z)) {
     if (p > 1) {
-      all_layers <- keras::layer_concatenate(layers)
+      all_layers <- keras3::layer_concatenate(layers)
     } else {
       all_layers <- layers[[1]]
     }
   } else {
     mats$z <- as.matrix(z)
-    pred_layer <- keras::layer_input(shape = ncol(z), name = "other_pred")
-    all_layers <- keras::layer_concatenate(c(layers, pred_layer))
+    pred_layer <- keras3::layer_input(shape = ncol(z), name = "other_pred")
+    all_layers <- keras3::layer_concatenate(c(layers, pred_layer))
     inputs <- c(inputs, pred_layer)
   }
 
   if (h > 0) {
     all_layers <-
       all_layers %>%
-      keras::layer_dense(
+      keras3::layer_dense(
         units = h, activation = "relu", name = "hidden_layer",
-        kernel_initializer = keras::initializer_glorot_uniform(seed = seeds[3])
+        kernel_initializer = keras3::initializer_glorot_uniform(seed = seeds[3])
       )
   }
 
   if (factor_y) {
     all_layers <-
       all_layers %>%
-      keras::layer_dense(
+      keras3::layer_dense(
         units = ncol(y), activation = "softmax", name = "output_layer",
-        kernel_initializer = keras::initializer_glorot_uniform(seed = seeds[4])
+        kernel_initializer = keras3::initializer_glorot_uniform(seed = seeds[4])
       )
   } else {
     all_layers <-
       all_layers %>%
-      keras::layer_dense(
+      keras3::layer_dense(
         units = 1, activation = "linear", name = "output_layer",
-        kernel_initializer = keras::initializer_glorot_uniform(seed = seeds[4])
+        kernel_initializer = keras3::initializer_glorot_uniform(seed = seeds[4])
       )
   }
 
   model <-
-    keras::keras_model(inputs = inputs, outputs = all_layers)
+    keras3::keras_model(inputs = inputs, outputs = all_layers)
 
   model %>%
-    keras::compile(
+    keras3::compile(
       loss = opt$loss,
       metrics = opt$metrics,
       optimizer = opt$optimizer
@@ -378,7 +375,7 @@ tf_coefs2 <- function(x, y, z, opt, num, lab, h, seeds = sample.int(10000, 4),
 
   history <-
     model %>%
-    keras::fit(
+    keras3::fit(
       x = unname(mats),
       y = y,
       epochs = opt$epochs,
@@ -392,7 +389,7 @@ tf_coefs2 <- function(x, y, z, opt, num, lab, h, seeds = sample.int(10000, 4),
 
   for (i in 1:p) {
     layer_values[[i]] <-
-      keras::get_layer(model, paste0("layer_", vars[i]))$get_weights() %>%
+      keras3::get_layer(model, paste0("layer_", vars[i]))$get_weights() %>%
       as.data.frame() %>%
       setNames(names0(num, paste0(vars[i], "_embed_"))) %>%
       as_tibble() %>%
@@ -482,9 +479,9 @@ print.step_embed <-
 
 #' @export
 #' @rdname step_embed
-#' @param optimizer,loss,metrics Arguments to pass to keras::compile()
+#' @param optimizer,loss,metrics Arguments to pass to keras3::compile()
 #' @param epochs,validation_split,batch_size,verbose,callbacks Arguments to pass
-#'   to keras::fit()
+#'   to keras3::fit()
 embed_control <- function(loss = "mse",
                           metrics = NULL,
                           optimizer = "sgd",
@@ -562,7 +559,7 @@ is_tf_available <- function() {
 #' @rdname required_pkgs.embed
 #' @export
 required_pkgs.step_embed <- function(x, ...) {
-  c("keras", "embed")
+  c("keras3", "embed")
 }
 
 #' @export

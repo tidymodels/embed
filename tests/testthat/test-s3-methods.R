@@ -13,5 +13,5 @@ test_that("required packages", {
   expect_equal(required_pkgs(r3), c("recipes", "rpart", "embed"))
   expect_equal(required_pkgs(r4), c("recipes", "xgboost", "embed"))
   expect_equal(required_pkgs(r5), c("recipes", "uwot", "embed"))
-  expect_equal(required_pkgs(r6), c("recipes", "keras", "embed"))
+  expect_equal(required_pkgs(r6), c("recipes", "keras3", "embed"))
 })
