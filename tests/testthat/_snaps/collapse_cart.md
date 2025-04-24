@@ -71,7 +71,7 @@
       predictor: 73
       
       -- Operations 
-      * Collapsing factor levels using CART: Neighborhood and Central_Air
+      * Collapsing factor levels using CART: Neighborhood Central_Air
 
 ---
 

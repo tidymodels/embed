@@ -81,10 +81,10 @@ processing the outcome variable(s)). Care should be taken when using \code{skip 
 
 \item{id}{A character string that is unique to this step to identify it.}
 
-\item{optimizer, loss, metrics}{Arguments to pass to keras::compile()}
+\item{optimizer, loss, metrics}{Arguments to pass to keras3::compile()}
 
 \item{epochs, validation_split, batch_size, verbose, callbacks}{Arguments to pass
-to keras::fit()}
+to keras3::fit()}
 }
 \value{
 An updated version of \code{recipe} with the new step added to the
@@ -115,14 +115,13 @@ predictors give in \code{predictors} (if any).
 When the outcome is numeric, a linear activation function is used in the last
 layer while softmax is used for factor outcomes (with any number of levels).
 
-For example, the \code{keras} code for a numeric outcome, one categorical
+For example, the \code{keras3} code for a numeric outcome, one categorical
 predictor, and no hidden units used here would be
 
 \if{html}{\out{<div class="sourceCode">}}\preformatted{  keras_model_sequential() \%>\%
   layer_embedding(
     input_dim = num_factor_levels_x + 1,
-    output_dim = num_terms,
-    input_length = 1
+    output_dim = num_terms
   ) \%>\%
   layer_flatten() \%>\%
   layer_dense(units = 1, activation = 'linear')
@@ -134,9 +133,8 @@ be
 \if{html}{\out{<div class="sourceCode">}}\preformatted{  keras_model_sequential() \%>\%
   layer_embedding(
     input_dim = num_factor_levels_x + 1,
-    output_dim = num_terms,
-    input_length = 1
-   ) \%>\%
+    output_dim = num_terms
+  ) \%>\%
   layer_flatten() \%>\%
   layer_dense(units = hidden_units, activation = "relu") \%>\%
   layer_dense(units = num_factor_levels_y, activation = 'softmax')
@@ -179,7 +177,7 @@ The underlying operation does not allow for case weights.
 }
 
 \examples{
-\dontshow{if (!embed:::is_cran_check() && rlang::is_installed(c("modeldata", "keras"))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (!embed:::is_cran_check() && rlang::is_installed(c("modeldata", "keras3"))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 data(grants, package = "modeldata")
 
 set.seed(1)
@@ -195,8 +193,8 @@ rec <- recipe(class ~ num_ci + sponsor_code, data = grants_other) \%>\%
 \references{
 Francois C and Allaire JJ (2018) \emph{Deep Learning with R}, Manning
 
-"Concatenate Embeddings for Categorical Variables with Keras"
-\url{https://flovv.github.io/Embeddings_with_keras_part2/}
+"Concatenate Embeddings for Categorical Variables with keras3"
+\url{https://flovv.github.io/Embeddings_with_keras3_part2/}
 }
 \concept{preprocessing encoding}
 \keyword{datagen}

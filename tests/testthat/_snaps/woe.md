@@ -87,7 +87,7 @@
       Training data contained 2000 data points and 186 incomplete rows.
       
       -- Operations 
-      * WoE version against outcome Status for: Home and Marital, ... | Trained
+      * WoE version against outcome Status for: Home Marital, ... | Trained
 
 ---
 
@@ -197,7 +197,7 @@
       predictor: 13
       
       -- Operations 
-      * WoE version against outcome Status for: Job and Home
+      * WoE version against outcome Status for: Job Home
 
 ---
 
@@ -219,5 +219,5 @@
       Training data contained 4454 data points and 415 incomplete rows.
       
       -- Operations 
-      * WoE version against outcome Status for: Job and Home | Trained
+      * WoE version against outcome Status for: Job Home | Trained
 

@@ -294,7 +294,7 @@
       Training data contained 1000 data points and no incomplete rows.
       
       -- Operations 
-      * Discretizing variables using xgboost: x and z | Trained, weighted
+      * Discretizing variables using xgboost: x z | Trained, weighted
 
 # bad args
 
@@ -422,5 +422,5 @@
       Training data contained 1000 data points and no incomplete rows.
       
       -- Operations 
-      * Discretizing variables using xgboost: x and z | Trained
+      * Discretizing variables using xgboost: x z | Trained
 

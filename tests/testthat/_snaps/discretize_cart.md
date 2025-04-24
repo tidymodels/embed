@@ -116,7 +116,7 @@
       Training data contained 1000 data points and no incomplete rows.
       
       -- Operations 
-      * Discretizing variables using CART: x and z | Trained, weighted
+      * Discretizing variables using CART: x z | Trained, weighted
 
 # bake method errors when needed non-standard role columns are missing
 

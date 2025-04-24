@@ -287,8 +287,17 @@ is_tf_2 <- function() {
   compareVersion("2.0", as.character(tensorflow::tf_version())) <= 0
 }
 
-tf_coefs2 <- function(x, y, z, opt, num, lab, h, seeds = sample.int(10000, 4),
-                      ...) {
+tf_coefs2 <- function(
+  x,
+  y,
+  z,
+  opt,
+  num,
+  lab,
+  h,
+  seeds = sample.int(10000, 4),
+  ...
+) {
   rlang::check_installed("keras3")
 
   vars <- names(x)
@@ -324,14 +333,10 @@ tf_coefs2 <- function(x, y, z, opt, num, lab, h, seeds = sample.int(10000, 4),
   inputs <- vector(mode = "list", length = p)
   # For each categorical predictor, make an input layer
   for (i in 1:p) {
-<<<<<<< HEAD
-    inputs[[i]] <- keras::layer_input(
+    inputs[[i]] <- keras3::layer_input(
       shape = 1,
       name = paste0("input_", vars[i])
     )
-=======
-    inputs[[i]] <- keras3::layer_input(shape = 1, name = paste0("input_", vars[i]))
->>>>>>> fe613e2abd5279953d263b9e41372d2d69bc2d9b
   }
 
   layers <- vector(mode = "list", length = p)
@@ -363,49 +368,31 @@ tf_coefs2 <- function(x, y, z, opt, num, lab, h, seeds = sample.int(10000, 4),
   if (h > 0) {
     all_layers <-
       all_layers %>%
-<<<<<<< HEAD
-      keras::layer_dense(
+      keras3::layer_dense(
         units = h,
         activation = "relu",
         name = "hidden_layer",
-        kernel_initializer = keras::initializer_glorot_uniform(seed = seeds[3])
-=======
-      keras3::layer_dense(
-        units = h, activation = "relu", name = "hidden_layer",
         kernel_initializer = keras3::initializer_glorot_uniform(seed = seeds[3])
->>>>>>> fe613e2abd5279953d263b9e41372d2d69bc2d9b
       )
   }
 
   if (factor_y) {
     all_layers <-
       all_layers %>%
-<<<<<<< HEAD
-      keras::layer_dense(
+      keras3::layer_dense(
         units = ncol(y),
         activation = "softmax",
         name = "output_layer",
-        kernel_initializer = keras::initializer_glorot_uniform(seed = seeds[4])
-=======
-      keras3::layer_dense(
-        units = ncol(y), activation = "softmax", name = "output_layer",
         kernel_initializer = keras3::initializer_glorot_uniform(seed = seeds[4])
->>>>>>> fe613e2abd5279953d263b9e41372d2d69bc2d9b
       )
   } else {
     all_layers <-
       all_layers %>%
-<<<<<<< HEAD
-      keras::layer_dense(
+      keras3::layer_dense(
         units = 1,
         activation = "linear",
         name = "output_layer",
-        kernel_initializer = keras::initializer_glorot_uniform(seed = seeds[4])
-=======
-      keras3::layer_dense(
-        units = 1, activation = "linear", name = "output_layer",
         kernel_initializer = keras3::initializer_glorot_uniform(seed = seeds[4])
->>>>>>> fe613e2abd5279953d263b9e41372d2d69bc2d9b
       )
   }
 
@@ -527,8 +514,7 @@ print.step_embed <-
 #' @rdname step_embed
 #' @param optimizer,loss,metrics Arguments to pass to keras3::compile()
 #' @param epochs,validation_split,batch_size,verbose,callbacks Arguments to pass
-<<<<<<< HEAD
-#'   to keras::fit()
+#'   to keras3::fit()
 embed_control <- function(
   loss = "mse",
   metrics = NULL,
@@ -539,17 +525,6 @@ embed_control <- function(
   verbose = 0,
   callbacks = NULL
 ) {
-=======
-#'   to keras3::fit()
-embed_control <- function(loss = "mse",
-                          metrics = NULL,
-                          optimizer = "sgd",
-                          epochs = 20,
-                          validation_split = 0,
-                          batch_size = 32,
-                          verbose = 0,
-                          callbacks = NULL) {
->>>>>>> fe613e2abd5279953d263b9e41372d2d69bc2d9b
   if (batch_size < 1) {
     cli::cli_abort("{.arg batch_size} should be a positive integer.")
   }
