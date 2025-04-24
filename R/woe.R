@@ -66,11 +66,11 @@
 #' (the selectors or variables selected), `value`, `n_tot`, `n_bad`, `n_good`,
 #' `p_bad`, `p_good`, `woe` and `outcome` is returned.. See [dictionary()] for
 #' more information.
-#' 
+#'
 #' When you [`tidy()`][recipes::tidy.recipe] this step, a tibble is returned with
 #' columns `terms` `value`, `n_tot`, `n_bad`, `n_good`, `p_bad`, `p_good`, `woe`
 #' and `outcome` and `id`:
-#' 
+#'
 #' \describe{
 #'   \item{terms}{character, the selectors or variables selected}
 #'   \item{value}{character, level of the outcome}
@@ -83,7 +83,7 @@
 #'   \item{outcome}{character, name of outcome variable}
 #'   \item{id}{character, id of this step}
 #' }
-#' 
+#'
 #' ```{r, echo = FALSE, results="asis"}
 #' step <- "step_woe"
 #' result <- knitr::knit_child("man/rmd/tunable-args.Rmd")
@@ -144,17 +144,19 @@
 #'   dplyr::filter(woe_Job == 1.23) %>%
 #'   head()
 #' @export
-step_woe <- function(recipe,
-                     ...,
-                     role = "predictor",
-                     outcome,
-                     trained = FALSE,
-                     dictionary = NULL,
-                     Laplace = 1e-6,
-                     prefix = "woe",
-                     keep_original_cols = FALSE,
-                     skip = FALSE,
-                     id = rand_id("woe")) {
+step_woe <- function(
+  recipe,
+  ...,
+  role = "predictor",
+  outcome,
+  trained = FALSE,
+  dictionary = NULL,
+  Laplace = 1e-6,
+  prefix = "woe",
+  keep_original_cols = FALSE,
+  skip = FALSE,
+  id = rand_id("woe")
+) {
   if (missing(outcome)) {
     cli::cli_abort("The {.arg outcome} argument is missing, with no default.")
   }
@@ -179,8 +181,18 @@ step_woe <- function(recipe,
 }
 
 ## Initializes a new object
-step_woe_new <- function(terms, role, trained, outcome, dictionary, Laplace,
-                         prefix, keep_original_cols, skip, id) {
+step_woe_new <- function(
+  terms,
+  role,
+  trained,
+  outcome,
+  dictionary,
+  Laplace,
+  prefix,
+  keep_original_cols,
+  skip,
+  id
+) {
   step(
     subclass = "woe",
     terms = terms,
@@ -224,10 +236,12 @@ step_woe_new <- function(terms, role, trained, outcome, dictionary, Laplace,
 #'
 #' Good, I. J. (1985), "Weight of evidence: A brief survey", _Bayesian
 #' Statistics_, 2, pp.249-270.
-woe_table <- function(predictor,
-                      outcome,
-                      Laplace = 1e-6,
-                      call = rlang::caller_env(0)) {
+woe_table <- function(
+  predictor,
+  outcome,
+  Laplace = 1e-6,
+  call = rlang::caller_env(0)
+) {
   if (is.factor(outcome)) {
     outcome_original_labels <- levels(outcome)
   } else {
@@ -237,11 +251,11 @@ woe_table <- function(predictor,
   if (length(outcome_original_labels) != 2) {
     cli::cli_abort(
       "{.arg outcome} must have exactly 2 categories 
-      (has {length(outcome_original_labels)}).", 
+      (has {length(outcome_original_labels)}).",
       call = call
     )
   }
-  
+
   if (is.factor(predictor)) {
     predictor <- as.character(predictor)
   }
@@ -316,9 +330,10 @@ woe_table <- function(predictor,
 #' @export
 dictionary <- function(.data, outcome, ..., Laplace = 1e-6) {
   outcome_vector <- .data %>% dplyr::pull(!!outcome)
-  res <- dplyr::select(.data, ..., -!!outcome) 
+  res <- dplyr::select(.data, ..., -!!outcome)
   res <- lapply(
-    res, woe_table, 
+    res,
+    woe_table,
     outcome = outcome_vector,
     Laplace = Laplace,
     call = caller_env(0)
@@ -375,7 +390,9 @@ add_woe <- function(.data, outcome, ..., dictionary = NULL, prefix = "woe") {
       cli::cli_abort('Column {.field variable} is missing in dictionary.')
     }
     if (is.null(dictionary$predictor)) {
-      cli::cli_abort('The column {.code predictor} is missing in the dictionary.')
+      cli::cli_abort(
+        'The column {.code predictor} is missing in the dictionary.'
+      )
     }
     if (is.null(dictionary$woe)) {
       cli::cli_abort('Column {.field woe} is missing in dictionary.')
@@ -397,17 +414,18 @@ add_woe <- function(.data, outcome, ..., dictionary = NULL, prefix = "woe") {
   output <-
     output %>%
     dplyr::mutate(
-      woe_table =
-        purrr::map2(
-          woe_table, variable,
-          ~ purrr::set_names(.x, c(.y, paste0(prefix, "_", .y)))
-        ) %>%
-          purrr::set_names(variable)
+      woe_table = purrr::map2(
+        woe_table,
+        variable,
+        ~ purrr::set_names(.x, c(.y, paste0(prefix, "_", .y)))
+      ) %>%
+        purrr::set_names(variable)
     )
 
   output <- purrr::map2(
     output$woe_table,
-    output$variable, ~ {
+    output$variable,
+    ~ {
       .data %>%
         dplyr::select(!!.y) %>%
         dplyr::mutate_all(as.character) %>%
@@ -492,9 +510,9 @@ bake.step_woe <- function(object, new_data, ...) {
     dictionary = dict,
     prefix = object$prefix
   )
-  
+
   new_data <- remove_original_cols(new_data, object, col_names)
-  
+
   new_data
 }
 

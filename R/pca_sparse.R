@@ -61,7 +61,7 @@
 #' result <- knitr::knit_child("man/rmd/tunable-args.Rmd")
 #' cat(result)
 #' ```
-#' 
+#'
 #' @template case-weights-not-supported
 #'
 #' @seealso [step_pca_sparse_bayes()]
@@ -91,20 +91,22 @@
 #'   scale_fill_gradient2() +
 #'   theme(axis.text.y = element_blank())
 #' @export
-step_pca_sparse <- function(recipe,
-                            ...,
-                            role = "predictor",
-                            trained = FALSE,
-                            num_comp = 5,
-                            predictor_prop = 1.0,
-                            options = list(),
-                            res = NULL,
-                            prefix = "PC",
-                            keep_original_cols = FALSE,
-                            skip = FALSE,
-                            id = rand_id("pca_sparse")) {
+step_pca_sparse <- function(
+  recipe,
+  ...,
+  role = "predictor",
+  trained = FALSE,
+  num_comp = 5,
+  predictor_prop = 1.0,
+  options = list(),
+  res = NULL,
+  prefix = "PC",
+  keep_original_cols = FALSE,
+  skip = FALSE,
+  id = rand_id("pca_sparse")
+) {
   check_string(prefix)
-  
+
   add_step(
     recipe,
     step_pca_sparse_new(
@@ -124,8 +126,19 @@ step_pca_sparse <- function(recipe,
 }
 
 step_pca_sparse_new <-
-  function(terms, role, trained, num_comp, predictor_prop, options, res,
-           prefix, keep_original_cols, skip, id) {
+  function(
+    terms,
+    role,
+    trained,
+    num_comp,
+    predictor_prop,
+    options,
+    res,
+    prefix,
+    keep_original_cols,
+    skip,
+    id
+  ) {
     step(
       subclass = "pca_sparse",
       terms = terms,
@@ -148,7 +161,10 @@ prep.step_pca_sparse <- function(x, training, info = NULL, ...) {
 
   check_number_whole(x$num_comp, min = 0, arg = "num_comp")
   check_number_decimal(
-    x$predictor_prop, min = 0, max = 1, arg = "predictor_prop"
+    x$predictor_prop,
+    min = 0,
+    max = 1,
+    arg = "predictor_prop"
   )
 
   if (length(col_names) > 0 && x$num_comp > 0) {
@@ -164,7 +180,7 @@ prep.step_pca_sparse <- function(x, training, info = NULL, ...) {
 
     if (x$num_comp > 0) {
       rlang::check_installed("irlba")
-      
+
       cl <-
         rlang::call2(
           "ssvd",
@@ -209,9 +225,9 @@ prop2int <- function(x, p) {
 #' @export
 bake.step_pca_sparse <- function(object, new_data, ...) {
   if (all(is.na(object$res))) {
-    return(new_data) 
+    return(new_data)
   }
-  
+
   pca_vars <- rownames(object$res)
   check_new_data(pca_vars, object, new_data)
 
@@ -220,9 +236,9 @@ bake.step_pca_sparse <- function(object, new_data, ...) {
   comps <- as_tibble(comps)
   comps <- recipes::check_name(comps, new_data, object)
   new_data <- vec_cbind(new_data, comps)
-  
+
   new_data <- remove_original_cols(new_data, object, pca_vars)
-  
+
   new_data
 }
 
@@ -250,7 +266,8 @@ pca_coefs <- function(x) {
     res <- as_tibble(res)[, c("terms", "value", "component")]
   } else {
     res <- tibble::tibble(
-      terms = vars, value = rlang::na_dbl,
+      terms = vars,
+      value = rlang::na_dbl,
       component = rlang::na_chr
     )
   }

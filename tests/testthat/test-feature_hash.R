@@ -15,7 +15,8 @@ test_that("basic usage", {
   expect_true(all(grepl("^x3_hash_", names(res_tr))))
 
   check_1 <-
-    keras::text_hashing_trick(as.character(ex_dat$x3[1]),
+    keras::text_hashing_trick(
+      as.character(ex_dat$x3[1]),
       2^6,
       filters = "",
       lower = FALSE
@@ -29,7 +30,8 @@ test_that("basic usage", {
   }
 
   check_2 <-
-    keras::text_hashing_trick("bridge 4",
+    keras::text_hashing_trick(
+      "bridge 4",
       2^6,
       filters = "",
       split = "please dont",
@@ -69,7 +71,8 @@ test_that("basic usage - character strings", {
   expect_true(all(grepl("^x3_hash_", names(res_tr))))
 
   check_1 <-
-    keras::text_hashing_trick(as.character(ex_dat$x3[1]),
+    keras::text_hashing_trick(
+      as.character(ex_dat$x3[1]),
       2^6,
       filters = "",
       lower = FALSE
@@ -83,7 +86,8 @@ test_that("basic usage - character strings", {
   }
 
   check_2 <-
-    keras::text_hashing_trick("bridge 4",
+    keras::text_hashing_trick(
+      "bridge 4",
       2^6,
       filters = "",
       split = "please dont",
@@ -107,13 +111,13 @@ test_that("check_name() is used", {
   skip_if_not_installed("keras")
   skip_if(is.null(tensorflow::tf_version()))
   rlang::local_options(lifecycle_verbosity = "quiet")
-  
+
   dat <- ex_dat
   dat$x3_hash_01 <- dat$x3
-  
+
   rec <- recipe(~., data = dat) %>%
     step_feature_hash(x3)
-  
+
   expect_snapshot(
     error = TRUE,
     prep(rec, training = dat)
@@ -140,9 +144,9 @@ test_that("bake method errors when needed non-standard role columns are missing"
     step_feature_hash(x3) %>%
     update_role(x3, new_role = "potato") %>%
     update_role_requirements(role = "potato", bake = FALSE)
-  
+
   rec_trained <- prep(rec, training = ex_dat, verbose = FALSE)
-  
+
   expect_snapshot(
     error = TRUE,
     bake(rec_trained, new_data = ex_dat[, -3])
@@ -154,14 +158,14 @@ test_that("empty printing", {
   skip_if_not_installed("keras")
   skip_if(is.null(tensorflow::tf_version()))
   rlang::local_options(lifecycle_verbosity = "quiet")
-  
+
   rec <- recipe(mpg ~ ., mtcars)
   rec <- step_feature_hash(rec)
-  
+
   expect_snapshot(rec)
-  
+
   rec <- prep(rec, mtcars)
-  
+
   expect_snapshot(rec)
 })
 
@@ -170,16 +174,16 @@ test_that("empty selection prep/bake is a no-op", {
   skip_if_not_installed("keras")
   skip_if(is.null(tensorflow::tf_version()))
   rlang::local_options(lifecycle_verbosity = "quiet")
-  
+
   rec1 <- recipe(mpg ~ ., mtcars)
   rec2 <- step_feature_hash(rec1)
-  
+
   rec1 <- prep(rec1, mtcars)
   rec2 <- prep(rec2, mtcars)
-  
+
   baked1 <- bake(rec1, mtcars)
   baked2 <- bake(rec2, mtcars)
-  
+
   expect_identical(baked1, baked2)
 })
 
@@ -188,16 +192,16 @@ test_that("empty selection tidy method works", {
   skip_if_not_installed("keras")
   skip_if(is.null(tensorflow::tf_version()))
   rlang::local_options(lifecycle_verbosity = "quiet")
-  
+
   rec <- recipe(mpg ~ ., mtcars)
   rec <- step_feature_hash(rec)
-  
+
   expect <- tibble(terms = character(), id = character())
-  
+
   expect_identical(tidy(rec, number = 1), expect)
-  
+
   rec <- prep(rec, mtcars)
-  
+
   expect_identical(tidy(rec, number = 1), expect)
 })
 
@@ -206,26 +210,26 @@ test_that("keep_original_cols works", {
   skip_if_not_installed("keras")
   skip_if(is.null(tensorflow::tf_version()))
   rlang::local_options(lifecycle_verbosity = "quiet")
-  
+
   new_names <- paste0("x3_hash_", 1:9)
-  
-  rec <- recipe(~ x3, data = ex_dat) %>%
+
+  rec <- recipe(~x3, data = ex_dat) %>%
     step_feature_hash(x3, num_hash = 9, keep_original_cols = FALSE)
-  
+
   rec <- prep(rec)
   res <- bake(rec, new_data = NULL)
-  
+
   expect_equal(
     colnames(res),
     new_names
   )
-  
-  rec <- recipe(~ x3, data = ex_dat) %>%
+
+  rec <- recipe(~x3, data = ex_dat) %>%
     step_feature_hash(x3, num_hash = 9, keep_original_cols = TRUE)
-  
+
   rec <- prep(rec)
   res <- bake(rec, new_data = NULL)
-  
+
   expect_equal(
     colnames(res),
     c("x3", new_names)
@@ -237,16 +241,16 @@ test_that("keep_original_cols - can prep recipes with it missing", {
   skip_if_not_installed("keras")
   skip_if(is.null(tensorflow::tf_version()))
   rlang::local_options(lifecycle_verbosity = "quiet")
-  
-  rec <- recipe(~ x3, data = ex_dat) %>%
+
+  rec <- recipe(~x3, data = ex_dat) %>%
     step_feature_hash(x3)
-  
+
   rec$steps[[1]]$keep_original_cols <- NULL
-  
+
   expect_snapshot(
     rec <- prep(rec)
   )
-  
+
   expect_no_error(
     bake(rec, new_data = ex_dat)
   )
@@ -256,10 +260,10 @@ test_that("printing", {
   skip_if_not_installed("keras")
   skip_if(is.null(tensorflow::tf_version()))
   rlang::local_options(lifecycle_verbosity = "quiet")
-  
+
   rec <- recipe(x1 ~ x3, data = ex_dat) %>%
     step_feature_hash(x3)
-  
+
   expect_snapshot(print(rec))
   expect_snapshot(prep(rec))
 })

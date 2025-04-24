@@ -41,10 +41,10 @@
 #' find any signal in the data.
 #'
 #' # Tidying
-#' 
+#'
 #' When you [`tidy()`][recipes::tidy.recipe] this step, a tibble is returned with
 #' columns `terms`, `old`, `new`, and `id`:
-#' 
+#'
 #' \describe{
 #'   \item{terms}{character, the selectors or variables selected}
 #'   \item{old}{character, the old levels}
@@ -68,16 +68,18 @@
 #' tidy(rec, number = 1)
 #' @export
 step_collapse_cart <-
-  function(recipe,
-           ...,
-           role = NA,
-           trained = FALSE,
-           outcome = NULL,
-           cost_complexity = 0.0001,
-           min_n = 5,
-           results = NULL,
-           skip = FALSE,
-           id = rand_id("step_collapse_cart")) {
+  function(
+    recipe,
+    ...,
+    role = NA,
+    trained = FALSE,
+    outcome = NULL,
+    cost_complexity = 0.0001,
+    min_n = 5,
+    results = NULL,
+    skip = FALSE,
+    id = rand_id("step_collapse_cart")
+  ) {
     recipes_pkg_check(required_pkgs.step_discretize_cart())
 
     check_number_decimal(cost_complexity, min = 0)
@@ -99,8 +101,17 @@ step_collapse_cart <-
     )
   }
 step_collapse_cart_new <-
-  function(terms, role, trained, outcome, cost_complexity, min_n, results, skip,
-           id) {
+  function(
+    terms,
+    role,
+    trained,
+    outcome,
+    cost_complexity,
+    min_n,
+    results,
+    skip,
+    id
+  ) {
     step(
       subclass = "collapse_cart",
       terms = terms,
@@ -157,7 +168,7 @@ bake.step_collapse_cart <- function(object, new_data, ...) {
   for (col_name in col_names) {
     new_data <- convert_keys(col_name, object$results[[col_name]], new_data)
   }
-  
+
   new_data
 }
 

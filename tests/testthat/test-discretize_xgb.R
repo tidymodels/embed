@@ -40,7 +40,10 @@ xgb_credit_test <- xgboost::xgb.DMatrix(
 set.seed(42)
 attrition <- attrition %>%
   mutate(EducationField = as.integer(EducationField) - 1)
-attrition_data_split <- rsample::initial_split(attrition, strata = "EducationField")
+attrition_data_split <- rsample::initial_split(
+  attrition,
+  strata = "EducationField"
+)
 attrition_data_train <- rsample::training(attrition_data_split)
 attrition_data_test <- rsample::testing(attrition_data_split)
 
@@ -106,8 +109,8 @@ sim_tr_reg <- sim_data_reg(1000)
 sim_te_reg <- sim_data_reg(100)
 
 test_that("run_xgboost for classification", {
-  skip_on_cran() # because data.table uses all cores by default 
-  
+  skip_on_cran() # because data.table uses all cores by default
+
   xgboost <- embed:::run_xgboost(
     xgb_credit_train,
     xgb_credit_test,
@@ -127,8 +130,8 @@ test_that("run_xgboost for classification", {
 })
 
 test_that("run_xgboost for multi-classification", {
-  skip_on_cran() # because data.table uses all cores by default 
-  
+  skip_on_cran() # because data.table uses all cores by default
+
   xgboost <- embed:::run_xgboost(
     xgb_attrition_train,
     xgb_attrition_test,
@@ -148,8 +151,8 @@ test_that("run_xgboost for multi-classification", {
 })
 
 test_that("run_xgboost for regression", {
-  skip_on_cran() # because data.table uses all cores by default 
-  
+  skip_on_cran() # because data.table uses all cores by default
+
   xgboost <- embed:::run_xgboost(
     xgb_ames_train,
     xgb_ames_test,
@@ -169,8 +172,8 @@ test_that("run_xgboost for regression", {
 })
 
 test_that("xgb_binning for classification", {
-  skip_on_cran() # because data.table uses all cores by default 
-  
+  skip_on_cran() # because data.table uses all cores by default
+
   less_than_3.6 <- function() {
     utils::compareVersion("3.5.3", as.character(getRversion())) >= 0
   }
@@ -210,8 +213,8 @@ test_that("xgb_binning for classification", {
 })
 
 test_that("xgb_binning for multi-classification", {
-  skip_on_cran() # because data.table uses all cores by default 
-  
+  skip_on_cran() # because data.table uses all cores by default
+
   less_than_3.6 <- function() {
     utils::compareVersion("3.5.3", as.character(getRversion())) >= 0
   }
@@ -250,8 +253,8 @@ test_that("xgb_binning for multi-classification", {
 })
 
 test_that("xgb_binning for regression", {
-  skip_on_cran() # because data.table uses all cores by default 
-  
+  skip_on_cran() # because data.table uses all cores by default
+
   less_than_3.6 <- function() {
     utils::compareVersion("3.5.3", as.character(getRversion())) >= 0
   }
@@ -291,8 +294,8 @@ test_that("xgb_binning for regression", {
 })
 
 test_that("step_discretize_xgb for classification", {
-  skip_on_cran() # because data.table uses all cores by default 
-  
+  skip_on_cran() # because data.table uses all cores by default
+
   set.seed(125)
   # General use
   xgb_rec <-
@@ -328,7 +331,9 @@ test_that("step_discretize_xgb for classification", {
 
   # No numeric variables present
   predictors_non_numeric <- c(
-    "Status", "Home", "Marital"
+    "Status",
+    "Home",
+    "Marital"
   )
 
   xgb_rec <- credit_data_train %>%
@@ -347,8 +352,8 @@ test_that("step_discretize_xgb for classification", {
 })
 
 test_that("step_discretize_xgb for multi-classification", {
-  skip_on_cran() # because data.table uses all cores by default 
-  
+  skip_on_cran() # because data.table uses all cores by default
+
   set.seed(125)
   # General use
   xgb_rec <-
@@ -385,11 +390,20 @@ test_that("step_discretize_xgb for multi-classification", {
 
   # No numeric variables present
   predictors_non_numeric <- c(
-    "Attrition", "BusinessTravel", "Department",
-    "Education", "EnvironmentSatisfaction", "Gender",
-    "JobInvolvement", "JobRole", "JobSatisfaction",
-    "MaritalStatus", "OverTime", "PerformanceRating",
-    "RelationshipSatisfaction", "WorkLifeBalance"
+    "Attrition",
+    "BusinessTravel",
+    "Department",
+    "Education",
+    "EnvironmentSatisfaction",
+    "Gender",
+    "JobInvolvement",
+    "JobRole",
+    "JobSatisfaction",
+    "MaritalStatus",
+    "OverTime",
+    "PerformanceRating",
+    "RelationshipSatisfaction",
+    "WorkLifeBalance"
   )
 
   xgb_rec <- attrition_data_train %>%
@@ -400,8 +414,8 @@ test_that("step_discretize_xgb for multi-classification", {
 })
 
 test_that("step_discretize_xgb for regression", {
-  skip_on_cran() # because data.table uses all cores by default 
-  
+  skip_on_cran() # because data.table uses all cores by default
+
   # Skip on R < 3.6 since the rng is different.
   skip("Needs to determine why random numbers are different")
 
@@ -479,8 +493,8 @@ test_that("step_discretize_xgb for regression", {
 })
 
 test_that("xgb_binning() errors if only one class in outcome", {
-  skip_on_cran() # because data.table uses all cores by default 
-  
+  skip_on_cran() # because data.table uses all cores by default
+
   const_outcome <- data.frame(
     outcome = factor(rep("a", 1000)),
     predictor = rep(1, 1000)
@@ -501,8 +515,8 @@ test_that("xgb_binning() errors if only one class in outcome", {
 })
 
 test_that("case weights step_discretize_xgb", {
-  skip_on_cran() # because data.table uses all cores by default 
-  
+  skip_on_cran() # because data.table uses all cores by default
+
   sim_tr_cls_cw <- sim_tr_cls %>%
     mutate(weight = importance_weights(rep(1:0, each = 500)))
 
@@ -615,7 +629,7 @@ test_that("tunable", {
     step_discretize_xgb(all_predictors(), outcome = "mpg")
   rec_param <- tunable.step_discretize_xgb(rec$steps[[1]])
   expect_equal(
-    rec_param$name, 
+    rec_param$name,
     c("sample_val", "learn_rate", "num_breaks", "tree_depth", "min_n")
   )
   expect_true(all(rec_param$source == "recipe"))
@@ -659,7 +673,6 @@ test_that("bad args", {
       step_discretize_xgb(outcome = "class", min_n = -4) %>%
       prep()
   )
-
 })
 
 # Infrastructure ---------------------------------------------------------------
@@ -669,9 +682,9 @@ test_that("bake method errors when needed non-standard role columns are missing"
     step_discretize_xgb(x, z, outcome = "class") %>%
     update_role(x, new_role = "potato") %>%
     update_role_requirements(role = "potato", bake = FALSE)
-  
+
   rec_trained <- prep(rec, training = sim_tr_cls, verbose = FALSE)
-  
+
   expect_snapshot(
     error = TRUE,
     bake(rec_trained, new_data = sim_tr_cls[, -1])
@@ -681,46 +694,46 @@ test_that("bake method errors when needed non-standard role columns are missing"
 test_that("empty printing", {
   rec <- recipe(mpg ~ ., mtcars)
   rec <- step_discretize_xgb(rec, outcome = "mpg")
-  
+
   expect_snapshot(rec)
-  
+
   rec <- prep(rec, mtcars)
-  
+
   expect_snapshot(rec)
 })
 
 test_that("empty selection prep/bake is a no-op", {
   rec1 <- recipe(mpg ~ ., mtcars)
   rec2 <- step_discretize_xgb(rec1, outcome = "mpg")
-  
+
   rec1 <- prep(rec1, mtcars)
   rec2 <- prep(rec2, mtcars)
-  
+
   baked1 <- bake(rec1, mtcars)
   baked2 <- bake(rec2, mtcars)
-  
+
   expect_identical(baked1, baked2)
 })
 
 test_that("empty selection tidy method works", {
   rec <- recipe(mpg ~ ., mtcars)
   rec <- step_discretize_xgb(rec, outcome = "mpg")
-  
+
   expect <- tibble(terms = character(), value = double(), id = character())
-  
+
   expect_identical(tidy(rec, number = 1), expect)
-  
+
   rec <- prep(rec, mtcars)
-  
+
   expect_identical(tidy(rec, number = 1), expect)
 })
 
 test_that("printing", {
-  skip_on_cran() # because data.table uses all cores by default 
-  
+  skip_on_cran() # because data.table uses all cores by default
+
   rec <- recipe(class ~ ., data = sim_tr_cls) %>%
     step_discretize_xgb(all_predictors(), outcome = "class")
-  
+
   expect_snapshot(print(rec))
   expect_snapshot(prep(rec))
 })
@@ -737,9 +750,9 @@ test_that("tunable is setup to works with extract_parameter_set_dials", {
       tree_depth = hardhat::tune(),
       min_n = hardhat::tune()
     )
-  
+
   params <- extract_parameter_set_dials(rec)
-  
+
   expect_s3_class(params, "parameters")
   expect_identical(nrow(params), 5L)
 })

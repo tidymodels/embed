@@ -59,7 +59,7 @@
 #'
 #' When you [`tidy()`][recipes::tidy.recipe] this step, a tibble is returned with
 #' columns `level`, `value`, `terms`, and `id`:
-#' 
+#'
 #' \describe{
 #'   \item{level}{character, the factor levels}
 #'   \item{value}{numeric, the encoding}
@@ -93,15 +93,17 @@
 #' }
 #' @export
 step_lencode_mixed <-
-  function(recipe,
-           ...,
-           role = NA,
-           trained = FALSE,
-           outcome = NULL,
-           options = list(verbose = 0),
-           mapping = NULL,
-           skip = FALSE,
-           id = rand_id("lencode_mixed")) {
+  function(
+    recipe,
+    ...,
+    role = NA,
+    trained = FALSE,
+    outcome = NULL,
+    options = list(verbose = 0),
+    mapping = NULL,
+    skip = FALSE,
+    id = rand_id("lencode_mixed")
+  ) {
     if (is.null(outcome)) {
       cli::cli_abort("Please list a variable in {.arg outcome}.")
     }
@@ -122,8 +124,17 @@ step_lencode_mixed <-
   }
 
 step_lencode_mixed_new <-
-  function(terms, role, trained, outcome, options, mapping, skip, id,
-           case_weights) {
+  function(
+    terms,
+    role,
+    trained,
+    outcome,
+    options,
+    mapping,
+    skip,
+    id,
+    case_weights
+  ) {
     step(
       subclass = "lencode_mixed",
       terms = terms,
@@ -159,7 +170,9 @@ prep.step_lencode_mixed <- function(x, training, info = NULL, ...) {
       }
     }
     res <-
-      purrr::map(training[, col_names], lme_coefs,
+      purrr::map(
+        training[, col_names],
+        lme_coefs,
         y = training[[y_name]],
         wts = wts,
         x$options
@@ -261,7 +274,11 @@ print.step_lencode_mixed <-
   function(x, width = max(20, options()$width - 31), ...) {
     title <- "Linear embedding for factors via mixed effects for "
     print_step(
-      names(x$mapping), x$terms, x$trained, title, width,
+      names(x$mapping),
+      x$terms,
+      x$trained,
+      title,
+      width,
       case_weights = x$case_weights
     )
     invisible(x)

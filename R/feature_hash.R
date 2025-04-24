@@ -34,10 +34,10 @@
 #' [recipes::step_zv()]) is recommended for any recipe that uses hashed columns.
 #'
 #' # Tidying
-#' 
+#'
 #' When you [`tidy()`][recipes::tidy.recipe] this step, a tibble is returned with
 #' columns `terms` and `id`:
-#' 
+#'
 #' \describe{
 #'   \item{terms}{character, the selectors or variables selected}
 #'   \item{id}{character, id of this step}
@@ -73,16 +73,18 @@
 #' apply(results %>% select(-sponsor_code), 2, sum) %>% table()
 #' @export
 step_feature_hash <-
-  function(recipe,
-           ...,
-           role = "predictor",
-           trained = FALSE,
-           num_hash = 2^6,
-           preserve = deprecated(),
-           columns = NULL,
-           keep_original_cols = FALSE,
-           skip = FALSE,
-           id = rand_id("feature_hash")) {
+  function(
+    recipe,
+    ...,
+    role = "predictor",
+    trained = FALSE,
+    num_hash = 2^6,
+    preserve = deprecated(),
+    columns = NULL,
+    keep_original_cols = FALSE,
+    skip = FALSE,
+    id = rand_id("feature_hash")
+  ) {
     lifecycle::deprecate_soft(
       "0.2.0",
       "embed::step_feature_hash()",
@@ -118,8 +120,17 @@ step_feature_hash <-
   }
 
 step_feature_hash_new <-
-  function(terms, role, trained, num_hash, preserve, columns,
-           keep_original_cols, skip, id) {
+  function(
+    terms,
+    role,
+    trained,
+    num_hash,
+    preserve,
+    columns,
+    keep_original_cols,
+    skip,
+    id
+  ) {
     step(
       subclass = "feature_hash",
       terms = terms,
@@ -139,7 +150,7 @@ prep.step_feature_hash <- function(x, training, info = NULL, ...) {
   col_names <- recipes_eval_select(x$terms, training, info)
 
   check_number_whole(x$num_hash, min = 0, arg = "num_hash")
-  
+
   if (length(col_names) > 0) {
     check_type(training[, col_names], types = c("string", "factor", "ordered"))
   }
@@ -219,13 +230,13 @@ bake.step_feature_hash <- function(object, new_data, ...) {
 
   new_cols <- purrr::map2_dfc(
     new_data[, col_names],
-    new_names, make_hash_vars,
-    num_hash =
-      object$num_hash
+    new_names,
+    make_hash_vars,
+    num_hash = object$num_hash
   )
-  
+
   new_cols <- recipes::check_name(new_cols, new_data, object, names(new_cols))
-  
+
   new_data <- vec_cbind(new_data, new_cols)
 
   new_data <- remove_original_cols(new_data, object, col_names)

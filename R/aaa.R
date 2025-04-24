@@ -4,10 +4,37 @@
 
 utils::globalVariables(
   c(
-    ".", "..level", "..order", ".group", ".rows", "col_names", "data", "epochs",
-    "Feature", "group", "group_f", "loss", "Missing", "n", "n_tot", "No",
-    "Node", "p", "predictor", "select", "Split", "summary_outcome", "terms",
-    "training", "type", "value", "var", "variable", "where", "woe", "y_name",
+    ".",
+    "..level",
+    "..order",
+    ".group",
+    ".rows",
+    "col_names",
+    "data",
+    "epochs",
+    "Feature",
+    "group",
+    "group_f",
+    "loss",
+    "Missing",
+    "n",
+    "n_tot",
+    "No",
+    "Node",
+    "p",
+    "predictor",
+    "select",
+    "Split",
+    "summary_outcome",
+    "terms",
+    "training",
+    "type",
+    "value",
+    "var",
+    "variable",
+    "where",
+    "woe",
+    "y_name",
     "Yes"
   )
 )
@@ -16,8 +43,7 @@ utils::globalVariables(
 is_cran_check <- function() {
   if (identical(Sys.getenv("NOT_CRAN"), "true")) {
     FALSE
-  }
-  else {
+  } else {
     Sys.getenv("_R_CHECK_PACKAGE_NAME_", "") != ""
   }
 }

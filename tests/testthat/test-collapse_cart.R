@@ -8,7 +8,8 @@ test_that("collapsing factors", {
       rec_1 <-
         recipe(Sale_Price ~ ., data = ames) %>%
         step_collapse_cart(
-          Neighborhood, Central_Air,
+          Neighborhood,
+          Central_Air,
           outcome = vars(Sale_Price)
         ) %>%
         prep()
@@ -38,9 +39,12 @@ test_that("collapsing factors", {
     {
       rec_2 <-
         recipe(Sale_Price ~ ., data = ames) %>%
-        step_collapse_cart(Neighborhood, Central_Air,
+        step_collapse_cart(
+          Neighborhood,
+          Central_Air,
           outcome = vars(Sale_Price),
-          min_n = 100, cost_complexity = 0.1
+          min_n = 100,
+          cost_complexity = 0.1
         ) %>%
         prep()
     }
@@ -63,7 +67,8 @@ test_that("failed collapsing", {
       rec_3 <-
         recipe(Sale_Price2 ~ ., data = ames) %>%
         step_collapse_cart(
-          Neighborhood, Central_Air,
+          Neighborhood,
+          Central_Air,
           outcome = vars(Sale_Price2)
         ) %>%
         prep()
@@ -80,7 +85,8 @@ test_that("failed collapsing", {
         step_collapse_cart(
           Neighborhood,
           outcome = vars(Sale_Price),
-          cost_complexity = 0, min_n = 1
+          cost_complexity = 0,
+          min_n = 1
         ) %>%
         prep()
     }
@@ -119,14 +125,14 @@ test_that("bad args", {
 test_that("bake method errors when needed non-standard role columns are missing", {
   skip_if_not_installed("modeldata")
   data(ames, package = "modeldata")
-  
+
   rec <- recipe(Sale_Price ~ ., data = ames) %>%
     step_collapse_cart(MS_SubClass, outcome = vars(Sale_Price)) %>%
     update_role(MS_SubClass, new_role = "potato") %>%
     update_role_requirements(role = "potato", bake = FALSE)
-  
+
   rec_trained <- prep(rec, training = ames, verbose = FALSE)
-  
+
   expect_snapshot(
     error = TRUE,
     bake(rec_trained, new_data = ames[, -1])
@@ -136,47 +142,47 @@ test_that("bake method errors when needed non-standard role columns are missing"
 test_that("empty printing", {
   rec <- recipe(mpg ~ ., mtcars)
   rec <- step_collapse_cart(rec)
-  
+
   expect_snapshot(rec)
-  
+
   rec <- prep(rec, mtcars)
-  
+
   expect_snapshot(rec)
 })
 
 test_that("empty selection prep/bake is a no-op", {
   rec1 <- recipe(mpg ~ ., mtcars)
   rec2 <- step_collapse_cart(rec1)
-  
+
   rec1 <- prep(rec1, mtcars)
   rec2 <- prep(rec2, mtcars)
-  
+
   baked1 <- bake(rec1, mtcars)
   baked2 <- bake(rec2, mtcars)
-  
+
   expect_identical(baked1, baked2)
 })
 
 test_that("empty selection tidy method works", {
   rec <- recipe(mpg ~ ., mtcars)
   rec <- step_collapse_cart(rec)
-  
+
   expect <- tibble(terms = character(), value = double(), id = character())
-  
+
   expect_identical(tidy(rec, number = 1), expect)
-  
+
   rec <- prep(rec, mtcars)
-  
+
   expect_identical(tidy(rec, number = 1), expect)
 })
 
 test_that("printing", {
   skip_if_not_installed("modeldata")
   data(ames, package = "modeldata")
-  
+
   rec <- recipe(Sale_Price ~ ., data = ames) %>%
     step_collapse_cart(Neighborhood, Central_Air, outcome = vars(Sale_Price))
-  
+
   expect_snapshot(print(rec))
   expect_snapshot(prep(rec))
 })

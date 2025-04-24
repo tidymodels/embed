@@ -252,7 +252,8 @@ test_that("case weights", {
     x2 ~ 0 + x3,
     data = ex_dat_cw,
     family = binomial,
-    na.action = na.omit, weights = ex_dat_cw$wts
+    na.action = na.omit,
+    weights = ex_dat_cw$wts
   )
 
   expect_equal(
@@ -270,9 +271,9 @@ test_that("bake method errors when needed non-standard role columns are missing"
     step_lencode_glm(x3, outcome = vars(x2)) %>%
     update_role(x3, new_role = "potato") %>%
     update_role_requirements(role = "potato", bake = FALSE)
-  
+
   rec_trained <- prep(rec, training = ex_dat, verbose = FALSE)
-  
+
   expect_snapshot(
     error = TRUE,
     bake(rec_trained, new_data = ex_dat[, -3])
@@ -282,42 +283,42 @@ test_that("bake method errors when needed non-standard role columns are missing"
 test_that("empty printing", {
   rec <- recipe(mpg ~ ., mtcars)
   rec <- step_lencode_glm(rec, outcome = vars(mpg))
-  
+
   expect_snapshot(rec)
-  
+
   rec <- prep(rec, mtcars)
-  
+
   expect_snapshot(rec)
 })
 
 test_that("empty selection prep/bake is a no-op", {
   rec1 <- recipe(mpg ~ ., mtcars)
   rec2 <- step_lencode_glm(rec1, outcome = vars(mpg))
-  
+
   rec1 <- prep(rec1, mtcars)
   rec2 <- prep(rec2, mtcars)
-  
+
   baked1 <- bake(rec1, mtcars)
   baked2 <- bake(rec2, mtcars)
-  
+
   expect_identical(baked1, baked2)
 })
 
 test_that("empty selection tidy method works", {
   rec <- recipe(mpg ~ ., mtcars)
   rec <- step_lencode_glm(rec, outcome = vars(mpg))
-  
+
   expect <- tibble(
     terms = character(),
     level = character(),
     value = double(),
     id = character()
   )
-  
+
   expect_identical(tidy(rec, number = 1), expect)
-  
+
   rec <- prep(rec, mtcars)
-  
+
   expect_identical(tidy(rec, number = 1), expect)
 })
 

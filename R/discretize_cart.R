@@ -45,10 +45,10 @@
 #' Note that the original data will be replaced with the new bins.
 #'
 #' # Tidying
-#' 
+#'
 #' When you [`tidy()`][recipes::tidy.recipe] this step, a tibble is returned with
 #' columns `terms`, `value`, and `id`:
-#' 
+#'
 #' \describe{
 #'   \item{terms}{character, the selectors or variables selected}
 #'   \item{value}{numeric, location of the splits}
@@ -90,17 +90,19 @@
 #' [recipes::prep()], [recipes::bake()]
 #' @export
 step_discretize_cart <-
-  function(recipe,
-           ...,
-           role = NA,
-           trained = FALSE,
-           outcome = NULL,
-           cost_complexity = 0.01,
-           tree_depth = 10,
-           min_n = 20,
-           rules = NULL,
-           skip = FALSE,
-           id = rand_id("discretize_cart")) {
+  function(
+    recipe,
+    ...,
+    role = NA,
+    trained = FALSE,
+    outcome = NULL,
+    cost_complexity = 0.01,
+    tree_depth = 10,
+    min_n = 20,
+    rules = NULL,
+    skip = FALSE,
+    id = rand_id("discretize_cart")
+  ) {
     recipes_pkg_check(required_pkgs.step_discretize_cart())
 
     if (is.null(outcome)) {
@@ -128,8 +130,19 @@ step_discretize_cart <-
   }
 
 step_discretize_cart_new <-
-  function(terms, role, trained, outcome, cost_complexity, tree_depth,
-           min_n, rules, skip, id, case_weights) {
+  function(
+    terms,
+    role,
+    trained,
+    outcome,
+    cost_complexity,
+    tree_depth,
+    min_n,
+    rules,
+    skip,
+    id,
+    case_weights
+  ) {
     step(
       subclass = "discretize_cart",
       terms = terms,
@@ -146,8 +159,15 @@ step_discretize_cart_new <-
     )
   }
 
-cart_binning <- function(predictor, term, outcome, cost_complexity, tree_depth,
-                         min_n, wts = NULL) {
+cart_binning <- function(
+  predictor,
+  term,
+  outcome,
+  cost_complexity,
+  tree_depth,
+  min_n,
+  wts = NULL
+) {
   df <- data.frame(y = outcome, x = predictor)
   if (is.null(wts)) {
     wts <- rep(1, nrow(df))
@@ -273,11 +293,18 @@ bake.step_discretize_cart <- function(object, new_data, ...) {
 }
 
 #' @export
-print.step_discretize_cart <- function(x, width = max(20, options()$width - 30),
-                                       ...) {
+print.step_discretize_cart <- function(
+  x,
+  width = max(20, options()$width - 30),
+  ...
+) {
   title <- "Discretizing variables using CART "
   print_step(
-    names(x$rules), x$terms, x$trained, title, width,
+    names(x$rules),
+    x$terms,
+    x$trained,
+    title,
+    width,
     case_weights = x$case_weights
   )
   invisible(x)
@@ -289,7 +316,7 @@ print.step_discretize_cart <- function(x, width = max(20, options()$width - 30),
 tidy.step_discretize_cart <- function(x, ...) {
   if (is_trained(x)) {
     num_splits <- purrr::map_int(x$rules, length)
- 
+
     if (length(num_splits) > 0) {
       res <- tibble(
         terms = rep(names(x$rules), num_splits),

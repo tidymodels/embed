@@ -12,17 +12,17 @@
 #' @param neighbors An integer for the number of nearest neighbors used to
 #'   construct the target simplicial set. If `neighbors` is greater than the
 #'   number of data points, the smaller value is used.
-#' @param metric Character, type of distance metric to use to find nearest 
+#' @param metric Character, type of distance metric to use to find nearest
 #'   neighbors. See [uwot::umap()] for more details. Default to `"euclidean"`.
 #' @param epochs Number of iterations for the neighbor optimization. See
 #'   [uwot::umap()] for more details.
-#' @param initial Character, Type of initialization for the coordinates. Can be 
-#'   one of `"spectral"`, `"normlaplacian"`, `"random"`, `"lvrandom"`, 
+#' @param initial Character, Type of initialization for the coordinates. Can be
+#'   one of `"spectral"`, `"normlaplacian"`, `"random"`, `"lvrandom"`,
 #'   `"laplacian"`, `"pca"`, `"spca"`, `"agspectral"`, or a matrix of initial
 #'   coordinates. See [uwot::umap()] for more details. Default to `"spectral"`.
-#' @param target_weight Weighting factor between data topology and target 
-#'   topology. A value of 0.0 weights entirely on data, a value of 1.0 weights 
-#'   entirely on target. The default of 0.5 balances the weighting equally 
+#' @param target_weight Weighting factor between data topology and target
+#'   topology. A value of 0.0 weights entirely on data, a value of 1.0 weights
+#'   entirely on target. The default of 0.5 balances the weighting equally
 #'   between data and target.
 #' @param learn_rate Positive number of the learning rate for the optimization
 #'   process.
@@ -59,12 +59,12 @@
 #'
 #' When you [`tidy()`][recipes::tidy.recipe] this step, a tibble is returned with
 #'  columns `terms` and `id`:
-#' 
+#'
 #' \describe{
 #'   \item{terms}{character, the selectors or variables selected}
 #'   \item{id}{character, id of this step}
 #' }
-#' 
+#'
 #' ```{r, echo = FALSE, results="asis"}
 #' step <- "step_umap"
 #' result <- knitr::knit_child("man/rmd/tunable-args.Rmd")
@@ -78,7 +78,7 @@
 #' @references
 #'
 #' McInnes, L., & Healy, J. (2018). UMAP: Uniform Manifold
-#' Approximation and Projection for Dimension Reduction. 
+#' Approximation and Projection for Dimension Reduction.
 #' \url{https://arxiv.org/abs/1802.03426}.
 #'
 #' "How UMAP Works"
@@ -107,27 +107,29 @@
 #'   geom_point(alpha = .5)
 #' @export
 step_umap <-
-  function(recipe,
-           ...,
-           role = "predictor",
-           trained = FALSE,
-           outcome = NULL,
-           neighbors = 15,
-           num_comp = 2,
-           min_dist = 0.01,
-           metric = "euclidean",
-           learn_rate = 1,
-           epochs = NULL,
-           initial = "spectral",
-           target_weight = 0.5,
-           options = list(verbose = FALSE, n_threads = 1),
-           seed = sample(10^5, 2),
-           prefix = "UMAP",
-           keep_original_cols = FALSE,
-           retain = deprecated(),
-           object = NULL,
-           skip = FALSE,
-           id = rand_id("umap")) {
+  function(
+    recipe,
+    ...,
+    role = "predictor",
+    trained = FALSE,
+    outcome = NULL,
+    neighbors = 15,
+    num_comp = 2,
+    min_dist = 0.01,
+    metric = "euclidean",
+    learn_rate = 1,
+    epochs = NULL,
+    initial = "spectral",
+    target_weight = 0.5,
+    options = list(verbose = FALSE, n_threads = 1),
+    seed = sample(10^5, 2),
+    prefix = "UMAP",
+    keep_original_cols = FALSE,
+    retain = deprecated(),
+    object = NULL,
+    skip = FALSE,
+    id = rand_id("umap")
+  ) {
     if (lifecycle::is_present(retain)) {
       lifecycle::deprecate_soft(
         "0.1.5",
@@ -175,9 +177,28 @@ step_umap <-
   }
 
 step_umap_new <-
-  function(terms, role, trained, outcome, neighbors, num_comp, min_dist, metric,
-           learn_rate, epochs, initial, target_weight, options, seed, prefix, 
-           keep_original_cols, retain, object, skip, id) {
+  function(
+    terms,
+    role,
+    trained,
+    outcome,
+    neighbors,
+    num_comp,
+    min_dist,
+    metric,
+    learn_rate,
+    epochs,
+    initial,
+    target_weight,
+    options,
+    seed,
+    prefix,
+    keep_original_cols,
+    retain,
+    object,
+    skip,
+    id
+  ) {
     step(
       subclass = "umap",
       terms = terms,
@@ -247,14 +268,14 @@ prep.step_umap <- function(x, training, info = NULL, ...) {
     }
     x$neighbors <- min(nrow(training) - 1, x$neighbors)
     x$num_comp <- min(length(col_names) - 1, x$num_comp)
-    
+
     if (is.null(x$initial)) {
       x$initial <- "spectral"
     }
     if (is.null(x$target_weight)) {
       x$target_weight <- 0.5
     }
-    
+
     withr::with_seed(
       x$seed[1],
       res <- rlang::eval_tidy(umap_fit_call(x, y = y_name))
@@ -313,7 +334,7 @@ bake.step_umap <- function(object, new_data, ...) {
 
   colnames(res) <- names0(object$num_comp, prefix = object$prefix)
   res <- as_tibble(res)
-  
+
   res <- recipes::check_name(res, new_data, object, names(res))
   new_data <- vec_cbind(new_data, res)
 
@@ -358,7 +379,15 @@ required_pkgs.step_umap <- function(x, ...) {
 #' @rdname tunable_embed
 tunable.step_umap <- function(x, ...) {
   tibble::tibble(
-    name = c("num_comp", "neighbors", "min_dist", "learn_rate", "epochs", "initial", "target_weight"),
+    name = c(
+      "num_comp",
+      "neighbors",
+      "min_dist",
+      "learn_rate",
+      "epochs",
+      "initial",
+      "target_weight"
+    ),
     call_info = list(
       list(pkg = "dials", fun = "num_comp", range = c(1, 10)),
       list(pkg = "dials", fun = "neighbors", range = c(5, 200)),

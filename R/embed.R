@@ -4,7 +4,7 @@
 #' nominal (i.e. factor) predictor into a set of scores derived from a
 #' tensorflow model via a word-embedding model. `embed_control` is a simple
 #' wrapper for setting default options.
-#' 
+#'
 #' @param recipe A recipe object. The step will be added to the sequence of
 #'   operations for this recipe.
 #' @param ... One or more selector functions to choose variables. For
@@ -102,11 +102,11 @@
 #' this step with `caret`, avoid parallel processing.
 #'
 #' # Tidying
-#' 
+#'
 #' When you [`tidy()`][recipes::tidy.recipe] this step, a tibble is returned with
-#' a number of columns with embedding information, and columns `terms`, 
+#' a number of columns with embedding information, and columns `terms`,
 #' `levels`, and `id`:
-#' 
+#'
 #' \describe{
 #'   \item{terms}{character, the selectors or variables selected}
 #'   \item{levels}{character, levels in variable}
@@ -141,20 +141,22 @@
 #'   )
 #' @export
 step_embed <-
-  function(recipe,
-           ...,
-           role = "predictor",
-           trained = FALSE,
-           outcome = NULL,
-           predictors = NULL,
-           num_terms = 2,
-           hidden_units = 0,
-           options = embed_control(),
-           mapping = NULL,
-           history = NULL,
-           keep_original_cols = FALSE,
-           skip = FALSE,
-           id = rand_id("embed")) {
+  function(
+    recipe,
+    ...,
+    role = "predictor",
+    trained = FALSE,
+    outcome = NULL,
+    predictors = NULL,
+    num_terms = 2,
+    hidden_units = 0,
+    options = embed_control(),
+    mapping = NULL,
+    history = NULL,
+    keep_original_cols = FALSE,
+    skip = FALSE,
+    id = rand_id("embed")
+  ) {
     # warm start for tf to avoid a bug in tensorflow
     is_tf_available()
 
@@ -182,8 +184,21 @@ step_embed <-
   }
 
 step_embed_new <-
-  function(terms, role, trained, outcome, predictors, num_terms, hidden_units,
-           options, mapping, history, keep_original_cols, skip, id) {
+  function(
+    terms,
+    role,
+    trained,
+    outcome,
+    predictors,
+    num_terms,
+    hidden_units,
+    options,
+    mapping,
+    history,
+    keep_original_cols,
+    skip,
+    id
+  ) {
     step(
       subclass = "embed",
       terms = terms,
@@ -274,8 +289,17 @@ is_tf_2 <- function() {
   compareVersion("2.0", as.character(tensorflow::tf_version())) <= 0
 }
 
-tf_coefs2 <- function(x, y, z, opt, num, lab, h, seeds = sample.int(10000, 4),
-                      ...) {
+tf_coefs2 <- function(
+  x,
+  y,
+  z,
+  opt,
+  num,
+  lab,
+  h,
+  seeds = sample.int(10000, 4),
+  ...
+) {
   rlang::check_installed("keras")
 
   vars <- names(x)
@@ -311,7 +335,10 @@ tf_coefs2 <- function(x, y, z, opt, num, lab, h, seeds = sample.int(10000, 4),
   inputs <- vector(mode = "list", length = p)
   # For each categorical predictor, make an input layer
   for (i in 1:p) {
-    inputs[[i]] <- keras::layer_input(shape = 1, name = paste0("input_", vars[i]))
+    inputs[[i]] <- keras::layer_input(
+      shape = 1,
+      name = paste0("input_", vars[i])
+    )
   }
 
   layers <- vector(mode = "list", length = p)
@@ -345,7 +372,9 @@ tf_coefs2 <- function(x, y, z, opt, num, lab, h, seeds = sample.int(10000, 4),
     all_layers <-
       all_layers %>%
       keras::layer_dense(
-        units = h, activation = "relu", name = "hidden_layer",
+        units = h,
+        activation = "relu",
+        name = "hidden_layer",
         kernel_initializer = keras::initializer_glorot_uniform(seed = seeds[3])
       )
   }
@@ -354,14 +383,18 @@ tf_coefs2 <- function(x, y, z, opt, num, lab, h, seeds = sample.int(10000, 4),
     all_layers <-
       all_layers %>%
       keras::layer_dense(
-        units = ncol(y), activation = "softmax", name = "output_layer",
+        units = ncol(y),
+        activation = "softmax",
+        name = "output_layer",
         kernel_initializer = keras::initializer_glorot_uniform(seed = seeds[4])
       )
   } else {
     all_layers <-
       all_layers %>%
       keras::layer_dense(
-        units = 1, activation = "linear", name = "output_layer",
+        units = 1,
+        activation = "linear",
+        name = "output_layer",
         kernel_initializer = keras::initializer_glorot_uniform(seed = seeds[4])
       )
   }
@@ -428,17 +461,17 @@ bake.step_embed <- function(object, new_data, ...) {
   for (col_name in col_names) {
     tmp <- map_tf_coef2(
       dat = new_data[, col_name], # map_tf_coef2() expects a tibble
-      mapping = object$mapping[[col_name]], 
+      mapping = object$mapping[[col_name]],
       prefix = col_name
     )
-   
+
     tmp <- recipes::check_name(tmp, new_data, object, names(tmp))
-    
+
     new_data <- vec_cbind(new_data, tmp)
   }
-  
+
   new_data <- remove_original_cols(new_data, object, col_names)
-  
+
   new_data
 }
 
@@ -485,14 +518,16 @@ print.step_embed <-
 #' @param optimizer,loss,metrics Arguments to pass to keras::compile()
 #' @param epochs,validation_split,batch_size,verbose,callbacks Arguments to pass
 #'   to keras::fit()
-embed_control <- function(loss = "mse",
-                          metrics = NULL,
-                          optimizer = "sgd",
-                          epochs = 20,
-                          validation_split = 0,
-                          batch_size = 32,
-                          verbose = 0,
-                          callbacks = NULL) {
+embed_control <- function(
+  loss = "mse",
+  metrics = NULL,
+  optimizer = "sgd",
+  epochs = 20,
+  validation_split = 0,
+  batch_size = 32,
+  verbose = 0,
+  callbacks = NULL
+) {
   if (batch_size < 1) {
     cli::cli_abort("{.arg batch_size} should be a positive integer.")
   }
@@ -503,9 +538,14 @@ embed_control <- function(loss = "mse",
     cli::cli_abort("{.arg validation_split} should be on [0, 1).")
   }
   list(
-    loss = loss, metrics = metrics, optimizer = optimizer, epochs = epochs,
-    validation_split = validation_split, batch_size = batch_size,
-    verbose = verbose, callbacks = callbacks
+    loss = loss,
+    metrics = metrics,
+    optimizer = optimizer,
+    epochs = epochs,
+    validation_split = validation_split,
+    batch_size = batch_size,
+    verbose = verbose,
+    callbacks = callbacks
   )
 }
 
@@ -544,7 +584,7 @@ is_tf_available <- function() {
   if (!rlang::is_installed("tensorflow")) {
     return(FALSE)
   }
-  
+
   capture.output(
     res <- try(tensorflow::tf_config(), silent = TRUE),
     file = NULL
