@@ -175,18 +175,20 @@ lencode_calc <- function(x, y, wts = NULL) {
         ..value = mean(..value),
         .by = ..level
       )
+      unseen_value <- mean(data$..value)
     } else {
       res <- dplyr::summarise(
         data,
         ..value = stats::weighted.mean(..value, wts),
         .by = ..level
       )
+      unseen_value <- stats::weighted.mean(data$..value, data$wts)
     }
 
     unseen <- tibble::new_tibble(
       list(
         ..level = "..new",
-        ..value = mean(res$..value)
+        ..value = unseen_value
       )
     )
   } else {
@@ -200,6 +202,8 @@ lencode_calc <- function(x, y, wts = NULL) {
       ) |>
         dplyr::mutate(..value = log(p / (1 - p))) |>
         dplyr::select(-p)
+
+      global_p <- (sum(data$..value == levels(data$..value)[1])) / nrow(data)
     } else {
       data$wts <- as.numeric(data$wts)
       res <- dplyr::summarize(
@@ -216,11 +220,14 @@ lencode_calc <- function(x, y, wts = NULL) {
           )
         ) |>
         dplyr::select(-p)
+
+      global_p <- (sum((data$..value == levels(data$..value)[1]) * data$wts)) /
+        sum(data$wts)
     }
     unseen <- tibble::new_tibble(
       list(
         ..level = "..new",
-        ..value = 0
+        ..value = log(global_p / (1 - global_p))
       )
     )
   }

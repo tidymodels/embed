@@ -53,6 +53,8 @@ test_that("factor outcome - factor predictor", {
     td_obj$value,
     key$x3$..value
   )
+
+  new_values
 })
 
 test_that("factor outcome - character predictor", {
@@ -109,6 +111,18 @@ test_that("factor outcome - character predictor", {
   expect_equal(
     td_obj$value,
     key$x3$..value
+  )
+
+  unseen_level <- data.frame(
+    x1 = 0,
+    x2 = factor("a", levels = c("a", "b")),
+    x3 = "unseen-level",
+    x4 = factor("A", levels = c("A", "B", "C", "D", "E"))
+  )
+
+  expect_equal(
+    bake(class_test, unseen_level)$x3,
+    0
   )
 })
 
@@ -222,6 +236,18 @@ test_that("numeric outcome - character predictor", {
   expect_equal(
     td_obj$value,
     key$x3$..value
+  )
+
+  unseen_level <- data.frame(
+    x1 = 0,
+    x2 = factor("a", levels = c("a", "b")),
+    x3 = "unseen-level",
+    x4 = factor("A", levels = c("A", "B", "C", "D", "E"))
+  )
+
+  expect_equal(
+    bake(reg_test, unseen_level)$x3,
+    mean(ex_dat_ch$x1)
   )
 })
 
