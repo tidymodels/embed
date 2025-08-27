@@ -1,20 +1,18 @@
-#' Supervised Factor Conversions into Linear Functions using Likelihood
-#' Encodings
+#' Likelihood encoding using analytical formula
 #'
-#' `step_lencode()` creates a *specification* of a recipe step that will
-#' convert a nominal (i.e. factor) predictor into a single set of scores derived
-#' from a generalized linear model.
+#' `step_lencode()` creates a *specification* of a recipe step that will convert
+#' a nominal (i.e. factor) predictor into a single set of scores derived
+#' analytically.
 #'
 #' @param recipe A recipe object. The step will be added to the sequence of
 #'   operations for this recipe.
 #' @param ... One or more selector functions to choose variables. For
-#'   `step_lencode`, this indicates the variables to be encoded into a
+#'   `step_lencode()`, this indicates the variables to be encoded into a
 #'   numeric format. See [recipes::selections()] for more details. For the
 #'   `tidy` method, these are not currently used.
 #' @param role Not used by this step since no new variables are created.
 #' @param outcome A call to `vars` to specify which variable is used as the
-#'   outcome in the generalized linear model. Only numeric and two-level factors
-#'   are currently supported.
+#'   outcome. Only numeric and two-level factors are currently supported.
 #' @param mapping A list of tibble results that define the encoding. This is
 #'   `NULL` until the step is trained by [recipes::prep()].
 #' @param skip A logical. Should the step be skipped when the recipe is baked by
@@ -33,19 +31,25 @@
 #' @concept preprocessing encoding
 #' @details
 #'
-#' For each factor predictor, a generalized linear model is fit to the outcome
-#' and the coefficients are returned as the encoding. These coefficients are on
-#' the linear predictor scale so, for factor outcomes, they are in log-odds
-#' units. The coefficients are created using a no intercept model and, when two
-#' factor outcomes are used, the log-odds reflect the event of interest being
-#' the _first_ level of the factor.
+#' Each selected nominal predictor will be replaced by a numeric predictor.
+#' Each unique value of the nominal predictor is replaced by a numeric value.
+#' Thse values are calculated differently depending on the type of the outcome.
 #'
-#' For novel levels, a slightly timmed average of the coefficients is returned.
+#' For **numeric** outcomes each value is the average value of the outcome
+#' inside each of the levels of the predictor. Unseen levels of the predictor
+#' will be using the global mean of the predictor.
+#' If case weights are used then a weighted mean is calculated instead.
+#'
+#' For **nominal** outcomes each value is the log odds of the of the first level
+#' of the outcome variable being present, within each level of the levels of the
+#' predictor. Unseen levels will be replaced by the global log odds without
+#' stratification.
+#' If case weights are used then a weighted log odds is calculated.
 #'
 #' # Tidying
 #'
-#' When you [`tidy()`][recipes::tidy.recipe] this step, a tibble is returned with
-#' columns `level`, `value`, `terms`, and `id`:
+#' When you [`tidy()`][recipes::tidy.recipe] this step, a tibble is returned
+#' with columns `level`, `value`, `terms`, and `id`:
 #'
 #' \describe{
 #'   \item{level}{character, the factor levels}
@@ -74,10 +78,13 @@
 #'
 #' set.seed(1)
 #' grants_other <- sample_n(grants_other, 500)
-#' \donttest{
 #' reencoded <- recipe(class ~ sponsor_code, data = grants_other) |>
-#'   step_lencode(sponsor_code, outcome = vars(class))
-#' }
+#'   step_lencode(sponsor_code, outcome = vars(class)) |>
+#'   prep()
+#'
+#' bake(reencoded, grants_other)
+#'
+#' tidy(reencoded, 1)
 #' @export
 step_lencode <-
   function(
