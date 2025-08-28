@@ -7,6 +7,7 @@ utils::globalVariables(
     ".",
     "..level",
     "..order",
+    "..value",
     ".group",
     ".rows",
     "col_names",
