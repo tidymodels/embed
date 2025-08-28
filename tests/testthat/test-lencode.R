@@ -251,6 +251,57 @@ test_that("numeric outcome - character predictor", {
   )
 })
 
+test_that("non occurring events doesn't result in infinities", {
+  data <- data.frame(
+    outcome = c("a", "a", "b", "b"),
+    predictor = c("a", "a", "a", "b")
+  )
+
+  res <- recipe(outcome ~ ., data = data) |>
+    step_lencode(predictor, outcome = vars(outcome)) |>
+    prep() |>
+    tidy(1)
+
+  exp <- c(
+    log(2 / 3 / (1 - 2 / 3)),
+    log(
+      (2 * nrow(data) - 1) /
+        (2 * nrow(data)) /
+        (1 - (2 * nrow(data) - 1) / (2 * nrow(data)))
+    ),
+    log(0.5 / (1 - 0.5))
+  )
+
+  expect_identical(res$value, exp)
+  expect_identical(res$level, c("a", "b", "..new"))
+})
+
+test_that("non occurring events doesn't result in infinities - case weights", {
+  data <- data.frame(
+    outcome = c("a", "a", "b", "b"),
+    predictor = c("a", "a", "a", "b"),
+    wts = importance_weights(rep(1, 4))
+  )
+
+  res <- recipe(outcome ~ ., data = data) |>
+    step_lencode(predictor, outcome = vars(outcome)) |>
+    prep() |>
+    tidy(1)
+
+  exp <- c(
+    log(2 / 3 / (1 - 2 / 3)),
+    log(
+      (2 * nrow(data) - 1) /
+        (2 * nrow(data)) /
+        (1 - (2 * nrow(data) - 1) / (2 * nrow(data)))
+    ),
+    log(0.5 / (1 - 0.5))
+  )
+
+  expect_identical(res$value, exp)
+  expect_identical(res$level, c("a", "b", "..new"))
+})
+
 test_that("bad args", {
   three_class <- iris
   three_class$fac <- rep(letters[1:3], 50)

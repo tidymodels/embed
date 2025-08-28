@@ -46,6 +46,10 @@
 #' stratification.
 #' If case weights are used then a weighted log odds is calculated.
 #'
+#' If no or all occurances happens then the log odds is calculated using
+#' `p = (2 * nrow(data) - 1) / (2 * nrow(data))` to avoid infinity that would
+#' happen by taking the log of `0`.
+#'
 #' # Tidying
 #'
 #' When you [`tidy()`][recipes::tidy.recipe] this step, a tibble is returned
@@ -201,6 +205,13 @@ lencode_calc <- function(x, y, wts = NULL) {
         .by = ..level
       ) |>
         dplyr::mutate(..value = log(p / (1 - p))) |>
+        dplyr::mutate(
+          ..value = dplyr::if_else(
+            is.infinite(..value),
+            inf_estimate_log_odds,
+            ..value
+          )
+        ) |>
         dplyr::select(-p)
 
       global_p <- (sum(data$..value == levels(data$..value)[1])) / nrow(data)

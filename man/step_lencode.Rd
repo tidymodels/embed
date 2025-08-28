@@ -69,6 +69,10 @@ of the outcome variable being present, within each level of the levels of the
 predictor. Unseen levels will be replaced by the global log odds without
 stratification.
 If case weights are used then a weighted log odds is calculated.
+
+If no or all occurances happens then the log odds is calculated using
+\code{p = (2 * nrow(data) - 1) / (2 * nrow(data))} to avoid infinity that would
+happen by taking the log of \code{0}.
 }
 \section{Tidying}{
 When you \code{\link[recipes:tidy.recipe]{tidy()}} this step, a tibble is returned
