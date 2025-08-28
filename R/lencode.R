@@ -168,6 +168,13 @@ prep.step_lencode <- function(x, training, info = NULL, ...) {
   )
 }
 lencode_calc <- function(x, y, wts = NULL) {
+  if (!is.numeric(y) && !is.factor(y) && !is.character(y)) {
+    cli::cli_abort(
+      "Only works nominal or numeric {.arg outcome}, 
+      not {.obj_type_friendly {y}}."
+    )
+  }
+
   data <- tibble::new_tibble(
     list(..level = x, ..value = y, wts = wts)
   )
@@ -188,14 +195,9 @@ lencode_calc <- function(x, y, wts = NULL) {
       )
       unseen_value <- stats::weighted.mean(data$..value, data$wts)
     }
+  }
 
-    unseen <- tibble::new_tibble(
-      list(
-        ..level = "..new",
-        ..value = unseen_value
-      )
-    )
-  } else if (is.factor(y) || is.character(y)) {
+  if (is.factor(y) || is.character(y)) {
     inf_estimate_p <- (2 * nrow(data) - 1) / (2 * nrow(data))
     inf_estimate_log_odds <- log(inf_estimate_p / (1 - inf_estimate_p))
     if (is.null(wts)) {
@@ -203,16 +205,7 @@ lencode_calc <- function(x, y, wts = NULL) {
         data,
         p = (sum(..value == levels(..value)[1])) / n(),
         .by = ..level
-      ) |>
-        dplyr::mutate(..value = log(p / (1 - p))) |>
-        dplyr::mutate(
-          ..value = dplyr::if_else(
-            is.infinite(..value),
-            inf_estimate_log_odds,
-            ..value
-          )
-        ) |>
-        dplyr::select(-p)
+      )
 
       global_p <- (sum(data$..value == levels(data$..value)[1])) / nrow(data)
     } else {
@@ -221,32 +214,32 @@ lencode_calc <- function(x, y, wts = NULL) {
         data,
         p = (sum((..value == levels(..value)[1]) * wts)) / sum(wts),
         .by = ..level
-      ) |>
-        dplyr::mutate(..value = log(p / (1 - p))) |>
-        dplyr::mutate(
-          ..value = dplyr::if_else(
-            is.infinite(..value),
-            inf_estimate_log_odds,
-            ..value
-          )
-        ) |>
-        dplyr::select(-p)
+      )
 
       global_p <- (sum((data$..value == levels(data$..value)[1]) * data$wts)) /
         sum(data$wts)
     }
-    unseen <- tibble::new_tibble(
-      list(
-        ..level = "..new",
-        ..value = log(global_p / (1 - global_p))
-      )
-    )
-  } else {
-    cli::cli_abort(
-      "Only works nominal or numeric {.arg outcome}, 
-      not {.obj_type_friendly {y}}."
-    )
+
+    res <- res |>
+      dplyr::mutate(..value = log(p / (1 - p))) |>
+      dplyr::mutate(
+        ..value = dplyr::if_else(
+          is.infinite(..value),
+          inf_estimate_log_odds,
+          ..value
+        )
+      ) |>
+      dplyr::select(-p)
+
+    unseen_value <- log(global_p / (1 - global_p))
   }
+
+  unseen <- tibble::new_tibble(
+    list(
+      ..level = "..new",
+      ..value = unseen_value
+    )
+  )
 
   dplyr::bind_rows(res, unseen)
 }
