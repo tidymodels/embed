@@ -186,6 +186,7 @@ lencode_calc <- function(x, y, wts = NULL) {
         ..value = mean(..value),
         .by = ..level
       )
+
       unseen_value <- mean(data$..value)
     } else {
       res <- dplyr::summarise(
@@ -193,45 +194,31 @@ lencode_calc <- function(x, y, wts = NULL) {
         ..value = stats::weighted.mean(..value, wts),
         .by = ..level
       )
+
       unseen_value <- stats::weighted.mean(data$..value, data$wts)
     }
   }
 
   if (is.factor(y) || is.character(y)) {
-    inf_estimate_p <- (2 * nrow(data) - 1) / (2 * nrow(data))
-    inf_estimate_log_odds <- log(inf_estimate_p / (1 - inf_estimate_p))
     if (is.null(wts)) {
       res <- dplyr::summarize(
         data,
-        p = (sum(..value == levels(..value)[1])) / n(),
+        ..value = log_odds(..value),
         .by = ..level
       )
 
-      global_p <- (sum(data$..value == levels(data$..value)[1])) / nrow(data)
+      unseen_value <- log_odds(data$..value)
     } else {
-      data$wts <- as.numeric(data$wts)
       res <- dplyr::summarize(
         data,
-        p = (sum((..value == levels(..value)[1]) * wts)) / sum(wts),
+        ..value = weighted_log_odds(..value, wts),
         .by = ..level
       )
 
-      global_p <- (sum((data$..value == levels(data$..value)[1]) * data$wts)) /
-        sum(data$wts)
+      unseen_value <- weighted_log_odds(data$..value, data$wts)
     }
 
-    res <- res |>
-      dplyr::mutate(..value = log(p / (1 - p))) |>
-      dplyr::mutate(
-        ..value = dplyr::if_else(
-          is.infinite(..value),
-          inf_estimate_log_odds,
-          ..value
-        )
-      ) |>
-      dplyr::select(-p)
-
-    unseen_value <- log(global_p / (1 - global_p))
+    res$..value <- adjust_infinities(res$..value, n = nrow(data))
   }
 
   unseen <- tibble::new_tibble(
@@ -242,6 +229,24 @@ lencode_calc <- function(x, y, wts = NULL) {
   )
 
   dplyr::bind_rows(res, unseen)
+}
+
+log_odds <- function(x) {
+  p <- (sum(x == levels(x)[1])) / length(x)
+  log(p / (1 - p))
+}
+
+weighted_log_odds <- function(x, wts) {
+  wts <- as.numeric(wts)
+  p <- (sum((x == levels(x)[1]) * wts)) / sum(wts)
+  log(p / (1 - p))
+}
+
+adjust_infinities <- function(x, n) {
+  p <- (2 * n - 1) / (2 * n)
+  log_odds <- log(p / (1 - p))
+
+  dplyr::if_else(is.infinite(x), log_odds, x)
 }
 
 #' @export
