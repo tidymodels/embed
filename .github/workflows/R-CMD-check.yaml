@@ -53,7 +53,9 @@ jobs:
 
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
-          extra-packages: any::rcmdcheck
+          extra-packages: 
+            any::rcmdcheck,
+            reticulate=?ignore-before-r=4.2.0
           needs: check
 
       - uses: actions/setup-python@v4
@@ -62,9 +64,11 @@ jobs:
 
       - name: Install TensorFlow
         run: |
-          reticulate::virtualenv_create('r-reticulate', python='3.11')
-          reticulate::use_virtualenv('r-reticulate')
-          tensorflow::install_tensorflow(version='2.16')
+          if (rlang::is_installed("reticulate")) {
+            reticulate::virtualenv_create('r-reticulate', python='3.11')
+            reticulate::use_virtualenv('r-reticulate')
+            tensorflow::install_tensorflow(version='2.16')
+          }
         shell: Rscript {0}
         
       - uses: r-lib/actions/check-r-package@v2
