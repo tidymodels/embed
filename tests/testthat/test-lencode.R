@@ -302,6 +302,7 @@ test_that("non occurring events doesn't result in infinities - case weights", {
   expect_identical(res$level, c("a", "b", "..new"))
 })
 
+
 test_that("bad args", {
   three_class <- iris
   three_class$fac <- rep(letters[1:3], 50)
@@ -311,6 +312,13 @@ test_that("bad args", {
     error = TRUE,
     recipe(Species ~ ., data = three_class) |>
       step_lencode(Sepal.Length, outcome = vars(Species)) |>
+      prep(training = three_class, retain = TRUE)
+  )
+
+  expect_snapshot(
+    error = TRUE,
+    recipe(Species ~ ., data = three_class) |>
+      step_lencode(Species, outcome = vars(logical)) |>
       prep(training = three_class, retain = TRUE)
   )
 })

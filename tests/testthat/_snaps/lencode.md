@@ -34,6 +34,19 @@
       x All columns selected for the step should be string, factor, or ordered.
       * 1 double variable found: `Sepal.Length`
 
+---
+
+    Code
+      prep(step_lencode(recipe(Species ~ ., data = three_class), Species, outcome = vars(
+        logical)), training = three_class, retain = TRUE)
+    Condition
+      Error in `step_lencode()`:
+      Caused by error in `purrr::map()`:
+      i In index: 1.
+      i With name: Species.
+      Caused by error in `.f()`:
+      ! Only works nominal or numeric `outcome`, not a logical vector.
+
 # case weights
 
     Code

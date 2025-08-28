@@ -195,7 +195,7 @@ lencode_calc <- function(x, y, wts = NULL) {
         ..value = unseen_value
       )
     )
-  } else {
+  } else if (is.factor(y) || is.character(y)) {
     inf_estimate_p <- (2 * nrow(data) - 1) / (2 * nrow(data))
     inf_estimate_log_odds <- log(inf_estimate_p / (1 - inf_estimate_p))
     if (is.null(wts)) {
@@ -240,6 +240,11 @@ lencode_calc <- function(x, y, wts = NULL) {
         ..level = "..new",
         ..value = log(global_p / (1 - global_p))
       )
+    )
+  } else {
+    cli::cli_abort(
+      "Only works nominal or numeric {.arg outcome}, 
+      not {.obj_type_friendly {y}}."
     )
   }
 
