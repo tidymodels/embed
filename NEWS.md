@@ -2,6 +2,8 @@
 
 * `step_feature_hash()` has been fully deprecated in favor of `textrecipes::step_dummy_hash()`. (#253)
 
+* Adds `step_lencode()` to perform analytical likelihood encoding. (#258)
+
 # embed 1.1.5
 
 ## Improvements
