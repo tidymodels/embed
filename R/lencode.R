@@ -180,44 +180,29 @@ lencode_calc <- function(x, y, wts = NULL) {
   )
 
   if (is.numeric(y)) {
-    if (is.null(wts)) {
-      res <- dplyr::summarise(
-        data,
-        ..value = mean(..value),
-        .by = ..level
-      )
-
-      unseen_value <- mean(data$..value)
-    } else {
-      res <- dplyr::summarise(
-        data,
-        ..value = stats::weighted.mean(..value, wts),
-        .by = ..level
-      )
-
-      unseen_value <- stats::weighted.mean(data$..value, data$wts)
-    }
+    fns <- list("weighted" = stats::weighted.mean, "unweighted" = mean)
+  }
+  if (is.factor(y) || is.character(y)) {
+    fns <- list("weighted" = weighted_log_odds, "unweighted" = log_odds)
   }
 
+  if (is.null(wts)) {
+    call <- rlang::call2(fns$unweighted)
+    call <- rlang::call_modify(call, quote(..value))
+  } else {
+    call <- rlang::call2(fns$weighted)
+    call <- rlang::call_modify(call, quote(..value), quote(wts))
+  }
+
+  res <- dplyr::summarise(
+    data,
+    ..value := {{ call }},
+    .by = ..level
+  )
+
+  unseen_value <- rlang::eval_tidy(call, data)
+
   if (is.factor(y) || is.character(y)) {
-    if (is.null(wts)) {
-      res <- dplyr::summarize(
-        data,
-        ..value = log_odds(..value),
-        .by = ..level
-      )
-
-      unseen_value <- log_odds(data$..value)
-    } else {
-      res <- dplyr::summarize(
-        data,
-        ..value = weighted_log_odds(..value, wts),
-        .by = ..level
-      )
-
-      unseen_value <- weighted_log_odds(data$..value, data$wts)
-    }
-
     res$..value <- adjust_infinities(res$..value, n = nrow(data))
   }
 
