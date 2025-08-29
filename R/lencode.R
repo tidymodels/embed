@@ -202,14 +202,6 @@ lencode_calc <- function(x, y, wts = NULL) {
 
   unseen_value <- rlang::eval_tidy(call, data)
 
-  if (is.numeric(y)) {
-    if (is.null(wts)) {
-      call <- rlang::call2(mean)
-    } else {
-      call <- rlang::call2(stats::weighted.mean)
-    }
-  }
-
   if (is.factor(y) || is.character(y)) {
     res$..value <- adjust_infinities(res$..value, n = nrow(data))
   }
