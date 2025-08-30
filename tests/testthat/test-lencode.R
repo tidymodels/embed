@@ -1,6 +1,6 @@
 test_that("factor outcome - factor predictor", {
   class_test <- recipe(x2 ~ ., data = ex_dat) |>
-    step_lencode(x3, outcome = vars(x2), id = "id") |>
+    step_lencode(x3, outcome = vars(x2), smooth = FALSE, id = "id") |>
     prep(training = ex_dat, retain = TRUE)
   tr_values <- bake(class_test, new_data = NULL)$x3
   new_values <- bake(class_test, new_data = new_dat)
@@ -59,7 +59,7 @@ test_that("factor outcome - factor predictor", {
 
 test_that("factor outcome - character predictor", {
   class_test <- recipe(x2 ~ ., data = ex_dat_ch) |>
-    step_lencode(x3, outcome = vars(x2)) |>
+    step_lencode(x3, outcome = vars(x2), smooth = FALSE) |>
     prep(training = ex_dat_ch, retain = TRUE)
   tr_values <- bake(class_test, new_data = NULL)$x3
   expect_snapshot(
@@ -258,7 +258,7 @@ test_that("non occurring events doesn't result in infinities", {
   )
 
   res <- recipe(outcome ~ ., data = data) |>
-    step_lencode(predictor, outcome = vars(outcome)) |>
+    step_lencode(predictor, outcome = vars(outcome), smooth = FALSE) |>
     prep() |>
     tidy(1)
 
@@ -284,7 +284,7 @@ test_that("non occurring events doesn't result in infinities - case weights", {
   )
 
   res <- recipe(outcome ~ ., data = data) |>
-    step_lencode(predictor, outcome = vars(outcome)) |>
+    step_lencode(predictor, outcome = vars(outcome), smooth = FALSE) |>
     prep() |>
     tidy(1)
 
@@ -330,7 +330,7 @@ test_that("case weights", {
     mutate(wts = importance_weights(wts_int))
 
   class_test <- recipe(x2 ~ ., data = ex_dat_cw) |>
-    step_lencode(x3, outcome = vars(x2), id = "id") |>
+    step_lencode(x3, outcome = vars(x2), smooth = FALSE, id = "id") |>
     prep(training = ex_dat_cw, retain = TRUE)
 
   ref_mod <- glm(
@@ -376,7 +376,7 @@ test_that("case weights", {
 
 test_that("bake method errors when needed non-standard role columns are missing", {
   rec <- recipe(x2 ~ ., data = ex_dat) |>
-    step_lencode(x3, outcome = vars(x2)) |>
+    step_lencode(x3, outcome = vars(x2), smooth = FALSE) |>
     update_role(x3, new_role = "potato") |>
     update_role_requirements(role = "potato", bake = FALSE)
 
@@ -431,8 +431,8 @@ test_that("empty selection tidy method works", {
 })
 
 test_that("printing", {
-  rec <- recipe(x2 ~ ., data = ex_dat_ch) |>
-    step_lencode(x3, outcome = vars(x2))
+  rec <- recipe(x1 ~ ., data = ex_dat_ch) |>
+    step_lencode(x3, outcome = vars(x1))
 
   expect_snapshot(print(rec))
   expect_snapshot(prep(rec))

@@ -13,6 +13,10 @@
 #' @param role Not used by this step since no new variables are created.
 #' @param outcome A call to `vars` to specify which variable is used as the
 #'   outcome. Only numeric and two-level factors are currently supported.
+#' @param smooth A logical, default to `TRUE`, should the estimates of groups
+#'   with low counts be pulled towards the gobal estimate? Defaults to `TRUE`.
+#'   See Details for how this is done. This is also known as partial pooling or
+#'   shrinkage. Only works for numeric outcomes.
 #' @param mapping A list of tibble results that define the encoding. This is
 #'   `NULL` until the step is trained by [recipes::prep()].
 #' @param skip A logical. Should the step be skipped when the recipe is baked by
@@ -50,6 +54,8 @@
 #' `p = (2 * nrow(data) - 1) / (2 * nrow(data))` to avoid infinity that would
 #' happen by taking the log of `0`.
 #'
+#' If `smooth = TRUE`,
+#'
 #' # Tidying
 #'
 #' When you [`tidy()`][recipes::tidy.recipe] this step, a tibble is returned
@@ -83,7 +89,7 @@
 #' set.seed(1)
 #' grants_other <- sample_n(grants_other, 500)
 #' reencoded <- recipe(class ~ sponsor_code, data = grants_other) |>
-#'   step_lencode(sponsor_code, outcome = vars(class)) |>
+#'   step_lencode(sponsor_code, outcome = vars(class), smooth = FALSE) |>
 #'   prep()
 #'
 #' bake(reencoded, grants_other)
@@ -97,6 +103,7 @@ step_lencode <-
     role = NA,
     trained = FALSE,
     outcome = NULL,
+    smooth = TRUE,
     mapping = NULL,
     skip = FALSE,
     id = rand_id("lencode")
@@ -111,6 +118,7 @@ step_lencode <-
         role = role,
         trained = trained,
         outcome = outcome,
+        smooth = smooth,
         mapping = mapping,
         skip = skip,
         id = id,
@@ -120,13 +128,24 @@ step_lencode <-
   }
 
 step_lencode_new <-
-  function(terms, role, trained, outcome, mapping, skip, id, case_weights) {
+  function(
+    terms,
+    role,
+    trained,
+    outcome,
+    smooth,
+    mapping,
+    skip,
+    id,
+    case_weights
+  ) {
     step(
       subclass = "lencode",
       terms = terms,
       role = role,
       trained = trained,
       outcome = outcome,
+      smooth = smooth,
       mapping = mapping,
       skip = skip,
       id = id,
@@ -151,7 +170,8 @@ prep.step_lencode <- function(x, training, info = NULL, ...) {
       training[, col_names],
       lencode_calc,
       y = training[[y_name]],
-      wts = wts
+      wts = wts,
+      smooth = x$smooth
     )
   } else {
     res <- list()
@@ -161,13 +181,14 @@ prep.step_lencode <- function(x, training, info = NULL, ...) {
     role = x$role,
     trained = TRUE,
     outcome = x$outcome,
+    smooth = x$smooth,
     mapping = res,
     skip = x$skip,
     id = x$id,
     case_weights = were_weights_used
   )
 }
-lencode_calc <- function(x, y, wts = NULL) {
+lencode_calc <- function(x, y, wts = NULL, smooth = TRUE) {
   if (!is.numeric(y) && !is.factor(y) && !is.character(y)) {
     cli::cli_abort(
       "Only works nominal or numeric {.arg outcome}, 
@@ -204,6 +225,33 @@ lencode_calc <- function(x, y, wts = NULL) {
 
   if (is.factor(y) || is.character(y)) {
     res$..value <- adjust_infinities(res$..value, n = nrow(data))
+  }
+
+  if (smooth) {
+    if (!is.numeric(y)) {
+      cli::cli_abort("{.code smooth = TRUE} only works for numeric outcomes.")
+    }
+
+    global_var <- var(data$..value)
+    global_mean <- mean(data$..value)
+
+    counts <- dplyr::summarise(
+      data,
+      n = dplyr::n(),
+      var_outcome = var(..value),
+      .by = ..level
+    )
+
+    res <- dplyr::left_join(res, counts, by = "..level")
+
+    res <- res |>
+      dplyr::mutate(
+        ..value = (n / global_var) /
+          (n / global_var + 1 / var_outcome) *
+          ..value +
+          (1 / var_outcome) / (n / global_var + 1 / var_outcome) * global_mean
+      ) |>
+      dplyr::select(-n, -var_outcome)
   }
 
   unseen <- tibble::new_tibble(

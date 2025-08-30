@@ -36,7 +36,8 @@ utils::globalVariables(
     "where",
     "woe",
     "y_name",
-    "Yes"
+    "Yes",
+    "var_outcome"
   )
 )
 
