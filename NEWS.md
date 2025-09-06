@@ -4,6 +4,8 @@
 
 * Adds `step_lencode()` to perform analytical likelihood encoding. (#258)
 
+* Adds `smooth` argument to `step_lencode()` to allow for partial pooling in numeric outcomes. (#261)
+
 # embed 1.1.5
 
 ## Improvements
