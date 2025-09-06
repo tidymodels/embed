@@ -80,7 +80,16 @@ If no or all occurances happens then the log odds is calculated using
 \code{p = (2 * nrow(data) - 1) / (2 * nrow(data))} to avoid infinity that would
 happen by taking the log of \code{0}.
 
-If \code{smooth = TRUE},
+For numeric outcomes where \code{smooth = TRUE}, the following adjustment is done.
+
+\deqn{
+estimate = (n / global_{var}) /
+(n / global_{var} + 1 / outcome_{var}) *
+ estimate +
+ (1 / outcome_{var}) / (n / global_{var} + 1 / outcome_{var}) * global_{mean}
+}
+
+Where \eqn{n} is the number of observations in the group.
 }
 \section{Tidying}{
 When you \code{\link[recipes:tidy.recipe]{tidy()}} this step, a tibble is returned

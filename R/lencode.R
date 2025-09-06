@@ -54,7 +54,16 @@
 #' `p = (2 * nrow(data) - 1) / (2 * nrow(data))` to avoid infinity that would
 #' happen by taking the log of `0`.
 #'
-#' If `smooth = TRUE`,
+#' For numeric outcomes where `smooth = TRUE`, the following adjustment is done.
+#'
+#' \deqn{
+#' estimate = (n / global_{var}) /
+#' (n / global_{var} + 1 / outcome_{var}) *
+#'  estimate +
+#'  (1 / outcome_{var}) / (n / global_{var} + 1 / outcome_{var}) * global_{mean}
+#' }
+#'
+#' Where \eqn{n} is the number of observations in the group.
 #'
 #' # Tidying
 #'
