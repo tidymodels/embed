@@ -40,9 +40,10 @@
 <h2 class="pkg-version" data-toc-text="development version" id="embed-development-version">embed (development version)<a class="anchor" aria-label="anchor" href="#embed-development-version"></a></h2>
 <ul><li><p><code><a href="../reference/step_feature_hash.html">step_feature_hash()</a></code> has been fully deprecated in favor of <code>textrecipes::step_dummy_hash()</code>. (<a href="https://github.com/tidymodels/embed/issues/253" class="external-link">#253</a>)</p></li>
 <li><p>Adds <code><a href="../reference/step_lencode.html">step_lencode()</a></code> to perform analytical likelihood encoding. (<a href="https://github.com/tidymodels/embed/issues/258" class="external-link">#258</a>)</p></li>
+<li><p>Adds <code>smooth</code> argument to <code><a href="../reference/step_lencode.html">step_lencode()</a></code> to allow for partial pooling in numeric outcomes. (<a href="https://github.com/tidymodels/embed/issues/261" class="external-link">#261</a>)</p></li>
 </ul></div>
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="1.1.5" id="embed-115">embed 1.1.5<a class="anchor" aria-label="anchor" href="#embed-115"></a></h2><p class="text-muted">CRAN release: 2025-01-22</p>
+<h2 class="pkg-version" data-toc-text="1.1.5" id="embed-115">embed 1.1.5<a class="anchor" aria-label="anchor" href="#embed-115"></a></h2>
 <div class="section level3">
 <h3 id="improvements-1-1-5">Improvements<a class="anchor" aria-label="anchor" href="#improvements-1-1-5"></a></h3>
 <ul><li><p><code><a href="../reference/step_umap.html">step_umap()</a></code> has tunable <code>initial</code> and <code>target_weight</code> arguments. (<a href="https://github.com/tidymodels/embed/issues/223" class="external-link">#223</a>, <a href="https://github.com/tidymodels/embed/issues/222" class="external-link">#222</a>)</p></li>
@@ -50,7 +51,7 @@
 </ul></div>
 </div>
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="1.1.4" id="embed-114">embed 1.1.4<a class="anchor" aria-label="anchor" href="#embed-114"></a></h2><p class="text-muted">CRAN release: 2024-03-20</p>
+<h2 class="pkg-version" data-toc-text="1.1.4" id="embed-114">embed 1.1.4<a class="anchor" aria-label="anchor" href="#embed-114"></a></h2>
 <div class="section level3">
 <h3 id="improvements-1-1-4">Improvements<a class="anchor" aria-label="anchor" href="#improvements-1-1-4"></a></h3>
 <ul><li><p><code><a href="../reference/step_umap.html">step_umap()</a></code> has gained <code>initial</code> and <code>target_weight</code> arguments. (<a href="https://github.com/tidymodels/embed/issues/213" class="external-link">#213</a>)</p></li>
@@ -60,12 +61,12 @@
 </ul></div>
 </div>
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="1.1.3" id="embed-113">embed 1.1.3<a class="anchor" aria-label="anchor" href="#embed-113"></a></h2><p class="text-muted">CRAN release: 2023-10-28</p>
+<h2 class="pkg-version" data-toc-text="1.1.3" id="embed-113">embed 1.1.3<a class="anchor" aria-label="anchor" href="#embed-113"></a></h2>
 <ul><li><p><code><a href="../reference/step_collapse_stringdist.html">step_collapse_stringdist()</a></code> will now return predictors as factors. (<a href="https://github.com/tidymodels/embed/issues/204" class="external-link">#204</a>)</p></li>
 <li><p>Fixed regression from 1.1.2 in <code><a href="../reference/step_lencode_glm.html">step_lencode_glm()</a></code> where it couldn’t be used on multiple columns.</p></li>
 </ul></div>
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="1.1.2" id="embed-112">embed 1.1.2<a class="anchor" aria-label="anchor" href="#embed-112"></a></h2><p class="text-muted">CRAN release: 2023-08-17</p>
+<h2 class="pkg-version" data-toc-text="1.1.2" id="embed-112">embed 1.1.2<a class="anchor" aria-label="anchor" href="#embed-112"></a></h2>
 <div class="section level3">
 <h3 id="improvements-1-1-2">Improvements<a class="anchor" aria-label="anchor" href="#improvements-1-1-2"></a></h3>
 <ul><li><p>The <code>keep_original_cols</code> argument has been added to <code><a href="../reference/step_woe.html">step_woe()</a></code>. This change should mean that every step that produces new columns has the <code>keep_original_cols</code> argument. (<a href="https://github.com/tidymodels/embed/issues/194" class="external-link">#194</a>)</p></li>
@@ -78,7 +79,7 @@
 </ul></div>
 </div>
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="1.1.1" id="embed-111">embed 1.1.1<a class="anchor" aria-label="anchor" href="#embed-111"></a></h2><p class="text-muted">CRAN release: 2023-05-30</p>
+<h2 class="pkg-version" data-toc-text="1.1.1" id="embed-111">embed 1.1.1<a class="anchor" aria-label="anchor" href="#embed-111"></a></h2>
 <div class="section level3">
 <h3 id="bug-fixes-1-1-1">Bug Fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-1-1-1"></a></h3>
 <ul><li><p>Fixed bug where <code><a href="../reference/step_pca_truncated.html">step_pca_truncated()</a></code> didn’t work with zero selection. (<a href="https://github.com/tidymodels/embed/issues/181" class="external-link">#181</a>)</p></li>
@@ -86,7 +87,7 @@
 </ul></div>
 </div>
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="1.1.0" id="embed-110">embed 1.1.0<a class="anchor" aria-label="anchor" href="#embed-110"></a></h2><p class="text-muted">CRAN release: 2023-04-14</p>
+<h2 class="pkg-version" data-toc-text="1.1.0" id="embed-110">embed 1.1.0<a class="anchor" aria-label="anchor" href="#embed-110"></a></h2>
 <div class="section level3">
 <h3 id="new-steps-1-1-0">New Steps<a class="anchor" aria-label="anchor" href="#new-steps-1-1-0"></a></h3>
 <ul><li>
@@ -103,13 +104,13 @@
 </ul></div>
 </div>
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="1.0.0" id="embed-100">embed 1.0.0<a class="anchor" aria-label="anchor" href="#embed-100"></a></h2><p class="text-muted">CRAN release: 2022-07-02</p>
+<h2 class="pkg-version" data-toc-text="1.0.0" id="embed-100">embed 1.0.0<a class="anchor" aria-label="anchor" href="#embed-100"></a></h2>
 <ul><li><p><code><a href="../reference/step_collapse_cart.html">step_collapse_cart()</a></code> can pool a predictor’s factor levels using a tree-based method.</p></li>
 <li><p><code><a href="../reference/step_collapse_stringdist.html">step_collapse_stringdist()</a></code> can pool a predictor’s factor levels using string distances.</p></li>
 <li><p>Case weights support have been added to <code><a href="../reference/step_discretize_cart.html">step_discretize_cart()</a></code>, <code><a href="../reference/step_discretize_xgb.html">step_discretize_xgb()</a></code>, <code><a href="../reference/step_lencode_bayes.html">step_lencode_bayes()</a></code>, <code><a href="../reference/step_lencode_glm.html">step_lencode_glm()</a></code>, and <code><a href="../reference/step_lencode_mixed.html">step_lencode_mixed()</a></code>.</p></li>
 </ul></div>
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.2.0" id="embed-020">embed 0.2.0<a class="anchor" aria-label="anchor" href="#embed-020"></a></h2><p class="text-muted">CRAN release: 2022-04-13</p>
+<h2 class="pkg-version" data-toc-text="0.2.0" id="embed-020">embed 0.2.0<a class="anchor" aria-label="anchor" href="#embed-020"></a></h2>
 <ul><li><p><code><a href="../reference/step_embed.html">step_embed()</a></code> now correctly defaults to have a random id with the word “embed”. (<a href="https://github.com/tidymodels/embed/issues/102" class="external-link">#102</a>)</p></li>
 <li><p><code><a href="../reference/step_feature_hash.html">step_feature_hash()</a></code> is soft deprecated in embed in favor of <code>step_dummy_hash()</code> in textrecipes. (<a href="https://github.com/tidymodels/embed/issues/95" class="external-link">#95</a>)</p></li>
 <li><p>Steps now have a dedicated subsection detailing what happens when <code><a href="https://generics.r-lib.org/reference/tidy.html" class="external-link">tidy()</a></code> is applied. (<a href="https://github.com/tidymodels/embed/issues/105" class="external-link">#105</a>)</p></li>
@@ -117,7 +118,7 @@
 <li><p>Fixed a bug where <code><a href="../reference/woe_table.html">woe_table()</a></code> and <code><a href="../reference/step_woe.html">step_woe()</a></code> didn’t respect the factor levels of the outcome. (109)</p></li>
 </ul></div>
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.1.5" id="embed-015">embed 0.1.5<a class="anchor" aria-label="anchor" href="#embed-015"></a></h2><p class="text-muted">CRAN release: 2021-11-24</p>
+<h2 class="pkg-version" data-toc-text="0.1.5" id="embed-015">embed 0.1.5<a class="anchor" aria-label="anchor" href="#embed-015"></a></h2>
 <ul><li><p>Re-licensed package from GPL-2 to MIT. See <a href="https://github.com/tidymodels/embed/issues/78" class="external-link">consent from copyright holders here</a>.</p></li>
 <li><p>The tunable parameter ranges for <code><a href="../reference/step_umap.html">step_umap()</a></code> were changed for <code>neighbors</code>, <code>num_comp</code>, and <code>min_dist</code> to prevent <code>uwot</code> segmentation faults. The step also check to see if the data dimensions are consistent with the argument values.</p></li>
 <li><p>Two new PCA steps were added, each using sparse techniques for estimation: <code><a href="../reference/step_pca_sparse.html">step_pca_sparse()</a></code> and <code><a href="../reference/step_pca_sparse_bayes.html">step_pca_sparse_bayes()</a></code>.</p></li>
@@ -127,26 +128,26 @@
 <li><p><code><a href="../reference/step_woe.html">step_woe()</a></code> no longer warns about high-cardinality predictors when the recipe is estimated. Instead it warns when categories have fewer than 10 data points in the training set. (<a href="https://github.com/tidymodels/embed/issues/74" class="external-link">#74</a>)</p></li>
 </ul></div>
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.1.4" id="embed-014">embed 0.1.4<a class="anchor" aria-label="anchor" href="#embed-014"></a></h2><p class="text-muted">CRAN release: 2021-01-16</p>
+<h2 class="pkg-version" data-toc-text="0.1.4" id="embed-014">embed 0.1.4<a class="anchor" aria-label="anchor" href="#embed-014"></a></h2>
 <ul><li><p>Minor release with changes to test for cases when CRAN cannot get <code>xgboost</code> to work on their Solaris configuration.</p></li>
 <li><p><code>lme4</code> and <code>rstanarm</code> are now in the Suggests list so they are not automatically installed with <code>embed</code>. A message is written to the console if those packages are missing and their associated steps functions are invoked.</p></li>
 </ul></div>
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.1.3" id="embed-013">embed 0.1.3<a class="anchor" aria-label="anchor" href="#embed-013"></a></h2><p class="text-muted">CRAN release: 2020-11-12</p>
+<h2 class="pkg-version" data-toc-text="0.1.3" id="embed-013">embed 0.1.3<a class="anchor" aria-label="anchor" href="#embed-013"></a></h2>
 <ul><li>More changes to enable better parallel processing on windows.</li>
 </ul></div>
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.1.2" id="embed-012">embed 0.1.2<a class="anchor" aria-label="anchor" href="#embed-012"></a></h2><p class="text-muted">CRAN release: 2020-10-17</p>
+<h2 class="pkg-version" data-toc-text="0.1.2" id="embed-012">embed 0.1.2<a class="anchor" aria-label="anchor" href="#embed-012"></a></h2>
 <ul><li>Changes to enable better parallel processing on windows.</li>
 </ul></div>
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.1.1" id="embed-011">embed 0.1.1<a class="anchor" aria-label="anchor" href="#embed-011"></a></h2><p class="text-muted">CRAN release: 2020-07-03</p>
+<h2 class="pkg-version" data-toc-text="0.1.1" id="embed-011">embed 0.1.1<a class="anchor" aria-label="anchor" href="#embed-011"></a></h2>
 <ul><li><p>Changes to tests to get out of archive jail.</p></li>
 <li><p>Updated the plumbing behind <code><a href="../reference/step_woe.html">step_woe()</a></code>.</p></li>
 <li><p>Due to a bug in <code>tensorflow</code>, added a “warm start” to instigate a TF session if one does not currently exist.</p></li>
 </ul></div>
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.1.0" id="embed-010">embed 0.1.0<a class="anchor" aria-label="anchor" href="#embed-010"></a></h2><p class="text-muted">CRAN release: 2020-05-25</p>
+<h2 class="pkg-version" data-toc-text="0.1.0" id="embed-010">embed 0.1.0<a class="anchor" aria-label="anchor" href="#embed-010"></a></h2>
 <ul><li>Changes for <code>dplyr</code> 1.0.0</li>
 </ul><div class="section level3">
 <h3 id="new-steps-0-1-0">New Steps<a class="anchor" aria-label="anchor" href="#new-steps-0-1-0"></a></h3>
@@ -164,24 +165,24 @@
 </ul></div>
 </div>
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.0.6" id="embed-006">embed 0.0.6<a class="anchor" aria-label="anchor" href="#embed-006"></a></h2><p class="text-muted">CRAN release: 2020-03-17</p>
+<h2 class="pkg-version" data-toc-text="0.0.6" id="embed-006">embed 0.0.6<a class="anchor" aria-label="anchor" href="#embed-006"></a></h2>
 <ul><li>Small changes for base R’s <code>stringsAsFactors</code> change.</li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.0.5" id="embed-005">
-<code>embed</code> 0.0.5<a class="anchor" aria-label="anchor" href="#embed-005"></a></h2><p class="text-muted">CRAN release: 2020-01-07</p>
+<code>embed</code> 0.0.5<a class="anchor" aria-label="anchor" href="#embed-005"></a></h2>
 <ul><li><p>The example data are now in the <code>modeldata</code> package.</p></li>
 <li><p>Small TF updates to <code><a href="../reference/step_embed.html">step_embed()</a></code>.</p></li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.0.4" id="embed-004">
-<code>embed</code> 0.0.4<a class="anchor" aria-label="anchor" href="#embed-004"></a></h2><p class="text-muted">CRAN release: 2019-09-15</p>
+<code>embed</code> 0.0.4<a class="anchor" aria-label="anchor" href="#embed-004"></a></h2>
 <ul><li><p>Methods were added for a future generic called <code><a href="https://generics.r-lib.org/reference/tunable.html" class="external-link">tunable()</a></code>. This outlines which parameters in a step can/could be tuned.</p></li>
 <li><p>Small updates to work with different versions of <code>tidyr</code>.</p></li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.0.3" id="embed-003">
-<code>embed</code> 0.0.3<a class="anchor" aria-label="anchor" href="#embed-003"></a></h2><p class="text-muted">CRAN release: 2019-07-12</p>
+<code>embed</code> 0.0.3<a class="anchor" aria-label="anchor" href="#embed-003"></a></h2>
 <div class="section level3">
 <h3 id="new-steps-0-0-3">New Steps<a class="anchor" aria-label="anchor" href="#new-steps-0-0-3"></a></h3>
 <ul><li>
@@ -192,7 +193,7 @@
 </div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.0.2" id="embed-002">
-<code>embed</code> 0.0.2<a class="anchor" aria-label="anchor" href="#embed-002"></a></h2><p class="text-muted">CRAN release: 2018-11-19</p>
+<code>embed</code> 0.0.2<a class="anchor" aria-label="anchor" href="#embed-002"></a></h2>
 <p>A mostly maintainence release to be compatible with version 0.1.3 of <code>recipes</code>.</p>
 <div class="section level3">
 <h3 id="other-changes-0-0-2">Other Changes:<a class="anchor" aria-label="anchor" href="#other-changes-0-0-2"></a></h3>
@@ -202,7 +203,7 @@
 </div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.0.1" id="embed-001">
-<code>embed</code> 0.0.1<a class="anchor" aria-label="anchor" href="#embed-001"></a></h2><p class="text-muted">CRAN release: 2018-09-14</p>
+<code>embed</code> 0.0.1<a class="anchor" aria-label="anchor" href="#embed-001"></a></h2>
 <p>First CRAN version</p>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

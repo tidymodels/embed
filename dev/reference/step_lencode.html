@@ -55,6 +55,7 @@ analytically.</p>
 <span>  role <span class="op">=</span> <span class="cn">NA</span>,</span>
 <span>  trained <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  outcome <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  smooth <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  mapping <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  skip <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  id <span class="op">=</span> <span class="fu"><a href="https://recipes.tidymodels.org/reference/rand_id.html" class="external-link">rand_id</a></span><span class="op">(</span><span class="st">"lencode"</span><span class="op">)</span></span>
@@ -89,6 +90,13 @@ been estimated.</p></dd>
 <dt id="arg-outcome">outcome<a class="anchor" aria-label="anchor" href="#arg-outcome"></a></dt>
 <dd><p>A call to <code>vars</code> to specify which variable is used as the
 outcome. Only numeric and two-level factors are currently supported.</p></dd>
+
+
+<dt id="arg-smooth">smooth<a class="anchor" aria-label="anchor" href="#arg-smooth"></a></dt>
+<dd><p>A logical, default to <code>TRUE</code>, should the estimates of groups
+with low counts be pulled towards the gobal estimate? Defaults to <code>TRUE</code>.
+See Details for how this is done. This is also known as partial pooling or
+shrinkage. Only works for numeric outcomes.</p></dd>
 
 
 <dt id="arg-mapping">mapping<a class="anchor" aria-label="anchor" href="#arg-mapping"></a></dt>
@@ -131,6 +139,14 @@ If case weights are used then a weighted log odds is calculated.</p>
 <p>If no or all occurances happens then the log odds is calculated using
 <code>p = (2 * nrow(data) - 1) / (2 * nrow(data))</code> to avoid infinity that would
 happen by taking the log of <code>0</code>.</p>
+<p>For numeric outcomes where <code>smooth = TRUE</code>, the following adjustment is done.</p>
+<p>$$
+estimate = (n / global_{var}) /
+(n / global_{var} + 1 / outcome_{var}) *
+ estimate +
+ (1 / outcome_{var}) / (n / global_{var} + 1 / outcome_{var}) * global_{mean}
+$$</p>
+<p>Where \(n\) is the number of observations in the group.</p>
     </div>
     <div class="section level2">
     <h2 id="tidying">Tidying<a class="anchor" aria-label="anchor" href="#tidying"></a></h2>
@@ -179,7 +195,7 @@ Modeling," arXiv:1611.09477</p>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">grants_other</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/sample_n.html" class="external-link">sample_n</a></span><span class="op">(</span><span class="va">grants_other</span>, <span class="fl">500</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">reencoded</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://recipes.tidymodels.org/reference/recipe.html" class="external-link">recipe</a></span><span class="op">(</span><span class="va">class</span> <span class="op">~</span> <span class="va">sponsor_code</span>, data <span class="op">=</span> <span class="va">grants_other</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
-<span class="r-in"><span>  <span class="fu">step_lencode</span><span class="op">(</span><span class="va">sponsor_code</span>, outcome <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html" class="external-link">vars</a></span><span class="op">(</span><span class="va">class</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
+<span class="r-in"><span>  <span class="fu">step_lencode</span><span class="op">(</span><span class="va">sponsor_code</span>, outcome <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html" class="external-link">vars</a></span><span class="op">(</span><span class="va">class</span><span class="op">)</span>, smooth <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://recipes.tidymodels.org/reference/prep.html" class="external-link">prep</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://recipes.tidymodels.org/reference/bake.html" class="external-link">bake</a></span><span class="op">(</span><span class="va">reencoded</span>, <span class="va">grants_other</span><span class="op">)</span></span></span>
