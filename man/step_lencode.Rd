@@ -11,6 +11,7 @@ step_lencode(
   role = NA,
   trained = FALSE,
   outcome = NULL,
+  smooth = TRUE,
   mapping = NULL,
   skip = FALSE,
   id = rand_id("lencode")
@@ -32,6 +33,11 @@ been estimated.}
 
 \item{outcome}{A call to \code{vars} to specify which variable is used as the
 outcome. Only numeric and two-level factors are currently supported.}
+
+\item{smooth}{A logical, default to \code{TRUE}, should the estimates of groups
+with low counts be pulled towards the gobal estimate? Defaults to \code{TRUE}.
+See Details for how this is done. This is also known as partial pooling or
+shrinkage. Only works for numeric outcomes.}
 
 \item{mapping}{A list of tibble results that define the encoding. This is
 \code{NULL} until the step is trained by \code{\link[recipes:prep]{recipes::prep()}}.}
@@ -73,6 +79,17 @@ If case weights are used then a weighted log odds is calculated.
 If no or all occurances happens then the log odds is calculated using
 \code{p = (2 * nrow(data) - 1) / (2 * nrow(data))} to avoid infinity that would
 happen by taking the log of \code{0}.
+
+For numeric outcomes where \code{smooth = TRUE}, the following adjustment is done.
+
+\deqn{
+estimate = (n / global_{var}) /
+(n / global_{var} + 1 / outcome_{var}) *
+ estimate +
+ (1 / outcome_{var}) / (n / global_{var} + 1 / outcome_{var}) * global_{mean}
+}
+
+Where \eqn{n} is the number of observations in the group.
 }
 \section{Tidying}{
 When you \code{\link[recipes:tidy.recipe]{tidy()}} this step, a tibble is returned
@@ -105,7 +122,7 @@ data(grants)
 set.seed(1)
 grants_other <- sample_n(grants_other, 500)
 reencoded <- recipe(class ~ sponsor_code, data = grants_other) |>
-  step_lencode(sponsor_code, outcome = vars(class)) |>
+  step_lencode(sponsor_code, outcome = vars(class), smooth = FALSE) |>
   prep()
 
 bake(reencoded, grants_other)
