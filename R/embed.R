@@ -124,7 +124,7 @@
 #' Francois C and Allaire JJ (2018) _Deep Learning with R_, Manning
 #'
 #' "Concatenate Embeddings for Categorical Variables with keras3"
-#' \url{https://flovv.github.io/Embeddings_with_keras3_part2/}
+#' \url{https://flovv.github.io/Embeddings_with_keras_part2/}
 #'
 #' @examplesIf !embed:::is_cran_check() && rlang::is_installed(c("modeldata", "keras3"))
 #' data(grants, package = "modeldata")

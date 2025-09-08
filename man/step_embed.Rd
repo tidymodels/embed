@@ -194,7 +194,7 @@ rec <- recipe(class ~ num_ci + sponsor_code, data = grants_other) |>
 Francois C and Allaire JJ (2018) \emph{Deep Learning with R}, Manning
 
 "Concatenate Embeddings for Categorical Variables with keras3"
-\url{https://flovv.github.io/Embeddings_with_keras3_part2/}
+\url{https://flovv.github.io/Embeddings_with_keras_part2/}
 }
 \concept{preprocessing encoding}
 \keyword{datagen}
