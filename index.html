@@ -8,8 +8,8 @@
 <title>Extra Recipes for Encoding Predictors • embed</title>
 <script src="deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="deps/Source_Sans_Pro-0.4.9/font.css" rel="stylesheet">
-<link href="deps/Source_Code_Pro-0.4.9/font.css" rel="stylesheet">
+<script src="deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="deps/Source_Sans_Pro-0.4.10/font.css" rel="stylesheet">
+<link href="deps/Source_Code_Pro-0.4.10/font.css" rel="stylesheet">
 <link href="deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="Extra Recipes for Encoding Predictors">
@@ -26,7 +26,7 @@
 
     <a class="navbar-brand me-2" href="index.html">embed</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.1.5</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.2.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -69,11 +69,11 @@
 <h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
 <p><code>embed</code> has extra steps for the <a href="https://recipes.tidymodels.org/" class="external-link"><code>recipes</code></a> package for embedding predictors into one or more numeric columns. Almost all of the preprocessing methods are <em>supervised</em>.</p>
-<p>These steps are available here in a separate package because the step dependencies, <a href="https://CRAN.r-project.org/package=rstanarm" class="external-link"><code>rstanarm</code></a>, <a href="https://CRAN.r-project.org/package=lme4" class="external-link"><code>lme4</code></a>, and <a href="https://CRAN.r-project.org/package=keras" class="external-link"><code>keras</code></a>, are fairly heavy.</p>
+<p>These steps are available here in a separate package because the step dependencies, <a href="https://CRAN.r-project.org/package=rstanarm" class="external-link"><code>rstanarm</code></a>, <a href="https://CRAN.r-project.org/package=lme4" class="external-link"><code>lme4</code></a>, and <a href="https://CRAN.r-project.org/package=keras3" class="external-link"><code>keras3</code></a>, are fairly heavy.</p>
 <p>Some steps handle categorical predictors:</p>
 <ul>
 <li><p><code><a href="reference/step_lencode_glm.html">step_lencode_glm()</a></code>, <code><a href="reference/step_lencode_bayes.html">step_lencode_bayes()</a></code>, and <code><a href="reference/step_lencode_mixed.html">step_lencode_mixed()</a></code> estimate the effect of each of the factor levels on the outcome and these estimates are used as the new encoding. The estimates are estimated by a generalized linear model. This step can be executed without pooling (via <code>glm</code>) or with partial pooling (<code>stan_glm</code> or <code>lmer</code>). Currently implemented for numeric and two-class outcomes.</p></li>
-<li><p><code><a href="reference/step_embed.html">step_embed()</a></code> uses <code><a href="https://rdrr.io/pkg/keras/man/layer_embedding.html" class="external-link">keras::layer_embedding</a></code> to translate the original <em>C</em> factor levels into a set of <em>D</em> new variables (&lt; <em>C</em>). The model fitting routine optimizes which factor levels are mapped to each of the new variables as well as the corresponding regression coefficients (i.e., neural network weights) that will be used as the new encodings.</p></li>
+<li><p><code><a href="reference/step_embed.html">step_embed()</a></code> uses <code><a href="https://keras3.posit.co/reference/layer_embedding.html" class="external-link">keras3::layer_embedding</a></code> to translate the original <em>C</em> factor levels into a set of <em>D</em> new variables (&lt; <em>C</em>). The model fitting routine optimizes which factor levels are mapped to each of the new variables as well as the corresponding regression coefficients (i.e., neural network weights) that will be used as the new encodings.</p></li>
 <li><p><code><a href="reference/step_woe.html">step_woe()</a></code> creates new variables based on weight of evidence encodings.</p></li>
 <li><p><code><a href="reference/step_feature_hash.html">step_feature_hash()</a></code> can create indicator variables using feature hashing.</p></li>
 </ul>
@@ -160,11 +160,11 @@
 <div class="developers">
 <h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
-<li>Emil Hvitfeldt <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0002-0679-1945" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
+<li>Emil Hvitfeldt <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0002-0679-1945" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a>  </li>
 <li>
-<a href="https://github.com/topepo" class="external-link">Max Kuhn</a> <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0003-2402-136X" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
+<a href="https://github.com/topepo" class="external-link">Max Kuhn</a> <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0003-2402-136X" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a>  </li>
 <li>
-<a href="https://www.posit.co" class="external-link"><img src="https://www.tidyverse.org/posit-logo.svg" alt="Posit" height="16" width="62" style="margin-bottom: 3px;"></a> <br><small class="roles"> Copyright holder, funder </small>  </li>
+<a href="https://www.posit.co" class="external-link"><img src="https://www.tidyverse.org/posit-logo.svg" alt="Posit" height="16" width="62" style="margin-bottom: 3px;"></a> <br><small class="roles"> Copyright holder, funder </small>  <a href="https://ror.org/03wc8by49" class="external-link"><img src="https://raw.githubusercontent.com/ror-community/ror-logos/main/ror-icon-rgb.svg" class="ror" alt="ROR"></a> </li>
 </ul>
 </div>
 
@@ -181,7 +181,7 @@
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
 </div>
 
   </div></footer>
