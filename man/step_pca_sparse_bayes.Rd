@@ -134,7 +134,7 @@ The underlying operation does not allow for case weights.
 }
 
 \examples{
-\dontshow{if (rlang::is_installed(c("modeldata", "ggplot2"))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (rlang::is_installed(c("modeldata", "ggplot2"))) withAutoprint(\{ # examplesIf}
 library(recipes)
 library(ggplot2)
 
@@ -167,7 +167,7 @@ Ning, B. (2021). Spike and slab Bayesian sparse principal
 component analysis. arXiv:2102.00305.
 }
 \seealso{
-\code{\link[=step_pca_sparse]{step_pca_sparse()}}
+\code{\link[=step_pca_sparse]{step_pca_sparse()}}, \code{\link[=step_pca_truncated]{step_pca_truncated()}}
 }
 \concept{pca}
 \concept{preprocessing}

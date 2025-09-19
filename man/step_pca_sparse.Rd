@@ -114,7 +114,7 @@ The underlying operation does not allow for case weights.
 }
 
 \examples{
-\dontshow{if (rlang::is_installed(c("modeldata", "ggplot2"))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (rlang::is_installed(c("modeldata", "ggplot2"))) withAutoprint(\{ # examplesIf}
 library(recipes)
 library(ggplot2)
 
@@ -142,7 +142,7 @@ tidy(ad_rec, id = "sparse pca") |>
 \dontshow{\}) # examplesIf}
 }
 \seealso{
-\code{\link[=step_pca_sparse_bayes]{step_pca_sparse_bayes()}}
+\code{\link[=step_pca_sparse_bayes]{step_pca_sparse_bayes()}}, \code{\link[=step_pca_truncated]{step_pca_truncated()}}
 }
 \concept{pca}
 \concept{preprocessing}
