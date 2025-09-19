@@ -174,11 +174,6 @@ test_that("run_xgboost for regression", {
 test_that("xgb_binning for classification", {
   skip_on_cran() # because data.table uses all cores by default
 
-  less_than_3.6 <- function() {
-    utils::compareVersion("3.5.3", as.character(getRversion())) >= 0
-  }
-  skip_if(less_than_3.6())
-
   # Usual case
   set.seed(8497)
   xgb_binning <- embed:::xgb_binning(
@@ -215,11 +210,6 @@ test_that("xgb_binning for classification", {
 test_that("xgb_binning for multi-classification", {
   skip_on_cran() # because data.table uses all cores by default
 
-  less_than_3.6 <- function() {
-    utils::compareVersion("3.5.3", as.character(getRversion())) >= 0
-  }
-  skip_if(less_than_3.6())
-
   # Usual case
   set.seed(8497)
   xgb_binning <- embed:::xgb_binning(
@@ -254,11 +244,6 @@ test_that("xgb_binning for multi-classification", {
 
 test_that("xgb_binning for regression", {
   skip_on_cran() # because data.table uses all cores by default
-
-  less_than_3.6 <- function() {
-    utils::compareVersion("3.5.3", as.character(getRversion())) >= 0
-  }
-  skip_if(less_than_3.6())
 
   set.seed(4235)
   # Usual case
@@ -418,11 +403,6 @@ test_that("step_discretize_xgb for regression", {
 
   # Skip on R < 3.6 since the rng is different.
   skip("Needs to determine why random numbers are different")
-
-  less_than_3.6 <- function() {
-    utils::compareVersion("3.5.3", as.character(getRversion())) >= 0
-  }
-  skip_if(less_than_3.6())
 
   # General use
   set.seed(83834)
