@@ -166,7 +166,7 @@ prepped recipes, see the \href{https://rstudio.github.io/bundle/}{bundle} packag
 }
 
 \examples{
-\dontshow{if (rlang::is_installed("ggplot2") && rlang::is_installed("irlba", version = "2.3.5.2")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (rlang::is_installed("ggplot2") && rlang::is_installed("irlba", version = "2.3.5.2")) withAutoprint(\{ # examplesIf}
 library(recipes)
 library(ggplot2)
 

@@ -101,7 +101,7 @@ To use them, see the documentation in \link[recipes:case_weights]{recipes::case_
 }
 
 \examples{
-\dontshow{if (rlang::is_installed("modeldata")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (rlang::is_installed("modeldata")) withAutoprint(\{ # examplesIf}
 library(recipes)
 library(dplyr)
 library(modeldata)
@@ -123,6 +123,9 @@ Explorations Newsletter, 3(1), 27-32.
 
 Zumel N and Mount J (2017) "vtreat: a data.frame Processor for Predictive
 Modeling," arXiv:1611.09477
+}
+\seealso{
+\code{\link[=step_lencode]{step_lencode()}}, \code{\link[=step_lencode_bayes]{step_lencode_bayes()}}, \code{\link[=step_lencode_glm]{step_lencode_glm()}}
 }
 \concept{preprocessing encoding}
 \keyword{datagen}

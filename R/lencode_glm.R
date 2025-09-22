@@ -78,6 +78,7 @@
 #' reencoded <- recipe(class ~ sponsor_code, data = grants_other) |>
 #'   step_lencode_glm(sponsor_code, outcome = vars(class))
 #' }
+#' @seealso [step_lencode()], [step_lencode_bayes()], [step_lencode_mixed()]
 #' @export
 step_lencode_glm <-
   function(
