@@ -83,7 +83,9 @@
 #'
 #' tidy(pca_trans, number = 2)
 #' tidy(pca_estimates, number = 2)
-#' @seealso [step_pca_sparse_bayes()], [step_pca_sparse()]
+#' @seealso [recipes::step_pca()], [recipes::step_kpca()],
+#'   [recipes::step_kpca_poly()], [recipes::step_kpca_rbf()],
+#'   [step_pca_sparse_bayes()], [step_pca_sparse()]
 #' @export
 step_pca_truncated <- function(
   recipe,

@@ -154,5 +154,7 @@ tidy(pca_estimates, number = 2)
 Jolliffe, I. T. (2010). \emph{Principal Component Analysis}. Springer.
 }
 \seealso{
+\code{\link[recipes:step_pca]{recipes::step_pca()}}, \code{\link[recipes:step_kpca]{recipes::step_kpca()}},
+\code{\link[recipes:step_kpca_poly]{recipes::step_kpca_poly()}}, \code{\link[recipes:step_kpca_rbf]{recipes::step_kpca_rbf()}},
 \code{\link[=step_pca_sparse_bayes]{step_pca_sparse_bayes()}}, \code{\link[=step_pca_sparse]{step_pca_sparse()}}
 }

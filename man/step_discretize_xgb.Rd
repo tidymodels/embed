@@ -151,5 +151,5 @@ bake(xgb_rec, credit_data_te, Assets)
 \dontshow{\}) # examplesIf}
 }
 \seealso{
-\code{\link[=step_discretize_cart]{step_discretize_cart()}}
+\code{\link[recipes:step_discretize]{recipes::step_discretize()}}, \code{\link[=step_discretize_cart]{step_discretize_cart()}}
 }

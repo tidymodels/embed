@@ -167,6 +167,8 @@ Ning, B. (2021). Spike and slab Bayesian sparse principal
 component analysis. arXiv:2102.00305.
 }
 \seealso{
+\code{\link[recipes:step_pca]{recipes::step_pca()}}, \code{\link[recipes:step_kpca]{recipes::step_kpca()}},
+\code{\link[recipes:step_kpca_poly]{recipes::step_kpca_poly()}}, \code{\link[recipes:step_kpca_rbf]{recipes::step_kpca_rbf()}},
 \code{\link[=step_pca_sparse]{step_pca_sparse()}}, \code{\link[=step_pca_truncated]{step_pca_truncated()}}
 }
 \concept{pca}

@@ -142,6 +142,8 @@ tidy(ad_rec, id = "sparse pca") |>
 \dontshow{\}) # examplesIf}
 }
 \seealso{
+\code{\link[recipes:step_pca]{recipes::step_pca()}}, \code{\link[recipes:step_kpca]{recipes::step_kpca()}},
+\code{\link[recipes:step_kpca_poly]{recipes::step_kpca_poly()}}, \code{\link[recipes:step_kpca_rbf]{recipes::step_kpca_rbf()}},
 \code{\link[=step_pca_sparse_bayes]{step_pca_sparse_bayes()}}, \code{\link[=step_pca_truncated]{step_pca_truncated()}}
 }
 \concept{pca}
