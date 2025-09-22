@@ -153,3 +153,6 @@ tidy(pca_estimates, number = 2)
 \references{
 Jolliffe, I. T. (2010). \emph{Principal Component Analysis}. Springer.
 }
+\seealso{
+\code{\link[=step_pca_sparse_bayes]{step_pca_sparse_bayes()}}, \code{\link[=step_pca_sparse]{step_pca_sparse()}}
+}

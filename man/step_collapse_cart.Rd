@@ -104,3 +104,6 @@ rec <-
 tidy(rec, number = 1)
 \dontshow{\}) # examplesIf}
 }
+\seealso{
+\code{\link[=step_collapse_stringdist]{step_collapse_stringdist()}}
+}

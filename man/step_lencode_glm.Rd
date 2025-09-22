@@ -110,5 +110,8 @@ Explorations Newsletter, 3(1), 27-32.
 Zumel N and Mount J (2017) "vtreat: a data.frame Processor for Predictive
 Modeling," arXiv:1611.09477
 }
+\seealso{
+\code{\link[=step_lencode]{step_lencode()}}, \code{\link[=step_lencode_bayes]{step_lencode_bayes()}}, \code{\link[=step_lencode_mixed]{step_lencode_mixed()}}
+}
 \concept{preprocessing encoding}
 \keyword{datagen}

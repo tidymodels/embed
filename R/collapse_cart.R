@@ -66,6 +66,7 @@
 #'   ) |>
 #'   prep()
 #' tidy(rec, number = 1)
+#' @seealso [step_collapse_stringdist()]
 #' @export
 step_collapse_cart <-
   function(

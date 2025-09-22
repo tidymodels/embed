@@ -139,5 +139,8 @@ Modeling," arXiv:1611.09477
 "Estimating Generalized (Non-)Linear Models with Group-Specific Terms with
 \code{rstanarm}" \url{http://mc-stan.org/rstanarm/articles/glmer.html}
 }
+\seealso{
+\code{\link[=step_lencode]{step_lencode()}}, \code{\link[=step_lencode_glm]{step_lencode_glm()}}, \code{\link[=step_lencode_mixed]{step_lencode_mixed()}}
+}
 \concept{preprocessing encoding}
 \keyword{datagen}

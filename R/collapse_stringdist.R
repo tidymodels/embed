@@ -65,6 +65,7 @@
 #'   bake(new_data = NULL)
 #'
 #' tidy(rec, 1)
+#' @seealso [step_collapse_cart()]
 #' @export
 step_collapse_stringdist <-
   function(
@@ -185,7 +186,9 @@ collapse_stringdist_impl <- function(x, dist, method, options) {
     repeat {
       group[selected] <- TRUE
       new_selected <- pairs[pairs[, 2] %in% selected, 1]
-      if (length(new_selected) == 0) break
+      if (length(new_selected) == 0) {
+        break
+      }
       pairs <- pairs[!pairs[, 2] %in% selected, , drop = FALSE]
       selected <- new_selected
     }

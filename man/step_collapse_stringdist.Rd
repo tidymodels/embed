@@ -112,3 +112,6 @@ rec |>
 tidy(rec, 1)
 \dontshow{\}) # examplesIf}
 }
+\seealso{
+\code{\link[=step_collapse_cart]{step_collapse_cart()}}
+}
