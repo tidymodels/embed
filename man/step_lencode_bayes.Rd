@@ -107,7 +107,7 @@ To use them, see the documentation in \link[recipes:case_weights]{recipes::case_
 }
 
 \examples{
-\dontshow{if (rlang::is_installed("modeldata")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (rlang::is_installed("modeldata")) withAutoprint(\{ # examplesIf}
 library(recipes)
 library(dplyr)
 library(modeldata)
@@ -138,6 +138,9 @@ Modeling," arXiv:1611.09477
 
 "Estimating Generalized (Non-)Linear Models with Group-Specific Terms with
 \code{rstanarm}" \url{http://mc-stan.org/rstanarm/articles/glmer.html}
+}
+\seealso{
+\code{\link[=step_lencode]{step_lencode()}}, \code{\link[=step_lencode_glm]{step_lencode_glm()}}, \code{\link[=step_lencode_mixed]{step_lencode_mixed()}}
 }
 \concept{preprocessing encoding}
 \keyword{datagen}

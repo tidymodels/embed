@@ -90,7 +90,7 @@ The underlying operation does not allow for case weights.
 }
 
 \examples{
-\dontshow{if (rlang::is_installed(c("modeldata", "rpart"))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (rlang::is_installed(c("modeldata", "rpart"))) withAutoprint(\{ # examplesIf}
 data(ames, package = "modeldata")
 ames$Sale_Price <- log10(ames$Sale_Price)
 
@@ -103,4 +103,7 @@ rec <-
   prep()
 tidy(rec, number = 1)
 \dontshow{\}) # examplesIf}
+}
+\seealso{
+\code{\link[=step_collapse_stringdist]{step_collapse_stringdist()}}
 }

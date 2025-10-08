@@ -129,7 +129,7 @@ To use them, see the documentation in \link[recipes:case_weights]{recipes::case_
 }
 
 \examples{
-\dontshow{if (rlang::is_installed(c("xgboost", "modeldata"))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (rlang::is_installed(c("xgboost", "modeldata"))) withAutoprint(\{ # examplesIf}
 library(rsample)
 library(recipes)
 data(credit_data, package = "modeldata")
@@ -151,6 +151,5 @@ bake(xgb_rec, credit_data_te, Assets)
 \dontshow{\}) # examplesIf}
 }
 \seealso{
-\code{\link[=step_discretize_cart]{step_discretize_cart()}}, \code{\link[recipes:recipe]{recipes::recipe()}},
-\code{\link[recipes:prep]{recipes::prep()}}, \code{\link[recipes:bake]{recipes::bake()}}
+\code{\link[recipes:step_discretize]{recipes::step_discretize()}}, \code{\link[=step_discretize_cart]{step_discretize_cart()}}
 }

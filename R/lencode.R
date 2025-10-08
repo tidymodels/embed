@@ -104,6 +104,7 @@
 #' bake(reencoded, grants_other)
 #'
 #' tidy(reencoded, 1)
+#' @seealso [step_lencode_bayes()], [step_lencode_glm()], [step_lencode_mixed()]
 #' @export
 step_lencode <-
   function(

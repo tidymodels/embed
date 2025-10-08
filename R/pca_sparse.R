@@ -64,7 +64,9 @@
 #'
 #' @template case-weights-not-supported
 #'
-#' @seealso [step_pca_sparse_bayes()]
+#' @seealso [recipes::step_pca()], [recipes::step_kpca()],
+#'   [recipes::step_kpca_poly()], [recipes::step_kpca_rbf()],
+#'   [step_pca_sparse_bayes()], [step_pca_truncated()]
 #' @examplesIf rlang::is_installed(c("modeldata", "ggplot2"))
 #' library(recipes)
 #' library(ggplot2)

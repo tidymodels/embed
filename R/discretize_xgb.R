@@ -99,8 +99,7 @@
 #' xgb_rec <- prep(xgb_rec, training = credit_data_tr)
 #'
 #' bake(xgb_rec, credit_data_te, Assets)
-#' @seealso [embed::step_discretize_cart()], [recipes::recipe()],
-#' [recipes::prep()], [recipes::bake()]
+#' @seealso [recipes::step_discretize()], [step_discretize_cart()]
 #' @export
 step_discretize_xgb <-
   function(
