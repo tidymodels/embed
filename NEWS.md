@@ -1,5 +1,7 @@
 # embed (development version)
 
+## Improvements
+
 * Make work with all versions of xgboost. (#267)
 
 # embed 1.2.0
