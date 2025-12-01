@@ -1,6 +1,9 @@
 # embed (development version)
 
+* Make work with all versions of xgboost. (#267)
+
 # embed 1.2.0
+
 ## Improvements
 
 * Adds `step_lencode()` to perform analytical likelihood encoding. (#258)
