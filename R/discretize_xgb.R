@@ -206,20 +206,38 @@ run_xgboost <- function(
     )
   }
 
-  xgboost::xgb.train(
-    params = .params,
-    nrounds = 100,
-    data = .train,
-    watchlist = list(
-      train = .train,
-      test = .test
-    ),
-    tree_method = "hist",
-    early_stopping_rounds = 10,
-    objective = .objective,
-    verbose = 0,
-    nthread = 1
-  )
+  if (utils::packageVersion("xgboost") >= "2.0.0.0") {
+    .params$tree_method = "hist"
+    .params$nthread = 1
+    .params$objective = .objective
+
+    xgboost::xgb.train(
+      params = .params,
+      nrounds = 100,
+      data = .train,
+      evals = list(
+        train = .train,
+        test = .test
+      ),
+      early_stopping_rounds = 10,
+      verbose = 0
+    )
+  } else {
+    xgboost::xgb.train(
+      params = .params,
+      nrounds = 100,
+      data = .train,
+      watchlist = list(
+        train = .train,
+        test = .test
+      ),
+      tree_method = "hist",
+      early_stopping_rounds = 10,
+      objective = .objective,
+      verbose = 0,
+      nthread = 1
+    )
+  }
 }
 
 xgb_binning <- function(
@@ -373,10 +391,16 @@ xgb_binning <- function(
   # inform the user that the dataset is insufficient for this particular case
   # https://github.com/dmlc/xgboost/issues/2876
   # https://stackoverflow.com/questions/42670033/r-getting-non-tree-model-detected-this-function-can-only-be-used-with-tree-mo
+  if (utils::packageVersion("xgboost") >= "2.0.0.0") {
+    best_iteration <- attr(xgb_mdl, "early_stop")$best_iteration
+  } else {
+    best_iteration <- xgb_mdl$best_iteration
+  }
+
   xgb_tree <- try(
     xgboost::xgb.model.dt.tree(
       model = xgb_mdl,
-      trees = 1:xgb_mdl$best_iteration,
+      trees = seq_len(best_iteration),
       use_int_id = TRUE
     ),
     silent = TRUE
