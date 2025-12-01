@@ -2,6 +2,9 @@
 
 ## embed (development version)
 
+- Make work with all versions of xgboost.
+  ([\#267](https://github.com/tidymodels/embed/issues/267))
+
 ## embed 1.2.0
 
 CRAN release: 2025-09-08
