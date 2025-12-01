@@ -1,4 +1,4 @@
-# embed (development version)
+# embed 1.2.1
 
 ## Improvements
 
