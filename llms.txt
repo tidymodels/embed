@@ -1,0 +1,202 @@
+# embed
+
+## Introduction
+
+`embed` has extra steps for the
+[`recipes`](https://recipes.tidymodels.org/) package for embedding
+predictors into one or more numeric columns. Almost all of the
+preprocessing methods are *supervised*.
+
+These steps are available here in a separate package because the step
+dependencies, [`rstanarm`](https://CRAN.r-project.org/package=rstanarm),
+[`lme4`](https://CRAN.r-project.org/package=lme4), and
+[`keras3`](https://CRAN.r-project.org/package=keras3), are fairly heavy.
+
+Some steps handle categorical predictors:
+
+- [`step_lencode_glm()`](https://embed.tidymodels.org/reference/step_lencode_glm.md),
+  [`step_lencode_bayes()`](https://embed.tidymodels.org/reference/step_lencode_bayes.md),
+  and
+  [`step_lencode_mixed()`](https://embed.tidymodels.org/reference/step_lencode_mixed.md)
+  estimate the effect of each of the factor levels on the outcome and
+  these estimates are used as the new encoding. The estimates are
+  estimated by a generalized linear model. This step can be executed
+  without pooling (via `glm`) or with partial pooling (`stan_glm` or
+  `lmer`). Currently implemented for numeric and two-class outcomes.
+
+- [`step_embed()`](https://embed.tidymodels.org/reference/step_embed.md)
+  uses
+  [`keras3::layer_embedding`](https://keras3.posit.co/reference/layer_embedding.html)
+  to translate the original *C* factor levels into a set of *D* new
+  variables (\< *C*). The model fitting routine optimizes which factor
+  levels are mapped to each of the new variables as well as the
+  corresponding regression coefficients (i.e., neural network weights)
+  that will be used as the new encodings.
+
+- [`step_woe()`](https://embed.tidymodels.org/reference/step_woe.md)
+  creates new variables based on weight of evidence encodings.
+
+- [`step_feature_hash()`](https://embed.tidymodels.org/reference/step_feature_hash.md)
+  can create indicator variables using feature hashing.
+
+For numeric predictors:
+
+- [`step_umap()`](https://embed.tidymodels.org/reference/step_umap.md)
+  uses a nonlinear transformation similar to t-SNE but can be used to
+  project the transformation on new data. Both supervised and
+  unsupervised methods can be used.
+
+- [`step_discretize_xgb()`](https://embed.tidymodels.org/reference/step_discretize_xgb.md)
+  and
+  [`step_discretize_cart()`](https://embed.tidymodels.org/reference/step_discretize_cart.md)
+  can make binned versions of numeric predictors using supervised
+  tree-based models.
+
+- [`step_pca_sparse()`](https://embed.tidymodels.org/reference/step_pca_sparse.md)
+  and
+  [`step_pca_sparse_bayes()`](https://embed.tidymodels.org/reference/step_pca_sparse_bayes.md)
+  conduct feature extraction with sparsity of the component loadings.
+
+Some references for these methods are:
+
+- Francois C and Allaire JJ (2018) [*Deep Learning with
+  R*](https://www.manning.com/books/deep-learning-with-r), Manning
+- Guo, C and Berkhahn F (2016) “[Entity Embeddings of Categorical
+  Variables](https://arxiv.org/abs/1604.06737)”
+- Micci-Barreca D (2001) “[A preprocessing scheme for high-cardinality
+  categorical attributes in classification and prediction
+  problems](https://scholar.google.com/scholar?hl=en&as_sdt=0%2C5&q=A+preprocessing+scheme+for+high-cardinality+categorical+attributes+in+classification+and+prediction+problems&btnG=),”
+  ACM SIGKDD Explorations Newsletter, 3(1), 27-32.
+- Zumel N and Mount J (2017) “[`vtreat`: a `data.frame` Processor for
+  Predictive Modeling](https://arxiv.org/abs/1611.09477)”
+- McInnes L and Healy J (2018) [UMAP: Uniform Manifold Approximation and
+  Projection for Dimension Reduction](https://arxiv.org/abs/1802.03426)
+- Good, I. J. (1985), “[Weight of evidence: A brief
+  survey](https://scholar.google.com/scholar?hl=en&as_sdt=0%2C5&q=Weight+of+evidence%3A+A+brief+survey&btnG=)”,
+  Bayesian Statistics, 2, pp.249-270.
+
+## Getting Started
+
+There are two articles that walk through how to use these embedding
+steps, using [generalized linear
+models](https://embed.tidymodels.org/articles/Applications/GLM.html) and
+[neural networks built via
+TensorFlow](https://embed.tidymodels.org/articles/Applications/Tensorflow.html).
+
+## Installation
+
+To install the package:
+
+``` r
+install.packages("embed")
+```
+
+Note that to use some steps, you will also have to install other
+packages such as `rstanarm` and `lme4`. For all of the steps to work,
+you may want to use:
+
+``` r
+install.packages(c("rpart", "xgboost", "rstanarm", "lme4"))
+```
+
+To get a bug fix or to use a feature from the development version, you
+can install the development version of this package from GitHub.
+
+``` r
+# install.packages("pak")
+pak::pak("tidymodels/embed")
+```
+
+## Contributing
+
+This project is released with a [Contributor Code of
+Conduct](https://contributor-covenant.org/version/2/0/CODE_OF_CONDUCT.html).
+By contributing to this project, you agree to abide by its terms.
+
+- For questions and discussions about tidymodels packages, modeling, and
+  machine learning, please [post on RStudio
+  Community](https://forum.posit.co/new-topic?category_id=15&tags=tidymodels,question).
+
+- If you think you have encountered a bug, please [submit an
+  issue](https://github.com/tidymodels/embed/issues).
+
+- Either way, learn how to create and share a
+  [reprex](https://reprex.tidyverse.org/articles/articles/learn-reprex.html)
+  (a minimal, reproducible example), to clearly communicate about your
+  code.
+
+- Check out further details on [contributing guidelines for tidymodels
+  packages](https://www.tidymodels.org/contribute/) and [how to get
+  help](https://www.tidymodels.org/help/).
+
+# Package index
+
+## Embed categorical predictors
+
+- [`step_embed()`](https://embed.tidymodels.org/reference/step_embed.md)
+  [`embed_control()`](https://embed.tidymodels.org/reference/step_embed.md)
+  : Encoding Factors into Multiple Columns
+- [`step_feature_hash()`](https://embed.tidymodels.org/reference/step_feature_hash.md)
+  **\[deprecated\]** : Dummy Variables Creation via Feature Hashing
+- [`step_lencode()`](https://embed.tidymodels.org/reference/step_lencode.md)
+  : Likelihood encoding using analytical formula
+- [`step_lencode_bayes()`](https://embed.tidymodels.org/reference/step_lencode_bayes.md)
+  : Supervised Factor Conversions into Linear Functions using Bayesian
+  Likelihood Encodings
+- [`step_lencode_glm()`](https://embed.tidymodels.org/reference/step_lencode_glm.md)
+  : Supervised Factor Conversions into Linear Functions using Likelihood
+  Encodings
+- [`step_lencode_mixed()`](https://embed.tidymodels.org/reference/step_lencode_mixed.md)
+  : Supervised Factor Conversions into Linear Functions using Bayesian
+  Likelihood Encodings
+- [`step_woe()`](https://embed.tidymodels.org/reference/step_woe.md) :
+  Weight of evidence transformation
+
+## Collapse categorical predictors
+
+- [`step_collapse_cart()`](https://embed.tidymodels.org/reference/step_collapse_cart.md)
+  : Supervised Collapsing of Factor Levels
+- [`step_collapse_stringdist()`](https://embed.tidymodels.org/reference/step_collapse_stringdist.md)
+  : collapse factor levels using stringdist
+
+## Embed numeric predictors
+
+- [`step_discretize_cart()`](https://embed.tidymodels.org/reference/step_discretize_cart.md)
+  : Discretize numeric variables with CART
+- [`step_discretize_xgb()`](https://embed.tidymodels.org/reference/step_discretize_xgb.md)
+  : Discretize numeric variables with XgBoost
+- [`step_pca_sparse()`](https://embed.tidymodels.org/reference/step_pca_sparse.md)
+  : Sparse PCA Signal Extraction
+- [`step_pca_sparse_bayes()`](https://embed.tidymodels.org/reference/step_pca_sparse_bayes.md)
+  : Sparse Bayesian PCA Signal Extraction
+- [`step_pca_truncated()`](https://embed.tidymodels.org/reference/step_pca_truncated.md)
+  : Truncated PCA Signal Extraction
+- [`step_umap()`](https://embed.tidymodels.org/reference/step_umap.md) :
+  Supervised and unsupervised uniform manifold approximation and
+  projection (UMAP)
+
+## Datasets
+
+- [`solubility`](https://embed.tidymodels.org/reference/solubility.md) :
+  Compound solubility data
+
+## Weight of evidence helpers
+
+- [`add_woe()`](https://embed.tidymodels.org/reference/add_woe.md) : Add
+  WoE in a data frame
+- [`woe_table()`](https://embed.tidymodels.org/reference/woe_table.md) :
+  Crosstable with woe between a binary outcome and a predictor variable.
+
+## miscellaneous
+
+- [`dictionary()`](https://embed.tidymodels.org/reference/dictionary.md)
+  : Weight of evidence dictionary
+
+# Articles
+
+### All vignettes
+
+- [Using Generalized Linear
+  Models](https://embed.tidymodels.org/articles/Applications/GLM.md):
+- [Entity Embeddings of Categorical Variables using
+  TensorFlow](https://embed.tidymodels.org/articles/Applications/Tensorflow.md):
