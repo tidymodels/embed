@@ -267,9 +267,15 @@ test_that("backwards compatible for initial and target_weight args (#213)", {
   rec$steps[[1]]$initial <- NULL
   rec$steps[[1]]$target_weight <- NULL
 
+  remove_fit_times <- function(x) {
+    x$fit_times <- NULL
+    x$steps[[1]]$object$nn_index <- NULL
+    x
+  }
+
   expect_identical(
-    prep(rec),
-    exp_res
+    remove_fit_times(prep(rec)),
+    remove_fit_times(exp_res)
   )
 })
 

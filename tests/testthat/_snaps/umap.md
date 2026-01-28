@@ -59,7 +59,7 @@
     Condition
       Error in `step_umap()`:
       Caused by error in `prep()`:
-      ! `target_weight` must be a number between 0 and 1, not the number -4.
+      ! `target_weight` must be a number between 0 and 1 or `NULL`, not the number -4.
 
 ---
 
