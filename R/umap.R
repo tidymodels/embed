@@ -257,8 +257,16 @@ prep.step_umap <- function(x, training, info = NULL, ...) {
   check_number_decimal(x$min_dist, arg = "min_dist")
   check_number_decimal(x$learn_rate, min = 0, arg = "learn_rate")
   check_number_whole(x$epochs, min = 0, allow_null = TRUE, arg = "epochs")
-  rlang::arg_match0(x$initial, initial_umap_values, arg_nm = "initial")
-  check_number_decimal(x$target_weight, min = 0, max = 1, arg = "target_weight")
+  if (!is.null(x$initial)) {
+    rlang::arg_match0(x$initial, initial_umap_values, arg_nm = "initial")
+  }
+  check_number_decimal(
+    x$target_weight,
+    min = 0,
+    max = 1,
+    allow_null = TRUE,
+    arg = "target_weight"
+  )
 
   if (length(col_names) > 0) {
     if (length(x$outcome) > 0) {
