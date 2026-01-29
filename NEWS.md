@@ -1,5 +1,9 @@
 # embed (development version)
 
+# embed 1.2.2
+
+* Fixed bug on step_umap() where the number of calculated components would be zero. (#271)
+
 # embed 1.2.1
 
 ## Improvements
