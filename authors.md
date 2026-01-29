@@ -15,15 +15,15 @@
 ## Citation
 
 Source:
-[`DESCRIPTION`](https://github.com/tidymodels/embed/blob/v1.2.1/DESCRIPTION)
+[`DESCRIPTION`](https://github.com/tidymodels/embed/blob/v1.2.2/DESCRIPTION)
 
-Hvitfeldt E, Kuhn M (2025). *embed: Extra Recipes for Encoding
-Predictors*. R package version 1.2.1, <https://embed.tidymodels.org>.
+Hvitfeldt E, Kuhn M (2026). *embed: Extra Recipes for Encoding
+Predictors*. R package version 1.2.2, <https://embed.tidymodels.org>.
 
     @Manual{,
       title = {embed: Extra Recipes for Encoding Predictors},
       author = {Emil Hvitfeldt and Max Kuhn},
-      year = {2025},
-      note = {R package version 1.2.1},
+      year = {2026},
+      note = {R package version 1.2.2},
       url = {https://embed.tidymodels.org},
     }
