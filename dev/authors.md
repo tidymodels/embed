@@ -18,13 +18,13 @@ Source:
 [`DESCRIPTION`](https://github.com/tidymodels/embed/blob/main/DESCRIPTION)
 
 Hvitfeldt E, Kuhn M (2026). *embed: Extra Recipes for Encoding
-Predictors*. R package version 1.2.1.9000,
+Predictors*. R package version 1.2.2.9000,
 <https://embed.tidymodels.org>.
 
     @Manual{,
       title = {embed: Extra Recipes for Encoding Predictors},
       author = {Emil Hvitfeldt and Max Kuhn},
       year = {2026},
-      note = {R package version 1.2.1.9000},
+      note = {R package version 1.2.2.9000},
       url = {https://embed.tidymodels.org},
     }
