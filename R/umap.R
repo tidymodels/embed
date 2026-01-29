@@ -275,7 +275,7 @@ prep.step_umap <- function(x, training, info = NULL, ...) {
       y_name <- NULL
     }
     x$neighbors <- min(nrow(training) - 1, x$neighbors)
-    x$num_comp <- min(length(col_names) - 1, x$num_comp)
+    x$num_comp <- min(length(col_names), x$num_comp)
 
     if (is.null(x$initial)) {
       x$initial <- "spectral"
