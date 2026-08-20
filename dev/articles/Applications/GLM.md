@@ -21,6 +21,7 @@ We first calculate the raw log-odds for the data (independent of any
 model):
 
 ``` r
+
 library(tidymodels)
 library(embed)
 
@@ -59,6 +60,7 @@ props |>
     ## # ℹ 281 more rows
 
 ``` r
+
 # later, for plotting
 rng <- extendrange(props$log_odds[is.finite(props$log_odds)], f = 0.1)
 ```
@@ -78,6 +80,7 @@ From this, the log-odds are naturally estimated by logistic regression.
 For these data, a recipe is created and `step_lencode_glm` is used:
 
 ``` r
+
 grants_glm <-
   recipe(class ~ ., data = grants_other) |>
   # specify the variable being encoded and the outcome
@@ -90,6 +93,7 @@ The `tidy` method can be used to extract the encodings and are merged
 with the raw estimates:
 
 ``` r
+
 glm_estimates <-
   tidy(grants_glm, number = 1) |>
   dplyr::select(-terms, -id)
@@ -112,6 +116,7 @@ glm_estimates
     ## # ℹ 282 more rows
 
 ``` r
+
 glm_estimates <-
   glm_estimates |>
   set_names(c("sponsor_code", "glm")) |>
@@ -122,6 +127,7 @@ For the sponsor codes with `n > 1`, the estimates are effectively the
 same:
 
 ``` r
+
 glm_estimates |>
   dplyr::filter(is.finite(log_odds)) |>
   mutate(difference = log_odds - glm) |>
@@ -141,6 +147,7 @@ Note that there is also a effect that is used for a novel sponsor code
 for future data sets that is the average effect:
 
 ``` r
+
 tidy(grants_glm, number = 1) |>
   dplyr::filter(level == "..new") |>
   select(-id)
@@ -169,6 +176,7 @@ page](https://cran.r-project.org/web/packages/rstanarm/vignettes/glmer.html)
 has a good discussion of pooling using Bayesian models.
 
 ``` r
+
 # due to Matrix problems
 knitr::knit_exit()
 ```

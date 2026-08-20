@@ -157,17 +157,17 @@ tidy(rec, 1)
 #> # A tibble: 11 × 4
 #>    terms from      to        id                       
 #>    <chr> <chr>     <chr>     <chr>                    
-#>  1 x1    a         a         collapse_stringdist_PVfLS
-#>  2 x1    b         a         collapse_stringdist_PVfLS
-#>  3 x1    d         a         collapse_stringdist_PVfLS
-#>  4 x1    e         a         collapse_stringdist_PVfLS
-#>  5 x1    hjhgfgjgr hjhgfgjgr collapse_stringdist_PVfLS
-#>  6 x1    sfgsfgsd  sfgsfgsd  collapse_stringdist_PVfLS
-#>  7 x2    ak        ak        collapse_stringdist_PVfLS
-#>  8 x2    b         b         collapse_stringdist_PVfLS
-#>  9 x2    e         b         collapse_stringdist_PVfLS
-#> 10 x2    djj       djj       collapse_stringdist_PVfLS
-#> 11 x2    hjhgfgjgr hjhgfgjgr collapse_stringdist_PVfLS
+#>  1 x1    a         a         collapse_stringdist_qIMPV
+#>  2 x1    b         a         collapse_stringdist_qIMPV
+#>  3 x1    d         a         collapse_stringdist_qIMPV
+#>  4 x1    e         a         collapse_stringdist_qIMPV
+#>  5 x1    hjhgfgjgr hjhgfgjgr collapse_stringdist_qIMPV
+#>  6 x1    sfgsfgsd  sfgsfgsd  collapse_stringdist_qIMPV
+#>  7 x2    ak        ak        collapse_stringdist_qIMPV
+#>  8 x2    b         b         collapse_stringdist_qIMPV
+#>  9 x2    e         b         collapse_stringdist_qIMPV
+#> 10 x2    djj       djj       collapse_stringdist_qIMPV
+#> 11 x2    hjhgfgjgr hjhgfgjgr collapse_stringdist_qIMPV
 
 rec <- recipe(~., data = data0) |>
   step_collapse_stringdist(all_predictors(), distance = 2) |>
@@ -189,15 +189,15 @@ tidy(rec, 1)
 #> # A tibble: 11 × 4
 #>    terms from      to        id                       
 #>    <chr> <chr>     <chr>     <chr>                    
-#>  1 x1    a         a         collapse_stringdist_SY1gQ
-#>  2 x1    b         a         collapse_stringdist_SY1gQ
-#>  3 x1    d         a         collapse_stringdist_SY1gQ
-#>  4 x1    e         a         collapse_stringdist_SY1gQ
-#>  5 x1    hjhgfgjgr hjhgfgjgr collapse_stringdist_SY1gQ
-#>  6 x1    sfgsfgsd  sfgsfgsd  collapse_stringdist_SY1gQ
-#>  7 x2    ak        ak        collapse_stringdist_SY1gQ
-#>  8 x2    b         ak        collapse_stringdist_SY1gQ
-#>  9 x2    e         ak        collapse_stringdist_SY1gQ
-#> 10 x2    djj       djj       collapse_stringdist_SY1gQ
-#> 11 x2    hjhgfgjgr hjhgfgjgr collapse_stringdist_SY1gQ
+#>  1 x1    a         a         collapse_stringdist_fLSSY
+#>  2 x1    b         a         collapse_stringdist_fLSSY
+#>  3 x1    d         a         collapse_stringdist_fLSSY
+#>  4 x1    e         a         collapse_stringdist_fLSSY
+#>  5 x1    hjhgfgjgr hjhgfgjgr collapse_stringdist_fLSSY
+#>  6 x1    sfgsfgsd  sfgsfgsd  collapse_stringdist_fLSSY
+#>  7 x2    ak        ak        collapse_stringdist_fLSSY
+#>  8 x2    b         ak        collapse_stringdist_fLSSY
+#>  9 x2    e         ak        collapse_stringdist_fLSSY
+#> 10 x2    djj       djj       collapse_stringdist_fLSSY
+#> 11 x2    hjhgfgjgr hjhgfgjgr collapse_stringdist_fLSSY
 ```

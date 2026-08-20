@@ -59,6 +59,7 @@ Statistics*, 2, pp.249-270.
 ## Examples
 
 ``` r
+
 mtcars |> dictionary("am", cyl, gear:carb)
 #> # A tibble: 12 × 9
 #>    variable predictor n_tot   n_0   n_1   p_0    p_1      woe outcome

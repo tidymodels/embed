@@ -236,7 +236,6 @@ and Projection for Dimension Reduction.
 ## Examples
 
 ``` r
-if (FALSE) { # rlang::is_installed("ggplot2") && rlang::is_installed("irlba", version = "2.3.5.2")
 library(recipes)
 library(ggplot2)
 
@@ -257,5 +256,4 @@ theme_set(theme_bw())
 bake(supervised, new_data = te, Species, starts_with("umap")) |>
   ggplot(aes(x = UMAP1, y = UMAP2, col = Species)) +
   geom_point(alpha = .5)
-}
 ```

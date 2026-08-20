@@ -145,15 +145,15 @@ tidy(rec, number = 1)
 #> # A tibble: 45 × 4
 #>    terms     old     new         id                      
 #>    <chr>     <chr>   <chr>       <chr>                   
-#>  1 Sale_Type "ConLD" Sale_Type_1 step_collapse_cart_EdLie
-#>  2 Sale_Type "ConLw" Sale_Type_1 step_collapse_cart_EdLie
-#>  3 Sale_Type "Oth"   Sale_Type_1 step_collapse_cart_EdLie
-#>  4 Sale_Type "COD"   Sale_Type_2 step_collapse_cart_EdLie
-#>  5 Sale_Type "VWD"   Sale_Type_2 step_collapse_cart_EdLie
-#>  6 Sale_Type "ConLI" Sale_Type_3 step_collapse_cart_EdLie
-#>  7 Sale_Type "WD "   Sale_Type_4 step_collapse_cart_EdLie
-#>  8 Sale_Type "CWD"   Sale_Type_5 step_collapse_cart_EdLie
-#>  9 Sale_Type "Con"   Sale_Type_6 step_collapse_cart_EdLie
-#> 10 Sale_Type "New"   Sale_Type_7 step_collapse_cart_EdLie
+#>  1 Sale_Type "ConLD" Sale_Type_1 step_collapse_cart_SwlKL
+#>  2 Sale_Type "ConLw" Sale_Type_1 step_collapse_cart_SwlKL
+#>  3 Sale_Type "Oth"   Sale_Type_1 step_collapse_cart_SwlKL
+#>  4 Sale_Type "COD"   Sale_Type_2 step_collapse_cart_SwlKL
+#>  5 Sale_Type "VWD"   Sale_Type_2 step_collapse_cart_SwlKL
+#>  6 Sale_Type "ConLI" Sale_Type_3 step_collapse_cart_SwlKL
+#>  7 Sale_Type "WD "   Sale_Type_4 step_collapse_cart_SwlKL
+#>  8 Sale_Type "CWD"   Sale_Type_5 step_collapse_cart_SwlKL
+#>  9 Sale_Type "Con"   Sale_Type_6 step_collapse_cart_SwlKL
+#> 10 Sale_Type "New"   Sale_Type_7 step_collapse_cart_SwlKL
 #> # ℹ 35 more rows
 ```

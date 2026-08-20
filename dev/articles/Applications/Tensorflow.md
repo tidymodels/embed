@@ -26,6 +26,7 @@ houses are being predicted. One predictor, neighborhood, has the most
 factor levels of the predictors.
 
 ``` r
+
 library(tidymodels)
 data(ames)
 length(levels(ames$Neighborhood))
@@ -36,6 +37,7 @@ length(levels(ames$Neighborhood))
 The distribution of data in the neighborhood is not uniform:
 
 ``` r
+
 ames |>
   count(Neighborhood) |>
   ggplot(aes(n, reorder(Neighborhood, n))) +
@@ -52,6 +54,7 @@ North_Ames.](Tensorflow_files/figure-html/ames-xtab-1.png)
 Fo plotting later, we calculate the simple means per neighborhood:
 
 ``` r
+
 means <-
   ames |>
   group_by(Neighborhood) |>
@@ -66,6 +69,7 @@ means <-
 We’ll fit a model with 10 hidden units and 3 encoding columns:
 
 ``` r
+
 library(embed)
 tf_embed <-
   recipe(Sale_Price ~ ., data = ames) |>
@@ -103,6 +107,7 @@ times.](Tensorflow_files/figure-html/ames-linear-1.png)
 The embeddings are obtained using the `tidy` method:
 
 ``` r
+
 hood_coef <-
   tidy(tf_embed, number = 4) |>
   dplyr::select(-terms, -id) |>
@@ -116,21 +121,22 @@ hood_coef
 ```
 
     ## # A tibble: 30 × 6
-    ##      embed_1  embed_2  embed_3 embed_4 embed_5 Neighborhood      
-    ##        <dbl>    <dbl>    <dbl>   <dbl>   <dbl> <chr>             
-    ##  1  0.00317   0.0481   0.0160   0.0209 -0.0491 ..new             
-    ##  2 -0.0495    0.00884  0.0114  -0.0150  0.0149 North_Ames        
-    ##  3 -0.00237  -0.0578   0.0356  -0.0787 -0.0448 College_Creek     
-    ##  4  0.0113    0.00907 -0.00652 -0.0156  0.0774 Old_Town          
-    ##  5  0.00774   0.0122  -0.0217   0.0246  0.0470 Edwards           
-    ##  6 -0.0201   -0.0552  -0.00939 -0.0508 -0.105  Somerset          
-    ##  7 -0.0242   -0.0907   0.0204  -0.0563 -0.150  Northridge_Heights
-    ##  8  0.0189   -0.0347   0.0433  -0.0234 -0.0206 Gilbert           
-    ##  9 -0.0428   -0.0358   0.0287  -0.0676  0.0462 Sawyer            
-    ## 10 -0.000432  0.0152  -0.00755  0.0100 -0.0320 Northwest_Ames    
+    ##      embed_1  embed_2  embed_3 embed_4  embed_5 Neighborhood      
+    ##        <dbl>    <dbl>    <dbl>   <dbl>    <dbl> <chr>             
+    ##  1  0.0147    0.0411   0.0181  -0.0161  0.00890 ..new             
+    ##  2 -0.0324   -0.00174 -0.0312  -0.0287  0.0254  North_Ames        
+    ##  3 -0.0357   -0.0469  -0.0131   0.0338 -0.0569  College_Creek     
+    ##  4 -0.0375    0.0729   0.0151   0.0113  0.0563  Old_Town          
+    ##  5  0.0461   -0.00818  0.0203  -0.0190  0.0589  Edwards           
+    ##  6 -0.0264   -0.0230   0.0455  -0.0513 -0.115   Somerset          
+    ##  7 -0.0263   -0.0938   0.00411 -0.0637 -0.143   Northridge_Heights
+    ##  8  0.0181   -0.0672   0.0305   0.0357 -0.0174  Gilbert           
+    ##  9  0.000736 -0.0462   0.0401  -0.0173  0.0234  Sawyer            
+    ## 10  0.000478 -0.00941 -0.0375   0.0262 -0.0177  Northwest_Ames    
     ## # ℹ 20 more rows
 
 ``` r
+
 hood_coef <-
   hood_coef |>
   inner_join(means, by = "Neighborhood")
@@ -138,18 +144,18 @@ hood_coef
 ```
 
     ## # A tibble: 28 × 10
-    ##      embed_1  embed_2  embed_3 embed_4 embed_5 Neighborhood  mean     n
-    ##        <dbl>    <dbl>    <dbl>   <dbl>   <dbl> <chr>        <dbl> <int>
-    ##  1 -0.0495    0.00884  0.0114  -0.0150  0.0149 North_Ames    5.15   443
-    ##  2 -0.00237  -0.0578   0.0356  -0.0787 -0.0448 College_Cre…  5.29   267
-    ##  3  0.0113    0.00907 -0.00652 -0.0156  0.0774 Old_Town      5.07   239
-    ##  4  0.00774   0.0122  -0.0217   0.0246  0.0470 Edwards       5.09   194
-    ##  5 -0.0201   -0.0552  -0.00939 -0.0508 -0.105  Somerset      5.35   182
-    ##  6 -0.0242   -0.0907   0.0204  -0.0563 -0.150  Northridge_…  5.49   166
-    ##  7  0.0189   -0.0347   0.0433  -0.0234 -0.0206 Gilbert       5.27   165
-    ##  8 -0.0428   -0.0358   0.0287  -0.0676  0.0462 Sawyer        5.13   151
-    ##  9 -0.000432  0.0152  -0.00755  0.0100 -0.0320 Northwest_A…  5.27   131
-    ## 10 -0.0144   -0.0232   0.0209  -0.0440 -0.0122 Sawyer_West   5.25   125
+    ##     embed_1  embed_2  embed_3 embed_4  embed_5 Neighborhood  mean     n
+    ##       <dbl>    <dbl>    <dbl>   <dbl>    <dbl> <chr>        <dbl> <int>
+    ##  1 -3.24e-2 -0.00174 -0.0312  -0.0287  0.0254  North_Ames    5.15   443
+    ##  2 -3.57e-2 -0.0469  -0.0131   0.0338 -0.0569  College_Cre…  5.29   267
+    ##  3 -3.75e-2  0.0729   0.0151   0.0113  0.0563  Old_Town      5.07   239
+    ##  4  4.61e-2 -0.00818  0.0203  -0.0190  0.0589  Edwards       5.09   194
+    ##  5 -2.64e-2 -0.0230   0.0455  -0.0513 -0.115   Somerset      5.35   182
+    ##  6 -2.63e-2 -0.0938   0.00411 -0.0637 -0.143   Northridge_…  5.49   166
+    ##  7  1.81e-2 -0.0672   0.0305   0.0357 -0.0174  Gilbert       5.27   165
+    ##  8  7.36e-4 -0.0462   0.0401  -0.0173  0.0234  Sawyer        5.13   151
+    ##  9  4.78e-4 -0.00941 -0.0375   0.0262 -0.0177  Northwest_A…  5.27   131
+    ## 10  1.05e-2 -0.0316   0.0406  -0.0611 -0.00742 Sawyer_West   5.25   125
     ## # ℹ 18 more rows
     ## # ℹ 2 more variables: lon <dbl>, lat <dbl>
 
@@ -157,6 +163,7 @@ We can make a simple, interactive plot of the new features versus the
 outcome:
 
 ``` r
+
 tf_plot <-
   hood_coef |>
   dplyr::select(-lon, -lat) |>
@@ -180,6 +187,7 @@ girafe(ggobj = tf_plot)
 However, this has induced some between-predictor correlations:
 
 ``` r
+
 hood_coef |>
   dplyr::select(contains("emb")) |>
   cor() |>
@@ -187,8 +195,8 @@ hood_coef |>
 ```
 
     ##         embed_1 embed_2 embed_3 embed_4 embed_5
-    ## embed_1    1.00   -0.03    0.11    0.24    0.15
-    ## embed_2   -0.03    1.00   -0.22    0.74    0.67
-    ## embed_3    0.11   -0.22    1.00   -0.32    0.08
-    ## embed_4    0.24    0.74   -0.32    1.00    0.47
-    ## embed_5    0.15    0.67    0.08    0.47    1.00
+    ## embed_1    1.00    0.27    0.32    0.19    0.42
+    ## embed_2    0.27    1.00    0.04    0.19    0.67
+    ## embed_3    0.32    0.04    1.00   -0.14   -0.03
+    ## embed_4    0.19    0.19   -0.14    1.00    0.39
+    ## embed_5    0.42    0.67   -0.03    0.39    1.00

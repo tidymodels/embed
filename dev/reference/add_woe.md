@@ -53,6 +53,7 @@ One easy way to do this is to tweak a output returned from it.
 ## Examples
 
 ``` r
+
 mtcars |> add_woe("am", cyl, gear:carb)
 #> # A tibble: 32 × 14
 #>      mpg   cyl  disp    hp  drat    wt  qsec    vs    am  gear  carb

@@ -223,20 +223,20 @@ tidy(pca_trans, number = 2)
 #> # A tibble: 1 × 4
 #>   terms         value component id                 
 #>   <chr>         <dbl> <chr>     <chr>              
-#> 1 all_numeric()    NA NA        pca_truncated_H3Jtu
+#> 1 all_numeric()    NA NA        pca_truncated_AGa8C
 tidy(pca_estimates, number = 2)
 #> # A tibble: 22 × 4
 #>    terms  value component id                 
 #>    <chr>  <dbl> <chr>     <chr>              
-#>  1 mpg    0.363 PC1       pca_truncated_H3Jtu
-#>  2 cyl   -0.374 PC1       pca_truncated_H3Jtu
-#>  3 disp  -0.368 PC1       pca_truncated_H3Jtu
-#>  4 hp    -0.330 PC1       pca_truncated_H3Jtu
-#>  5 drat   0.294 PC1       pca_truncated_H3Jtu
-#>  6 wt    -0.346 PC1       pca_truncated_H3Jtu
-#>  7 qsec   0.200 PC1       pca_truncated_H3Jtu
-#>  8 vs     0.307 PC1       pca_truncated_H3Jtu
-#>  9 am     0.235 PC1       pca_truncated_H3Jtu
-#> 10 gear   0.207 PC1       pca_truncated_H3Jtu
+#>  1 mpg    0.363 PC1       pca_truncated_AGa8C
+#>  2 cyl   -0.374 PC1       pca_truncated_AGa8C
+#>  3 disp  -0.368 PC1       pca_truncated_AGa8C
+#>  4 hp    -0.330 PC1       pca_truncated_AGa8C
+#>  5 drat   0.294 PC1       pca_truncated_AGa8C
+#>  6 wt    -0.346 PC1       pca_truncated_AGa8C
+#>  7 qsec   0.200 PC1       pca_truncated_AGa8C
+#>  8 vs     0.307 PC1       pca_truncated_AGa8C
+#>  9 am     0.235 PC1       pca_truncated_AGa8C
+#> 10 gear   0.207 PC1       pca_truncated_AGa8C
 #> # ℹ 12 more rows
 ```

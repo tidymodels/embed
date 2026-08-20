@@ -88,6 +88,7 @@ TensorFlow](https://embed.tidymodels.org/articles/Applications/Tensorflow.html).
 To install the package:
 
 ``` r
+
 install.packages("embed")
 ```
 
@@ -96,6 +97,7 @@ packages such as `rstanarm` and `lme4`. For all of the steps to work,
 you may want to use:
 
 ``` r
+
 install.packages(c("rpart", "xgboost", "rstanarm", "lme4"))
 ```
 
@@ -103,6 +105,7 @@ To get a bug fix or to use a feature from the development version, you
 can install the development version of this package from GitHub.
 
 ``` r
+
 # install.packages("pak")
 pak::pak("tidymodels/embed")
 ```

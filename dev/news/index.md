@@ -4,6 +4,8 @@
 
 ## embed 1.2.2
 
+CRAN release: 2026-01-29
+
 - Fixed bug on step_umap() where the number of calculated components
   would be zero.
   ([\#271](https://github.com/tidymodels/embed/issues/271))

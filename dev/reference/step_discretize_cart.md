@@ -180,34 +180,39 @@ cart_rec <- prep(cart_rec, training = ad_data_tr)
 
 # The splits:
 tidy(cart_rec, id = "cart splits")
-#> # A tibble: 24 × 3
-#>    terms value id         
-#>    <chr> <dbl> <chr>      
-#>  1 tau   5.89  cart splits
-#>  2 tau   6.00  cart splits
-#>  3 tau   6.17  cart splits
-#>  4 tau   6.25  cart splits
-#>  5 tau   6.31  cart splits
-#>  6 tau   6.36  cart splits
-#>  7 tau   6.66  cart splits
-#>  8 age   0.986 cart splits
-#>  9 age   0.987 cart splits
-#> 10 age   0.988 cart splits
-#> # ℹ 14 more rows
+#> # A tibble: 16 × 3
+#>    terms  value id         
+#>    <chr>  <dbl> <chr>      
+#>  1 tau    5.74  cart splits
+#>  2 tau    5.79  cart splits
+#>  3 tau    5.89  cart splits
+#>  4 tau    6.00  cart splits
+#>  5 tau    6.15  cart splits
+#>  6 tau    6.25  cart splits
+#>  7 tau    6.30  cart splits
+#>  8 tau    6.42  cart splits
+#>  9 tau    6.66  cart splits
+#> 10 age    0.986 cart splits
+#> 11 age    0.987 cart splits
+#> 12 p_tau  3.90  cart splits
+#> 13 p_tau  4.62  cart splits
+#> 14 Ab_42 10.6   cart splits
+#> 15 Ab_42 11.2   cart splits
+#> 16 Ab_42 11.3   cart splits
 
 bake(cart_rec, ad_data_te, tau)
 #> # A tibble: 84 × 1
 #>    tau          
 #>    <fct>        
-#>  1 [-Inf,5.886) 
-#>  2 [5.995,6.175)
-#>  3 [5.995,6.175)
-#>  4 [5.995,6.175)
-#>  5 [-Inf,5.886) 
-#>  6 [-Inf,5.886) 
-#>  7 [6.363,6.664)
-#>  8 [6.175,6.249)
-#>  9 [-Inf,5.886) 
-#> 10 [6.308,6.363)
+#>  1 [-Inf,5.744) 
+#>  2 [6.147,6.249)
+#>  3 [6.664, Inf] 
+#>  4 [5.995,6.147)
+#>  5 [-Inf,5.744) 
+#>  6 [-Inf,5.744) 
+#>  7 [6.422,6.664)
+#>  8 [6.147,6.249)
+#>  9 [6.304,6.422)
+#> 10 [-Inf,5.744) 
 #> # ℹ 74 more rows
 ```
