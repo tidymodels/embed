@@ -101,18 +101,18 @@ glm_estimates
 ```
 
     ## # A tibble: 292 × 2
-    ##    level  value
-    ##    <chr>  <dbl>
-    ##  1 100D   0.405
-    ##  2 101A  -1.95 
-    ##  3 103C  -2.08 
-    ##  4 105A  -1.61 
-    ##  5 107C  16.6  
-    ##  6 10B   16.6  
-    ##  7 111C  -1.61 
-    ##  8 112D   0.693
-    ##  9 113A   0    
-    ## 10 118B   0    
+    ##    level     value
+    ##    <chr>     <dbl>
+    ##  1 100D   4.05e- 1
+    ##  2 101A  -1.95e+ 0
+    ##  3 103C  -2.08e+ 0
+    ##  4 105A  -1.61e+ 0
+    ##  5 107C   1.66e+ 1
+    ##  6 10B    1.66e+ 1
+    ##  7 111C  -1.61e+ 0
+    ##  8 112D   6.93e- 1
+    ##  9 113A   0       
+    ## 10 118B   3.14e-16
     ## # ℹ 282 more rows
 
 ``` r
@@ -136,11 +136,11 @@ glm_estimates |>
 ```
 
     ##    difference        
-    ##  Min.   :-1.332e-15  
+    ##  Min.   :-1.776e-15  
     ##  1st Qu.:-2.220e-16  
     ##  Median : 0.000e+00  
-    ##  Mean   :-5.139e-17  
-    ##  3rd Qu.: 1.604e-16  
+    ##  Mean   :-2.789e-17  
+    ##  3rd Qu.: 2.220e-16  
     ##  Max.   : 8.882e-16
 
 Note that there is also a effect that is used for a novel sponsor code
