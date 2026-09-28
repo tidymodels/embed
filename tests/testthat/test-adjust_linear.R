@@ -238,3 +238,86 @@ test_that("step_adjust_linear can use case weights", {
 
   expect_false(isTRUE(all.equal(baked_weighted$y, baked_unweighted$y)))
 })
+
+# Infrastructure ---------------------------------------------------------------
+
+test_that("bake method errors when needed non-standard role columns are missing", {
+  dat <- tibble::tibble(
+    y = c(10, 12, 14, 16, 18, 20),
+    batch = c(0, 0, 1, 1, 2, 2),
+    group = factor(c("a", "a", "a", "b", "b", "b"))
+  )
+
+  rec <- recipe(y ~ ., data = dat) |>
+    step_adjust_linear(
+      y,
+      remove_vars = vars(batch),
+      keep_vars = vars(group)
+    ) |>
+    update_role(batch, new_role = "potato") |>
+    update_role_requirements(role = "potato", bake = FALSE)
+
+  rec_trained <- prep(rec, training = dat, verbose = FALSE)
+
+  expect_snapshot(
+    error = TRUE,
+    bake(rec_trained, new_data = dat[, -2])
+  )
+})
+
+test_that("empty printing", {
+  rec <- recipe(mpg ~ ., mtcars)
+  rec <- step_adjust_linear(rec, remove_vars = vars(cyl))
+
+  expect_snapshot(rec)
+
+  rec <- prep(rec, mtcars)
+
+  expect_snapshot(rec)
+})
+
+test_that("empty selection prep/bake is a no-op", {
+  rec1 <- recipe(mpg ~ ., mtcars)
+  rec2 <- step_adjust_linear(rec1, remove_vars = vars(cyl), drop = "none")
+
+  rec1 <- prep(rec1, mtcars)
+  rec2 <- prep(rec2, mtcars)
+
+  baked1 <- bake(rec1, mtcars)
+  baked2 <- bake(rec2, mtcars)
+
+  expect_identical(baked1, baked2)
+})
+
+test_that("empty selection tidy method works", {
+  rec <- recipe(mpg ~ ., mtcars)
+  rec <- step_adjust_linear(rec, remove_vars = vars(cyl))
+
+  expect <- tibble::tibble(
+    variables = character(),
+    term = character(),
+    type = character(),
+    value = double(),
+    id = character()
+  )
+
+  expect_identical(tidy(rec, number = 1), expect)
+
+  rec <- prep(rec, mtcars)
+
+  expect_identical(tidy(rec, number = 1), expect)
+})
+
+test_that("printing", {
+  dat <- tibble::tibble(
+    y = c(10, 12, 14, 16, 18, 20),
+    batch = c(0, 0, 1, 1, 2, 2),
+    group = factor(c("a", "a", "a", "b", "b", "b"))
+  )
+
+  rec <- recipe(y ~ ., data = dat) |>
+    step_adjust_linear(y, remove_vars = vars(batch), keep_vars = vars(group))
+
+  expect_snapshot(print(rec))
+  expect_snapshot(prep(rec))
+})
