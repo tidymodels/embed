@@ -330,22 +330,32 @@ tidy.step_adjust_linear <- function(x, ...) {
   keep_vars <- to_chr(x$keep_vars)
 
   if (is_trained(x)) {
-    res <- purrr::map(x$models, \(mod) {
-      a <- attr(stats::model.matrix(mod), "assign")
-      a[a == 0] <- NA
-      trm <- attr(stats::terms(mod), "term.labels")
-      trm <- gsub("^scale\\((.*), scale = FALSE\\)$", "\\1", trm)
-      b <- stats::coef(mod)
-      tibble(term = names(b), type = trm[a], value = b)
-    }) |>
-      dplyr::bind_rows(.id = "variables")
+    if (length(x$models) == 0) {
+      res <- tibble(
+        variables = character(),
+        term = character(),
+        type = character(),
+        value = double()
+      )
+    } else {
+      res <- purrr::map(x$models, \(mod) {
+        a <- attr(stats::model.matrix(mod), "assign")
+        a[a == 0] <- NA
+        trm <- attr(stats::terms(mod), "term.labels")
+        trm <- gsub("^scale\\((.*), scale = FALSE\\)$", "\\1", trm)
+        b <- stats::coef(mod)
+        tibble(term = names(b), type = trm[a], value = b)
+      }) |>
+        dplyr::bind_rows(.id = "variables")
+    }
   } else {
     term_names <- to_chr(x$terms)
     res <- as_tibble(
       expand.grid(
         variables = term_names,
         term = c(remove_vars, keep_vars),
-        stringsAsFactors = FALSE
+        stringsAsFactors = FALSE,
+        KEEP.OUT.ATTRS = FALSE
       )
     )
     res$type <- res$term
