@@ -56,7 +56,7 @@
 #'
 #' @template case-weights-supervised
 #'
-#' @examplesIf rlang::is_installed(c("modeldata", "ggplot2 (>= 4.0.0)"))
+#' @examplesIf rlang::is_installed(c("modeldata", "ggplot2"))
 #'
 #' library(ggplot2)
 #'
@@ -80,9 +80,10 @@
 #'     drop = "none" # keep all variables in the baked data
 #'   )
 #'
-#' p +
-#'   (prep(recipe) |>
-#'     bake(new_data = penguins)) +
+#' baked <- prep(recipe) |>
+#'   bake(new_data = penguins)
+#'
+#' ggplot2::ggplot_add(baked, p) +
 #'   labs(title = "Adjustment for species")
 #'
 #'

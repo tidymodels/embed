@@ -105,7 +105,7 @@ To use them, see the documentation in \link[recipes:case_weights]{recipes::case_
 }
 
 \examples{
-\dontshow{if (rlang::is_installed(c("modeldata", "ggplot2 (>= 4.0.0)"))) withAutoprint(\{ # examplesIf}
+\dontshow{if (rlang::is_installed(c("modeldata", "ggplot2"))) withAutoprint(\{ # examplesIf}
 
 library(ggplot2)
 
@@ -129,9 +129,10 @@ recipe <- recipe(body_mass_g ~ ., data = penguins) |>
     drop = "none" # keep all variables in the baked data
   )
 
-p +
-  (prep(recipe) |>
-    bake(new_data = penguins)) +
+baked <- prep(recipe) |>
+  bake(new_data = penguins)
+
+ggplot2::ggplot_add(baked, p) +
   labs(title = "Adjustment for species")
 
 \dontshow{\}) # examplesIf}
