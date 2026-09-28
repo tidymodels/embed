@@ -71,7 +71,7 @@ the \emph{first} level of the factor.
 For novel levels, a slightly timmed average of the coefficients is returned.
 
 A hierarchical generalized linear model is fit using \code{\link[lme4:lmer]{lme4::lmer()}} or
-\code{\link[lme4:glmer]{lme4::glmer()}}, depending on the nature of the outcome, and no intercept via
+\code{\link[lme4:glmer]{lme4::glmer()}}, depending on the nature of the outcome, and an intercept via
 
 \if{html}{\out{<div class="sourceCode">}}\preformatted{  lmer(outcome ~ 1 + (1 | predictor), data = data, ...)
 }\if{html}{\out{</div>}}
