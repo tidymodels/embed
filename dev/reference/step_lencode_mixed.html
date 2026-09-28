@@ -131,7 +131,7 @@ factor outcomes are used, the log-odds reflect the event of interest being
 the <em>first</em> level of the factor.</p>
 <p>For novel levels, a slightly timmed average of the coefficients is returned.</p>
 <p>A hierarchical generalized linear model is fit using <code><a href="https://rdrr.io/pkg/lme4/man/lmer.html" class="external-link">lme4::lmer()</a></code> or
-<code><a href="https://rdrr.io/pkg/lme4/man/glmer.html" class="external-link">lme4::glmer()</a></code>, depending on the nature of the outcome, and no intercept via</p>
+<code><a href="https://rdrr.io/pkg/lme4/man/glmer.html" class="external-link">lme4::glmer()</a></code>, depending on the nature of the outcome, and an intercept via</p>
 <p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a>  <span class="fu">lmer</span>(outcome <span class="sc">~</span> <span class="dv">1</span> <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">|</span> predictor), <span class="at">data =</span> data, ...)</span></code></pre><p></p></div>
 <p>where the <code>...</code> include the <code>family</code> argument (automatically set by the step)
 as well as any arguments given to the <code>options</code> argument to the step.

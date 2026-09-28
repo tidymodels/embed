@@ -99,7 +99,7 @@ returned.
 A hierarchical generalized linear model is fit using
 [`lme4::lmer()`](https://rdrr.io/pkg/lme4/man/lmer.html) or
 [`lme4::glmer()`](https://rdrr.io/pkg/lme4/man/glmer.html), depending on
-the nature of the outcome, and no intercept via
+the nature of the outcome, and an intercept via
 
       lmer(outcome ~ 1 + (1 | predictor), data = data, ...)
 

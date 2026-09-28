@@ -155,18 +155,18 @@ are merged with the raw estimates:</p>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">terms</span>, <span class="op">-</span><span class="va">id</span><span class="op">)</span></span>
 <span><span class="va">glm_estimates</span></span></code></pre></div>
 <pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 292 × 2</span></span></span>
-<span><span class="co">##    level     value</span></span>
-<span><span class="co">##    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 1</span> 100D   4.05<span style="color: #949494;">e</span><span style="color: #BB0000;">- 1</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 2</span> 101A  -<span style="color: #BB0000;">1.95</span><span style="color: #949494;">e</span>+ 0</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 3</span> 103C  -<span style="color: #BB0000;">2.08</span><span style="color: #949494;">e</span>+ 0</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 4</span> 105A  -<span style="color: #BB0000;">1.61</span><span style="color: #949494;">e</span>+ 0</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 5</span> 107C   1.66<span style="color: #949494;">e</span>+ 1</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 6</span> 10B    1.66<span style="color: #949494;">e</span>+ 1</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 7</span> 111C  -<span style="color: #BB0000;">1.61</span><span style="color: #949494;">e</span>+ 0</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 8</span> 112D   6.93<span style="color: #949494;">e</span><span style="color: #BB0000;">- 1</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 9</span> 113A   0   <span style="color: #949494;"> </span>   </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">10</span> 118B   3.14<span style="color: #949494;">e</span><span style="color: #BB0000;">-16</span></span></span>
+<span><span class="co">##    level  value</span></span>
+<span><span class="co">##    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 1</span> 100D   0.405</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 2</span> 101A  -<span style="color: #BB0000;">1.95</span> </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 3</span> 103C  -<span style="color: #BB0000;">2.08</span> </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 4</span> 105A  -<span style="color: #BB0000;">1.61</span> </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 5</span> 107C  16.6  </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 6</span> 10B   16.6  </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 7</span> 111C  -<span style="color: #BB0000;">1.61</span> </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 8</span> 112D   0.693</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 9</span> 113A   0    </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">10</span> 118B   0    </span></span>
 <span><span class="co">## <span style="color: #949494;"># ℹ 282 more rows</span></span></span></code></pre>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">glm_estimates</span> <span class="op">&lt;-</span></span>
@@ -182,11 +182,11 @@ effectively the same:</p>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">difference</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##    difference        </span></span>
-<span><span class="co">##  Min.   :-1.776e-15  </span></span>
+<span><span class="co">##  Min.   :-1.332e-15  </span></span>
 <span><span class="co">##  1st Qu.:-2.220e-16  </span></span>
 <span><span class="co">##  Median : 0.000e+00  </span></span>
-<span><span class="co">##  Mean   :-2.789e-17  </span></span>
-<span><span class="co">##  3rd Qu.: 2.220e-16  </span></span>
+<span><span class="co">##  Mean   :-5.139e-17  </span></span>
+<span><span class="co">##  3rd Qu.: 1.604e-16  </span></span>
 <span><span class="co">##  Max.   : 8.882e-16</span></span></code></pre>
 <p>Note that there is also a effect that is used for a novel sponsor
 code for future data sets that is the average effect:</p>
