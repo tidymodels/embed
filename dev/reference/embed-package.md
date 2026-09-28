@@ -26,6 +26,9 @@ Useful links:
 
 Authors:
 
+- Emil Hvitfeldt <emil.hvitfeldt@posit.co>
+  ([ORCID](https://orcid.org/0000-0002-0679-1945))
+
 - Max Kuhn <max@posit.co>
   ([ORCID](https://orcid.org/0000-0003-2402-136X))
 
