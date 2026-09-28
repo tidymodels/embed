@@ -19,3 +19,5 @@ Applications/Tensorflow.Rmd
 ^CRAN-SUBMISSION$
 ^[\.]?air\.toml$
 ^\.vscode$
+^AGENTS\.md$
+^\.claude$
