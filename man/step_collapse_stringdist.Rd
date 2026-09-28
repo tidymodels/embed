@@ -40,7 +40,7 @@ that have a string distance between them of 2 or lower.}
 \code{"osa"}, see \link[stringdist:stringdist-metrics]{stringdist::stringdist-metrics}.}
 
 \item{options}{List, other arguments passed to
-\code{\link[stringdist:stringdist]{stringdist::stringdistmatrix()}} such as \code{weight}, \code{q}, \code{p}, and \code{bt}, that
+\code{\link[stringdist:stringdistmatrix]{stringdist::stringdistmatrix()}} such as \code{weight}, \code{q}, \code{p}, and \code{bt}, that
 are used for different values of \code{method}.}
 
 \item{results}{A list denoting the way the labels should be collapses is
