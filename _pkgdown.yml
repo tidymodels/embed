@@ -27,6 +27,7 @@ reference:
   - step_collapse_stringdist
 - title: Embed numeric predictors
   contents:
+  - step_adjust_linear
   - step_discretize_cart
   - step_discretize_xgb
   - step_pca_sparse

@@ -48,6 +48,9 @@ Some steps handle categorical predictors:
 
 For numeric predictors:
 
+- `step_adjust_linear()` residualizes one or more numeric outcomes by
+  removing linear effects from selected nuisance variables.
+
 - `step_umap()` uses a nonlinear transformation similar to t-SNE but can
   be used to project the transformation on new data. Both supervised and
   unsupervised methods can be used.
