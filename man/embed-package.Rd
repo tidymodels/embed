@@ -24,6 +24,7 @@ Useful links:
 
 Authors:
 \itemize{
+  \item Emil Hvitfeldt \email{emil.hvitfeldt@posit.co} (\href{https://orcid.org/0000-0002-0679-1945}{ORCID})
   \item Max Kuhn \email{max@posit.co} (\href{https://orcid.org/0000-0003-2402-136X}{ORCID})
 }
 
