@@ -56,7 +56,7 @@
 #'
 #' @template case-weights-supervised
 #'
-#' @examplesIf rlang::is_installed(c("modeldata", "ggplot2"))
+#' @examplesIf rlang::is_installed(c("modeldata", "ggplot2 (>= 4.0.0)"))
 #'
 #' library(ggplot2)
 #'

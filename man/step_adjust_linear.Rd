@@ -105,7 +105,7 @@ To use them, see the documentation in \link[recipes:case_weights]{recipes::case_
 }
 
 \examples{
-\dontshow{if (rlang::is_installed(c("modeldata", "ggplot2"))) withAutoprint(\{ # examplesIf}
+\dontshow{if (rlang::is_installed(c("modeldata", "ggplot2 (>= 4.0.0)"))) withAutoprint(\{ # examplesIf}
 
 library(ggplot2)
 
