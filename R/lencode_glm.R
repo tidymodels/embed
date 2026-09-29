@@ -40,7 +40,8 @@
 #' factor outcomes are used, the log-odds reflect the event of interest being
 #' the _first_ level of the factor.
 #'
-#' For novel levels, a slightly timmed average of the coefficients is returned.
+#' For novel levels, the coefficient of an intercept-only model fit to the
+#' whole outcome is returned.
 #'
 #' # Tidying
 #'
@@ -168,10 +169,12 @@ glm_coefs <- function(x, y, wts = NULL, ...) {
     x <- as_tibble(x)
   }
 
+  dat <- vec_cbind(x, y)
+
   mod <-
     glm(
       form,
-      data = vec_cbind(x, y),
+      data = dat,
       family = fam,
       weights = wts,
       na.action = na.omit,
@@ -182,7 +185,20 @@ glm_coefs <- function(x, y, wts = NULL, ...) {
   names(coefs) <- gsub("^value", "", names(coefs))
   mean_coef <- mean(coefs, na.rm = TRUE, trim = .1)
   coefs[is.na(coefs)] <- mean_coef
-  coefs <- c(coefs, ..new = mean_coef)
+
+  # For unseen levels, use the coefficient of a pooled model (i.e. the
+  # overall outcome mean on the link scale) rather than a trimmed mean of
+  # the per-level coefficients. See #243.
+  new_form <- as.formula(paste0(names(y), "~ 1"))
+  new_mod <- glm(
+    new_form,
+    data = dat,
+    family = fam,
+    weights = wts,
+    na.action = na.omit,
+    ...
+  )
+  coefs <- c(coefs, ..new = unname(coef(new_mod)))
   if (is.factor(y[[1]])) {
     coefs <- -coefs
   }
