@@ -238,6 +238,32 @@ test_that("bad args", {
   )
 })
 
+test_that("new level value is based on a pooled model, not per-level coefs (#243)", {
+  reg_test <- recipe(x1 ~ ., data = ex_dat) |>
+    step_lencode_glm(x3, outcome = vars(x1)) |>
+    prep(training = ex_dat, retain = TRUE)
+
+  ref_mod <- glm(x1 ~ 1, data = ex_dat, family = gaussian)
+
+  key <- reg_test$steps[[1]]$mapping$x3
+  expect_equal(
+    key$..value[key$..level == "..new"],
+    unname(coef(ref_mod))
+  )
+
+  class_test <- recipe(x2 ~ ., data = ex_dat) |>
+    step_lencode_glm(x3, outcome = vars(x2)) |>
+    prep(training = ex_dat, retain = TRUE)
+
+  ref_mod_cls <- glm(x2 ~ 1, data = ex_dat, family = binomial)
+
+  key_cls <- class_test$steps[[1]]$mapping$x3
+  expect_equal(
+    key_cls$..value[key_cls$..level == "..new"],
+    -unname(coef(ref_mod_cls))
+  )
+})
+
 test_that("case weights", {
   wts_int <- rep(c(0, 1), times = c(100, 400))
 

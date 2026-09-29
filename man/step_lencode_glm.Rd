@@ -64,7 +64,8 @@ units. The coefficients are created using a no intercept model and, when two
 factor outcomes are used, the log-odds reflect the event of interest being
 the \emph{first} level of the factor.
 
-For novel levels, a slightly timmed average of the coefficients is returned.
+For novel levels, the coefficient of an intercept-only model fit to the
+whole outcome is returned.
 }
 \section{Tidying}{
 When you \code{\link[recipes:tidy.recipe]{tidy()}} this step, a tibble is returned with

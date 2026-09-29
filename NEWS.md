@@ -1,5 +1,7 @@
 # embed (development version)
 
+* Fixed bug where `step_lencode_glm()` calculated the value for novel levels from the mean of the per-level coefficients instead of a pooled model fit to the whole outcome. (#243)
+
 # embed 1.2.2
 
 * Fixed bug on step_umap() where the number of calculated components would be zero. (#271)
